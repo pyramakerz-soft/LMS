@@ -26,7 +26,7 @@
         <div class="col-span-3">
             @yield('sidebar')
         </div>
-        <div class="col-span-9 p-5">
+        <div class="col-span-9">
             @yield('content')
         </div>
     </div>

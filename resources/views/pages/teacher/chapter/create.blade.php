@@ -5,7 +5,7 @@
 @endsection
 
 @section("content")
-    <form action="" method="POST">
+    <form action="" method="POST" class="p-5">
         <div class="flex justify-between mb-5 items-center">
             <div>
                 <p class="text-[#272D37] font-semibold text-2xl md:text-3xl">Chapter</p>

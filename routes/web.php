@@ -15,12 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('pages.student.DashboardTheme');
-});
-
 Route::get('/login', function () {
     return view('pages.login.index');
+});
+
+Route::get('/theme', function () {
+    return view('pages.student.theme.index');
 });
 
 Route::get('/create_theme', function () {
@@ -47,7 +47,6 @@ Route::get('/create_lesson', function () {
 Route::get('/create_assignment', function () {
     return view('pages.teacher.Assignment.create');
 });
-
 
 
 // Route::group(['middleware' => ['admin:super_admin,school_admin']], function () {
