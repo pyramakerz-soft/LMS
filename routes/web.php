@@ -41,3 +41,7 @@ Route::get('/create_lesson', function () {
     return view('pages.teacher.lesson.create');
 });
 
+
+Route::get('/create_assignment', function () {
+    return view('pages.teacher.Assignment.create');
+});
