@@ -17,13 +17,19 @@ $tableDataa = [
         ]
     ],
 ];
+
+$paths = [
+        ["name" => "Theme", "url" => "student.theme"],
+        ["name" => "Unit", "url" => "student.unit"],
+        ["name" => "Chapter", "url" => "student.chapter"],
+    ]; // Example of paths
 @endphp
 
 <div class="p-4">
     @include('components.profile', ['name' => 'menna' , 'subText'=>'class1' , "image" => "https://mdbcdn.b-cdn.net/img/new/avatars/9.webp"] )
 
 
-    @include('components.path',['paths' => ['Assignment','Class1' , 'menna']])
+    @include('components.path',['paths' => $paths])
 
     @include('components.GradesTable', ['tableData' => $tableDataa])
 

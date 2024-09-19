@@ -23,6 +23,8 @@ $tableDataa = [
         ]
     ]
 ];
+
+
 @endphp
 
 <div class="p-4">

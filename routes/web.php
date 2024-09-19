@@ -86,6 +86,11 @@ Route::get('/Show_Assignment', function () {
     return view('pages.teacher.Assignment.details');
 });
 
+Route::get('/Edit_Assignment', function () {
+    return view('pages.teacher.Assignment.Edit');
+});
+
+
 
 // Route::group(['middleware' => ['admin:super_admin,school_admin']], function () {
     Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
