@@ -70,3 +70,26 @@ Route::get('/create_assignment', function () {
     return view('pages.teacher.Assignment.create');
 });
 
+Route::get('/view_assignment', function () {
+    return view('pages.teacher.Assignment.index');
+});
+
+Route::get('/view_class', function () {
+    return view('pages.teacher.Class.index');
+});
+
+Route::get('/view_grades_student', function () {
+    return view('pages.teacher.grades.index');
+});
+
+Route::get('/Show_Assignment', function () {
+    return view('pages.teacher.Assignment.details');
+});
+
+
+// Route::group(['middleware' => ['admin:super_admin,school_admin']], function () {
+    Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
+    Route::post('/students/store', [StudentController::class, 'store'])->name('students.store');
+    Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+// });
+
