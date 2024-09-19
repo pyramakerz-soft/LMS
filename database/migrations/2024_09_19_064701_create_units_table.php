@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('units', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->text('description')->nullable();
+            $table->string('title')->nullable();
             $table->foreignId('material_id')->constrained()->onDelete('cascade');
             $table->string('image')->nullable();
-            $table->boolean('status')->nullable();
+            $table->boolean('is_active')->nullable();
             $table->timestamps();
         });
     }

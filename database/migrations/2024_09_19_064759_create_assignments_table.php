@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->foreignId('school_id')->constrained()->onDelete('cascade');
             $table->integer('marks')->nullable();
-            $table->boolean('status')->nullable();
+            $table->boolean('is_active')->nullable();
             $table->timestamps();
         });
     }

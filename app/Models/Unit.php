@@ -21,8 +21,9 @@ class Unit extends Model
         return $this->belongsToMany(School::class, 'unit_school');
     }
 
-    public function lessons()
+
+    public function units()
     {
-        return $this->hasMany(Lesson::class);
+        return $this->hasMany(Unit::class);
     }
 }
