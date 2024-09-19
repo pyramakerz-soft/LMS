@@ -30,4 +30,8 @@ class Lesson extends Model
     {
         return $this->hasMany(Assessment::class);
     }
+    public function ebooks()
+    {
+        return $this->hasMany(Ebook::class);
+    }
 }
