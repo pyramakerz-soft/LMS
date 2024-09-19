@@ -6,8 +6,8 @@
 
 @php
 $menuItems = [
-    ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => '#'],
-    ['label' => 'Assignment', 'icon' => 'fas fa-home', 'route' => '#'],
+    ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => 'student.theme'],
+    ['label' => 'Assignment', 'icon' => 'fas fa-home', 'route' => 'student.assignment'],
 ];
 
 @endphp
