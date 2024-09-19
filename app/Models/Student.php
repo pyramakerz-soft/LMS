@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Student extends Model
+{
+    use HasFactory;
+    protected $guarded = [];
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
+
+    public function stage()
+    {
+        return $this->belongsTo(Stage::class);
+    }
+
+    public function assignments()
+    {
+        return $this->belongsToMany(Assignment::class, 'assignment_student');
+    }
+}
