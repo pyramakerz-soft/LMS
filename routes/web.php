@@ -16,7 +16,36 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages.student.DashboardTheme');
+});
+
+Route::get('/login', function () {
+    return view('pages.login.index');
+});
+
+Route::get('/create_theme', function () {
+    return view('pages.teacher.theme.create');
+});
+
+Route::get('/create_unit', function () {
+    return view('pages.teacher.unit.create');
+});
+
+Route::get('/create_material', function () {
+    return view('pages.teacher.material.create');
+});
+
+Route::get('/create_chapter', function () {
+    return view('pages.teacher.chapter.create');
+});
+
+Route::get('/create_lesson', function () {
+    return view('pages.teacher.lesson.create');
+});
+
+
+Route::get('/create_assignment', function () {
+    return view('pages.teacher.Assignment.create');
 });
 
 
