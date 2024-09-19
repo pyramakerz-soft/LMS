@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* body {
+body {
     font-family: 'Poppins', sans-serif;
-} */
+}
+
+.bgLinearGradient{
+    background: linear-gradient(to right top, #2E5EB5 10%, #17253E 60%);
+}
