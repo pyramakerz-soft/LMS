@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,3 +47,11 @@ Route::get('/create_lesson', function () {
 Route::get('/create_assignment', function () {
     return view('pages.teacher.Assignment.create');
 });
+
+
+
+// Route::group(['middleware' => ['admin:super_admin,school_admin']], function () {
+    Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
+    Route::post('/students/store', [StudentController::class, 'store'])->name('students.store');
+    Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+// });

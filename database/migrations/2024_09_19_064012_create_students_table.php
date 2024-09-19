@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('school_id')->constrained()->onDelete('cascade');
             $table->foreignId('stage_id')->constrained()->onDelete('cascade');
             $table->enum('gender' , ['boy' , 'girl'])->nullable();
-            $table->boolean('status')->nullable();
+            $table->boolean('is_active')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
         });

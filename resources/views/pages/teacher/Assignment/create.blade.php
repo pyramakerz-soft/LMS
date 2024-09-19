@@ -6,7 +6,7 @@ Theme
 
 @section("content")
 
-  @include('components.profile')
+  @include('components.profile', ['name' => 'menna' , 'subText'=>'class1'] )
 
   @include('components.AssignmentForms', ['paths' => ['Assignment','Assugnment Name']])
 @endsection

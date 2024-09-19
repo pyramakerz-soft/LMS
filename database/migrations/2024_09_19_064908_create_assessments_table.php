@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('start_date')->nullable();
             $table->date('due_date')->nullable();
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
-            $table->boolean('status')->nullable();
+            $table->boolean('is_active')->nullable();
             $table->timestamps();
         });
     }

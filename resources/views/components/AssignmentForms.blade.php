@@ -20,44 +20,44 @@
     <form  method="POST" enctype="multipart/form-data">
         @csrf <!-- Add CSRF protection -->
 
-        <div class="border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F]">
+        <div class="border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F] mb-3">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 
                 <!-- Input 1: Point -->
                 <div>
-                    <label for="value1" class="block mb-1 text-xs md:text-sm text-[#3A3A3C]">Point</label>
+                    <label for="value1" class="block mb-1 font-poppins font-semibold text-[14px] leading-[21px] text-[#3A3A3C]">Point</label>
                     <input id="value1" name="point" type="text" class="border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" placeholder="Choose degree" value="{{ old('point') }}">
                 </div>
                 
                 <!-- Input 2: Due Date -->
                 <div>
-                    <label for="value2" class="block mb-1 text-xs md:text-sm text-[#3A3A3C]">Due Date</label>
+                    <label for="value2" class="block mb-1 font-poppins font-semibold text-[14px] leading-[21px] text-[#3A3A3C]">Due Date</label>
                     <input id="value2" name="due_date" type="date" class="border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" placeholder="Choose Date" value="{{ old('due_date') }}">
                 </div>
 
                 <!-- Input 3: Topic -->
                 <div>
-                    <label for="value3" class="block mb-1 text-xs md:text-sm text-[#3A3A3C]">Topic</label>
+                    <label for="value3" class="block mb-1 font-poppins font-semibold text-[14px] leading-[21px] text-[#3A3A3C]">Topic</label>
                     <input id="value3" name="topic" type="text" class="border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" placeholder="Choose Topic" value="{{ old('topic') }}">
                 </div>
 
                 <!-- Input 4: Assign to -->
                 <div>
-                    <label for="value4" class="block mb-1 text-xs md:text-sm text-[#3A3A3C]">Assign to</label>
+                    <label for="value4" class="block mb-1 font-poppins font-semibold text-[14px] leading-[21px] text-[#3A3A3C]">Assign to</label>
                     <input id="value4" name="assign_to" type="text" class="border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" placeholder="Choose Classes" value="{{ old('assign_to') }}">
                 </div>
 
                 <!-- Input 5: Title -->
-                <div>
-                    <label for="value5" class="block mb-1 text-xs md:text-sm text-[#3A3A3C]">Title</label>
-                    <input id="value5" name="title" type="text" class="border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" placeholder="Choose Title" value="{{ old('title') }}">
-                </div>
-
-                <!-- Input 6: Description -->
-                <div>
-                    <label for="value6" class="block mb-1 text-xs md:text-sm text-[#3A3A3C]">Description</label>
-                    <input id="value6" name="description" type="text" class="border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" placeholder="Add" value="{{ old('description') }}">
-                </div>
+                
+            </div>
+            <!-- Input 6: Description -->
+            <div class="pt-4">
+                <label for="value5" class="block mb-1 font-poppins font-semibold text-[14px] leading-[21px] text-[#3A3A3C]">Title</label>
+                <input id="value5" name="title" type="text" class="border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" placeholder="Choose Title" value="{{ old('title') }}">
+            </div>
+            <div class="pt-4">
+                <label for="value6" class="block mb-1 font-poppins font-semibold text-[14px] leading-[21px] text-[#3A3A3C]">Description</label>
+                <input id="value6" name="description" type="text" class="border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" placeholder="Add" value="{{ old('description') }}">
             </div>
         </div>
 
