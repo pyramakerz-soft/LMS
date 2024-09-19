@@ -6,10 +6,17 @@
 
 
 @php
-    $paths = ["link 1", "link 2"];
+    $paths = [
+        ["name" => "Theme", "url" => "student.theme"]
+    ];
     $cards = [
-        ["title" => "roro"],
-        ["title" => "toto"]
+        ["title" => "roro", "url" => "student.unit"],
+        ["title" => "toto", "url" => "student.unit"],
+        ["title" => "toto", "url" => "student.unit"],
+        ["title" => "toto", "url" => "student.unit"],
+        ["title" => "toto", "url" => "student.unit"],
+        ["title" => "toto", "url" => "student.unit"],
+        ["title" => "toto", "url" => "student.unit"]
     ]
 @endphp
 

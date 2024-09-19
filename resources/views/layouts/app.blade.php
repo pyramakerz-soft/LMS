@@ -23,15 +23,31 @@
 
 <body>
     <div class="grid grid-cols-12">
-        <div class="col-span-3">
+        <div id="sidebar" class="lg:col-span-3 bg-[#17253E] min-h-[100vh] h-full border-r-[1.33px] border-[#2E3545] lg:block absolute lg:static lg:z-auto z-20 transform translate-y-16 lg:translate-y-0">
             @yield('sidebar')
         </div>
-        <div class="col-span-9">
+
+        <div class="col-span-12 lg:col-span-9">
+            <button id="burger" class="lg:hidden p-4 text-white z-30">
+                <div class="cursor-pointer pt-5 pr-7"  (click)="OpenMenu()">
+                    <div class="h-1 w-7 md:h-[6px] md:w-10 mb-1 bg-[#454950] rounded"></div>
+                    <div class="h-1 w-7 md:h-[6px] md:w-10 mb-1 bg-[#454950] rounded"></div>
+                    <div class="h-1 w-7 md:h-[6px] md:w-10 bg-[#454950] rounded"></div>
+                </div>
+            </button>
+
             @yield('content')
         </div>
     </div>
 
     @yield("login")
+
+    <script>
+        document.getElementById('burger').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('hidden');
+        });
+    </script>
 </body>
 
 </html>

@@ -2,6 +2,6 @@
     <i class="fa-solid fa-house mx-2"></i>
     @foreach ($paths as $item)
         <span class="mx-2 text-[#D0D5DD]">/</span> 
-        <span class="mx-2">{{ $item }}</span>
+        <a href="{{ route($item['url']) }}" class="mx-2 cursor-pointer">{{ $item['name'] }}</a>
     @endforeach
 </div>

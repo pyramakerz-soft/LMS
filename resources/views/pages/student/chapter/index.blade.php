@@ -1,7 +1,7 @@
 @extends('pages.student.student')
 
 @section('title')
-    Unit
+    Chapter
 @endsection
 
 
@@ -9,12 +9,12 @@
     $paths = [
         ["name" => "Theme", "url" => "student.theme"],
         ["name" => "Unit", "url" => "student.unit"],
+        ["name" => "Chapter", "url" => "student.chapter"],
     ];
     $cards = [
-        ["title" => "roro", "url" => "student.chapter"],
-        ["title" => "toto", "url" => "student.chapter"],
-        ["title" => "toto", "url" => "student.chapter"],
-        ["title" => "toto", "url" => "student.chapter"],
+        ["title" => "roro", "url" => "student.week"],
+        ["title" => "toto", "url" => "student.week"],
+        ["title" => "toto", "url" => "student.week"]
     ]
 @endphp
 

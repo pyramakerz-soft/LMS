@@ -28,9 +28,22 @@ Route::get('/teacher/dashboard', function() {
     return 'Teacher Dashboard'; // Replace with actual view
 })->middleware('auth:teacher')->name('teacher.dashboard');
 
-Route::get('/theme', function () {
+
+Route::get('/theme',function () {
     return view('pages.student.theme.index');
-});
+}) -> name('student.theme');
+
+Route::get('/unit',function () {
+    return view('pages.student.unit.index');
+}) -> name('student.unit');
+
+Route::get('/chapter',function () {
+    return view('pages.student.chapter.index');
+}) -> name('student.chapter');
+
+Route::get('/week',function () {
+    return view('pages.student.week.index');
+}) -> name('student.week');
 
 Route::get('/create_theme', function () {
     return view('pages.teacher.theme.create');
