@@ -8,10 +8,10 @@
         <!-- Name and Class Info -->
         <div class="ml-3">
             <div class="text-white font-inter font-semibold text-[20px] leading-[32px] tracking-[-0.13px]">
-                Mohamed
+                {{$name}}
             </div>
             <div class="text-white font-inter font-bold text-[14.98px] leading-[22.47px] tracking-[-0.09px]">
-                Grade A1 - Class A1</div>
+                {{$subText}}</div>
         </div>
     </div>
 
