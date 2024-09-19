@@ -2,15 +2,16 @@
 
 @section("login")
     <div class="lg:h-[100vh] flex flex-col-reverse lg:flex-row">
-        <form action="" method="POST" class="w-full lg:w-1/3 bg-white flex flex-col justify-center items-center p-12 md:p-20">
+        <form action="{{route('login.post')}}" method="POST" class="w-full lg:w-1/3 bg-white flex flex-col justify-center items-center p-12 md:p-20">
+            @csrf
             <img src="{{ asset('images/Paragraphcontainer.png') }}" alt="Logo" class="w-[63%]">
             <p class="h5 text-[#111111] py-3">Hello, please sign into your account</p>
 
             <div class="w-full text-start">
-                <label htmlFor="email" class="h-4 font-medium text-[#344054] block mb-1" >
+                <label htmlFor="text" class="h-4 font-medium text-[#344054] block mb-1" >
                     Email
                 </label>
-                <input id="email" name="email" type="email" placeholder="Enter your email" 
+                <input id="email" name="username" type="text" placeholder="Enter your username" 
                 class="h5 w-full bg-white border rounded border-[#D0D5DD] shadow-sm shadow-[#1018280D] h-[22%]  py-[7.5px] px-[10.5px]"   [(ngModel)]="email">
                 
                 <label htmlFor="pass" class="h-4 font-medium text-[#344054] block mb-1 mt-4"  >

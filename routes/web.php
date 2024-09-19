@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
@@ -19,9 +20,18 @@ Route::get('/', function () {
     return view('pages.student.DashboardTheme');
 });
 
-Route::get('/login', function () {
-    return view('pages.login.index');
-});
+
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('/student/dashboard', function() {
+    return 'Student Dashboard'; // Replace with actual view
+})->middleware('auth:student')->name('student.dashboard');
+
+Route::get('/teacher/dashboard', function() {
+    return 'Teacher Dashboard'; // Replace with actual view
+})->middleware('auth:teacher')->name('teacher.dashboard');
 
 Route::get('/create_theme', function () {
     return view('pages.teacher.theme.create');
@@ -47,7 +57,6 @@ Route::get('/create_lesson', function () {
 Route::get('/create_assignment', function () {
     return view('pages.teacher.Assignment.create');
 });
-
 
 
 // Route::group(['middleware' => ['admin:super_admin,school_admin']], function () {
