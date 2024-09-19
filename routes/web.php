@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
@@ -15,12 +16,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('pages.student.DashboardTheme');
-});
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/login', function () {
-    return view('pages.login.index');
+Route::get('/student/dashboard', function() {
+    return 'Student Dashboard'; // Replace with actual view
+})->middleware('auth:student')->name('student.dashboard');
+
+Route::get('/teacher/dashboard', function() {
+    return 'Teacher Dashboard'; // Replace with actual view
+})->middleware('auth:teacher')->name('teacher.dashboard');
+
+Route::get('/theme', function () {
+    return view('pages.student.theme.index');
 });
 
 Route::get('/create_theme', function () {
@@ -52,8 +61,22 @@ Route::get('/view_assignment', function () {
     return view('pages.teacher.Assignment.index');
 });
 
+Route::get('/view_class', function () {
+    return view('pages.teacher.Class.index');
+});
+
+Route::get('/view_grades_student', function () {
+    return view('pages.teacher.grades.index');
+});
+
+Route::get('/Show_Assignment', function () {
+    return view('pages.teacher.Assignment.details');
+});
+
+
 // Route::group(['middleware' => ['admin:super_admin,school_admin']], function () {
     Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
     Route::post('/students/store', [StudentController::class, 'store'])->name('students.store');
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');
 // });
+

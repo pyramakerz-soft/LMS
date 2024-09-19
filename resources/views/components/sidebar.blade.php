@@ -3,8 +3,7 @@
         <div class="px-3 md:px-5 py-3 md:py-4 bg-[#2E3646] rounded-md flex justify-between items-center">
             <img src="{{ asset('images/Paragraph container.png') }}" class="w-2/3 md:w-[90%]" />
             <div class="relative">
-                <i class="fa-solid fa-bell text-[#FF7519] text-[24px]"></i>
-                
+                <i class="fa-solid fa-bell text-[#FF7519] text-2xl"></i>
                 <span class="absolute -top-2 -right-2 bg-black border-2 border-white text-white rounded-full text-xs px-1 py-0.25">5</span>
             </div>
         </div>
