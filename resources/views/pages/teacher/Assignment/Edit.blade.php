@@ -23,6 +23,7 @@
     ]; // Example of paths
 @endphp
 
+
   @include('components.AssignmentEdit', ['paths' => $paths ,  $data])
 
 </div>

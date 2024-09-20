@@ -7,7 +7,7 @@
 @section("InsideContent")
 
 @php
-    $data = [
+   $data = [
         'point' => '95',
         'dueDate' => '2024-10-01',
         'topic' => 'Mathematics',
@@ -26,7 +26,6 @@
             ['type' => 'link', 'url' => 'https://example.com']
         ],
     ];
-
     $paths = [
       ["name" => "Assignment", "url" => "teacher.Assignment"],
       ["name" => "AssignmentName", "url" => "teacher.assignment.show"],
@@ -34,7 +33,24 @@
 
 
 
+<div class="flex justify-between">
+
+  @include('components.path', ['paths' => $paths])
+
+  <!-- Create Button Wrapped in Link -->
+  <a href="{{ route('teacher.assignment.edit') }}">
+      <button class="w-[99.13px] h-[55.47px] rounded-[11.23px] py-[11.23px] px-[21.06px] bg-[#17253E] text-white border-none mt-4">
+          Edit
+      </button>
+      
+  </a>
+
+</div>
+
+
   @include('components.AssignmentDetails', ['paths' =>$paths  ,  $data])
 
 @endsection
+
+
 
