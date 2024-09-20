@@ -23,7 +23,7 @@
 
 <body>
     <div class="grid grid-cols-12">
-        <div id="sidebar" class="lg:col-span-3 bg-[#17253E] min-h-[100vh] h-full border-r-[1.33px] border-[#2E3545] lg:block absolute lg:static lg:z-auto z-20 transform translate-y-16 lg:translate-y-0">
+        <div id="sidebar" class="lg:col-span-3 bg-[#17253E] min-h-[100vh] h-full border-r-[1.33px] border-[#2E3545] hidden lg:block absolute lg:static lg:z-auto z-20 transform translate-y-16 lg:translate-y-0">
             @yield('sidebar')
         </div>
 
