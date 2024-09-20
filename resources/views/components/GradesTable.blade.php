@@ -2,9 +2,9 @@
 
     <div class="mt-5 overflow-x-auto rounded-2xl border border-[#EAECF0]">
         <table class="w-full table-auto bg-[#FFFFFF] text-left text-[#475467] text-lg md:text-xl">  
-            <thead class="bg-[#F9FAFB] text-lg md:text-xl">  
+            <thead class="bg-[#F9FAFB]">  
                 <tr>
-                    <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Name</th>
+                    <th class="py-4 px-6 min-w-[220px] whitespace-nowrap">Name</th>
                     <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Attendance</th>
                     <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Classroom Participation</th>
                     <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Classroom Behavior</th>
@@ -43,6 +43,8 @@
                 @endforeach
     
                 @endforeach
+
+
             </tbody>
         </table>
     </div>

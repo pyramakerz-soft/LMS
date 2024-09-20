@@ -9,14 +9,13 @@
         [
             'name' => 'John Doe',
             'records' => [
-                ['attendance' => 'Present', 'participation' => 'Active', 'behavior' => 'Good', 'homework' => 'Completed', 'final_project' => 'A'],
-                ['attendance' => 'Absent', 'participation' => 'N/A', 'behavior' => 'N/A', 'homework' => 'Incomplete', 'final_project' => 'B'],
+                ['attendance' => '7', 'participation' => '12', 'behavior' => '12', 'homework' => '6', 'final_project' => '50'],
             ]
         ],
         [
             'name' => 'Jane Smith',
             'records' => [
-                ['attendance' => 'Present', 'participation' => 'Average', 'behavior' => 'Excellent', 'homework' => 'Completed', 'final_project' => 'A+'],
+                ['attendance' => '7', 'participation' => '12', 'behavior' => '12', 'homework' => '6', 'final_project' => '50'],
             ]
         ]
     ];
