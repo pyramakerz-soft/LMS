@@ -1,11 +1,9 @@
 <div class="p-1">
 
-  <div class="rounded-[8px] border border-[#D0D5DD] bg-[#FFFFFF] flex space-x-4 items-center relative p-4">
+  <div class="rounded-lg border border-[#D0D5DD] bg-[#FFFFFF] flex space-x-4 items-center p-2">
     <i class="fa-solid fa-search text-[#667085] w-[20px] h-[20px]"></i>
-    
-    <!-- Search Input -->
     <form method="GET" class="w-full">
-        <input type="text" name="selectedName" placeholder="Enter Employee Name..." class="outline-none border-none placeholder-[#667085] bg-transparent text-lg md:text-xl w-full py-2" value="{{ request('selectedName') }}">
+        <input type="text" name="selectedName" placeholder="Enter Employee Name..." class="outline-none border-none placeholder-[#667085] bg-transparent w-full" value="{{ request('selectedName') }}">
     </form>
   </div>
   

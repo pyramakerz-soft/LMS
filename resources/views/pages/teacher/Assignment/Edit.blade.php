@@ -1,7 +1,7 @@
 @extends('pages.teacher.teacher')
 
 @section("title")
-  Create Assignment
+  Edit Assignment
 @endsection
 
 @section("InsideContent")
@@ -14,13 +14,23 @@
         'assignTo' => 'Class A',
         'title' => 'Homework Assignment',
         'description' => 'Solve the problems in chapter 5.',
-        'uploadedFileName' => 'homework.pdf', // Example of an uploaded file name
+        'uploadedFileName' =>
+        [
+            ['type' => 'photo', 'url' => 'images/Layer 2.png'],
+            ['type' => 'photo', 'url' => 'images/Layer 2.png'],
+            ['type' => 'video', 'url' => '/path/to/video.mp4'],
+            ['type' => 'video', 'url' => '/path/to/video.mp4'],
+            ['type' => 'pdf', 'url' => '/path/to/file.pdf', 'file_name' => 'HannahBusing_Resume.pdf', 'file_space' => '200 KB'],
+            ['type' => 'pdf', 'url' => '/path/to/file.pdf', 'file_name' => 'HannahBusing_Resume.pdf', 'file_space' => '200 KB'],
+            ['type' => 'pdf', 'url' => '/path/to/file.pdf', 'file_name' => 'HannahBusing_Resume.pdf', 'file_space' => '200 KB'],
+            ['type' => 'link', 'url' => 'https://example.com']
+        ],
     ];
 
     $paths = [
         ["name" => "Assignment", "url" => "teacher.Assignment"],
-        ["name" => "AssignmentName", "url" => "teacher.assignment.edit"],
-    ]; // Example of paths
+        ["name" => "Assignment Name", "url" => "teacher.assignment.edit"],
+    ];
 @endphp
 
 

@@ -95,7 +95,7 @@
         <div class="w-full md:w-2/5 mx-auto">
             <label for="file-upload" class="cursor-pointer flex flex-col items-center border border-dashed border-[#CACACA] rounded-xl px-6 py-3 lg:py-5">
                 <i class="fa-solid fa-upload text-[#FF7519] bg-[#F5F5F5] rounded-full p-3"></i>
-                <p class="my-2"><span class="text-[#FF7519]">Click to Upload</span>or drag and drop</p>
+                <p class="my-2"><span class="text-[#FF7519]">Click to Upload</span> or drag and drop</p>
                 <p> (Max. File size: 25 MB) </p>
             </label>
             <input id="file-upload" name="file-upload" type="file" class="hidden" />

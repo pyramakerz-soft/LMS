@@ -1,7 +1,7 @@
 @extends('pages.student.student')
 
 @section('title')
-    Chapter
+    Assignment Details
 @endsection
 
 

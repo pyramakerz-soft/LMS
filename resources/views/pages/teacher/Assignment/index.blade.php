@@ -1,7 +1,7 @@
 @extends('pages.teacher.teacher')
 
 @section("title")
-Theme
+    Assignment
 @endsection
 
 @php
@@ -17,12 +17,11 @@ $tableData = [
             'dueDate' => '2024-10-05',
             'desc' => 'Description for Task 2',
         ],
-        // Add more data as needed
     ];
 
     $paths = [
         ["name" => "Assignment", "url" => "teacher.Assignment"],
-    ]; // Example of paths
+    ];
 
 @endphp
 
@@ -30,31 +29,18 @@ $tableData = [
 
 @section("InsideContent")
 
+    <div class="">
+    <div class="flex justify-between items-center">
+        @include('components.path', ['paths' => $paths])
 
-<div class="">
-
-
-  <div class="flex justify-between">
-
-
-    @include('components.path', ['paths' => $paths])
-
-    <!-- Create Button Wrapped in Link -->
-    <a href="{{ route('teacher.Assignment.create') }}">
-        <button class="w-[99.13px] h-[55.47px] rounded-[11.23px] py-[11.23px] px-[21.06px] bg-[#17253E] text-white border-none mt-4">
-            Create
-        </button>
-        
-    </a>
-
-
-
-  </div>
-
-  @include('components.table', ['paths' => ['tableData' => $tableData]])
-
-
-</div>
+        <a href="{{ route('teacher.Assignment.create') }}">
+            <button class="rounded-md px-5 py-3 bg-[#17253E] text-white border-none">
+                Create
+            </button>
+        </a>
+    </div>
+    @include('components.table', ['paths' => ['tableData' => $tableData]])
+    </div>
 
 @endsection
 

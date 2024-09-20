@@ -1,12 +1,18 @@
 @extends('pages.teacher.teacher')
 
 @section('title')
-    Theme
+    Assignments
 @endsection
 
 
 @php
     $paths = [
+        ["name" => "Grade", "url" => "teacher.theme"],
+        ["name" => "Material", "url" => "teacher.material"],
+        ["name" => "Theme", "url" => "teacher.theme"],
+        ["name" => "Unit", "url" => "teacher.unit"],
+        ["name" => "Chapter", "url" => "teacher.chapter"],
+        ["name" => "Lesson", "url" => "teacher.lesson"],
         ["name" => "Assignments", "url" => "teacher.assignments_cards"]
     ];
     $cards = [

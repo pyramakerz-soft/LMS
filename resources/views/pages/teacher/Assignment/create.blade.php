@@ -10,8 +10,8 @@
 
     $paths = [
       ["name" => "Assignment", "url" => "teacher.Assignment"],
-      ["name" => "AssignmentName", "url" => "teacher.Assignment.create"],
-    ]; // Example of paths
+      ["name" => "Assignment Name", "url" => "teacher.Assignment.create"],
+    ];
 @endphp
 
 

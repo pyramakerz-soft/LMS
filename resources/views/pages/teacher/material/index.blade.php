@@ -1,14 +1,14 @@
 @extends('pages.teacher.teacher')
 
 @section('title')
-    Theme
+    Material
 @endsection
 
 
 @php
     $paths = [
         ["name" => "Grade", "url" => "teacher.grade"],
-        ["name" => "info", "url" => "teacher.material"]
+        ["name" => "Material", "url" => "teacher.material"]
     ];
     $cards = [
         ["title" => "material", "url" => "teacher.theme"],

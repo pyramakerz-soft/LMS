@@ -8,8 +8,8 @@
 @php
     $paths = [
         ["name" => "Grade", "url" => "teacher.grade"],
-        ["name" => "info", "url" => "teacher.material"],
-        ["name" => "theme", "url" => "teacher.theme"],
+        ["name" => "Material", "url" => "teacher.material"],
+        ["name" => "Theme", "url" => "teacher.theme"],
 
     ];
     $cards = [

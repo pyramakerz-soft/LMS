@@ -1,7 +1,7 @@
 @extends('pages.teacher.teacher')
 
 @section('title')
-    Theme
+    Grade
 @endsection
 
 

@@ -1,7 +1,7 @@
 @extends('pages.teacher.teacher')
 
 @section("title")
-  Create Assignment
+  Assignment Details
 @endsection
 
 @section("InsideContent")
@@ -28,18 +28,17 @@
     ];
     $paths = [
       ["name" => "Assignment", "url" => "teacher.Assignment"],
-      ["name" => "AssignmentName", "url" => "teacher.assignment.show"],
+      ["name" => "Assignment Name", "url" => "teacher.assignment.show"],
     ];
 
-
+@endphp
 
 <div class="flex justify-between">
 
   @include('components.path', ['paths' => $paths])
 
-  <!-- Create Button Wrapped in Link -->
   <a href="{{ route('teacher.assignment.edit') }}">
-      <button class="w-[99.13px] h-[55.47px] rounded-[11.23px] py-[11.23px] px-[21.06px] bg-[#17253E] text-white border-none mt-4">
+      <button class="rounded-md px-5 py-3 bg-[#17253E] text-white border-none mt-4">
           Edit
       </button>
       
