@@ -1,4 +1,4 @@
-@extends('pages.student.student')
+@extends('pages.teacher.teacher')
 
 @section("title")
 Theme
@@ -19,26 +19,41 @@ $tableData = [
         ],
         // Add more data as needed
     ];
+
+    $paths = [
+        ["name" => "Assignment", "url" => "teacher.Assignment"],
+    ]; // Example of paths
+
 @endphp
 
 
 
-@section("content")
-<div class="p-4">
+@section("InsideContent")
 
-  @include('components.profile', ['name' => 'menna' , 'subText'=>'class1' , "image" => "https://mdbcdn.b-cdn.net/img/new/avatars/9.webp"] )
 
-  <div class="flex justify-between p-3">
-    @include('components.path', ['paths' => ['tableData' ,'tww']])
+<div class="">
 
-    <button class="w-[99.13px] h-[60.47px] rounded-[11.23px] py-[11.23px] px-[21.06px] bg-[#17253E] text-white border-none">
-        Create
-    </button>
+
+  <div class="flex justify-between">
+
+
+    @include('components.path', ['paths' => $paths])
+
+    <!-- Create Button Wrapped in Link -->
+    <a href="{{ route('teacher.Assignment.create') }}">
+        <button class="w-[99.13px] h-[55.47px] rounded-[11.23px] py-[11.23px] px-[21.06px] bg-[#17253E] text-white border-none mt-4">
+            Create
+        </button>
+        
+    </a>
+
 
 
   </div>
 
   @include('components.table', ['paths' => ['tableData' => $tableData]])
+
+
 </div>
 
 @endsection

@@ -21,8 +21,11 @@
     
                 @foreach ($tableData as $student)
                 <tr class="border-t border-gray-300 text-lg md:text-xl {{ $loop->index % 2 === 0 ? 'bg-[#F4F4F4]' : 'bg-white' }}"> <!-- Increased text size -->
-                    <td class="py-5 px-6" rowspan="{{ count($student['records']) }}">{{ $student['name'] }}</td>
-                    <td class="py-5 px-6">{{ $student['records'][0]['attendance'] }}</td>
+                    <td class="py-5 px-6" rowspan="{{ count($student['records']) }}">
+                        <a href="{{ route('teacher.student.grade') }}" class="text-blue-600 hover:underline">
+                            {{ $student['name'] }}
+                        </a>
+                    </td>                    <td class="py-5 px-6">{{ $student['records'][0]['attendance'] }}</td>
                     <td class="py-5 px-6">{{ $student['records'][0]['participation'] }}</td>
                     <td class="py-5 px-6">{{ $student['records'][0]['behavior'] }}</td>
                     <td class="py-5 px-6">{{ $student['records'][0]['homework'] }}</td>

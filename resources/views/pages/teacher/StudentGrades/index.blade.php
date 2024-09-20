@@ -1,10 +1,10 @@
-@extends('pages.student.student')
+@extends('pages.teacher.teacher')
 
 @section("title")
 Theme
 @endsection
 
-@section("content")
+@section("InsideContent")
 
 @php
 
@@ -19,21 +19,18 @@ $tableDataa = [
 ];
 
 $paths = [
-        ["name" => "Theme", "url" => "student.theme"],
-        ["name" => "Unit", "url" => "student.unit"],
-        ["name" => "Chapter", "url" => "student.chapter"],
+    ["name" => "Assignments", "url" => "teacher.assignments_cards"],
+    ["name" => "class number", "url" => "teacher.class"],
+    ["name" => "student name", "url" => "teacher.student.grade"],
+
     ]; // Example of paths
 @endphp
-
-<div class="p-4">
-    @include('components.profile', ['name' => 'menna' , 'subText'=>'class1' , "image" => "https://mdbcdn.b-cdn.net/img/new/avatars/9.webp"] )
 
 
     @include('components.path',['paths' => $paths])
 
     @include('components.GradesTable', ['tableData' => $tableDataa])
 
-</div>
 
 
 @endsection

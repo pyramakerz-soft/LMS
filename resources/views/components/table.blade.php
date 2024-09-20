@@ -1,4 +1,4 @@
-<div class="p-5">
+<div class="p-1">
 
   <div class="rounded-[8px] border border-[#D0D5DD] bg-[#FFFFFF] flex space-x-4 items-center relative p-4">
     <i class="fa-solid fa-search text-[#667085] w-[20px] h-[20px]"></i>
@@ -42,8 +42,10 @@
             <td class="py-5 px-6">{{ $row['dueDate'] }}</td>
             <td class="py-5 px-6">{{ $row['desc'] }}</td>
             <td class="py-5 px-6">
-              <i class="fas fa-edit text-[#101828] w-5 md:w-6"></i>
-              <i class="fa fa-trash text-[#CC161D] ml-2 w-5 md:w-6"></i>
+              <a href="{{ route('teacher.assignment.edit') }}">       {{-- add here['assignment_id' => $assignment->id] --}}
+                <i class="fas fa-edit text-[#101828] w-5 md:w-6"></i>
+            </a>
+                <i class="fa fa-trash text-[#CC161D] ml-2 w-5 md:w-6"></i>
             </td>
           </tr>
           @endforeach
