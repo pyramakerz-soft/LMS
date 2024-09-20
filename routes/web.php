@@ -100,6 +100,7 @@ Route::get('/Edit_Assignment', function () {
 
 
 
+
 // Route::group(['middleware' => ['admin:super_admin,school_admin']], function () {
     Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
     Route::post('/students/store', [StudentController::class, 'store'])->name('students.store');

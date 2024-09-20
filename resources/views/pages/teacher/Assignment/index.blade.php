@@ -1,4 +1,4 @@
-@extends('pages.student.student')
+@extends('pages.teacher.teacher')
 
 @section("title")
 Theme
@@ -19,17 +19,24 @@ $tableData = [
         ],
         // Add more data as needed
     ];
+
+    $paths = [
+        ["name" => "Theme", "url" => "student.theme"],
+        ["name" => "Unit", "url" => "student.unit"],
+        ["name" => "Chapter", "url" => "student.chapter"],
+    ]; // Example of paths
+
 @endphp
 
 
 
-@section("content")
+@section("InsideContent")
 <div class="p-4">
 
-  @include('components.profile', ['name' => 'menna' , 'subText'=>'class1' , "image" => "https://mdbcdn.b-cdn.net/img/new/avatars/9.webp"] )
+  {{-- @include('components.profile', ['name' => 'menna' , 'subText'=>'class1' , "image" => "https://mdbcdn.b-cdn.net/img/new/avatars/9.webp"] ) --}}
 
   <div class="flex justify-between p-3">
-    @include('components.path', ['paths' => ['tableData' ,'tww']])
+    @include('components.path', ['paths' => $paths])
 
     <button class="w-[99.13px] h-[60.47px] rounded-[11.23px] py-[11.23px] px-[21.06px] bg-[#17253E] text-white border-none">
         Create
