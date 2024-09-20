@@ -9,9 +9,8 @@
 @php
 
     $paths = [
-        ["name" => "Theme", "url" => "student.theme"],
-        ["name" => "Unit", "url" => "student.unit"],
-        ["name" => "Chapter", "url" => "student.chapter"],
+      ["name" => "Assignment", "url" => "teacher.Assignment"],
+      ["name" => "AssignmentName", "url" => "teacher.Assignment.create"],
     ]; // Example of paths
 @endphp
 

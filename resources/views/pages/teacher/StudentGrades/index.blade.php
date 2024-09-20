@@ -19,9 +19,10 @@ $tableDataa = [
 ];
 
 $paths = [
-        ["name" => "Theme", "url" => "student.theme"],
-        ["name" => "Unit", "url" => "student.unit"],
-        ["name" => "Chapter", "url" => "student.chapter"],
+    ["name" => "Assignments", "url" => "teacher.assignments_cards"],
+    ["name" => "class number", "url" => "teacher.class"],
+    ["name" => "student name", "url" => "teacher.student.grade"],
+
     ]; // Example of paths
 @endphp
 
