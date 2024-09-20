@@ -16,13 +16,13 @@
 
     ];
     $cards = [
-        ["title" => "material", "url" => "student.unit"],
-        ["title" => "material", "url" => "student.unit"],
-        ["title" => "material", "url" => "student.unit"],
-        ["title" => "material", "url" => "student.unit"],
-        ["title" => "material", "url" => "student.unit"],
-        ["title" => "material", "url" => "student.unit"],
-        ["title" => "material", "url" => "student.unit"]
+        ["title" => "material", "url" => "teacher.assignments_cards"],
+        ["title" => "material", "url" => "teacher.assignments_cards"],
+        ["title" => "material", "url" => "teacher.assignments_cards"],
+        ["title" => "material", "url" => "teacher.assignments_cards"],
+        ["title" => "material", "url" => "teacher.assignments_cards"],
+        ["title" => "material", "url" => "teacher.assignments_cards"],
+        ["title" => "material", "url" => "teacher.assignments_cards"]
     ]
 @endphp
 

@@ -11,13 +11,13 @@
         ["name" => "info", "url" => "teacher.material"]
     ];
     $cards = [
-        ["title" => "material", "url" => "student.unit"],
-        ["title" => "material", "url" => "student.unit"],
-        ["title" => "material", "url" => "student.unit"],
-        ["title" => "material", "url" => "student.unit"],
-        ["title" => "material", "url" => "student.unit"],
-        ["title" => "material", "url" => "student.unit"],
-        ["title" => "material", "url" => "student.unit"]
+        ["title" => "material", "url" => "teacher.theme"],
+        ["title" => "material", "url" => "teacher.theme"],
+        ["title" => "material", "url" => "teacher.theme"],
+        ["title" => "material", "url" => "teacher.theme"],
+        ["title" => "material", "url" => "teacher.theme"],
+        ["title" => "material", "url" => "teacher.theme"],
+        ["title" => "material", "url" => "teacher.theme"]
     ]
 @endphp
 
