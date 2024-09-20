@@ -29,7 +29,7 @@
         ["name" => "Chapter", "url" => "teacher.chapter"],
         ["name" => "Lesson", "url" => "teacher.lesson"],
         ["name" => "Assignments", "url" => "teacher.assignments_cards"],
-        ["name" => "Class number", "url" => "teacher.class"]
+        ["name" => "Class", "url" => "teacher.class"]
     ];
 @endphp
 

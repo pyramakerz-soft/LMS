@@ -1,7 +1,7 @@
 @extends('pages.teacher.teacher')
 
 @section("title")
-Theme
+    Student
 @endsection
 
 @section("InsideContent")
@@ -19,11 +19,16 @@ $tableDataa = [
 ];
 
 $paths = [
-    ["name" => "Assignments", "url" => "teacher.assignments_cards"],
-    ["name" => "class number", "url" => "teacher.class"],
-    ["name" => "student name", "url" => "teacher.student.grade"],
-
-    ]; // Example of paths
+        ["name" => "Grade", "url" => "teacher.theme"],
+        ["name" => "Material", "url" => "teacher.material"],
+        ["name" => "Theme", "url" => "teacher.theme"],
+        ["name" => "Unit", "url" => "teacher.unit"],
+        ["name" => "Chapter", "url" => "teacher.chapter"],
+        ["name" => "Lesson", "url" => "teacher.lesson"],
+        ["name" => "Assignments", "url" => "teacher.assignments_cards"],
+        ["name" => "Class", "url" => "teacher.class"],
+        ["name" => "Student", "url" => "teacher.student.grade"],
+    ];
 @endphp
 
 
