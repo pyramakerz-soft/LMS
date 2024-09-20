@@ -40,10 +40,10 @@
           <tr class="border-t border-gray-300 text-lg md:text-xl {{ $loop->index % 2 === 0 ? 'bg-[#F4F4F4]' : 'bg-white' }}">
             <td class="py-5 px-6">
               <a href="{{ route('teacher.assignment.show') }}" class="text-blue-600 hover:underline">
-                  {{ $row['title'] }}
-              </a>
+                {{ $row['title'] }}
+            </a>
           </td>
-                      <td class="py-5 px-6">{{ $row['dueDate'] }}</td>
+            <td class="py-5 px-6">{{ $row['dueDate'] }}</td>
             <td class="py-5 px-6">{{ $row['desc'] }}</td>
             <td class="py-5 px-6">
               <a href="{{ route('teacher.assignment.edit') }}">       {{-- add here['assignment_id' => $assignment->id] --}}
