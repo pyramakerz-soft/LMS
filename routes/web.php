@@ -105,6 +105,7 @@ Route::get('/create_lesson', function () {
 
 Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::resource('assessments', StudentAssessmentController::class);
+    Route::get('assessments/student/{student_id}', [StudentAssessmentController::class, 'showStudentAssessments'])->name('teacher.assessments.student');
 });
 Route::get('/create_assignment', function () {
     return view('pages.teacher.Assignment.create');

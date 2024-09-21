@@ -30,6 +30,10 @@ class Student extends Authenticatable
     }
     public function studentAssessment()
     {
-        return $this->hasMany(Student_assessment::class);
+        return $this->hasMany(Student_assessment::class)->latest(); // Fetch the latest assessments
     }
+    // public function studentAssessment()
+    // {
+    //     return $this->hasMany(Student_assessment::class);
+    // }
 }
