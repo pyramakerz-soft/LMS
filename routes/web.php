@@ -1,14 +1,20 @@
 <?php
 
+use App\Http\Controllers\Admin\AssignmentController;
 use App\Http\Controllers\Admin\ChapterController;
+use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\MaterialController;
+use App\Http\Controllers\Admin\StageController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\ChapterController as ControllersChapterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentAssessmentController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UnitController as ControllersUnitController;
+use App\Models\School;
+use App\Models\Stage;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,7 +39,18 @@ Route::get('/student/dashboard', [DashboardController::class, 'index'])->middlew
 Route::resource('material', MaterialController::class);
 Route::resource('units', UnitController::class);
 Route::resource('chapters', ChapterController::class);
+Route::resource('lessons', LessonController::class);
+Route::resource('stages', StageController::class);
+Route::resource('assignments', AssignmentController::class);
 
+
+Route::get('/api/schools/{school}/stages', function (School $school) {
+    return response()->json($school->stages);
+});
+
+Route::get('/api/stages/{stage}/students', function (Stage $stage) {
+    return response()->json($stage->students);
+});
 // Teacher dashboard route with 'auth:teacher' middleware
 Route::get('/teacher/dashboard', function () {
     return 'Teacher Dashboard';
@@ -86,7 +103,9 @@ Route::get('/create_lesson', function () {
     return view('pages.teacher.lesson.create');
 });
 
-
+Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
+    Route::resource('assessments', StudentAssessmentController::class);
+});
 Route::get('/create_assignment', function () {
     return view('pages.teacher.Assignment.create');
 })->name('teacher.Assignment.create');

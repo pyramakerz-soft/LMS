@@ -77,7 +77,29 @@ class LessonController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $lesson = Lesson::findOrFail($id);
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'chapter_id' => 'required|exists:chapters,id', // Validate the selected unit
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'is_active' => 'nullable|boolean',
+        ]);
+
+        // Handle image upload if exists
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('lessons', 'public');
+            $lesson->image = $imagePath;
+        }
+
+        // Update chapter
+        $lesson->update([
+            'title' => $request->title,
+            'chapter_id' => $request->chapter_id, // Update with the selected unit_id
+            'is_active' => $request->is_active ?? 0,
+        ]);
+
+        return redirect()->route('lessons.index')->with('success', 'Lesson updated successfully.');
     }
 
     /**
@@ -85,6 +107,9 @@ class LessonController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $lesson = Lesson::findOrFail($id);
+        $lesson->delete();
+
+        return redirect()->route('admin.lessons.index')->with('success', 'Lesson deleted successfully.');
     }
 }

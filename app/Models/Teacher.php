@@ -4,10 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Teacher extends Model
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+
+
+class Teacher extends Authenticatable
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
     protected $guarded = [];
 
 
@@ -19,5 +24,9 @@ class Teacher extends Model
     public function stages()
     {
         return $this->belongsToMany(Stage::class, 'teacher_stage');
+    }
+    public function assessments()
+    {
+        return $this->hasMany(Student_assessment::class);
     }
 }

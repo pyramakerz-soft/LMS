@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Chapter;
+use App\Models\Material;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class ChapterController extends Controller
      */
     public function index()
     {
-        $chapters = Chapter::with('unit')->get();
+        $chapters = Chapter::with(['unit', 'material.stage'])->get();
         return view('admin.chapters.index', compact('chapters'));
     }
 
@@ -24,7 +25,8 @@ class ChapterController extends Controller
     public function create()
     {
         $units = Unit::all();
-        return view('admin.chapters.create', compact('units'));
+        $materials = Material::with('stage')->get(); 
+        return view('admin.chapters.create', compact('units', 'materials'));
     }
 
     /**
@@ -35,6 +37,7 @@ class ChapterController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'unit_id' => 'required|exists:units,id',
+            'material_id' => 'required|exists:materials,id', // Validate material
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'is_active' => 'nullable|boolean',
         ]);
@@ -47,6 +50,7 @@ class ChapterController extends Controller
         Chapter::create([
             'title' => $request->title,
             'unit_id' => $request->unit_id,
+            'material_id' => $request->material_id, // Store material ID
             'image' => $imagePath,
             'is_active' => $request->is_active ?? 0,
         ]);
@@ -69,7 +73,8 @@ class ChapterController extends Controller
     {
         $chapter = Chapter::findOrFail($id);
         $units = Unit::all();
-        return view('admin.chapters.edit', compact('chapter', 'units'));
+        $materials = Material::all(); // Fetch materials
+        return view('admin.chapters.edit', compact('chapter', 'units', 'materials'));
     }
 
     /**
@@ -81,21 +86,21 @@ class ChapterController extends Controller
 
         $request->validate([
             'title' => 'required|string|max:255',
-            'unit_id' => 'required|exists:units,id', // Validate the selected unit
+            'unit_id' => 'required|exists:units,id',
+            'material_id' => 'required|exists:materials,id', // Validate material
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'is_active' => 'nullable|boolean',
         ]);
 
-        // Handle image upload if exists
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('chapters', 'public');
             $chapter->image = $imagePath;
         }
 
-        // Update chapter
         $chapter->update([
             'title' => $request->title,
-            'unit_id' => $request->unit_id, // Update with the selected unit_id
+            'unit_id' => $request->unit_id,
+            'material_id' => $request->material_id, // Update material ID
             'is_active' => $request->is_active ?? 0,
         ]);
 

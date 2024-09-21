@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('stages', function (Blueprint $table) {
-            $table->id();
-            $table->string('image')->nullable();
-
-            $table->string('name')->nullable();
-
-            $table->timestamps();
+        Schema::table('assignments', function (Blueprint $table) {
+            $table->foreignId('teacher_id')->nullable()->constrained('teachers')->onDelete('cascade');
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stages');
+        Schema::table('assignments', function (Blueprint $table) {
+            $table->dropColumn('teacher_id');
+        });
     }
 };

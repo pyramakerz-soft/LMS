@@ -1,0 +1,49 @@
+{{-- @extends('layouts.admin')
+
+@section('content') --}}
+    <div class="container">
+        <h1>Lessons</h1>
+
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+
+        <a href="{{ route('lessons.create') }}" class="btn btn-primary mb-3">Add Lesson</a>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Chapter</th>
+                    <th>Image</th>
+                    <th>Is Active</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($lessons as $lesson)
+                    <tr>
+                        <td>{{ $lesson->title }}</td>
+                        <td>{{ $lesson->chapter->title }}</td>
+                        <td>
+                            @if ($lesson->image)
+                                <img src="{{ asset('storage/' . $lesson->image) }}" alt="{{ $lesson->title }}" width="100">
+                            @else
+                                No Image
+                            @endif
+                        </td>
+                        <td>{{ $lesson->is_active ? 'Active' : 'Inactive' }}</td>
+                        <td>
+                            <a href="{{ route('lessons.edit', $lesson->id) }}" class="btn btn-info">Edit</a>
+                            <form action="{{ route('lessons.destroy', $lesson->id) }}" method="POST" style="display:inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+{{-- @endsection --}}

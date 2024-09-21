@@ -30,5 +30,8 @@ class Assignment extends Model
     {
         return $this->belongsToMany(Student::class, 'assignment_student');
     }
-
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
+    }
 }
