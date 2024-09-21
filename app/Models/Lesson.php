@@ -11,9 +11,9 @@ class Lesson extends Model
     protected $guarded = [];
 
 
-    public function unit()
+    public function chapter()
     {
-        return $this->belongsTo(Unit::class);
+        return $this->belongsTo(Chapter::class);
     }
 
     public function schools()

@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use App\Models\Teacher;
-use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -27,17 +27,18 @@ class LoginController extends Controller
         $student = Student::where('username', $request->input('username'))->first();
         if ($student && Hash::check($request->input('password'), $student->password)) {
             Auth::guard('student')->login($student); // Log in the student
-            return redirect()->route('student.dashboard'); // Redirect to student dashboard
+
+            // Redirect to student's dashboard or theme page
+            return redirect()->route('student.dashboard');
         }
 
         // Attempt to authenticate as a teacher
         $teacher = Teacher::where('username', $request->input('username'))->first();
         if ($teacher && Hash::check($request->input('password'), $teacher->password)) {
             Auth::guard('teacher')->login($teacher); // Log in the teacher
-            return redirect()->route('teacher.dashboard'); // Redirect to teacher dashboard
+            return redirect()->route('teacher.dashboard');
         }
 
-        // If login fails, return with an error
         return back()->withErrors([
             'username' => 'The provided credentials are incorrect.',
         ]);
@@ -46,7 +47,7 @@ class LoginController extends Controller
     // Handle logout for both students and teachers
     public function logout(Request $request)
     {
-        Auth::logout(); // Log out the user
+        Auth::guard()->logout(); // Log out the user
         return redirect()->route('login'); // Redirect to the login page
     }
 }
