@@ -43,7 +43,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="file_path" class="form-label">File</label>
+                            <label for="file_path" class="form-label">Upload Ebook </label>
                             <input type="file" name="file_path" class="form-control" id="file_path" required>
                         </div>
 

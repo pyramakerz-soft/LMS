@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Teacher Dashboard
+    Lessons for {{ $chapter->title }}
 @endsection
 
 @php
@@ -28,7 +28,6 @@
                         {{ Auth::guard('teacher')->user()->username }}
                     </div>
                     <div class="text-sm">
-                        <!-- Optionally show the teacher's school -->
                         {{ Auth::guard('teacher')->user()->school->name }}
                     </div>
                 </div>
@@ -46,24 +45,23 @@
     <div class="p-2 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="#" class="mx-2 cursor-pointer">Dashboard</a>
+        <a href="{{ route('teacher.dashboard') }}" class="mx-2 cursor-pointer">Dashboard</a>
+        <span class="mx-2 text-[#D0D5DD]">/</span>
+        <a href="#" class="mx-2 cursor-pointer">Lessons</a>
     </div>
 
-    <!-- Display Stages -->
+    <!-- Display Lessons -->
     <div class="flex flex-wrap">
-        @foreach ($stages as $stage)
+        @foreach ($chapter->lessons as $lesson)
             <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
-                <div class="h-[400px] bg-white shadow-md border border-slate-200 rounded-md">
-                    <!-- Make the stage card a link -->
-                    <a href="{{ route('teacher.showMaterials', $stage->id) }}" class="block h-full">
-                        <h3 class="px-4 py-2 bg-gray-200 text-lg font-bold">{{ $stage->name }}</h3>
+                <div class="h-[350px] bg-white shadow-md border border-slate-200 rounded-md">
+                    <h3 class="px-4 py-2 bg-gray-200 text-lg font-bold">{{ $lesson->title }}</h3>
 
-                        <!-- Stage Image -->
-                        <div class="p-4">
-                            <img src="{{ $stage->image ? asset('storage/' . $stage->image) : asset('images/default-stage.png') }}"
-                                 alt="{{ $stage->name }}" class="object-cover w-full h-45 rounded-md">
-                        </div>
-                    </a>
+                    <!-- Lesson Image -->
+                    <div class="p-4">
+                        <img src="{{ $lesson->image ? asset('storage/' . $lesson->image) : asset('images/default-lesson.png') }}"
+                            alt="{{ $lesson->title }}" class="object-cover w-full h-32 rounded-md">
+                    </div>
                 </div>
             </div>
         @endforeach

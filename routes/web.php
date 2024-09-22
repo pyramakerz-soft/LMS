@@ -7,13 +7,16 @@ use App\Http\Controllers\Admin\EbookController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\MaterialController;
 use App\Http\Controllers\Admin\StageController;
+use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\ChapterController as ControllersChapterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentAssessmentController;
-use App\Http\Controllers\StudentController;
+use App\Http\Controllers\Teacher\TeacherDashboardController;
+use App\Http\Controllers\Teacher\TeacherUnitController;
 use App\Http\Controllers\UnitController as ControllersUnitController;
 use App\Models\School;
 use App\Models\Stage;
@@ -39,6 +42,8 @@ Route::get('/student/dashboard', [DashboardController::class, 'index'])->middlew
 
 
 // Route::prefix('admin')->middleware('auth:admin')->group(function () {
+
+
 // Admin Controller 
 Route::resource('material', MaterialController::class);
 Route::resource('units', UnitController::class);
@@ -47,13 +52,23 @@ Route::resource('lessons', LessonController::class);
 Route::resource('stages', StageController::class);
 Route::resource('assignments', AssignmentController::class);
 Route::resource('ebooks', EbookController::class);
+Route::get('/ebooks/{ebook}/view', [EbookController::class, 'viewEbook'])->name('ebooks.view');
+
+
+Route::resource('students', StudentController::class);
+Route::resource('teachers', TeacherController::class);
 Route::resource('admins', AdminController::class);
 
 Route::get('school/{schoolId}/curriculum', [AdminController::class, 'assignCurriculum'])->name('school.curriculum.assign');
 Route::post('school/{schoolId}/curriculum', [AdminController::class, 'storeCurriculum'])->name('school.curriculum.store');
 Route::get('school/{schoolId}/curriculum/view', [AdminController::class, 'viewCurriculum'])->name('school.curriculum.view');
 
-// });
+
+// Get stage where the school select
+Route::get('/api/schools/{school}/stages', function ($schoolId) {
+    $school = School::findOrFail($schoolId);
+    return response()->json($school->stages);
+});
 
 Route::get('/api/schools/{school}/stages', function (School $school) {
     return response()->json($school->stages);
@@ -62,6 +77,17 @@ Route::get('/api/schools/{school}/stages', function (School $school) {
 Route::get('/api/stages/{stage}/students', function (Stage $stage) {
     return response()->json($stage->students);
 });
+
+// Admin Controller 
+
+
+
+// });
+
+
+
+
+
 // Teacher dashboard route with 'auth:teacher' middleware
 Route::get('/teacher/dashboard', function () {
     return 'Teacher Dashboard';
@@ -117,6 +143,18 @@ Route::get('/create_lesson', function () {
 Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::resource('assessments', StudentAssessmentController::class);
     Route::get('assessments/student/{student_id}', [StudentAssessmentController::class, 'showStudentAssessments'])->name('teacher.assessments.student');
+
+    // Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
+
+    Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
+    Route::get('/teacher/stage/{stageId}/materials', [TeacherDashboardController::class, 'showMaterials'])->name('teacher.showMaterials');
+    Route::get('/teacher/material/{materialId}/units', [TeacherDashboardController::class, 'showUnits'])->name('teacher.units');
+    Route::get('/units/{unitId}/chapters', [TeacherDashboardController::class, 'showChapters'])->name('teacher.chapters.index');
+    Route::get('/chapters/{chapterId}/lessons', [TeacherDashboardController::class, 'showLessons'])->name('teacher.lessons.index');
+
+    // Example route to show units for a material (adapt as needed)
+
+
 });
 Route::get('/create_assignment', function () {
     return view('pages.teacher.Assignment.create');
@@ -141,10 +179,6 @@ Route::get('/Show_Assignment', function () {
 Route::get('/Edit_Assignment', function () {
     return view('pages.teacher.Assignment.Edit');
 })->name('teacher.assignment.edit');
-
-Route::get('/view_grades', function () {
-    return view('pages.teacher.Grade.index');
-})->name('teacher.grade');
 
 
 Route::get('/view_material_in_grade', function () {
@@ -171,7 +205,5 @@ Route::get('/view_assignments_cards', function () {
     return view('pages.teacher.AssignmentsCards.index');
 })->name('teacher.assignments_cards');
 // Route::group(['middleware' => ['admin:super_admin,school_admin']], function () {
-Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
-Route::post('/students/store', [StudentController::class, 'store'])->name('students.store');
-Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+
 // });

@@ -34,10 +34,14 @@
                                     <td>{{ $ebook->title }}</td>
                                     <td>{{ $ebook->author ?? 'N/A' }}</td>
                                     <td>{{ $ebook->lesson->title }}</td>
-                                    <td><a href="{{ asset('storage/' . $ebook->file_path) }}" target="_blank">View File</a></td>
+                                    <td>
+                                        <a href="{{ route('ebooks.view', $ebook->id) }}" target="_blank" class="btn btn-success">View
+                                            Ebook</a>
+                                    </td>
                                     <td>
                                         <a href="{{ route('ebooks.edit', $ebook->id) }}" class="btn btn-info">Edit</a>
-                                        <form action="{{ route('ebooks.destroy', $ebook->id) }}" method="POST" style="display:inline-block;">
+                                        <form action="{{ route('ebooks.destroy', $ebook->id) }}" method="POST"
+                                            style="display:inline-block;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger">Delete</button>
