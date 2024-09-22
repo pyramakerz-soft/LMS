@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AssignmentController;
 use App\Http\Controllers\Admin\ChapterController;
+use App\Http\Controllers\Admin\EbookController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\MaterialController;
 use App\Http\Controllers\Admin\StageController;
@@ -35,6 +37,8 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // Student dashboard route with 'auth:student' middleware
 Route::get('/student/dashboard', [DashboardController::class, 'index'])->middleware('auth:student')->name('student.dashboard');
 
+
+// Route::prefix('admin')->middleware('auth:admin')->group(function () {
 // Admin Controller 
 Route::resource('material', MaterialController::class);
 Route::resource('units', UnitController::class);
@@ -42,7 +46,14 @@ Route::resource('chapters', ChapterController::class);
 Route::resource('lessons', LessonController::class);
 Route::resource('stages', StageController::class);
 Route::resource('assignments', AssignmentController::class);
+Route::resource('ebooks', EbookController::class);
+Route::resource('admins', AdminController::class);
 
+Route::get('school/{schoolId}/curriculum', [AdminController::class, 'assignCurriculum'])->name('school.curriculum.assign');
+Route::post('school/{schoolId}/curriculum', [AdminController::class, 'storeCurriculum'])->name('school.curriculum.store');
+Route::get('school/{schoolId}/curriculum/view', [AdminController::class, 'viewCurriculum'])->name('school.curriculum.view');
+
+// });
 
 Route::get('/api/schools/{school}/stages', function (School $school) {
     return response()->json($school->stages);

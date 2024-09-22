@@ -1,55 +1,69 @@
-{{-- @extends('layouts.admin')
+@extends('admin.layouts.layout')
 
-@section('content') --}}
-    <div class="container">
-        <h1>Edit Unit</h1>
+@section('content')
+    <div class="wrapper">
+        @include('admin.layouts.sidebar')
 
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        <div class="main">
+            @include('admin.layouts.navbar')
 
-        <form action="{{ route('units.update', $unit->id) }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
+            <main class="content">
+                <div class="container-fluid p-0">
+                    <h1>Edit Unit</h1>
 
-            <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input type="text" name="title" class="form-control" id="title" value="{{ $unit->title }}" required>
-            </div>
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
-            <div class="mb-3">
-                <label for="material_id" class="form-label">Material</label>
-                <select name="material_id" class="form-control" id="material_id" required>
-                    @foreach ($materials as $material)
-                        <option value="{{ $material->id }}" {{ $unit->material_id == $material->id ? 'selected' : '' }}>
-                            {{ $material->title }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+                    <form action="{{ route('units.update', $unit->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
 
-            <div class="mb-3">
-                <label for="image" class="form-label">Image</label>
-                <input type="file" name="image" class="form-control" id="image" accept="image/*">
-                @if ($unit->image)
-                    <p>Current Image:</p>
-                    <img src="{{ asset('storage/' . $unit->image) }}" alt="{{ $unit->title }}" width="100">
-                @endif
-            </div>
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" name="title" class="form-control" id="title"
+                                value="{{ $unit->title }}" required>
+                        </div>
 
-            <div class="mb-3 form-check">
-                <input type="checkbox" name="is_active" class="form-check-input" id="is_active" value="1"
-                    {{ $unit->is_active ? 'checked' : '' }}>
-                <label class="form-check-label" for="is_active">Is Active</label>
-            </div>
+                        <div class="mb-3">
+                            <label for="material_id" class="form-label">Material</label>
+                            <select name="material_id" class="form-control" id="material_id" required>
+                                @foreach ($materials as $material)
+                                    <option value="{{ $material->id }}"
+                                        {{ $unit->material_id == $material->id ? 'selected' : '' }}>
+                                        {{ $material->title }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-            <button type="submit" class="btn btn-primary">Update Unit</button>
-        </form>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Image</label>
+                            <input type="file" name="image" class="form-control" id="image" accept="image/*">
+                            @if ($unit->image)
+                                <p>Current Image:</p>
+                                <img src="{{ asset('storage/' . $unit->image) }}" alt="{{ $unit->title }}" width="100">
+                            @endif
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" name="is_active" class="form-check-input" id="is_active" value="1"
+                                {{ $unit->is_active ? 'checked' : '' }}>
+                            <label class="form-check-label" for="is_active">Is Active</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Update Unit</button>
+                    </form>
+                </div>
+            </main>
+
+            @include('admin.layouts.footer')
+        </div>
     </div>
-{{-- @endsection --}}
+@endsection
