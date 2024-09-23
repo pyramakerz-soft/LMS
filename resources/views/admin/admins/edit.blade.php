@@ -10,46 +10,54 @@
             <main class="content">
                 <div class="container-fluid p-0">
 
-                    <h1>Edit School Admin</h1>
+                    <h1>Edit School</h1>
 
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
+                    @if (session('success'))
+                        <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    <form action="{{ route('admins.update', $admin->id) }}" method="POST">
+                    <form action="{{ route('admins.update', $school->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 
+                        <!-- School Name -->
                         <div class="mb-3">
-                            <label for="admin_name" class="form-label">Admin Name</label>
-                            <input type="text" name="admin_name" class="form-control" id="admin_name"
-                                value="{{ old('admin_name', $admin->name) }}" required>
+                            <label for="name" class="form-label">School Name</label>
+                            <input type="text" name="name" class="form-control" value="{{ $school->name }}" required>
                         </div>
 
+                        <!-- Address -->
                         <div class="mb-3">
-                            <label for="admin_email" class="form-label">Admin Email</label>
-                            <input type="email" name="admin_email" class="form-control" id="admin_email"
-                                value="{{ old('admin_email', $admin->email) }}" required>
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" name="address" class="form-control" value="{{ $school->address }}">
                         </div>
 
+                        <!-- City -->
                         <div class="mb-3">
-                            <label for="admin_password" class="form-label">Password (Leave empty if not changing)</label>
-                            <input type="password" name="admin_password" class="form-control" id="admin_password">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" name="city" class="form-control" value="{{ $school->city }}">
                         </div>
 
+                        <!-- Type -->
                         <div class="mb-3">
-                            <label for="admin_password_confirmation" class="form-label">Confirm Password</label>
-                            <input type="password" name="admin_password_confirmation" class="form-control"
-                                id="admin_password_confirmation">
+                            <label for="type" class="form-label">School Type</label>
+                            <select name="type" class="form-control" required>
+                                <option value="international" {{ $school->type == 'international' ? 'selected' : '' }}>
+                                    International</option>
+                                <option value="national" {{ $school->type == 'national' ? 'selected' : '' }}>National
+                                </option>
+                            </select>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Update Admin</button>
+                        <!-- Is Active -->
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" name="is_active" class="form-check-input" id="is_active" value="1"
+                                {{ $school->is_active ? 'checked' : '' }}>
+                            <label for="is_active" class="form-check-label">Is Active</label>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary">Update School</button>
                     </form>
 
                 </div>

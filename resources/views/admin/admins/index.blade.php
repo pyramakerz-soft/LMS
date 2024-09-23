@@ -22,22 +22,24 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Email</th>
-                                <th>School</th>
+                                <th>Address</th>
+                                <th>City</th>
+                                <th>Type</th>
                                 <th>Students Count</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($admins as $admin)
+                            @foreach ($schools as $school)
                                 <tr>
-                                    <td>{{ $admin->name }}</td>
-                                    <td>{{ $admin->email }}</td>
-                                    <td>{{ $admin->school->name ?? 'N/A' }}</td>
-                                    <td>{{ $admin->school->students->count() ?? 'N/A' }}</td>
+                                    <td>{{ $school->name ?? '-' }}</td>
+                                    <td>{{ $school->address ?? '-' }}</td>
+                                    <td>{{ $school->city ?? '-' }}</td>
+                                    <td>{{ $school->type ?? '-' }}</td>
+                                    <td>{{ $school->students->count() ?? '-' }}</td>
                                     <td>
-                                        <a href="{{ route('admins.edit', $admin->id) }}" class="btn btn-info">Edit</a>
-                                        <form action="{{ route('admins.destroy', $admin->id) }}" method="POST"
+                                        <a href="{{ route('admins.edit', $school->id) }}" class="btn btn-info">Edit</a>
+                                        <form action="{{ route('admins.destroy', $school->id) }}" method="POST"
                                             style="display:inline-block;">
                                             @csrf
                                             @method('DELETE')
@@ -45,11 +47,11 @@
                                         </form>
 
                                         <!-- Button to assign curriculum -->
-                                        <a href="{{ route('school.curriculum.assign', $admin->school->id) }}"
+                                        <a href="{{ route('school.curriculum.assign', $school->id) }}"
                                             class="btn btn-success">Add Curriculum</a>
 
                                         <!-- New Button to view curriculum -->
-                                        <a href="{{ route('school.curriculum.view', $admin->school->id) }}"
+                                        <a href="{{ route('school.curriculum.view', $school->id) }}"
                                             class="btn btn-primary">View Curriculum</a>
                                     </td>
                                 </tr>

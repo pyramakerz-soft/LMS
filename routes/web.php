@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AssignmentController;
+use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ChapterController;
 use App\Http\Controllers\Admin\EbookController;
 use App\Http\Controllers\Admin\LessonController;
@@ -32,6 +33,63 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/', function () {
+    return view('landing'); // Displays the landing page
+})->name('landing');
+
+
+
+Route::prefix('admin')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('/login', [AuthController::class, 'login'])->name('admin.login.post');
+
+    Route::middleware('auth:admin')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
+
+        // Admin Controller 
+        Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('stage/{stageId}/material/create', [StageController::class, 'createMaterial'])->name('material.unit.chapter.create');
+
+        Route::resource('material', MaterialController::class);
+        Route::resource('units', UnitController::class);
+        Route::resource('chapters', ChapterController::class);
+        Route::resource('lessons', LessonController::class);
+        Route::resource('stages', StageController::class);
+        Route::resource('assignments', AssignmentController::class);
+        Route::resource('ebooks', EbookController::class);
+        Route::get('/ebooks/{ebook}/view', [EbookController::class, 'viewEbook'])->name('ebooks.view');
+
+        Route::resource('students', StudentController::class);
+        Route::resource('teachers', TeacherController::class);
+        Route::resource('admins', AdminController::class);
+
+        Route::get('school/{schoolId}/curriculum', [AdminController::class, 'assignCurriculum'])->name('school.curriculum.assign');
+        Route::post('school/{schoolId}/curriculum', [AdminController::class, 'storeCurriculum'])->name('school.curriculum.store');
+        Route::get('school/{schoolId}/curriculum/view', [AdminController::class, 'viewCurriculum'])->name('school.curriculum.view');
+        Route::delete('/schools/{schoolId}/stages/{stageId}', [AdminController::class, 'removeStage'])->name('school.removeStage');
+        Route::delete('/schools/{schoolId}/materials/{materialId}', [AdminController::class, 'removeMaterial'])->name('school.removeMaterial');
+        Route::delete('/schools/{schoolId}/units/{unitId}', [AdminController::class, 'removeUnit'])->name('school.removeUnit');
+        Route::delete('/schools/{schoolId}/chapters/{chapterId}', [AdminController::class, 'removeChapter'])->name('school.removeChapter');
+        Route::delete('/schools/{schoolId}/lessons/{lessonId}', [AdminController::class, 'removeLesson'])->name('school.removeLesson');
+
+        // Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+        Route::get('/api/schools/{school}/stages', function (School $school) {
+            return response()->json($school->stages);
+        });
+
+        Route::get('/api/stages/{stage}/students', function (Stage $stage) {
+            return response()->json($stage->students);
+        });
+    });
+});
+
+
+
+
+
+
+
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
@@ -41,48 +99,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/student/dashboard', [DashboardController::class, 'index'])->middleware('auth:student')->name('student.dashboard');
 
 
-// Route::prefix('admin')->middleware('auth:admin')->group(function () {
-
-
-// Admin Controller 
-Route::resource('material', MaterialController::class);
-Route::resource('units', UnitController::class);
-Route::resource('chapters', ChapterController::class);
-Route::resource('lessons', LessonController::class);
-Route::resource('stages', StageController::class);
-Route::resource('assignments', AssignmentController::class);
-Route::resource('ebooks', EbookController::class);
-Route::get('/ebooks/{ebook}/view', [EbookController::class, 'viewEbook'])->name('ebooks.view');
-
-
-Route::resource('students', StudentController::class);
-Route::resource('teachers', TeacherController::class);
-Route::resource('admins', AdminController::class);
-
-Route::get('school/{schoolId}/curriculum', [AdminController::class, 'assignCurriculum'])->name('school.curriculum.assign');
-Route::post('school/{schoolId}/curriculum', [AdminController::class, 'storeCurriculum'])->name('school.curriculum.store');
-Route::get('school/{schoolId}/curriculum/view', [AdminController::class, 'viewCurriculum'])->name('school.curriculum.view');
-
-
-// Get stage where the school select
-Route::get('/api/schools/{school}/stages', function ($schoolId) {
-    $school = School::findOrFail($schoolId);
-    return response()->json($school->stages);
-});
-
-Route::get('/api/schools/{school}/stages', function (School $school) {
-    return response()->json($school->stages);
-});
-
-Route::get('/api/stages/{stage}/students', function (Stage $stage) {
-    return response()->json($stage->students);
-});
-
-// Admin Controller 
-
-
-
-// });
 
 // Start student  dashboard routes
 

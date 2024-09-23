@@ -23,5 +23,9 @@ class Chapter extends Model
     {
         return $this->belongsTo(Material::class);
     }
+    public function schools()
+    {
+        return $this->belongsToMany(School::class, 'chapter_school');
+    }
 
 }

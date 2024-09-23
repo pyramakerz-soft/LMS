@@ -12,10 +12,19 @@
 
                     <h1>Assign Curriculum to {{ $school->name }}</h1>
 
-                    @if ($errors->any())
+                    {{-- @if ($errors->any())
                         <div class="alert alert-danger">{{ implode('', $errors->all(':message')) }}</div>
-                    @endif
+                    @endif --}}
 
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form action="{{ route('school.curriculum.store', $school->id) }}" method="POST">
                         @csrf
 
@@ -74,7 +83,6 @@
 @endsection
 
 @section('page_js')
-
     <script>
         document.getElementById('stage_id').addEventListener('change', function() {
             let stageId = this.value;

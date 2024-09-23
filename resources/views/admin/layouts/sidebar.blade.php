@@ -22,7 +22,7 @@
             </li>
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('stages.index') }}">
-                    <i class="align-middle" data-feather="user"></i> <span class="align-middle">Stage</span>
+                    <i class="align-middle" data-feather="user"></i> <span class="align-middle">Grade</span>
                 </a>
             </li>
 
