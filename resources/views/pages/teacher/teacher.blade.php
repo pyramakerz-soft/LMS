@@ -20,7 +20,14 @@
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
-                    <img class="w-20 h-20 rounded-full" alt="avatar" src="{{ Auth::guard('teacher')->user()->image }}" />
+                    {{-- <img class="w-20 h-20 rounded-full" alt="avatar" src="{{ Auth::guard('teacher')->user()->image }}" /> --}}
+                    @if (Auth::guard('teacher')->user()->image)
+                        <img src="{{ asset('storage/' . Auth::guard('teacher')->user()->image) }}" alt="Teacher Image"
+                            class="w-20 h-20 rounded-full">
+                    @else
+                        <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
+                            class="w-30 h-20 rounded-full">
+                    @endif
                 </div>
 
                 <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
@@ -61,7 +68,7 @@
                         <!-- Stage Image -->
                         <div class="p-4">
                             <img src="{{ $stage->image ? asset('storage/' . $stage->image) : asset('images/default-stage.png') }}"
-                                 alt="{{ $stage->name }}" class="object-cover w-full h-45 rounded-md">
+                                alt="{{ $stage->name }}" class="object-cover w-full h-45 rounded-md">
                         </div>
                     </a>
                 </div>

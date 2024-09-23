@@ -23,6 +23,7 @@
                             <tr>
                                 <th>Image</th>
                                 <th>Username</th>
+                                <th>Password</th>
                                 <th>Gender</th>
                                 <th>School</th>
                                 <th>Stage</th>
@@ -41,6 +42,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $student->username }}</td>
+                                    <td>{{ $student->plain_password }}</td>
                                     <td>{{ ucfirst($student->gender) }}</td>
                                     <td>{{ $student->school->name }}</td>
                                     <td>{{ $student->stage->name }}</td>

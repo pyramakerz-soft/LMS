@@ -15,7 +15,7 @@
         @foreach ($menuItems as $menuItem)
             <div class="text_Style text-lg md:text-xl font-semibold px-9 py-3 md:py-5 flex items-center space-x-4 cursor-pointer">
                 <i class="{{ $menuItem['icon'] }}"></i>
-                <a href="#" class="no-underline ml-3">{{ $menuItem['label'] }}</a>
+                <a href="{{ $menuItem['route'] }}" class="no-underline ml-3">{{ $menuItem['label'] }}</a>
             </div>
         @endforeach
         <div class="text_Style text-lg md:text-xl font-semibold px-9 py-3 md:py-5 flex items-center space-x-4 cursor-pointer">

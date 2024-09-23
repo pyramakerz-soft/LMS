@@ -84,7 +84,15 @@ Route::get('/api/stages/{stage}/students', function (Stage $stage) {
 
 // });
 
+// Start student  dashboard routes
 
+Route::get('/theme', [DashboardController::class, 'index'])->name('student.theme');
+Route::get('/materials/{materialId}/units', [ControllersUnitController::class, 'index'])->name('student_units.index');
+Route::get('/units/{unitId}/chapters', [ControllersChapterController::class, 'index'])->name('student_chapters.index');
+Route::get('/chapters/{chapterId}/lessons', [ControllersChapterController::class, 'showLessons'])->name('student_lessons.index');
+Route::get('/lessons/{lessonId}/ebooks', [ControllersChapterController::class, 'viewEbooks'])->name('student_lessons.ebooks');
+
+// End student  dashboard routes
 
 
 
@@ -93,32 +101,32 @@ Route::get('/teacher/dashboard', function () {
     return 'Teacher Dashboard';
 })->middleware('auth:teacher')->name('teacher.dashboard');
 
-Route::get('/theme', [DashboardController::class, 'index'])->name('student.theme');
+
+
+
 
 
 // Route::get('/unit', function () {
 //     return view('pages.student.unit.index');
 // })->name('student.unit');
 
-Route::get('/materials/{materialId}/units', [ControllersUnitController::class, 'index'])->name('student_units.index');
-Route::get('/units/{unitId}/chapters', [ControllersChapterController::class, 'index'])->name('student_chapters.index');
 
 
-Route::get('/chapter', function () {
-    return view('pages.student.chapter.index');
-})->name('student.chapter');
+// Route::get('/chapter', function () {
+//     return view('pages.student.chapter.index');
+// })->name('student.chapter');
 
-Route::get('/week', function () {
-    return view('pages.student.week.index');
-})->name('student.week');
+// Route::get('/week', function () {
+//     return view('pages.student.week.index');
+// })->name('student.week');
 
-Route::get('/assignment', function () {
-    return view('pages.student.assignment.index');
-})->name('student.assignment');
+// Route::get('/assignment', function () {
+//     return view('pages.student.assignment.index');
+// })->name('student.assignment');
 
-Route::get('/assignment_show', function () {
-    return view('pages.student.assignment.show');
-})->name('student.assignment.show');
+// Route::get('/assignment_show', function () {
+//     return view('pages.student.assignment.show');
+// })->name('student.assignment.show');
 
 Route::get('/create_theme', function () {
     return view('pages.teacher.theme.create');
@@ -156,6 +164,7 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
 
 
 });
+
 Route::get('/create_assignment', function () {
     return view('pages.teacher.Assignment.create');
 })->name('teacher.Assignment.create');
