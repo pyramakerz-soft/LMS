@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
 @section('title')
-    @yield('title')
+    Lessons for {{ $chapter->title }}
 @endsection
 
 @php
     $menuItems = [
-        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('student.theme')],
-        ['label' => 'Assignment', 'icon' => 'fas fa-home', 'route' => 'student.assignment'],
+        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => 'teacher.dashboard'],
+        ['label' => 'Assignments', 'icon' => 'fas fa-home', 'route' => 'teacher.assignment'],
     ];
-
 @endphp
+
 @section('sidebar')
     @include('components.sidebar', ['menuItems' => $menuItems])
 @endsection
@@ -20,16 +20,15 @@
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
-                    <img class="w-20 h-20 rounded-full" alt="avatar1" src="{{ $userAuth->image }}" />
+                    <img class="w-20 h-20 rounded-full" alt="avatar" src="{{ Auth::guard('teacher')->user()->image }}" />
                 </div>
 
                 <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
                     <div class="text-xl">
-                        {{ $userAuth->username }}
+                        {{ Auth::guard('teacher')->user()->username }}
                     </div>
                     <div class="text-sm">
-                        {{ $userAuth->stage->name }}
-
+                        {{ Auth::guard('teacher')->user()->school->name }}
                     </div>
                 </div>
             </div>
@@ -42,28 +41,27 @@
         </div>
         @yield('insideContent')
     </div>
+
     <div class="p-2 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
-        {{-- @foreach ($paths as $item) --}}
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="#" class="mx-2 cursor-pointer">Theme</a>
-        {{-- @endforeach --}}
+        <a href="{{ route('teacher.dashboard') }}" class="mx-2 cursor-pointer">Dashboard</a>
+        <span class="mx-2 text-[#D0D5DD]">/</span>
+        <a href="#" class="mx-2 cursor-pointer">Lessons</a>
     </div>
+
+    <!-- Display Lessons -->
     <div class="flex flex-wrap">
-        @foreach ($material->units as $unit)
+        @foreach ($chapter->lessons as $lesson)
             <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
                 <div class="h-[350px] bg-white shadow-md border border-slate-200 rounded-md">
-                    <a class="cursor-pointer" href="{{ route('student_chapters.index', $unit->id) }}">
-                        @if ($unit->image)
-                            <img src="{{ asset('storage/' . $unit->image) }}" class="card-img-top"
-                                alt="{{ $unit->name }}">
-                        @else
-                            <img src="https://via.placeholder.com/150" class="card-img-top" alt="No Image">
-                        @endif
-                        <p class="py-5 px-2 text-slate-800 text-2xl font-semibold">
-                            {{ $unit->title }}
-                        </p>
-                    </a>
+                    <h3 class="px-4 py-2 bg-gray-200 text-lg font-bold">{{ $lesson->title }}</h3>
+
+                    <!-- Lesson Image -->
+                    <div class="p-4">
+                        <img src="{{ $lesson->image ? asset('storage/' . $lesson->image) : asset('images/default-lesson.png') }}"
+                            alt="{{ $lesson->title }}" class="object-cover w-full h-32 rounded-md">
+                    </div>
                 </div>
             </div>
         @endforeach

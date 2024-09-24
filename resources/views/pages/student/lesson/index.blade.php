@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    @yield('title')
+    Lessons for {{ $chapter->title }}
 @endsection
 
 @php
@@ -9,8 +9,8 @@
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('student.theme')],
         ['label' => 'Assignment', 'icon' => 'fas fa-home', 'route' => 'student.assignment'],
     ];
-
 @endphp
+
 @section('sidebar')
     @include('components.sidebar', ['menuItems' => $menuItems])
 @endsection
@@ -20,7 +20,6 @@
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
-                    {{-- <img class="w-20 h-20 rounded-full" alt="avatar1" src="{{ Auth::guard('student')->user()->image }}" /> --}}
                     @if ($userAuth->image)
                         <img src="{{ asset('storage/' . $userAuth->image) }}" alt="Student Image"
                             class="w-20 h-20 rounded-full">
@@ -36,7 +35,6 @@
                     </div>
                     <div class="text-sm">
                         {{ $userAuth->stage->name }}
-
                     </div>
                 </div>
             </div>
@@ -49,27 +47,28 @@
         </div>
         @yield('insideContent')
     </div>
+
     <div class="p-2 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
-        {{-- @foreach ($paths as $item) --}}
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="#" class="mx-2 cursor-pointer">Theme</a>
-        {{-- @endforeach --}}
+        <a href="{{ route('student_chapters.index', $chapter->unit_id) }}" class="mx-2 cursor-pointer">Chapters</a>
     </div>
+
     <div class="flex flex-wrap">
-        @foreach ($materials as $material)
+        @foreach ($chapter->lessons as $lesson)
             <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
                 <div class="h-[350px] bg-white shadow-md border border-slate-200 rounded-md">
-                    <a class="cursor-pointer" href="{{ route('student_units.index', $material->id) }}">
-                        @if ($material->image)
-                            <img src="{{ asset('storage/' . $material->image) }}" alt="{{ $material->title }}"
-                                class="object-cover w-full h-[80%] rounded-md">
-                        @else
-                            No Image
-                        @endif
-                        <p class="py-5 px-2 text-slate-800 text-2xl font-semibold">
-                            {{ $material->title }}
-                        </p>
+                    <a href="{{ route('student_lessons.ebooks', $lesson->id) }}" class="block h-full">
+                        <h3 class="px-4 py-2 bg-gray-200 text-lg font-bold">{{ $lesson->title }}</h3>
+                        <div class="p-4">
+                            @if ($lesson->image)
+                                <img src="{{ asset('storage/' . $lesson->image) }}"
+                                    class="object-cover w-full h-32 rounded-md">
+                            @else
+                                <img src="https://via.placeholder.com/150" class="object-cover w-full h-32 rounded-md"
+                                    alt="No Image">
+                            @endif
+                        </div>
                     </a>
                 </div>
             </div>

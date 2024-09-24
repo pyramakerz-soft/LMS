@@ -10,18 +10,18 @@
             <main class="content">
                 <div class="container-fluid p-0">
 
-                    <h1>Stages</h1>
+                    <h1>Grades</h1>
 
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    <a href="{{ route('stages.create') }}" class="btn btn-primary mb-3">Add Stage</a>
+                    <a href="{{ route('stages.create') }}" class="btn btn-primary mb-3">Add Grade</a>
 
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Stage Name</th>
+                                <th>Grade Name</th>
                                 <th>Image</th>
                                 <th>Actions</th>
                             </tr>
@@ -39,6 +39,9 @@
                                         @endif
                                     </td>
                                     <td>
+
+                                        <a href="{{ route('material.unit.chapter.create', $stage->id) }}"
+                                            class="btn btn-primary">Add Material</a>
                                         <a href="{{ route('stages.edit', $stage->id) }}" class="btn btn-info">Edit</a>
                                         <form action="{{ route('stages.destroy', $stage->id) }}" method="POST"
                                             style="display:inline-block;">

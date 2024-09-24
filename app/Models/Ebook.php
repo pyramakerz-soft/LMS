@@ -13,4 +13,9 @@ class Ebook extends Model
     {
         return $this->belongsTo(Lesson::class);
     }
+    // public function getFilePathAttribute($val)
+    // {
+    //     return ($val !== null) ? asset('public/storage/ebooks/' . basename($val).'/index.html') : "";
+
+    // }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Ebook;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
+use ZipArchive;
 
 class EbookController extends Controller
 {
@@ -36,23 +37,64 @@ class EbookController extends Controller
             'title' => 'required|string|max:255',
             'author' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            // Allow any type of file, including ppt, pdf, html, etc.
-            'file_path' => 'required|file|mimes:pdf,ppt,pptx,doc,docx,html,txt,zip|max:10240', // Set max file size to 10MB
+            'file_path' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240', // Accept zip or other file formats
             'lesson_id' => 'required|exists:lessons,id',
         ]);
 
-        $filePath = $request->file('file_path')->store('ebooks', 'public'); // Store the file in 'storage/app/public/ebooks'
+        // Handle the file upload and saving process
+        $file = $request->file('file_path');
+        $isZip = $file->getClientOriginalExtension() === 'zip';
 
+        // If it's a zip file, extract it
+        if ($isZip) {
+            $filePath = $file->store('ebooks', 'public'); // Store the zip file temporarily
+
+            // Create a path for the extracted files
+            $extractPath = storage_path('app/public/ebooks/' . pathinfo($filePath, PATHINFO_FILENAME));
+
+            // Extract the zip file
+            $zip = new \ZipArchive;
+            if ($zip->open(storage_path('app/public/' . $filePath)) === TRUE) {
+                $zip->extractTo($extractPath);
+                $zip->close();
+
+                // Update the file path to the folder where files are extracted
+                $filePath = 'ebooks/' . pathinfo($filePath, PATHINFO_FILENAME);
+
+                // Check if there's an index.html file in the extracted folder
+                if (file_exists(public_path('storage/' . $filePath . '/index.html'))) {
+                    // Save the ebook record and redirect to view index.html
+                    $ebook = Ebook::create([
+                        'title' => $request->title,
+                        'author' => $request->author,
+                        'description' => $request->description,
+                        'file_path' => $filePath,
+                        'lesson_id' => $request->lesson_id,
+                    ]);
+
+                    // Redirect to view the index.html file
+                    return redirect()->back();
+                }
+            } else {
+                return back()->withErrors(['file_path' => 'Failed to extract the zip file.']);
+            }
+        } else {
+            // Store non-zip files (pdf, ppt, etc.)
+            $filePath = $file->store('ebooks', 'public');
+        }
+
+        // Create the Ebook record in the database
         Ebook::create([
             'title' => $request->title,
             'author' => $request->author,
             'description' => $request->description,
-            'file_path' => $filePath,
+            'file_path' => $filePath, // This could be a file or a folder
             'lesson_id' => $request->lesson_id,
         ]);
 
         return redirect()->route('ebooks.index')->with('success', 'Ebook created successfully.');
     }
+
 
     /**
      * Display the specified resource.
@@ -61,13 +103,35 @@ class EbookController extends Controller
     {
         //
     }
+    public function viewEbook(Ebook $ebook)
+    {
+        // Ensure that $ebook->file_path contains only the relative path
+        $relativePath = 'storage/' . $ebook->file_path . '/index.html'; // Correct path for web
+
+        // Construct the URL to the index.html file
+        $fileUrl = asset($relativePath); // This creates a public URL
+
+        // Debugging: log the URL
+        \Log::info('Looking for index.html at: ' . $fileUrl);
+
+        // Check if the file exists in the storage path
+        if (file_exists(public_path($relativePath))) {
+            return redirect($fileUrl); // Redirect to the file URL for viewing
+        } else {
+            return abort(404, 'Index file not found.');
+        }
+    }
+
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
+        $ebook = Ebook::findOrFail($id);
+
         $lessons = Lesson::all();
+
         return view('admin.ebooks.edit', compact('ebook', 'lessons'));
     }
 

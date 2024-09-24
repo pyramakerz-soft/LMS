@@ -10,7 +10,7 @@
             <main class="content">
                 <div class="container-fluid p-0">
 
-                    <h1>Edit Stage</h1>
+                    <h1>Edit Grade</h1>
 
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -27,21 +27,21 @@
                         @method('PUT')
 
                         <div class="mb-3">
-                            <label for="name" class="form-label">Stage Name</label>
+                            <label for="name" class="form-label">Grade Name</label>
                             <input type="text" name="name" class="form-control" id="name"
                                 value="{{ $stage->name }}" required>
                         </div>
 
                         <div class="mb-3">
-                            <label for="image" class="form-label">Stage Image</label>
-                            <input type="file" name="image" class="form-control" id="image" accept="image/*">
+                            <label for="image" class="form-label">Grade Image</label>
+                            <input type="file" name="image" value="{{ $stage->image }}" class="form-control" id="image" accept="image/*">
                             @if ($stage->image)
                                 <p>Current Image:</p>
                                 <img src="{{ asset('storage/' . $stage->image) }}" alt="{{ $stage->name }}" width="100">
                             @endif
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Update Stage</button>
+                        <button type="submit" class="btn btn-primary">Update Grade</button>
                     </form>
 
                 </div>
