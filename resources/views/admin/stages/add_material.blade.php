@@ -6,7 +6,9 @@
 
         <div class="main">
             @include('admin.layouts.navbar')
-
+            @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
             <main class="content">
                 <div class="container-fluid p-0">
                     <h1>Add Material</h1>
@@ -19,17 +21,31 @@
                         <div class="card-body">
                             <form action="{{ route('material.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
+                                <input type="hidden" name="stage_id" value="{{ $stage->id }}">
+
                                 <div class="mb-3">
                                     <label for="title" class="form-label">Material Title</label>
                                     <input type="text" class="form-control" id="title" name="title" required>
+                                    @error('title')
+                                        <div class="text-danger">{{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="image" class="form-label">Material Image</label>
                                     <input type="file" class="form-control" id="image" name="image">
+                                    @error('image')
+                                        <div class="text-danger">{{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="is_active" class="form-label">Active Status</label>
                                     <input type="checkbox" id="is_active" name="is_active" value="1">
+                                    @error('is_active')
+                                        <div class="text-danger">{{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                                 <button type="submit" class="btn btn-primary">Create Material</button>
                             </form>
@@ -40,6 +56,7 @@
                     <div class="card mb-4">
                         <div class="card-header">
                             <h3>Create Unit</h3>
+  
                         </div>
                         <div class="card-body">
                             <form action="{{ route('units.store') }}" method="POST" enctype="multipart/form-data">

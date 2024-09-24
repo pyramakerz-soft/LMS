@@ -53,7 +53,7 @@ class MaterialController extends Controller
             'is_active' => $request->is_active ?? 0,
         ]);
 
-        return redirect()->route('material.index')->with('success', 'Material created successfully.');
+        return redirect()->back()->with('success', 'Material created successfully.');
     }
 
     /**
@@ -69,8 +69,8 @@ class MaterialController extends Controller
      */
     public function edit(string $id)
     {
-        $material = Material::findOrFail($id); 
-        $stages = Stage::all(); 
+        $material = Material::findOrFail($id);
+        $stages = Stage::all();
         return view("admin.material.edit", compact('material', 'stages'));
     }
 
@@ -90,8 +90,8 @@ class MaterialController extends Controller
 
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('materials', 'public');
-            
-            $material->image = $imagePath; 
+
+            $material->image = $imagePath;
         }
 
         // Update the material
@@ -109,8 +109,8 @@ class MaterialController extends Controller
      */
     public function destroy(string $id)
     {
-        $material = Material::findOrFail($id); 
-        $material->delete(); 
+        $material = Material::findOrFail($id);
+        $material->delete();
 
         return redirect()->route('material.index')->with('success', 'Material deleted successfully.');
     }

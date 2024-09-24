@@ -37,7 +37,7 @@ class ChapterController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'unit_id' => 'required|exists:units,id',
-            'material_id' => 'required|exists:materials,id', // Validate material
+            'material_id' => 'required|exists:materials,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'is_active' => 'nullable|boolean',
         ]);
@@ -50,12 +50,12 @@ class ChapterController extends Controller
         Chapter::create([
             'title' => $request->title,
             'unit_id' => $request->unit_id,
-            'material_id' => $request->material_id, // Store material ID
+            'material_id' => $request->material_id,
             'image' => $imagePath,
             'is_active' => $request->is_active ?? 0,
         ]);
 
-        return redirect()->route('chapters.index')->with('success', 'Chapter created successfully.');
+        return redirect()->back()->with('success', 'Chapter created successfully.');
     }
 
     /**

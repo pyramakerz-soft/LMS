@@ -35,17 +35,15 @@ class UnitController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'material_id' => 'required|exists:materials,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
             'is_active' => 'nullable|boolean',
         ]);
 
-        // Handle image upload if exists
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('units', 'public');
         }
 
-        // Create a new unit
         Unit::create([
             'title' => $request->title,
             'material_id' => $request->material_id,
@@ -53,7 +51,7 @@ class UnitController extends Controller
             'is_active' => $request->is_active ?? 0,
         ]);
 
-        return redirect()->route('units.index')->with('success', 'Unit created successfully.');
+        return redirect()->back()->with('success', 'Unit created successfully.');
     }
 
     /**
