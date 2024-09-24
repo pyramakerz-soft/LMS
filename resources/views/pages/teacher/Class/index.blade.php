@@ -1,41 +1,42 @@
-@extends('pages.student.student')
+@extends('pages.teacher.teacher')
 
 @section("title")
-Theme
+    Class
 @endsection
-
-@section("content")
 
 @php
-
-$tableDataa = [
-    [
-        'name' => 'John Doe',
-        'records' => [
-            ['attendance' => 'Present', 'participation' => 'Active', 'behavior' => 'Good', 'homework' => 'Completed', 'final_project' => 'A'],
-            ['attendance' => 'Absent', 'participation' => 'N/A', 'behavior' => 'N/A', 'homework' => 'Incomplete', 'final_project' => 'B'],
+    $tableDataa = [
+        [
+            'name' => 'John Doe',
+            'records' => [
+                ['attendance' => '7', 'participation' => '12', 'behavior' => '12', 'homework' => '6', 'final_project' => '50'],
+            ]
+        ],
+        [
+            'name' => 'Jane Smith',
+            'records' => [
+                ['attendance' => '7', 'participation' => '12', 'behavior' => '12', 'homework' => '6', 'final_project' => '50'],
+            ]
         ]
-    ],
-    [
-        'name' => 'Jane Smith',
-        'records' => [
-            ['attendance' => 'Present', 'participation' => 'Average', 'behavior' => 'Excellent', 'homework' => 'Completed', 'final_project' => 'A+'],
-        ]
-    ]
-];
+    ];
 
+    $paths = [
+        ["name" => "Grade", "url" => "teacher.theme"],
+        ["name" => "Material", "url" => "teacher.material"],
+        ["name" => "Theme", "url" => "teacher.theme"],
+        ["name" => "Unit", "url" => "teacher.unit"],
+        ["name" => "Chapter", "url" => "teacher.chapter"],
+        ["name" => "Lesson", "url" => "teacher.lesson"],
+        ["name" => "Assignments", "url" => "teacher.assignments_cards"],
+        ["name" => "Class", "url" => "teacher.class"]
+    ];
 @endphp
 
-<div class="p-4">
-    @include('components.profile', ['name' => 'menna' , 'subText'=>'class1' , "image" => "https://mdbcdn.b-cdn.net/img/new/avatars/9.webp"] )
+@section("InsideContent")
+    <div>
+        @include('components.path',['paths' => $paths])
 
+        @include('components.GradesTable', ['tableData' => $tableDataa])
 
-    @include('components.path',['paths' => ['Assignment','Class1']])
-
-    @include('components.GradesTable', ['tableData' => $tableDataa])
-
-</div>
-
-
+    </div>
 @endsection
-

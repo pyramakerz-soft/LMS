@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CurriculumController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::get('stages/{stageId}/materials', [CurriculumController::class, 'getMaterialsByStage']);
+Route::get('materials/{materialId}/units', [CurriculumController::class, 'getUnitsByMaterial']);
+Route::get('units/{unitId}/chapters', [CurriculumController::class, 'getChaptersByUnit']);
+Route::get('chapters/{chapterId}/lessons', [CurriculumController::class, 'getLessonsByChapter']);

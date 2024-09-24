@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->string('image')->nullable();
             $table->boolean('is_active')->nullable();
+            $table->foreignId('stage_id')->constrained()->onDelete('cascade');
+
             $table->timestamps();
         });
     }

@@ -29,5 +29,9 @@ class Stage extends Model
     {
         return $this->belongsToMany(Assignment::class, 'assignment_stage');
     }
+    public function materials()
+    {
+        return $this->hasMany(Material::class);
+    }
     
 }

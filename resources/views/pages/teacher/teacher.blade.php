@@ -6,14 +6,25 @@
 
 @php
 $menuItems = [
-    ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => '#'],
+    ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => 'teacher.grade'],
+    ['label' => 'Assignment', 'icon' => 'fas fa-home', 'route' => 'teacher.Assignment'],
 ];
-
 @endphp
+
+
 @section("sidebar")
+
     @include('components.sidebar', ['menuItems' => $menuItems])
+    
 @endsection
 
+
+
 @section("content")
-    @yield("content")
+
+<div class="p-5">
+    @include('components.profile', ['name' => 'mennaosama' , 'subText'=>'class1' , "image" => "https://mdbcdn.b-cdn.net/img/new/avatars/9.webp"] )
+    @yield("InsideContent")
+</div>
+
 @endsection

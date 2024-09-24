@@ -38,6 +38,10 @@ class School extends Model
     {
         return $this->belongsToMany(Unit::class, 'unit_school');
     }
+    public function chapters()
+    {
+        return $this->belongsToMany(Chapter::class, 'chapter_school');
+    }
 
     public function assignments()
     {

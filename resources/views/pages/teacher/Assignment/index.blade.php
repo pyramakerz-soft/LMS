@@ -1,7 +1,7 @@
-@extends('pages.student.student')
+@extends('pages.teacher.teacher')
 
 @section("title")
-Theme
+    Assignment
 @endsection
 
 @php
@@ -17,29 +17,30 @@ $tableData = [
             'dueDate' => '2024-10-05',
             'desc' => 'Description for Task 2',
         ],
-        // Add more data as needed
     ];
+
+    $paths = [
+        ["name" => "Assignment", "url" => "teacher.Assignment"],
+    ];
+
 @endphp
 
 
 
-@section("content")
-<div class="p-4">
+@section("InsideContent")
 
-  @include('components.profile', ['name' => 'menna' , 'subText'=>'class1' , "image" => "https://mdbcdn.b-cdn.net/img/new/avatars/9.webp"] )
+    <div class="">
+    <div class="flex justify-between items-center">
+        @include('components.path', ['paths' => $paths])
 
-  <div class="flex justify-between p-3">
-    @include('components.path', ['paths' => ['tableData' ,'tww']])
-
-    <button class="w-[99.13px] h-[60.47px] rounded-[11.23px] py-[11.23px] px-[21.06px] bg-[#17253E] text-white border-none">
-        Create
-    </button>
-
-
-  </div>
-
-  @include('components.table', ['paths' => ['tableData' => $tableData]])
-</div>
+        <a href="{{ route('teacher.Assignment.create') }}">
+            <button class="rounded-md px-5 py-3 bg-[#17253E] text-white border-none">
+                Create
+            </button>
+        </a>
+    </div>
+    @include('components.table', ['paths' => ['tableData' => $tableData]])
+    </div>
 
 @endsection
 

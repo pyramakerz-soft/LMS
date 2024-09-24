@@ -1,10 +1,10 @@
-@extends('pages.student.student')
+@extends('pages.teacher.teacher')
 
 @section("title")
-  Create Assignment
+  Edit Assignment
 @endsection
 
-@section("content")
+@section("InsideContent")
 
 @php
     $data = [
@@ -14,19 +14,25 @@
         'assignTo' => 'Class A',
         'title' => 'Homework Assignment',
         'description' => 'Solve the problems in chapter 5.',
-        'uploadedFileName' => 'homework.pdf', // Example of an uploaded file name
+        'uploadedFileName' =>
+        [
+            ['type' => 'photo', 'url' => 'images/Layer 2.png'],
+            ['type' => 'photo', 'url' => 'images/Layer 2.png'],
+            ['type' => 'video', 'url' => '/path/to/video.mp4'],
+            ['type' => 'video', 'url' => '/path/to/video.mp4'],
+            ['type' => 'pdf', 'url' => '/path/to/file.pdf', 'file_name' => 'HannahBusing_Resume.pdf', 'file_space' => '200 KB'],
+            ['type' => 'pdf', 'url' => '/path/to/file.pdf', 'file_name' => 'HannahBusing_Resume.pdf', 'file_space' => '200 KB'],
+            ['type' => 'pdf', 'url' => '/path/to/file.pdf', 'file_name' => 'HannahBusing_Resume.pdf', 'file_space' => '200 KB'],
+            ['type' => 'link', 'url' => 'https://example.com']
+        ],
     ];
 
     $paths = [
-        ["name" => "Theme", "url" => "student.theme"],
-        ["name" => "Unit", "url" => "student.unit"],
-        ["name" => "Chapter", "url" => "student.chapter"],
-    ]; // Example of paths
+        ["name" => "Assignment", "url" => "teacher.Assignment"],
+        ["name" => "Assignment Name", "url" => "teacher.assignment.edit"],
+    ];
 @endphp
 
-
-<div class="p-4">
-  @include('components.profile', ['name' => 'menna' , 'subText'=>'class1' , "image" => "https://mdbcdn.b-cdn.net/img/new/avatars/9.webp"] )
 
   @include('components.AssignmentEdit', ['paths' => $paths ,  $data])
 

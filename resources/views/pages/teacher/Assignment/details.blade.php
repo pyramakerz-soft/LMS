@@ -1,34 +1,55 @@
-@extends('pages.student.student')
+@extends('pages.teacher.teacher')
 
 @section("title")
-  Create Assignment
+  Assignment Details
 @endsection
 
-@section("content")
+@section("InsideContent")
 
 @php
-    $data = [
+   $data = [
         'point' => '95',
         'dueDate' => '2024-10-01',
         'topic' => 'Mathematics',
-        'assignTo' => 'Class A',
+        'assignTo' => ['Class A', 'Class B'],
         'title' => 'Homework Assignment',
         'description' => 'Solve the problems in chapter 5.',
-        'uploadedFileName' => 'homework.pdf', // Example of an uploaded file name
+        'uploadedFileName' =>
+        [
+            ['type' => 'photo', 'url' => 'images/Layer 2.png'],
+            ['type' => 'photo', 'url' => 'images/Layer 2.png'],
+            ['type' => 'video', 'url' => '/path/to/video.mp4'],
+            ['type' => 'video', 'url' => '/path/to/video.mp4'],
+            ['type' => 'pdf', 'url' => '/path/to/file.pdf', 'file_name' => 'HannahBusing_Resume.pdf', 'file_space' => '200 KB'],
+            ['type' => 'pdf', 'url' => '/path/to/file.pdf', 'file_name' => 'HannahBusing_Resume.pdf', 'file_space' => '200 KB'],
+            ['type' => 'pdf', 'url' => '/path/to/file.pdf', 'file_name' => 'HannahBusing_Resume.pdf', 'file_space' => '200 KB'],
+            ['type' => 'link', 'url' => 'https://example.com']
+        ],
+    ];
+    $paths = [
+      ["name" => "Assignment", "url" => "teacher.Assignment"],
+      ["name" => "Assignment Name", "url" => "teacher.assignment.show"],
     ];
 
-    $paths = [
-        ["name" => "Theme", "url" => "student.theme"],
-        ["name" => "Unit", "url" => "student.unit"],
-        ["name" => "Chapter", "url" => "student.chapter"],
-    ]; // Example of paths@endphp
+@endphp
 
+<div class="flex justify-between">
 
-<div class="p-4">
-  @include('components.profile', ['name' => 'menna' , 'subText'=>'class1' , "image" => "https://mdbcdn.b-cdn.net/img/new/avatars/9.webp"] )
+  @include('components.path', ['paths' => $paths])
+
+  <a href="{{ route('teacher.assignment.edit') }}">
+      <button class="rounded-md px-5 py-3 bg-[#17253E] text-white border-none mt-4">
+          Edit
+      </button>
+      
+  </a>
+
+</div>
+
 
   @include('components.AssignmentDetails', ['paths' =>$paths  ,  $data])
 
-</div>
 @endsection
+
+
 
