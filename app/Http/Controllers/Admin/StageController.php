@@ -110,8 +110,9 @@ class StageController extends Controller
     public function createMaterial($stageId)
     {
         // $stages = Stage::all();
+        $stage = Stage::findOrFail($stageId);
         $materials = Material::all();
         $units = Unit::all();
-        return view('admin.stages.add_material', compact('materials', 'units'));
+        return view('admin.stages.add_material', compact('materials', 'units' , 'stage'));
     }
 }
