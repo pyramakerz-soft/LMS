@@ -47,25 +47,144 @@
         {{-- @foreach ($paths as $item) --}}
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="#" class="mx-2 cursor-pointer">Theme</a>
+        <span class="mx-2 text-[#D0D5DD]">/</span>
+
+        <a href="#" class="mx-2 cursor-pointer">Unit</a>
+
         {{-- @endforeach --}}
     </div>
     <div class="flex flex-wrap">
-        @foreach ($material->units as $unit)
-            <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
-                <div class="h-[350px] bg-white shadow-md border border-slate-200 rounded-md">
-                    <a class="cursor-pointer" href="{{ route('student_chapters.index', $unit->id) }}">
-                        @if ($unit->image)
-                            <img src="{{ asset('storage/' . $unit->image) }}" class="card-img-top"
-                                alt="{{ $unit->name }}">
-                        @else
-                            <img src="https://via.placeholder.com/150" class="card-img-top" alt="No Image">
-                        @endif
-                        <p class="py-5 px-2 text-slate-800 text-2xl font-semibold">
-                            {{ $unit->title }}
-                        </p>
-                    </a>
+        
+        <div id="accordion-collapse " class="w-full p-5">
+
+            <div class="mb-5">
+
+                <h2 id="accordion-collapse-heading-1">
+                    <button type="button" class="accordion-button flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" data-accordion-target="#accordion-collapse-body-1" aria-expanded="false" aria-controls="accordion-collapse-body-1">
+                        <span>Unit 1 beginner Level</span>
+                        <svg data-accordion-icon class="w-3 h-3 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
+                        </svg>
+                    </button>
+                </h2>
+                <div id="accordion-collapse-body-1" class="hidden" aria-labelledby="accordion-collapse-heading-1">
+                    <div class="flex  flex-wrap items-center justify-start">
+    
+                        @foreach ($material->units as $unit)
+                  <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
+                      <div class="h-[350px] bg-white shadow-md border border-slate-200 rounded-md">
+                          <a class="cursor-pointer" href="{{ route('student_chapters.index', $unit->id) }}">
+                              @if ($unit->image)
+                                  <img src="{{ asset('storage/' . $unit->image) }}" class="card-img-top"
+                                      alt="{{ $unit->name }}">
+                              @else
+                                  <img src="https://via.placeholder.com/150" class="card-img-top" alt="No Image">
+                              @endif
+                              <p class="py-5 px-2 text-slate-800 text-2xl font-semibold">
+                                  {{ $unit->title }}
+                              </p>
+                          </a>
+                      </div>
+                  </div>
+                         @endforeach
+    
+                    </div>
                 </div>
+            
+
             </div>
-        @endforeach
-    </div>
+
+            <div class="mb-5">
+
+                <h2 id="accordion-collapse-heading-2">
+                    <button type="button" class="accordion-button flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" data-accordion-target="#accordion-collapse-body-2" aria-expanded="false" aria-controls="accordion-collapse-body-2">
+                        <span>Unit 2 Intermediate Level</span>
+                        <svg data-accordion-icon class="w-3 h-3 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
+                        </svg>
+                    </button>
+                </h2>
+                <div id="accordion-collapse-body-2" class="hidden" aria-labelledby="accordion-collapse-heading-2">
+                    <div class="flex  flex-wrap items-center justify-start">
+    
+                        @foreach ($material->units as $unit)
+                  <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
+                      <div class="h-[350px] bg-white shadow-md border border-slate-200 rounded-md">
+                          <a class="cursor-pointer" href="{{ route('student_chapters.index', $unit->id) }}">
+                              @if ($unit->image)
+                                  <img src="{{ asset('storage/' . $unit->image) }}" class="card-img-top"
+                                      alt="{{ $unit->name }}">
+                              @else
+                                  <img src="https://via.placeholder.com/150" class="card-img-top" alt="No Image">
+                              @endif
+                              <p class="py-5 px-2 text-slate-800 text-2xl font-semibold">
+                                  {{ $unit->title }}
+                              </p>
+                          </a>
+                      </div>
+                  </div>
+                   @endforeach
+    
+                    </div>
+                </div>
+
+            </div>
+        
+            <div class="mb-5">
+
+                <h2 id="accordion-collapse-heading-3">
+                    <button type="button" class="accordion-button flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" data-accordion-target="#accordion-collapse-body-3" aria-expanded="false" aria-controls="accordion-collapse-body-3">
+                        <span>Unit 3 Advanced Level</span>
+                        <svg data-accordion-icon class="w-3 h-3 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
+                        </svg>
+                    </button>
+                </h2>
+                <div id="accordion-collapse-body-3" class="hidden" aria-labelledby="accordion-collapse-heading-3">
+                    <div class="flex  flex-wrap items-center justify-start">
+    
+                        @foreach ($material->units as $unit)
+                  <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
+                      <div class="h-[350px] bg-white shadow-md border border-slate-200 rounded-md">
+                          <a class="cursor-pointer" href="{{ route('student_chapters.index', $unit->id) }}">
+                              @if ($unit->image)
+                                  <img src="{{ asset('storage/' . $unit->image) }}" class="card-img-top"
+                                      alt="{{ $unit->name }}">
+                              @else
+                                  <img src="https://via.placeholder.com/150" class="card-img-top" alt="No Image">
+                              @endif
+                              <p class="py-5 px-2 text-slate-800 text-2xl font-semibold">
+                                  {{ $unit->title }}
+                              </p>
+                          </a>
+                      </div>
+                  </div>
+                       @endforeach
+    
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+        </div>
+
+ <script>
+    document.querySelectorAll('.accordion-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const accordionBody = document.querySelector(button.getAttribute('data-accordion-target'));
+            const icon = button.querySelector('svg');
+
+            if (accordionBody.classList.contains('hidden')) {
+                accordionBody.classList.remove('hidden');  // Show accordion content
+                icon.classList.add('rotate-180');  // Rotate icon
+            } else {
+                accordionBody.classList.add('hidden');  // Hide accordion content
+                icon.classList.remove('rotate-180');  // Reset icon rotation
+            }
+        });
+    });
+</script>
 @endsection
