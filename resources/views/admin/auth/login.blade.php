@@ -47,12 +47,14 @@
             </form>
     
             <div class="w-full lg:w-2/3 bgLinearGradient text-white flex flex-col items-center justify-center p-3 lg:p-0">
-                <p class="text-xl md:text-4xl font-bold mb-8">Do more <span class="font-normal">with Pyramakerz</span></p>
-    
-                <div class="flex flex-col items-center justify-center">
-                    <img src="{{ asset('images/Layer 2.png') }}" alt="calender" class="w-[83%] mb-6">
+                <div class="mx-9 p-3 lg:p-0 text-center">
+                    <p class="text-xl md:text-4xl font-bold mb-8">Do more <span class="font-normal">with Pyramakerz</span></p>
+                    
+                    <div class="flex flex-col items-center justify-center">
+                        <img src="{{ asset('images/login.png') }}" alt="calender" class="w-[83%] mb-6">
+                        <p>Welcome to the Learning Management System (LMS) login screen! Here, you can access a world of educational resources designed to enhance your learning experience. </p>
+                    </div>
                 </div>
-    
             </div>
         </div>
 

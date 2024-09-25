@@ -16,7 +16,7 @@
 @endsection
 
 @section('content')
-    <div class="p-5">
+    <div class="p-3">
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
@@ -48,18 +48,24 @@
         @yield('insideContent')
     </div>
 
-    <div class="p-2 text-[#667085] my-8">
+    <div class="p-3 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="{{ route('student_chapters.index', $lesson->chapter->unit_id) }}" class="mx-2 cursor-pointer">Lessons</a>
+        <a href="{{ route("student.theme") }}" class="mx-2 cursor-pointer">Theme</a>
+        <span class="mx-2 text-[#D0D5DD]">/</span>
+        <a href="{{ route("student_units.index", $lesson->chapter->unit_id) }}" class="mx-2 cursor-pointer">Unit</a>
+        <span class="mx-2 text-[#D0D5DD]">/</span>
+        <a href="{{ route('student_lessons.index', $lesson->id) }}" class="mx-2 cursor-pointer">Lessons</a>
+        <span class="mx-2 text-[#D0D5DD]">/</span>
+        <a href="#" class="mx-2 cursor-pointer">Ebook</a>
     </div>
 
     <!-- Display eBooks -->
-    <div class="flex flex-wrap">
+    <div class="flex flex-wrap p-3">
         @foreach ($lesson->ebooks as $ebook)
-            <div class="w-full sm:w-1/2 lg:w-1/3 p-2">
-                <div class="h-[350px] bg-white shadow-md border border-slate-200 rounded-md">
-                    <div class="p-4">
+            <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-5 mx-2 bg-white shadow-md rounded-xl">
+                <div class="h-full">
+                    <div class="cursor-pointer h-full flex flex-col justify-center">
                         <h3 class="text-lg font-bold text-gray-700">{{ $ebook->title }}</h3>
                         <p class="text-gray-600">{{ $ebook->description }}</p>
 

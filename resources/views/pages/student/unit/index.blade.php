@@ -16,11 +16,18 @@
 @endsection
 
 @section('content')
-    <div class="p-5">
+    <div class="p-3">
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
-                    <img class="w-20 h-20 rounded-full" alt="avatar1" src="{{ $userAuth->image }}" />
+                    {{-- <img class="w-20 h-20 rounded-full" alt="avatar1" src="{{ $userAuth->image }}" /> --}}
+                    @if ($userAuth->image)
+                        <img src="{{ asset('storage/' . $userAuth->image) }}" alt="Student Image"
+                            class="w-20 h-20 rounded-full object-cover">
+                    @else
+                        <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
+                            class="w-30 h-20 rounded-full object-cover">
+                    @endif
                 </div>
 
                 <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
@@ -42,21 +49,16 @@
         </div>
         @yield('insideContent')
     </div>
-    <div class="p-2 text-[#667085] my-8">
+    <div class="p-3 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="#" class="mx-2 cursor-pointer">Theme</a>
+        <a href="{{ route("student.theme") }}" class="mx-2 cursor-pointer">Theme</a>
         <span class="mx-2 text-[#D0D5DD]">/</span>
-
         <a href="#" class="mx-2 cursor-pointer">Unit</a>
-
     </div>
     <div class="flex flex-wrap">
-
-        <div id="accordion-collapse " class="w-full p-5">
-
+        <div id="accordion-collapse " class="w-full p-3">
             <div class="mb-5 ">
-
                 @foreach ($material->units as $unit)
                     <h2 id="accordion-collapse-heading-{{ $unit->id }}">
                         <button type="button"
@@ -73,18 +75,18 @@
                     </h2>
                     <div id="accordion-collapse-body-{{ $unit->id }}" class="hidden"
                         aria-labelledby="accordion-collapse-heading-{{ $unit->id }}">
-                        <div class="flex flex-wrap items-center justify-start">
+                        <div class="p-3 flex flex-wrap justify-start">
                             @foreach ($unit->chapters as $chapter)
-                                <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
-                                    <div class="bg-white shadow-md border border-slate-200 rounded-md">
-                                        <a class="cursor-pointer" href="{{ route('student_lessons.index', $chapter->id) }}">
+                                <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white shadow-md rounded-xl">
+                                    <div class="full">
+                                        <a class="cursor-pointer h-full flex flex-col justify-between" href="{{ route('student_lessons.index', $chapter->id) }}">
                                             <div class="overflow-hidden">
                                                 @if ($chapter->image)
                                                     <img src="{{ asset('storage/' . $chapter->image) }}"
-                                                        class="w-full h-full object-fit" alt="{{ $chapter->name }}">
+                                                        class="object-contain w-full h-[250px] rounded-xl" alt="{{ $chapter->name }}">
                                                 @else
                                                     <img src="https://via.placeholder.com/150"
-                                                        class="w-full h-full object-fit" alt="No Image">
+                                                        class="object-contain w-full h-[250px] rounded-xl" alt="No Image">
                                                 @endif
                                             </div>
                                             <div class="p-2">

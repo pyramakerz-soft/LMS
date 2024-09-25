@@ -24,10 +24,10 @@
                     {{-- <img class="w-20 h-20 rounded-full" alt="avatar1" src="{{ Auth::guard('student')->user()->image }}" /> --}}
                     @if ($userAuth->image)
                         <img src="{{ asset('storage/' . $userAuth->image) }}" alt="Student Image"
-                            class="w-20 h-20 rounded-full">
+                            class="w-20 h-20 rounded-full object-cover">
                     @else
                         <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
-                            class="w-30 h-20 rounded-full">
+                            class="w-30 h-20 rounded-full object-cover">
                     @endif
                 </div>
 
@@ -57,14 +57,14 @@
         <a href="#" class="mx-2 cursor-pointer">Theme</a>
         {{-- @endforeach --}}
     </div>
-    <div class="p-3 flex flex-wrap justify-between">
+    <div class="p-3 flex flex-wrap justify-start">
         @foreach ($materials as $material)
-            <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 bg-white shadow-md rounded-xl min-h-[380px]">
+            <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white shadow-md rounded-xl min-h-[380px]">
                 <div class="h-full">
                     <a class="cursor-pointer h-full flex flex-col justify-between" href="{{ route('student_units.index', $material->id) }}">
                         @if ($material->image)
                             <img src="{{ asset('storage/' . $material->image) }}" alt="{{ $material->title }}"
-                                class="object-cover w-full h-[70%] rounded-xl">
+                                class="object-contain w-full h-[250px] rounded-xl">
                         @else
                             No Image
                         @endif
@@ -72,7 +72,7 @@
                             <div class="flex justify-between items-center text-2xl">
                                 <p class="font-semibold">{{ $material->title }}</p>
                                 <button class="pt-2" onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');">
-                                    <i class="fi fi-rr-rectangle-list"></i>
+                                    <img src="{{ asset('images/Clip path group.png') }}">
                                 </button>
                             </div>
                             <div class="flex justify-between items-center mt-4">
