@@ -60,7 +60,7 @@
 
     <div class="flex flex-wrap p-3">
         @foreach ($chapter->lessons as $lesson)
-            <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white shadow-md rounded-xl min-h-[380px]">
+            <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white shadow-md rounded-xl">
                 <div class="w-full">
                     <a href="{{ route('student_lessons.ebooks', $lesson->id) }}" class="cursor-pointer h-full flex flex-col justify-between">
                         <h3 class="px-4 py-2 bg-gray-200 text-lg font-bold">{{ $lesson->title }}</h3>
