@@ -16,7 +16,7 @@
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    <a href="{{ route('units.create') }}" class="btn btn-primary mb-3">Add Unit</a>
+                    {{-- <a href="{{ route('units.create') }}" class="btn btn-primary mb-3">Add Unit</a> --}}
 
                     <table class="table table-bordered">
                         <thead>

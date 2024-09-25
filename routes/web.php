@@ -57,7 +57,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('stages', StageController::class);
         Route::resource('assignments', AssignmentController::class);
         Route::resource('ebooks', EbookController::class);
-        Route::get('/ebooks/{ebook}/view', [EbookController::class, 'viewEbook'])->name('ebooks.view');
+        Route::get('/lessons/{lesson}/view', [LessonController::class, 'viewEbook'])->name('lesson.view');
 
         Route::resource('students', StudentController::class);
         Route::resource('teachers', TeacherController::class);

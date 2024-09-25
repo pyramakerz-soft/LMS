@@ -43,6 +43,10 @@
                             <label for="image" class="form-label">Lesson Image</label>
                             <input type="file" name="image" class="form-control" id="image" accept="image/*">
                         </div>
+                        <div class="mb-3">
+                            <label for="file_path" class="form-label">Upload Ebook </label>
+                            <input type="file" name="file_path" class="form-control" id="file_path" required>
+                        </div>
 
                         <div class="mb-3 form-check">
                             <input type="checkbox" name="is_active" class="form-check-input" id="is_active" value="1">

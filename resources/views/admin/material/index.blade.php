@@ -16,7 +16,7 @@
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    <a href="{{ route('material.create') }}" class="btn btn-primary mb-3">Add Material</a>
+                    {{-- <a href="{{ route('material.create') }}" class="btn btn-primary mb-3">Add Material</a> --}}
 
                     <table class="table table-bordered">
                         <thead>

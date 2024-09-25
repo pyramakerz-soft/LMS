@@ -52,11 +52,11 @@
 
 
 
-            <li class="sidebar-item">
+            {{-- <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('ebooks.index') }}">
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Ebook</span>
                 </a>
-            </li>
+            </li> --}}
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('students.index') }}">
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Student</span>
