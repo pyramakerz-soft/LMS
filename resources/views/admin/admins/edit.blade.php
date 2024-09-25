@@ -49,11 +49,11 @@
                             </select>
                         </div>
 
-                        <!-- Is Active -->
+                        <!-- Active -->
                         <div class="mb-3 form-check">
                             <input type="checkbox" name="is_active" class="form-check-input" id="is_active" value="1"
                                 {{ $school->is_active ? 'checked' : '' }}>
-                            <label for="is_active" class="form-check-label">Is Active</label>
+                            <label for="is_active" class="form-check-label">Active</label>
                         </div>
 
                         <!-- Submit Button -->

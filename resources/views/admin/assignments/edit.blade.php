@@ -114,7 +114,7 @@
         <div class="mb-3 form-check">
             <input type="checkbox" name="is_active" class="form-check-input" id="is_active" value="1"
                 {{ $assignment->is_active ? 'checked' : '' }}>
-            <label class="form-check-label" for="is_active">Is Active</label>
+            <label class="form-check-label" for="is_active">Active</label>
         </div>
 
         <button type="submit" class="btn btn-primary">Update Assignment</button>

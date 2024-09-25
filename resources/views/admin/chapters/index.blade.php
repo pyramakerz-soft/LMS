@@ -27,7 +27,7 @@
                                 <th>Material</th>
                                 <th>Stage</th> <!-- Add stage column -->
                                 <th>Image</th>
-                                <th>Is Active</th>
+                                <th>Active</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
