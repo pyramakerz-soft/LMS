@@ -72,7 +72,7 @@
                             <div class="flex justify-between items-center text-2xl">
                                 <p class="font-semibold">{{ $material->title }}</p>
                                 <button class="pt-2" onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');">
-                                    <i class="fi fi-rr-rectangle-list"></i>
+                                    <img src="{{ asset('images/Clip path group.png') }}">
                                 </button>
                             </div>
                             <div class="flex justify-between items-center mt-4">
