@@ -24,7 +24,7 @@
                                 <th>Title</th>
                                 <th>Material</th>
                                 <th>Image</th>
-                                <th>Is Active</th>
+                                <th>Active</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>

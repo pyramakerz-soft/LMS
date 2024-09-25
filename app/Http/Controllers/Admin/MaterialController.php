@@ -37,20 +37,67 @@ class MaterialController extends Controller
             'title' => 'required|string|max:255',
             'stage_id' => 'required|exists:stages,id',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'file_path' => 'required|file|mimes:zip,pdf,docx', 
+            'how_to_use' => 'required|file|mimes:zip,pdf,docx', 
+            'learning' => 'required|file|mimes:zip,pdf,docx',
             'is_active' => 'nullable|boolean',
         ]);
 
+        // Handle image upload
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('materials', 'public');
         }
 
-        // Create a new material
+        // Handle file_path (Ebook or zip file handling)
+        $filePath = null;
+        $file = $request->file('file_path');
+        $isZip = $file->getClientOriginalExtension() === 'zip';
+
+        if ($isZip) {
+            $filePath = $file->store('ebooks', 'public');
+            $extractPath = storage_path('app/public/ebooks/' . pathinfo($filePath, PATHINFO_FILENAME));
+
+            $zip = new \ZipArchive;
+            if ($zip->open(storage_path('app/public/' . $filePath)) === TRUE) {
+                $zip->extractTo($extractPath);
+                $zip->close();
+
+                $filePath = 'ebooks/' . pathinfo($filePath, PATHINFO_FILENAME);
+
+                // Check if the extracted zip contains index.html
+                if (!file_exists(public_path('storage/' . $filePath . '/index.html'))) {
+                    return back()->withErrors(['file_path' => 'The extracted zip does not contain index.html.']);
+                }
+            } else {
+                return back()->withErrors(['file_path' => 'Failed to extract the zip file.']);
+            }
+        } else {
+            // For non-zip files
+            $filePath = $file->store('ebooks', 'public');
+        }
+
+        // Handle how_to_use file upload
+        $howToUsePath = null;
+        if ($request->hasFile('how_to_use')) {
+            $howToUsePath = $request->file('how_to_use')->store('ebooks', 'public');
+        }
+
+        // Handle learning outcomes file upload
+        $learningPath = null;
+        if ($request->hasFile('learning')) {
+            $learningPath = $request->file('learning')->store('ebooks', 'public');
+        }
+
+        // Create a new material with the uploaded data
         Material::create([
             'title' => $request->title,
             'stage_id' => $request->stage_id,
             'image' => $imagePath,
             'is_active' => $request->is_active ?? 0,
+            'file_path' => $filePath, // Save the file_path (info) to the material
+            'how_to_use' => $howToUsePath, // Save how_to_use file path
+            'learning' => $learningPath, // Save learning outcomes file path
         ]);
 
         return redirect()->back()->with('success', 'Material created successfully.');

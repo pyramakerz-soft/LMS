@@ -44,11 +44,41 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    <div class="col-4">
+                                        <div class="mb-3">
+                                            <label for="file_path" class="form-label">Upload Info </label>
+                                            <input type="file" name="file_path" class="form-control" id="file_path"
+                                                required>
+                                            @error('file_path')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="mb-3">
+                                            <label for="how_to_use" class="form-label">Upload how to use </label>
+                                            <input type="file" name="how_to_use" class="form-control" id="how_to_use"
+                                                required>
+                                            @error('how_to_use')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="mb-3">
+                                            <label for="learning" class="form-label">Upload learning outcomes </label>
+                                            <input type="file" name="learning" class="form-control" id="learning"
+                                                required>
+                                            @error('learning')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
                                 </div>
 
 
                                 <div class="mb-3">
-                                    <label for="is_active" class="form-label">Active Status</label>
+                                    <label for="is_active" class="form-label">Active </label>
                                     <input type="checkbox" id="is_active" name="is_active" value="1">
                                     @error('is_active')
                                         <div class="text-danger">{{ $message }}
@@ -100,7 +130,7 @@
 
 
                                 <div class="mb-3">
-                                    <label for="is_active" class="form-label">Active Status</label>
+                                    <label for="is_active" class="form-label">Active </label>
                                     <input type="checkbox" id="is_active" name="is_active" value="1">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Create Unit</button>
@@ -158,7 +188,7 @@
 
 
                                 <div class="mb-3">
-                                    <label for="is_active" class="form-label">Active Status</label>
+                                    <label for="is_active" class="form-label">Active </label>
                                     <input type="checkbox" id="is_active" name="is_active" value="1">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Create Chapter</button>
