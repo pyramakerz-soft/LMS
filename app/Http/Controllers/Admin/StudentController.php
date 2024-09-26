@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\School;
 use App\Models\Stage;
 use App\Models\Student;
+use App\Models\StudentClass;
 use Hash;
 use Illuminate\Http\Request;
 use Str;
@@ -41,7 +42,8 @@ class StudentController extends Controller
             'gender' => 'required',
             'school_id' => 'required|exists:schools,id',
             'stage_id' => 'required|exists:stages,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validation for image
+            'class_id' => 'required|exists:groups,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $password = Str::random(8);
@@ -61,7 +63,10 @@ class StudentController extends Controller
             'is_active' => 1,
             'image' => $imagePath, // Save the image path
         ]);
-
+        StudentClass::create([
+            'student_id' => $student->id,
+            'class_id' => $request->class_id,
+        ]);
         return redirect()->route('students.index')->with('success', 'Student created successfully.');
 
     }
@@ -98,7 +103,8 @@ class StudentController extends Controller
             'gender' => 'required',
             'school_id' => 'required|exists:schools,id',
             'stage_id' => 'required|exists:stages,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validation for image
+            'class_id' => 'required|exists:groups,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         if ($request->hasFile('image')) {
@@ -113,7 +119,10 @@ class StudentController extends Controller
             'stage_id' => $request->input('stage_id'),
             'is_active' => $request->input('is_active') ?? 1,
         ]);
-
+        StudentClass::updateOrCreate(
+            ['student_id' => $student->id],
+            ['class_id' => $request->class_id]
+        );
         return redirect()->route('students.index')->with('success', 'Student updated successfully.');
 
     }

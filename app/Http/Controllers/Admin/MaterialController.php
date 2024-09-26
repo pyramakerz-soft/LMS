@@ -48,6 +48,7 @@ class MaterialController extends Controller
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('materials', 'public');
         }
+        
 
         // Handle file_path (Ebook or zip file handling)
         $filePath = null;

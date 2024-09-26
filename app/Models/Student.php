@@ -32,6 +32,10 @@ class Student extends Authenticatable
     {
         return $this->hasMany(Student_assessment::class)->latest(); // Fetch the latest assessments
     }
+    public function classes()
+    {
+        return $this->belongsToMany(Group::class, );
+    }
     // public function studentAssessment()
     // {
     //     return $this->hasMany(Student_assessment::class);

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AssignmentController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ChapterController;
+use App\Http\Controllers\Admin\ClassController;
 use App\Http\Controllers\Admin\EbookController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\MaterialController;
@@ -57,6 +58,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('stages', StageController::class);
         Route::resource('assignments', AssignmentController::class);
         Route::resource('ebooks', EbookController::class);
+        Route::resource('classes', ClassController::class);
         Route::get('/lessons/{lesson}/view', [LessonController::class, 'viewEbook'])->name('lesson.view');
 
         Route::resource('students', StudentController::class);
@@ -80,6 +82,10 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/api/stages/{stage}/students', function (Stage $stage) {
             return response()->json($stage->students);
+        });
+
+        Route::get('/api/stages/{stage}/classes', function (Stage $stage) {
+            return response()->json($stage->classes);
         });
     });
 });

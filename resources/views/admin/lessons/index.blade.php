@@ -36,6 +36,9 @@
                                     <td>
                                         <a href="{{ route('lesson.view', $lesson->id) }}" target="_blank"
                                             class="btn btn-success">View
+
+
+                                            
                                             Ebook</a>
                                     </td>
                                     <td>{{ $lesson->chapter->title }}</td>

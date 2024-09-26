@@ -17,12 +17,17 @@
 
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('admins.index') }}">
-                    <i class="align-middle" data-feather="user"></i> <span class="align-middle">School admin</span>
+                    <i class="align-middle" data-feather="user"></i> <span class="align-middle">School</span>
                 </a>
             </li>
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('stages.index') }}">
                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">Grade</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{ route('classes.index') }}">
+                    <i class="align-middle" data-feather="user"></i> <span class="align-middle">Class</span>
                 </a>
             </li>
 
