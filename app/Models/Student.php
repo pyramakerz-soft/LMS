@@ -34,8 +34,9 @@ class Student extends Authenticatable
     }
     public function classes()
     {
-        return $this->belongsToMany(Group::class, );
+        return $this->belongsTo(Group::class, 'class_id');
     }
+
     // public function studentAssessment()
     // {
     //     return $this->hasMany(Student_assessment::class);

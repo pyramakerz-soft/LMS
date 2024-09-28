@@ -61,14 +61,12 @@ class StudentController extends Controller
             'school_id' => $request->input('school_id'),
             'stage_id' => $request->input('stage_id'),
             'is_active' => 1,
-            'image' => $imagePath, // Save the image path
-        ]);
-        StudentClass::create([
-            'student_id' => $student->id,
+            'image' => $imagePath,
             'class_id' => $request->class_id,
-        ]);
-        return redirect()->route('students.index')->with('success', 'Student created successfully.');
 
+        ]);
+
+        return redirect()->route('students.index')->with('success', 'Student created successfully.');
     }
 
     /**
@@ -124,7 +122,6 @@ class StudentController extends Controller
             ['class_id' => $request->class_id]
         );
         return redirect()->route('students.index')->with('success', 'Student updated successfully.');
-
     }
 
     /**
@@ -135,6 +132,5 @@ class StudentController extends Controller
         $student = Student::findOrFail($id);
         $student->delete();
         return redirect()->route('students.index')->with('success', 'Student deleted successfully.');
-
     }
 }

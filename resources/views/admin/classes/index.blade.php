@@ -23,7 +23,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>School</th>
-                                <th>Stage</th>
+                                <th>Grade</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>

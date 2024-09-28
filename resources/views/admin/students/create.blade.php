@@ -50,9 +50,9 @@
 
                         <!-- Stage Selection -->
                         <div class="mb-3">
-                            <label for="stage_id" class="form-label">Stage</label>
+                            <label for="stage_id" class="form-label">Grade</label>
                             <select name="stage_id" id="stage_id" class="form-control" required>
-                                <option value="">Select Stage</option>
+                                <option value="">Select Grade</option>
                             </select>
                         </div>
 

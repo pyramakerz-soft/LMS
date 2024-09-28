@@ -38,7 +38,7 @@
                                             class="btn btn-success">View
 
 
-                                            
+
                                             Ebook</a>
                                     </td>
                                     <td>{{ $lesson->chapter->title }}</td>
