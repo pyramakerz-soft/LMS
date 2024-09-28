@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Image;
 use App\Models\Material;
 use App\Models\Stage;
 use Illuminate\Http\Request;
@@ -24,8 +25,8 @@ class MaterialController extends Controller
     public function create()
     {
         $stages = Stage::all();
-
-        return view("admin.material.create", compact('stages'));
+        $images = Image::all();
+        return view("admin.material.create", compact('stages', 'images'));
     }
 
     /**
@@ -109,16 +110,23 @@ class MaterialController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'stage_id' => 'required|exists:stages,id',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'existing_image' => 'nullable|string',
             'file_path' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240',
             'how_to_use' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240',
             'learning' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240',
             'is_active' => 'nullable|boolean',
         ]);
 
-        $imagePath = $request->hasFile('image')
-            ? $request->file('image')->store('materials', 'public')
-            : null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('materials', 'public');
+        } elseif ($request->existing_image) {
+            $imagePath = $request->existing_image;
+        }
+
+        // $imagePath = $request->hasFile('image')
+        //     ? $request->file('image')->store('materials', 'public')
+        //     : null;
 
         $filePath = $this->handleFileUpload($request->file('file_path'), 'ebooks');
         if ($filePath === false) {

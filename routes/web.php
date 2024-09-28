@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ChapterController;
 use App\Http\Controllers\Admin\ClassController;
 use App\Http\Controllers\Admin\EbookController;
+use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\MaterialController;
 use App\Http\Controllers\Admin\StageController;
@@ -65,6 +66,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('students', StudentController::class);
         Route::resource('teachers', TeacherController::class);
         Route::resource('admins', AdminController::class);
+        Route::resource('images', ImageController::class);
 
         Route::get('school/{schoolId}/curriculum', [AdminController::class, 'assignCurriculum'])->name('school.curriculum.assign');
         Route::post('school/{schoolId}/curriculum', [AdminController::class, 'storeCurriculum'])->name('school.curriculum.store');
@@ -74,7 +76,6 @@ Route::prefix('admin')->group(function () {
         Route::delete('/schools/{schoolId}/units/{unitId}', [AdminController::class, 'removeUnit'])->name('school.removeUnit');
         Route::delete('/schools/{schoolId}/chapters/{chapterId}', [AdminController::class, 'removeChapter'])->name('school.removeChapter');
         Route::delete('/schools/{schoolId}/lessons/{lessonId}', [AdminController::class, 'removeLesson'])->name('school.removeLesson');
-
         // Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
         Route::get('/api/schools/{school}/stages', function (School $school) {

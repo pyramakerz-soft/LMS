@@ -34,7 +34,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-6">
+                                    {{-- <div class="col-6">
                                         <div class="mb-3">
                                             <label for="image" class="form-label">Theme Image</label>
                                             <input type="file" class="form-control" id="image" name="image">
@@ -43,6 +43,28 @@
                                                 </div>
                                             @enderror
                                         </div>
+                                    </div> --}}
+
+                                    <div class="mb-3">
+                                        <label for="image" class="form-label">Upload New Image</label>
+                                        <input type="file" name="image" class="form-control" id="image"
+                                            accept="image/*">
+                                        @error('image')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <button type="button" class="btn btn-secondary" id="chooseFromLibraryButton">
+                                            Choose from Library
+                                        </button>
+                                        <input type="hidden" name="existing_image" id="existing_image" value="">
+                                    </div>
+
+                                    <div id="image-preview-container" style="display: none;">
+                                        <h5>Selected Image Preview:</h5>
+                                        <img id="image-preview" src="" alt="Selected Image"
+                                            style="max-width: 200px; border-radius: 8px; box-shadow: 0px 0px 5px #ccc;">
                                     </div>
                                     <div class="col-4">
                                         <div class="mb-3">
@@ -88,7 +110,9 @@
                                 <button type="submit" class="btn btn-primary">Create Theme</button>
                             </form>
                         </div>
+
                     </div>
+
 
                     <!-- Unit Form -->
                     <div class="card mb-4">
@@ -113,7 +137,8 @@
                                             <select class="form-control" id="material_id" name="material_id" required>
                                                 <option value="">-- Select Theme --</option>
                                                 @foreach ($materials as $material)
-                                                    <option value="{{ $material->id }}">{{ $material->title }}</option>
+                                                    <option value="{{ $material->id }}">{{ $material->title }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -160,7 +185,8 @@
                                             <select class="form-control" id="material_id" name="material_id" required>
                                                 <option value="">-- Select Theme --</option>
                                                 @foreach ($materials as $material)
-                                                    <option value="{{ $material->id }}">{{ $material->title }}</option>
+                                                    <option value="{{ $material->id }}">{{ $material->title }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -202,4 +228,90 @@
             @include('admin.layouts.footer')
         </div>
     </div>
+@endsection
+
+<div class="modal fade" id="imageLibraryModal" tabindex="-1" aria-labelledby="imageLibraryModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageLibraryModalLabel">Choose an Image from Library</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    @foreach ($images as $image)
+                        <div class="col-md-3 mb-3">
+                            <div class="card image-option" style="cursor: pointer;" data-path="{{ $image->path }}">
+                                <img src="{{ asset('storage/' . $image->path) }}" alt="Image"
+                                    class="card-img-top img-thumbnail selectable-image"
+                                    style="width: 100%; height: 150px; object-fit: cover;">
+                                <div class="card-body text-center">
+                                    <button class="btn btn-sm btn-primary select-image-button"
+                                        type="button">Select</button>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section('page_js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chooseFromLibraryButton = document.getElementById('chooseFromLibraryButton');
+            const existingImageInput = document.getElementById('existing_image');
+            const imagePreviewContainer = document.getElementById('image-preview-container');
+            const imagePreview = document.getElementById('image-preview');
+
+            chooseFromLibraryButton.addEventListener('click', function() {
+                const modal = new bootstrap.Modal(document.getElementById('imageLibraryModal'), {
+                    keyboard: false
+                });
+                modal.show();
+            });
+
+            document.querySelectorAll('.select-image-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const imageCard = this.closest('.image-option');
+                    const imagePath = imageCard.getAttribute('data-path');
+
+                    existingImageInput.value = imagePath;
+
+                    updateImagePreview("{{ asset('storage') }}/" + imagePath);
+
+                    const modal = bootstrap.Modal.getInstance(document.getElementById(
+                        'imageLibraryModal'));
+                    modal.hide();
+                });
+            });
+
+            function updateImagePreview(src) {
+                if (src) {
+                    imagePreview.src = src;
+                    imagePreviewContainer.style.display = 'block';
+                } else {
+                    imagePreviewContainer.style.display = 'none';
+                }
+            }
+
+            const newImageInput = document.getElementById('image');
+            newImageInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        updateImagePreview(e.target.result);
+                        existingImageInput.value =
+                            "";
+                    };
+                    reader.readAsDataURL(this.files[0]);
+                } else {
+                    updateImagePreview(null);
+                }
+            });
+        });
+    </script>
 @endsection

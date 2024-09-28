@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Image;
 use App\Models\Material;
 use App\Models\Stage;
 use App\Models\Unit;
@@ -113,6 +114,7 @@ class StageController extends Controller
         $stage = Stage::findOrFail($stageId);
         $materials = Material::all();
         $units = Unit::all();
-        return view('admin.stages.add_material', compact('materials', 'units' , 'stage'));
+        $images = Image::all();
+        return view('admin.stages.add_material', compact('materials', 'units', 'images', 'stage'));
     }
 }
