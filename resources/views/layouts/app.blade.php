@@ -49,6 +49,8 @@
             sidebar.classList.toggle('hidden');
         });
     </script>
+    @yield('page_js')
+
 </body>
 
 </html>

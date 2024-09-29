@@ -26,7 +26,8 @@
                                     <div class="col-6">
                                         <div class="mb-3">
                                             <label for="title" class="form-label">Theme Title</label>
-                                            <input type="text" class="form-control" id="title" name="title" required>
+                                            <input type="text" class="form-control" id="title" name="title"
+                                                required>
                                             @error('title')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -58,6 +59,45 @@
                                         <img id="material_preview" src="" alt="Selected Image"
                                             style="max-width: 200px; border-radius: 8px; box-shadow: 0px 0px 5px #ccc;">
                                     </div>
+
+                                    <div class="col-4">
+                                        <div class="mb-3">
+                                            <label for="file_path" class="form-label">Upload Info </label>
+                                            <input type="file" name="file_path" class="form-control" id="file_path"
+                                                required>
+                                            @error('file_path')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="mb-3">
+                                            <label for="how_to_use" class="form-label">Upload how to use </label>
+                                            <input type="file" name="how_to_use" class="form-control" id="how_to_use"
+                                                required>
+                                            @error('how_to_use')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="mb-3">
+                                            <label for="learning" class="form-label">Upload learning outcomes </label>
+                                            <input type="file" name="learning" class="form-control" id="learning"
+                                                required>
+                                            @error('learning')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="is_active" class="form-label">Active </label>
+                                    <input type="checkbox" id="is_active" name="is_active" value="1">
+                                    @error('is_active')
+                                        <div class="text-danger">{{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">Create Theme</button>
@@ -111,7 +151,8 @@
                                             data-target="existing_image_unit" data-preview="unit_preview">
                                             Choose from Library
                                         </button>
-                                        <input type="hidden" name="existing_image" id="existing_image_unit" value="">
+                                        <input type="hidden" name="existing_image" id="existing_image_unit"
+                                            value="">
                                     </div>
 
                                     <div id="unit_preview-container" style="display: none;">
@@ -245,10 +286,12 @@
                 button.addEventListener('click', function() {
                     const targetInputId = this.dataset.target;
                     const previewId = this.dataset.preview;
-                    const modal = new bootstrap.Modal(document.getElementById('imageLibraryModal'), {
+                    const modal = new bootstrap.Modal(document.getElementById(
+                    'imageLibraryModal'), {
                         keyboard: false
                     });
-                    document.getElementById('imageLibraryModal').dataset.targetInput = targetInputId;
+                    document.getElementById('imageLibraryModal').dataset.targetInput =
+                    targetInputId;
                     document.getElementById('imageLibraryModal').dataset.previewId = previewId;
                     modal.show();
                 });
