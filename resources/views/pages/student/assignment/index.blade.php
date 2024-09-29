@@ -60,62 +60,60 @@
                 class="absolute -top-2 -right-2 bg-black border-2 border-white text-white rounded-full text-[10px] px-1 py-0.25">5</span>
         </div>
     </div>
-    @yield('insideContent')
   </div>
   <div class="p-3 text-[#667085] my-8">
     <i class="fa-solid fa-house mx-2"></i>
     <span class="mx-2 text-[#D0D5DD]">/</span>
     <a href="#" class="mx-2 cursor-pointer">Assignment</a>
   </div>
-  <div>
-      <div class="rounded-lg border border-[#D0D5DD] bg-[#FFFFFF] flex space-x-4 items-center p-2">
-          <i class="fa-solid fa-search text-[#667085] w-[20px] h-[20px]"></i>
-          <form method="GET" class="w-full">
-              <input type="text" name="selectedName" placeholder="Enter Employee Name..." class="outline-none border-none placeholder-[#667085] bg-transparent w-full" value="{{ request('selectedName') }}">
-          </form>
-      </div>
-
-        <div class="mt-5 overflow-x-auto rounded-2xl border border-[#EAECF0]">
-          <table class="w-full table-auto bg-[#FFFFFF] text-left text-[#475467] text-lg md:text-xl">
-            <thead class="bg-[#F9FAFB]">
-              <tr>
-                <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">
-                  Title <i class="fa-solid fa-arrow-down mx-2"></i>
-                </th>
-                <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">
-                  Due Date <i class="fa-solid fa-arrow-down mx-2"></i>
-                </th>
-                <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">
-                  Description <i class="fa-solid fa-arrow-down mx-2"></i>
-                </th>
-                <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">
-                  Actions <i class="fa-solid fa-arrow-down mx-2"></i>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              @if(count($tableData) === 0)
-              <tr>
-                <td colspan="4" class="px-4 py-4 h-[72px] text-center border-t border-gray-300">
-                  No Data Found
-                </td>
-              </tr>
-              @endif
-      
-              @foreach ($tableData as $row)
-              <tr class="border-t border-gray-300 {{ $loop->index % 2 === 0 ? 'bg-[#F4F4F4]' : 'bg-white' }}">
-                <td class="py-5 px-6">{{ $row['title'] }}</td>
-                <td class="py-5 px-6">{{ $row['dueDate'] }}</td>
-                <td class="py-5 px-6">{{ $row['desc'] }}</td>
-                <td class="py-5 px-6">
-                  <a href="{{route($row['url'])}}" class="text-[#FF7519] cursor-pointer"> 
-                      View Assignments
-                  </a>
-                </td>
-              </tr>
-              @endforeach
-            </tbody>
-          </table>
+  <div class="p-3">
+      <div class="overflow-x-auto rounded-2xl border border-[#EAECF0]">
+        <table class="w-full table-auto bg-[#FFFFFF] text-left text-[#475467] text-lg md:text-xl">
+          <thead class="bg-[#F9FAFB]">
+            <tr>
+              <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">
+                Title <i class="fa-solid fa-arrow-down mx-2"></i>
+              </th>
+              <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">
+                Description <i class="fa-solid fa-arrow-down mx-2"></i>
+              </th>
+              <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">
+                Start Date <i class="fa-solid fa-arrow-down mx-2"></i>
+              </th>
+              <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">
+                Due Date <i class="fa-solid fa-arrow-down mx-2"></i>
+              </th>
+              <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">
+                Marks <i class="fa-solid fa-arrow-down mx-2"></i>
+              </th>
+              <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">
+                Actions <i class="fa-solid fa-arrow-down mx-2"></i>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @if(count($tableData) === 0)
+            <tr>
+              <td colspan="4" class="px-4 py-4 h-[72px] text-center border-t border-gray-300">
+                No Data Found
+              </td>
+            </tr>
+            @endif
+    
+            @foreach ($tableData as $row)
+            <tr class="border-t border-gray-300 {{ $loop->index % 2 === 0 ? 'bg-[#F4F4F4]' : 'bg-white' }}">
+              <td class="py-5 px-6">{{ $row['title'] }}</td>
+              <td class="py-5 px-6">{{ $row['dueDate'] }}</td>
+              <td class="py-5 px-6">{{ $row['desc'] }}</td>
+              <td class="py-5 px-6">
+                <a href="{{route($row['url'])}}" class="text-[#FF7519] cursor-pointer"> 
+                    View Assignments
+                </a>
+              </td>
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
       </div>
   </div>
 @endsection

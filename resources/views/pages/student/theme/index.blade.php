@@ -48,14 +48,11 @@
                     class="absolute -top-2 -right-2 bg-black border-2 border-white text-white rounded-full text-[10px] px-1 py-0.25">5</span>
             </div>
         </div>
-        @yield('insideContent')
     </div>
     <div class="p-3 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
-        {{-- @foreach ($paths as $item) --}}
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="#" class="mx-2 cursor-pointer">Theme</a>
-        {{-- @endforeach --}}
     </div>
     <div class="p-3 flex flex-wrap justify-start">
         @foreach ($materials as $material)
