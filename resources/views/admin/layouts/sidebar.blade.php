@@ -38,7 +38,7 @@
 
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('material.index') }}">
-                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Material</span>
+                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Theme</span>
                 </a>
             </li>
 
