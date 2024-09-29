@@ -132,7 +132,7 @@ class MaterialController extends Controller
         if ($filePath === false) {
             return back()->withErrors(['file_path' => 'Failed to extract the zip file or missing index.html.']);
         }
-
+        
         $howToUsePath = $this->handleFileUpload($request->file('how_to_use'), 'ebooks');
         if ($howToUsePath === false) {
             return back()->withErrors(['how_to_use' => 'Failed to extract the zip file or missing index.html.']);
