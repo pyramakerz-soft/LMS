@@ -58,7 +58,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('chapters', ChapterController::class);
         Route::resource('lessons', LessonController::class);
         Route::resource('stages', StageController::class);
-        Route::resource('assignments', AssignmentController::class);
+        // Route::resource('assignments', AssignmentController::class);
         Route::resource('ebooks', EbookController::class);
         Route::resource('classes', ClassController::class);
         Route::get('/lessons/{lesson}/view', [LessonController::class, 'viewEbook'])->name('lesson.view');
@@ -179,6 +179,8 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     // Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
 
     Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
+    Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
+
     Route::get('/teacher/stage/{stageId}/materials', [TeacherDashboardController::class, 'showMaterials'])->name('teacher.showMaterials');
     Route::get('/teacher/material/{materialId}/units', [TeacherDashboardController::class, 'showUnits'])->name('teacher.units');
     Route::get('/units/{unitId}/chapters', [TeacherDashboardController::class, 'showChapters'])->name('teacher.chapters.index');

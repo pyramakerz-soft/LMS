@@ -7,7 +7,7 @@
 @php
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('student.theme')],
-        ['label' => 'Assignment', 'icon' => 'fas fa-home', 'route' => 'student.assignment'],
+        ['label' => 'Assignment', 'icon' => 'fas fa-home', 'route' => route('student.assignment')],
     ];
 @endphp
 

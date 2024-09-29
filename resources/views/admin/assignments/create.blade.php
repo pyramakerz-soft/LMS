@@ -1,6 +1,6 @@
-{{-- @extends('layouts.admin')
+@extends('admin.layouts.layout')
 
-@section('content') --}}
+@section('content')
 <div class="container">
     <h1>Create Assignment</h1>
 
@@ -95,6 +95,8 @@
         <button type="submit" class="btn btn-primary">Create Assignment</button>
     </form>
 </div>
+@endsection
+@section('page_js')
 
 <!-- Include Summernote JS -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -107,7 +109,7 @@
 <script>
     document.getElementById('school_id').addEventListener('change', function() {
         let schoolId = this.value;
-        fetch(`/api/schools/${schoolId}/stages`)
+        fetch(`/admin/api/schools/${schoolId}/stages`)
             .then(response => response.json())
             .then(data => {
                 let stageSelect = document.getElementById('stage_id');
@@ -120,7 +122,7 @@
 
     document.getElementById('stage_id').addEventListener('change', function() {
         let stageId = this.value;
-        fetch(`/api/stages/${stageId}/students`)
+        fetch(`/admin/api/stages/${stageId}/students`)
             .then(response => response.json())
             .then(data => {
                 let studentSelect = document.getElementById('student_ids');
@@ -132,6 +134,7 @@
             });
     });
 </script>
+
 {{-- <script>
     $(document).ready(function() {
         $('#summernote').summernote({
@@ -139,4 +142,4 @@
         });
     });
 </script> --}}
-{{-- @endsection --}}
+@endsection
