@@ -37,7 +37,7 @@
                             <input type="file" name="image" value="{{ $stage->image }}" class="form-control" id="image" accept="image/*">
                             @if ($stage->image)
                                 <p>Current Image:</p>
-                                <img src="{{ asset('storage/' . $stage->image) }}" alt="{{ $stage->name }}" width="100">
+                                <img src="{{ asset($stage->image) }}" alt="{{ $stage->name }}" width="100">
                             @endif
                         </div>
 

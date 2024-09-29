@@ -44,7 +44,7 @@
                                     <td>{{ $lesson->chapter->title }}</td>
                                     <td>
                                         @if ($lesson->image)
-                                            <img src="{{ asset('storage/' . $lesson->image) }}" alt="{{ $lesson->title }}"
+                                            <img src="{{ asset($lesson->image) }}" alt="{{ $lesson->title }}"
                                                 width="100">
                                         @else
                                             No Image

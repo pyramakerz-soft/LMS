@@ -77,7 +77,7 @@
         document.getElementById('school_id').addEventListener('change', function() {
             let schoolId = this.value;
             if (schoolId) {
-                fetch(`/api/schools/${schoolId}/stages`)
+                fetch(`/LMS/lms_pyramakerz/public/api/schools/${schoolId}/stages`)
                     .then(response => response.json())
                     .then(data => {
                         let stageSelect = document.getElementById('stage_ids');

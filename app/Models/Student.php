@@ -41,4 +41,8 @@ class Student extends Authenticatable
     // {
     //     return $this->hasMany(Student_assessment::class);
     // }
+     public function getImageAttribute($val)
+    {
+        return ($val !== null) ? asset( $val) : "";
+    }
 }

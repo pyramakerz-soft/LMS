@@ -36,7 +36,7 @@
                                 <tr>
                                     <td>
                                         @if ($student->image)
-                                            <img src="{{ asset('storage/' . $student->image) }}" alt="Student Image"
+                                            <img src="{{ asset( $student->image) }}" alt="Student Image"
                                                 width="50" height="50" class="rounded-circle">
                                         @else
                                             No Image

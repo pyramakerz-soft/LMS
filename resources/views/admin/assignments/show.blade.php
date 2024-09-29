@@ -20,7 +20,7 @@
 
             <p><strong>File:</strong>
                 @if ($assignment->path_file)
-                    <a href="{{ asset('storage/' . $assignment->path_file) }}" target="_blank">Download File</a>
+                    <a href="{{ asset($assignment->path_file) }}" target="_blank">Download File</a>
                 @else
                     No file uploaded
                 @endif

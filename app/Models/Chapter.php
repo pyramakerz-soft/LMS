@@ -27,5 +27,9 @@ class Chapter extends Model
     {
         return $this->belongsToMany(School::class, 'chapter_school');
     }
+     public function getImageAttribute($val)
+    {
+        return ($val !== null) ? asset( $val) : "";
+    }
 
 }
