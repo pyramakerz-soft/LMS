@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('title')
-    @yield('title')
+    Unit
 @endsection
 
 @php
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('student.theme')],
-        ['label' => 'Assignment', 'icon' => 'fas fa-home', 'route' => 'student.assignment'],
+        ['label' => 'Assignment', 'icon' => 'fas fa-home', 'route' => route('student.assignment')],
     ];
 
 @endphp
@@ -18,9 +18,9 @@
 @section('content')
     <div class="p-3">
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-4
+            ">
                 <div>
-                    {{-- <img class="w-20 h-20 rounded-full" alt="avatar1" src="{{ $userAuth->image }}" /> --}}
                     @if ($userAuth->image)
                         <img src="{{ asset('storage/' . $userAuth->image) }}" alt="Student Image"
                             class="w-20 h-20 rounded-full object-cover">
@@ -62,7 +62,7 @@
                 @foreach ($material->units as $unit)
                     <h2 id="accordion-collapse-heading-{{ $unit->id }}">
                         <button type="button"
-                            class="accordion-button flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
+                            class="accordion-button flex items-center justify-between w-full p-3 font-medium rtl:text-right text-gray-500 border border-gray-200 dark:border-gray-700 dark:text-gray-400 hover:bg-[#2E3646] rounded-md gap-3"
                             data-accordion-target="#accordion-collapse-body-{{ $unit->id }}" aria-expanded="false"
                             aria-controls="accordion-collapse-body-{{ $unit->id }}">
                             <span> {{ $unit->title }}</span>

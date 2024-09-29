@@ -144,13 +144,13 @@ Route::get('/teacher/dashboard', function () {
 //     return view('pages.student.week.index');
 // })->name('student.week');
 
-// Route::get('/assignment', function () {
-//     return view('pages.student.assignment.index');
-// })->name('student.assignment');
+Route::get('/assignment', function () {
+    return view('pages.student.assignment.index');
+})->name('student.assignment');
 
-// Route::get('/assignment_show', function () {
-//     return view('pages.student.assignment.show');
-// })->name('student.assignment.show');
+Route::get('/assignment_show', function () {
+    return view('pages.student.assignment.show');
+})->name('student.assignment.show');
 
 Route::get('/create_theme', function () {
     return view('pages.teacher.theme.create');

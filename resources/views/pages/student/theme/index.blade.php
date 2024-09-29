@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('title')
-    @yield('title')
+    Theme
 @endsection
 
 @php
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('student.theme')],
-        ['label' => 'Assignment', 'icon' => 'fas fa-home', 'route' => 'student.assignment'],
+        ['label' => 'Assignment', 'icon' => 'fas fa-home', 'route' => route('student.assignment')],
     ];
 
 @endphp
@@ -59,10 +59,6 @@
     </div>
     <div class="p-3 flex flex-wrap justify-start">
         @foreach ($materials as $material)
-        {{-- <embed src="{{ asset('storage/'. $material->file_path . '/Index.html')}}" width="800px" height="2100px" />
-        <embed src="{{ asset('storage/'. $material->how_to_use . '/Index.html')}}" width="800px" height="2100px" />
-        <embed src="{{ asset('storage/'. $material->learning . '/Index.html')}}" width="800px" height="2100px" /> --}}
-
             <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white shadow-md rounded-xl min-h-[380px]">
                 <div class="h-full">
                     <a class="cursor-pointer h-full flex flex-col justify-between"
@@ -106,55 +102,51 @@
 {{-- ------------------------------------------------------------------------------------- --}}
 
 {{-- Ebook Modal --}}
-<div id="ebook" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll overflow-x-scroll">
+<div id="ebook" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-10">
+    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll">
         <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <h3 class="text-lg font-semibold text-gray-900">
                 EBook
             </h3>
+            <div class="flex justify-end">
+                <button onclick="closeModal('ebook')" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
+            </div>
         </div>
         {{-- Put the EBook Here --}}
         <embed src="{{ asset('storage/'. $material->file_path . '/Index.html')}}" width="800px" height="2100px" />
 
-        <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
-            <button onclick="closeModal('ebook')" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">Close</button>
-        </div>
     </div>
 </div>
 
 {{-- How To Use Modal --}}
-<div id="use" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll overflow-x-scroll">
+<div id="use" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-10">
+    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll">
         <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <h3 class="text-lg font-semibold text-gray-900">
                 How To Use
             </h3>
+            <div class="flex justify-end">
+                <button onclick="closeModal('use')" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
+            </div>
         </div>
         {{-- Put the How To Use Here --}}
         <embed src="{{ asset('storage/'. $material->how_to_use . '/Index.html')}}" width="800px" height="2100px" />
-
-        <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
-            <button onclick="closeModal('use')"
-                class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">Close</button>
-        </div>
     </div>
 </div>
 
 {{-- Learning Modal --}}
-<div id="learn" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll overflow-x-scroll">
+<div id="learn" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-10">
+    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll">
         <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <h3 class="text-lg font-semibold text-gray-900">
                 Learning
             </h3>
+            <div class="flex justify-end">
+                <button onclick="closeModal('learn')" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
+            </div>
         </div>
         {{-- Put the Learning Here --}}
         <embed src="{{ asset('storage/'. $material->learning . '/Index.html')}}" width="800px" height="2100px" />
-
-        <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
-            <button onclick="closeModal('learn')"
-                class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">Close</button>
-        </div>
     </div>
 </div>
 
