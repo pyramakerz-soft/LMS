@@ -21,7 +21,7 @@
                 <th>Due Date</th>
                 <th>Lesson</th>
                 <th>Marks</th>
-                <th>Is Active</th>
+                <th>Active</th>
                 <th>Actions</th>
             </tr>
         </thead>

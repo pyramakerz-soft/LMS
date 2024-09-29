@@ -22,9 +22,10 @@
                         <thead>
                             <tr>
                                 <th>Title</th>
+                                <th>File</th>
                                 <th>Chapter</th>
                                 <th>Image</th>
-                                <th>Is Active</th>
+                                <th>Active</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -32,6 +33,11 @@
                             @foreach ($lessons as $lesson)
                                 <tr>
                                     <td>{{ $lesson->title }}</td>
+                                    <td>
+                                        <a href="{{ route('lesson.view', $lesson->id) }}" target="_blank"
+                                            class="btn btn-success">View
+                                            Ebook</a>
+                                    </td>
                                     <td>{{ $lesson->chapter->title }}</td>
                                     <td>
                                         @if ($lesson->image)

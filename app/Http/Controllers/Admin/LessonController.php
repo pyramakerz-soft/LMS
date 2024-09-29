@@ -37,11 +37,43 @@ class LessonController extends Controller
             'chapter_id' => 'required|exists:chapters,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'is_active' => 'nullable|boolean',
+            'file_path' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240',
         ]);
 
+        $file = $request->file('file_path');
+        $isZip = $file->getClientOriginalExtension() === 'zip';
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('lessons', 'public');
+        }
+
+        if ($isZip) {
+            $filePath = $file->store('ebooks', 'public');
+
+            $extractPath = storage_path('app/public/ebooks/' . pathinfo($filePath, PATHINFO_FILENAME));
+
+            $zip = new \ZipArchive;
+            if ($zip->open(storage_path('app/public/' . $filePath)) === TRUE) {
+                $zip->extractTo($extractPath);
+                $zip->close();
+
+                $filePath = 'ebooks/' . pathinfo($filePath, PATHINFO_FILENAME);
+
+                if (file_exists(public_path('storage/' . $filePath . '/index.html'))) {
+                    $lesson = Lesson::create([
+                        'title' => $request->title,
+                        'chapter_id' => $request->chapter_id,
+                        'image' => $imagePath,
+                        'is_active' => $request->is_active ?? 0,
+                        'file_path' => $filePath,
+                    ]);
+                    return redirect()->back();
+                }
+            } else {
+                return back()->withErrors(['file_path' => 'Failed to extract the zip file.']);
+            }
+        } else {
+            $filePath = $file->store('ebooks', 'public');
         }
 
         Lesson::create([
@@ -49,11 +81,12 @@ class LessonController extends Controller
             'chapter_id' => $request->chapter_id,
             'image' => $imagePath,
             'is_active' => $request->is_active ?? 0,
+            'file_path' => $filePath,
         ]);
 
-        return redirect()->route('lessons.index')->with('success', 'Chapter created successfully.');
-    }
+        return redirect()->route('lessons.index')->with('success', 'Lesson created successfully.');
 
+    }
     /**
      * Display the specified resource.
      */
@@ -61,6 +94,21 @@ class LessonController extends Controller
     {
         //
     }
+    public function viewEbook(Lesson $lesson)
+    {
+        $relativePath = 'storage/' . $lesson->file_path . '/index.html';
+
+        $fileUrl = asset($relativePath);
+
+        \Log::info('Looking for index.html at: ' . $fileUrl);
+
+        if (file_exists(public_path($relativePath))) {
+            return redirect($fileUrl);
+        } else {
+            return abort(404, 'Index file not found.');
+        }
+    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -72,6 +120,7 @@ class LessonController extends Controller
         return view('admin.lessons.edit', compact('lesson', 'chapters'));
     }
 
+
     /**
      * Update the specified resource in storage.
      */
@@ -81,21 +130,25 @@ class LessonController extends Controller
 
         $request->validate([
             'title' => 'required|string|max:255',
-            'chapter_id' => 'required|exists:chapters,id', // Validate the selected unit
+            'chapter_id' => 'required|exists:chapters,id',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'file_path' => 'nullable|file|mimes:pdf,ppt,pptx,doc,docx,html,txt,zip|max:10240',
+
             'is_active' => 'nullable|boolean',
         ]);
 
-        // Handle image upload if exists
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('lessons', 'public');
             $lesson->image = $imagePath;
         }
+        if ($request->hasFile('file_path')) {
+            $filePath = $request->file('file_path')->store('ebooks', 'public');
+            $lesson->file_path = $filePath;
+        }
 
-        // Update chapter
         $lesson->update([
             'title' => $request->title,
-            'chapter_id' => $request->chapter_id, // Update with the selected unit_id
+            'chapter_id' => $request->chapter_id,
             'is_active' => $request->is_active ?? 0,
         ]);
 

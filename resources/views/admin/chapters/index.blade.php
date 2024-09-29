@@ -16,7 +16,7 @@
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    <a href="{{ route('chapters.create') }}" class="btn btn-primary mb-3">Add Chapter</a>
+                    {{-- <a href="{{ route('chapters.create') }}" class="btn btn-primary mb-3">Add Chapter</a> --}}
 
 
                     <table class="table table-bordered">
@@ -27,7 +27,7 @@
                                 <th>Material</th>
                                 <th>Stage</th> <!-- Add stage column -->
                                 <th>Image</th>
-                                <th>Is Active</th>
+                                <th>Active</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
