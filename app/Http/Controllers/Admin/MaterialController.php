@@ -133,60 +133,6 @@ class MaterialController extends Controller
             return back()->withErrors(['file_path' => 'Failed to extract the zip file or missing index.html.']);
         }
         
-        // $howToUsePath = null;
-        // $fileHowToUse = $request->file('how_to_use');
-        // $isHowToUseZip = $fileHowToUse->getClientOriginalExtension() === 'zip';
-
-        // if ($isHowToUseZip) {
-        //     $howToUsePath = $fileHowToUse->store('ebooks', 'public');
-        //     $extractPath = storage_path('app/public/ebooks/' . pathinfo($howToUsePath, PATHINFO_FILENAME));
-
-        //     $zip = new \ZipArchive;
-        //     if ($zip->open(storage_path('app/public/' . $howToUsePath)) === TRUE) {
-        //         $zip->extractTo($extractPath);
-        //         $zip->close();
-
-        //         $howToUsePath = 'ebooks/' . pathinfo($howToUsePath, PATHINFO_FILENAME);
-
-        //         // Check if the extracted zip contains index.html
-        //         if (!file_exists(public_path('storage/' . $howToUsePath . '/index.html'))) {
-        //             return back()->withErrors(['how_to_use' => 'The extracted zip does not contain index.html.']);
-        //         }
-        //     } else {
-        //         return back()->withErrors(['how_to_use' => 'Failed to extract the zip file.']);
-        //     }
-        // } else {
-        //     // For non-zip files
-        //     $howToUsePath = $fileHowToUse->store('ebooks', 'public');
-        // }
-        
-        // $learningPath = null;
-        // $fileLearning = $request->file('learning');
-        // $isLearningZip = $fileLearning->getClientOriginalExtension() === 'zip';
-
-        // if ($isLearningZip) {
-        //     $learningPath = $fileLearning->store('ebooks', 'public');
-        //     $extractPath = storage_path('app/public/ebooks/' . pathinfo($learningPath, PATHINFO_FILENAME));
-
-        //     $zip = new \ZipArchive;
-        //     if ($zip->open(storage_path('app/public/' . $learningPath)) === TRUE) {
-        //         $zip->extractTo($extractPath);
-        //         $zip->close();
-
-        //         $learningPath = 'ebooks/' . pathinfo($learningPath, PATHINFO_FILENAME);
-
-        //         // Check if the extracted zip contains index.html
-        //         if (!file_exists(public_path('storage/' . $learningPath . '/index.html'))) {
-        //             return back()->withErrors(['learning' => 'The extracted zip does not contain index.html.']);
-        //         }
-        //     } else {
-        //         return back()->withErrors(['learning' => 'Failed to extract the zip file.']);
-        //     }
-        // } else {
-        //     // For non-zip files
-        //     $learningPath = $fileLearning->store('ebooks', 'public');
-        // }
-
         $howToUsePath = $this->handleFileUpload($request->file('how_to_use'), 'ebooks');
         if ($howToUsePath === false) {
             return back()->withErrors(['how_to_use' => 'Failed to extract the zip file or missing index.html.']);
