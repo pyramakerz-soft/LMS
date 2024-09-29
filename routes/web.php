@@ -92,7 +92,13 @@ Route::prefix('admin')->group(function () {
     });
 });
 
+Route::get('/api/schools/{school}/stages', function (School $school) {
+    return response()->json($school->stages);
+});
 
+Route::get('/api/stages/{stage}/students', function (Stage $stage) {
+    return response()->json($stage->students);
+});
 
 
 
@@ -174,6 +180,7 @@ Route::get('/create_lesson', function () {
 
 Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::resource('assessments', StudentAssessmentController::class);
+    Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
     Route::get('assessments/student/{student_id}', [StudentAssessmentController::class, 'showStudentAssessments'])->name('teacher.assessments.student');
 
     // Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
