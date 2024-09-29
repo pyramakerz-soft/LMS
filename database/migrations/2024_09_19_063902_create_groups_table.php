@@ -10,16 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('groups', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->unique()->nullable();
-            $table->string('password')->nullable();
+            $table->string('name')->nullable();
+            $table->string('image')->nullable();
             $table->foreignId('school_id')->constrained()->onDelete('cascade');
             $table->foreignId('stage_id')->constrained()->onDelete('cascade');
-            $table->foreignId('class_id')->constrained('groups')->onDelete('cascade');
-            $table->enum('gender', ['boy', 'girl'])->nullable();
-            $table->boolean('is_active')->nullable();
-            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +25,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('groups');
     }
 };

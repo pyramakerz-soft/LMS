@@ -52,5 +52,10 @@ class School extends Model
     {
         return $this->hasMany(Admin::class);
     }
+    public function classes()
+    {
+        return $this->hasMany(Group::class);
+    }
+    
 
 }

@@ -9,7 +9,7 @@
 
             <main class="content">
                 <div class="container-fluid p-0">
-                    <h1>Edit Material</h1>
+                    <h1>Edit Student</h1>
 
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -21,14 +21,27 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('material.update', $material->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('classes.update', $class->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
                         <div class="mb-3">
-                            <label for="title" class="form-label">Title</label>
-                            <input type="text" name="title" class="form-control" id="title"
-                                value="{{ $material->title }}" required>
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" name="name" class="form-control" id="name"
+                                value="{{ $student->username }}" required>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label for="school_id" class="form-label">School</label>
+                            <select name="school_id" class="form-control" id="school_id" required>
+                                @foreach ($schools as $school)
+                                    <option value="{{ $school->id }}"
+                                        {{ $class->school_id == $school->id ? 'selected' : '' }}>
+                                        {{ $school->name }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
 
                         <div class="mb-3">
@@ -36,28 +49,18 @@
                             <select name="stage_id" class="form-control" id="stage_id" required>
                                 @foreach ($stages as $stage)
                                     <option value="{{ $stage->id }}"
-                                        {{ $material->stage_id == $stage->id ? 'selected' : '' }}>{{ $stage->name }}
+                                        {{ $class->stage_id == $stage->id ? 'selected' : '' }}>
+                                        {{ $stage->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="image" class="form-label">Image</label>
-                            <input type="file" name="image" class="form-control" id="image" accept="image/*">
-                            @if ($material->image)
-                                <p>Current Image: <img src="{{ asset('storage/' . $material->image) }}" width="100"></p>
-                            @endif
-                        </div>
 
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" name="is_active" class="form-check-input" id="is_active" value="1"
-                                {{ $material->is_active ? 'checked' : '' }}>
-                            <label class="form-check-label" for="is_active">Active</label>
-                        </div>
 
-                        <button type="submit" class="btn btn-primary">Update Material</button>
+                        <button type="submit" class="btn btn-primary">Update Class</button>
                     </form>
+
                 </div>
             </main>
 

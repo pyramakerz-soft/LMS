@@ -25,7 +25,7 @@
                                 <th>Title</th>
                                 <th>Unit</th>
                                 <th>Material</th>
-                                <th>Stage</th> <!-- Add stage column -->
+                                <th>Grade</th> 
                                 <th>Image</th>
                                 <th>Active</th>
                                 <th>Actions</th>

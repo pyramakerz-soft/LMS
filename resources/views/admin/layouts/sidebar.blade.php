@@ -1,7 +1,7 @@
 <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
         <a class="sidebar-brand" href="index.html">
-            <span class="align-middle">AdminKit</span>
+            <span class="align-middle">LMS Pyramakerz</span>
         </a>
 
         <ul class="sidebar-nav">
@@ -10,19 +10,29 @@
             </li>
 
             <li class="sidebar-item active">
-                <a class="sidebar-link" href="index.html">
+                <a class="sidebar-link" href="{{ route('admin.dashboard') }}">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+                </a>
+            </li>
+            <li class="sidebar-item ">
+                <a class="sidebar-link" href="{{ route('images.index') }}">
+                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Images</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('admins.index') }}">
-                    <i class="align-middle" data-feather="user"></i> <span class="align-middle">School admin</span>
+                    <i class="align-middle" data-feather="user"></i> <span class="align-middle">School</span>
                 </a>
             </li>
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('stages.index') }}">
                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">Grade</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{ route('classes.index') }}">
+                    <i class="align-middle" data-feather="user"></i> <span class="align-middle">Class</span>
                 </a>
             </li>
 

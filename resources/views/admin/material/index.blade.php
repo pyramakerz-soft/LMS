@@ -22,7 +22,7 @@
                         <thead>
                             <tr>
                                 <th>Title</th>
-                                <th>Stage</th>
+                                <th>Grade</th>
                                 <th>Image</th>
                                 <th>Active</th>
                                 <th>Actions</th>

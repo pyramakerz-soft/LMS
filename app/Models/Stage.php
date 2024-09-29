@@ -33,5 +33,8 @@ class Stage extends Model
     {
         return $this->hasMany(Material::class);
     }
-    
+    public function classes()
+    {
+        return $this->hasMany(Group::class);
+    }
 }

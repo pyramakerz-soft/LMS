@@ -27,6 +27,7 @@
                                 <th>Gender</th>
                                 <th>School</th>
                                 <th>Stage</th>
+                                <th>Class</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -46,6 +47,7 @@
                                     <td>{{ ucfirst($student->gender) }}</td>
                                     <td>{{ $student->school->name }}</td>
                                     <td>{{ $student->stage->name }}</td>
+                                    <td>{{ $student->classes->name }}</td>
                                     <td>
                                         <a href="{{ route('students.edit', $student->id) }}" class="btn btn-info">Edit</a>
 

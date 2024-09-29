@@ -65,7 +65,8 @@
 
             <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white shadow-md rounded-xl min-h-[380px]">
                 <div class="h-full">
-                    <a class="cursor-pointer h-full flex flex-col justify-between" href="{{ route('student_units.index', $material->id) }}">
+                    <a class="cursor-pointer h-full flex flex-col justify-between"
+                        href="{{ route('student_units.index', $material->id) }}">
                         @if ($material->image)
                             <img src="{{ asset('storage/' . $material->image) }}" alt="{{ $material->title }}"
                                 class="object-cover object-top w-full h-[350px] rounded-xl">
@@ -75,24 +76,43 @@
                         <div class="text-slate-800">
                             <div class="flex justify-between items-center text-2xl">
                                 <p class="font-semibold">{{ $material->title }}</p>
-                                <button class="pt-2" onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');">
+                                <button class="pt-2"
+                                    onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');">
                                     <img src="{{ asset('images/Clip path group.png') }}">
                                 </button>
                             </div>
                             <div class="flex justify-between items-center mt-4">
                                 <div>
-                                    <button class="bg-[#17253E] p-2 text-white rounded-md" onclick="event.stopPropagation(); event.preventDefault(); openModal('use');">
+                                    <button class="bg-[#17253E] p-2 text-white rounded-md"
+                                        onclick="event.stopPropagation(); event.preventDefault(); openModal('use');">
                                         How To Use
-                                    <button>
+                                        <button>
                                 </div>
-                                <div> 
-                                    <button class="bg-white border border-[#FF7519] p-2 text-black font-semibold rounded-md" onclick="event.stopPropagation(); event.preventDefault(); openModal('learn');">
+                                <div>
+                                    <button class="bg-white border border-[#FF7519] p-2 text-black font-semibold rounded-md"
+                                        onclick="event.stopPropagation(); event.preventDefault(); openModal('learn');">
                                         Learning Outcomes
-                                    <button>
+                                        <button>
                                 </div>
                             </div>
                         </div>
                     </a>
+                </div>
+            </div>
+            {{-- Ebook Modal --}}
+            <div id="ebook" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+                <div class="bg-white rounded-lg shadow-lg w-1/3">
+                    <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                        <h3 class="text-lg font-semibold text-gray-900">
+                            EBook
+                        </h3>
+                    </div>
+                    {{-- Put the EBook Here --}}
+                    {{ $material->file_path }}
+                    <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
+                        <button onclick="closeModal('ebook')"
+                            class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">Close</button>
+                    </div>
                 </div>
             </div>
         @endforeach
@@ -130,7 +150,8 @@
         <embed src="{{ asset('storage/'. $material->how_to_use . '/Index.html')}}" width="800px" height="2100px" />
 
         <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
-            <button onclick="closeModal('use')" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">Close</button>
+            <button onclick="closeModal('use')"
+                class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">Close</button>
         </div>
     </div>
 </div>
@@ -147,14 +168,14 @@
         <embed src="{{ asset('storage/'. $material->learning . '/Index.html')}}" width="800px" height="2100px" />
 
         <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
-            <button onclick="closeModal('learn')" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">Close</button>
+            <button onclick="closeModal('learn')"
+                class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">Close</button>
         </div>
     </div>
 </div>
 
 
 <script>
-
     function openModal(id) {
         document.getElementById(id).classList.remove("hidden");
     }
@@ -162,5 +183,4 @@
     function closeModal(id) {
         document.getElementById(id).classList.add("hidden");
     }
-
 </script>

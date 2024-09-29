@@ -30,7 +30,7 @@
                                 value="{{ old('title') }}" required>
                         </div>
                         <div class="mb-3">
-                            <label for="material_id" class="form-label">Select Material</label>
+                            <label for="material_id" class="form-label">Select Theme</label>
                             <select name="material_id" id="material_id" class="form-control" required>
                                 @foreach ($materials as $material)
                                     <option value="{{ $material->id }}">
