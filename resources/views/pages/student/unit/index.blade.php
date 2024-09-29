@@ -83,7 +83,7 @@
                                             <div class="overflow-hidden">
                                                 @if ($chapter->image)
                                                     <img src="{{ asset('storage/' . $chapter->image) }}"
-                                                        class="object-contain w-full h-[250px] rounded-xl" alt="{{ $chapter->name }}">
+                                                        class="object-contain w-full rounded-xl" alt="{{ $chapter->name }}">
                                                 @else
                                                     <img src="https://via.placeholder.com/150"
                                                         class="object-contain w-full h-[250px] rounded-xl" alt="No Image">

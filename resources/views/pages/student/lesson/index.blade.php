@@ -67,7 +67,7 @@
                         <div class="p-4">
                             @if ($lesson->image)
                                 <img src="{{ asset('storage/' . $lesson->image) }}"
-                                    class="object-contain w-full h-[250px] rounded-xl">
+                                    class="object-contain w-full rounded-xl">
                             @else
                                 <img src="https://via.placeholder.com/150" class="object-contain w-full h-[250px] rounded-xl"
                                     alt="No Image">
