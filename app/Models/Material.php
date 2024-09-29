@@ -22,4 +22,8 @@ class Material extends Model
     {
         return $this->hasMany(Unit::class);
     }
+     public function getImageAttribute($val)
+    {
+        return ($val !== null) ? asset( $val) : "";
+    }
 }

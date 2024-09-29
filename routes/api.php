@@ -3,7 +3,8 @@
 use App\Http\Controllers\Admin\CurriculumController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Models\School;
+use App\Models\Stage;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,3 +25,10 @@ Route::get('stages/{stageId}/materials', [CurriculumController::class, 'getMater
 Route::get('materials/{materialId}/units', [CurriculumController::class, 'getUnitsByMaterial']);
 Route::get('units/{unitId}/chapters', [CurriculumController::class, 'getChaptersByUnit']);
 Route::get('chapters/{chapterId}/lessons', [CurriculumController::class, 'getLessonsByChapter']);
+Route::get('schools/{school}/stages', function (School $school) {
+            return response()->json($school->stages);
+        });
+
+        Route::get('stages/{stage}/students', function (Stage $stage) {
+            return response()->json($stage->students);
+        });

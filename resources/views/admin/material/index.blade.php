@@ -35,7 +35,7 @@
                                     <td>{{ $material->stage->name }}</td>
                                     <td>
                                         @if ($material->image)
-                                            <img src="{{ asset('storage/' . $material->image) }}" alt="{{ $material->title }}"
+                                            <img src="{{ asset( $material->image) }}" alt="{{ $material->title }}"
                                                 width="100">
                                         @else
                                             No Image

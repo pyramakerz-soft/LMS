@@ -68,7 +68,7 @@
                             <label for="image" class="form-label">Profile Image</label>
                             <input type="file" name="image" class="form-control" id="image" accept="image/*">
                             @if ($student->image)
-                                <p>Current Image: <img src="{{ asset('storage/' . $student->image) }}" alt="Student Image"
+                                <p>Current Image: <img src="{{ asset( $student->image) }}" alt="Student Image"
                                         width="100"></p>
                             @endif
                         </div>

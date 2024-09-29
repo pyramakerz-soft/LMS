@@ -32,7 +32,7 @@
                                     <td>{{ $stage->name }}</td>
                                     <td>
                                         @if ($stage->image)
-                                            <img src="{{ asset('storage/' . $stage->image) }}" alt="{{ $stage->name }}"
+                                            <img src="{{ asset( $stage->image) }}" alt="{{ $stage->name }}"
                                                 width="100">
                                         @else
                                             No Image

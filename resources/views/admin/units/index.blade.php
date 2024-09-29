@@ -35,7 +35,7 @@
                                     <td>{{ $unit->material->title }}</td>
                                     <td>
                                         @if ($unit->image)
-                                            <img src="{{ asset('storage/' . $unit->image) }}" alt="{{ $unit->title }}"
+                                            <img src="{{ asset( $unit->image) }}" alt="{{ $unit->title }}"
                                                 width="100">
                                         @else
                                             No Image
