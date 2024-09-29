@@ -41,21 +41,28 @@
                         <div class="mb-3">
                             <label for="school_id" class="form-label">School</label>
                             <select name="school_id" id="school_id" class="form-control" required>
+                                <option value="">Select School</option>
                                 @foreach ($schools as $school)
                                     <option value="{{ $school->id }}">{{ $school->name }}</option>
                                 @endforeach
                             </select>
                         </div>
 
+                        <!-- Stage Selection -->
                         <div class="mb-3">
-                            <label for="stage_id" class="form-label">Stage</label>
+                            <label for="stage_id" class="form-label">Grade</label>
                             <select name="stage_id" id="stage_id" class="form-control" required>
-                                @foreach ($stages as $stage)
-                                    <option value="{{ $stage->id }}">{{ $stage->name }}</option>
-                                @endforeach
+                                <option value="">Select Grade</option>
                             </select>
                         </div>
 
+                        <!-- Class Selection -->
+                        <div class="mb-3">
+                            <label for="class_id" class="form-label">Class</label>
+                            <select name="class_id" id="class_id" class="form-control" required>
+                                <option value="">Select Class</option>
+                            </select>
+                        </div>
                         <!-- Image Upload -->
                         <div class="mb-3">
                             <label for="image" class="form-label">Profile Image</label>
@@ -71,4 +78,42 @@
             @include('admin.layouts.footer')
         </div>
     </div>
+@endsection
+@section('page_js')
+    <script>
+        document.getElementById('school_id').addEventListener('change', function() {
+            let schoolId = this.value;
+            if (schoolId) {
+                fetch(`/admin/api/schools/${schoolId}/stages`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let stageSelect = document.getElementById('stage_id');
+                        stageSelect.innerHTML = '<option value="">Select Stage</option>';
+                        data.forEach(stage => {
+                            stageSelect.innerHTML +=
+                                `<option value="${stage.id}">${stage.name}</option>`;
+                        });
+                    });
+            } else {
+                document.getElementById('stage_id').innerHTML = '<option value="">Select Stage</option>';
+            }
+        });
+
+        document.getElementById('stage_id').addEventListener('change', function() {
+            let stageId = this.value;
+            if (stageId) {
+                fetch(`/admin/api/stages/${stageId}/classes`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let classSelect = document.getElementById('class_id');
+                        classSelect.innerHTML = '<option value="">Select Class</option>';
+                        data.forEach(cls => {
+                            classSelect.innerHTML += `<option value="${cls.id}">${cls.name}</option>`;
+                        });
+                    });
+            } else {
+                document.getElementById('class_id').innerHTML = '<option value="">Select Class</option>';
+            }
+        });
+    </script>
 @endsection

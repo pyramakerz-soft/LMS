@@ -9,7 +9,8 @@
 
             <main class="content">
                 <div class="container-fluid p-0">
-                    <h1>Create Material</h1>
+
+                    <h2>Create Class</h2>
 
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -21,35 +22,36 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('material.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('classes.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="mb-3">
-                            <label for="title" class="form-label">Title</label>
-                            <input type="text" name="title" class="form-control" id="title"
-                                value="{{ old('title') }}" required>
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" name="name" id="name" class="form-control" required>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label for="school_id" class="form-label">School</label>
+                            <select name="school_id" id="school_id" class="form-control" required>
+                                @foreach ($schools as $school)
+                                    <option value="{{ $school->id }}">{{ $school->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
                         <div class="mb-3">
                             <label for="stage_id" class="form-label">Grade</label>
-                            <select name="stage_id" class="form-control" id="stage_id" required>
+                            <select name="stage_id" id="stage_id" class="form-control" required>
                                 @foreach ($stages as $stage)
                                     <option value="{{ $stage->id }}">{{ $stage->name }}</option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="image" class="form-label">Image</label>
-                            <input type="file" name="image" class="form-control" id="image" accept="image/*">
-                        </div>
 
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" name="is_active" class="form-check-input" id="is_active" value="1">
-                            <label class="form-check-label" for="is_active">Active</label>
-                        </div>
 
-                        <button type="submit" class="btn btn-primary">Create Material</button>
+                        <button type="submit" class="btn btn-primary">Create Class</button>
                     </form>
 
                 </div>

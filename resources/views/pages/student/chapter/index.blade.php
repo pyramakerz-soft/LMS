@@ -16,16 +16,16 @@
 @endsection
 
 @section('content')
-    <div class="p-5">
+    <div class="p-3">
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
                     @if ($userAuth->image)
                         <img src="{{ asset('storage/' . $userAuth->image) }}" alt="Student Image"
-                            class="w-20 h-20 rounded-full">
+                            class="w-20 h-20 rounded-full object-cover">
                     @else
                         <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
-                            class="w-30 h-20 rounded-full">
+                            class="w-30 h-20 rounded-full object-cover">
                     @endif
                 </div>
 
@@ -48,7 +48,7 @@
         @yield('insideContent')
     </div>
 
-    <div class="p-2 text-[#667085] my-8">
+    <div class="p-3 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="#" class="mx-2 cursor-pointer">Chapters</a>
