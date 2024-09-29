@@ -79,6 +79,7 @@ Route::prefix('admin')->group(function () {
         Route::delete('/schools/{schoolId}/lessons/{lessonId}', [AdminController::class, 'removeLesson'])->name('school.removeLesson');
         // Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
+
         Route::get('/api/schools/{school}/stages', function (School $school) {
             return response()->json($school->stages);
         });
@@ -90,6 +91,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/api/stages/{stage}/classes', function (Stage $stage) {
             return response()->json($stage->classes);
         });
+
     });
 });
 

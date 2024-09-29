@@ -105,7 +105,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/login">Login</a>
+                        <a class="nav-link" href="{{route('login')}}">Login</a>
                     </li>
                 </ul>
             </div>
@@ -117,7 +117,7 @@
         <div class="container">
             <h1>Pyramakerz LMS</h1>
             <p>Empowering digital learning from PreK1 to Grade 12 with cutting-edge technology.</p>
-            <a href="/login" class="btn btn-custom btn-lg">Login Now</a>
+            <a href="{{route('login')}}" class="btn btn-custom btn-lg">Login Now</a>
         </div>
     </header>
 
