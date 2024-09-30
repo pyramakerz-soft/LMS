@@ -4,8 +4,8 @@
 @endsection
 @php
     $menuItems = [
-        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('student.theme')],
-        ['label' => 'Assignment', 'icon' => 'fas fa-home', 'route' => route('student.assignment')],
+        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
+        ['label' => 'Assignments', 'icon' => 'fas fa-home', 'route' => route('assignments.index')],
     ];
 @endphp
 @section('sidebar')
