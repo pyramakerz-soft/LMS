@@ -61,6 +61,7 @@
                     <a class="cursor-pointer h-full flex flex-col justify-between"
                         href="{{ route('student_units.index', $material->id) }}">
                         @if ($material->image)
+                          
                             <img src="{{ asset('storage/' . $material->image) }}" alt="{{ $material->title }}"
                                 class="object-cover object-top w-full h-[350px] rounded-xl">
                         @else

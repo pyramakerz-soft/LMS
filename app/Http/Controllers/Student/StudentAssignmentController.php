@@ -13,9 +13,8 @@ class StudentAssignmentController extends Controller
         $userAuth = auth()->guard('student')->user();
 
         if ($userAuth) {
-            // $assignments = Assignment::where('stage_id', $userAuth->stage_id)->get();
-            $assignments = Assignment::all();
-            @dd($assignments);
+            $assignments = $userAuth->assignments()->with('students')->get();
+            dd($assignments);
             return view('pages.student.assignment.index', compact('assignments', 'userAuth'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
