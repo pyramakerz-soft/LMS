@@ -212,10 +212,10 @@ class AssignmentController extends Controller
         // Find the assignment by id
         $assignmentt = Assignment::find($id);
     
-        // // Check if the assignment exists
-        // if (!$assignment) {
-        //     return redirect()->back()->with('error', 'Assignment not found.');
-        // }
+        // Check if the assignment exists
+        if (!$assignmentt) {
+            return redirect()->back()->with('error', 'Assignment not found.');
+        }
     
         // Delete the assignment
         $assignmentt->delete();
