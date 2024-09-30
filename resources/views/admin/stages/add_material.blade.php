@@ -261,7 +261,7 @@
                         @foreach ($images as $image)
                             <div class="col-md-3 mb-3">
                                 <div class="card image-option" style="cursor: pointer;" data-path="{{ $image->path }}">
-                                    <img src="{{ asset('storage/' . $image->path) }}" alt="Image"
+                                    <img src="{{ asset(  $image->path) }}" alt="Image"
                                         class="card-img-top img-thumbnail selectable-image"
                                         style="width: 100%; height: 150px; object-fit: cover;">
                                     <div class="card-body text-center">
@@ -314,7 +314,7 @@
 
                         hiddenInput.value = imagePath;
                         if (previewImage && previewContainer) {
-                            previewImage.src = `{{ asset('storage') }}/${imagePath}`;
+                            previewImage.src = `{{ asset('/') }}${imagePath}`;
                             previewContainer.style.display = 'block';
                         }
 
