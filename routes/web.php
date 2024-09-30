@@ -206,7 +206,7 @@ Route::get('/create_assignment', function () {
     return view('pages.teacher.Assignment.create');
 })->name('teacher.Assignment.create');
 
-Route::get('/view_assignment', function () {
+Route::get('/teacher/teacher.assignment', function () {
     return view('pages.teacher.Assignment.index');
 })->name('teacher.Assignment');
 
