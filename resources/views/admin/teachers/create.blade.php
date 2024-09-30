@@ -86,10 +86,10 @@
                             stageSelect.innerHTML +=
                                 `<option value="${stage.id}">${stage.name}</option>`;
                         });
-                        stageSelect.disabled = false; // Enable the stage select input
+                        stageSelect.disabled = false;
                     });
             } else {
-                document.getElementById('stage_ids').disabled = true; // Disable the select if no school is selected
+                document.getElementById('stage_ids').disabled = true; 
             }
         });
     </script>
