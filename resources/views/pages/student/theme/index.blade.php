@@ -61,6 +61,7 @@
                     <a class="cursor-pointer h-full flex flex-col justify-between"
                         href="{{ route('student_units.index', $material->id) }}">
                         @if ($material->image)
+                          
                             <img src="{{ asset('storage/' . $material->image) }}" alt="{{ $material->title }}"
                                 class="object-cover object-top w-full h-[350px] rounded-xl">
                         @else
@@ -99,18 +100,19 @@
 {{-- ------------------------------------------------------------------------------------- --}}
 
 {{-- Ebook Modal --}}
-<div id="ebook" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-10">
-    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll">
+<div id="ebook" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-10 hidden">
+    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll w-[90%]">
         <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <h3 class="text-lg font-semibold text-gray-900">
                 EBook
             </h3>
             <div class="flex justify-end">
-                <button onclick="closeModal('ebook')" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
+                <button onclick="closeModal('ebook')"
+                    class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
             </div>
         </div>
         {{-- Put the EBook Here --}}
-        <embed src="{{ asset('storage/'. $material->file_path . '/Index.html')}}" width="800px" height="2100px" />
+        <embed src="{{ asset('storage/' . $material->file_path . '/Index.html') }}" width="100%" height="90%" />
 
     </div>
 </div>
@@ -123,11 +125,12 @@
                 How To Use
             </h3>
             <div class="flex justify-end">
-                <button onclick="closeModal('use')" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
+                <button onclick="closeModal('use')"
+                    class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
             </div>
         </div>
         {{-- Put the How To Use Here --}}
-        <embed src="{{ asset('storage/'. $material->how_to_use . '/Index.html')}}" width="800px" height="2100px" />
+        <embed src="{{ asset('storage/' . $material->how_to_use . '/Index.html') }}" width="800px" height="2100px" />
     </div>
 </div>
 
@@ -139,11 +142,12 @@
                 Learning
             </h3>
             <div class="flex justify-end">
-                <button onclick="closeModal('learn')" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
+                <button onclick="closeModal('learn')"
+                    class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
             </div>
         </div>
         {{-- Put the Learning Here --}}
-        <embed src="{{ asset('storage/'. $material->learning . '/Index.html')}}" width="800px" height="2100px" />
+        <embed src="{{ asset('storage/' . $material->learning . '/Index.html') }}" width="800px" height="2100px" />
     </div>
 </div>
 
