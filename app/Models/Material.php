@@ -26,4 +26,16 @@ class Material extends Model
     {
         return ($val !== null) ? asset( $val) : "";
     }
+     public function getLearningAttribute($val)
+    {
+        return ($val !== null) ? asset('ebooks/'.$val) : "";
+    }
+     public function getHowToUseAttribute($val)
+    {
+        return ($val !== null) ? asset('ebooks/'. $val) : "";
+    }
+     public function getFilePathAttribute($val)
+    {
+        return ($val !== null) ? asset('ebooks/'. $val) : "";
+    }
 }

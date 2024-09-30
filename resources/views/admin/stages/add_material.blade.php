@@ -52,6 +52,9 @@
                                         </button>
                                         <input type="hidden" name="existing_image" id="existing_image_material"
                                             value="">
+                                            @error('existing_image')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                     <div id="material_preview-container" style="display: none;">
@@ -63,8 +66,16 @@
                                     <div class="col-4">
                                         <div class="mb-3">
                                             <label for="file_path" class="form-label">Upload Info </label>
-                                            <input type="file" name="file_path" class="form-control" id="file_path"
-                                                required>
+                                            <!--<input type="file" name="file_path" class="form-control" id="file_path"-->
+                                            <!--    required>-->
+                                            <select name="file_path" class="form-control" id="file_path">
+                                                @foreach(\App\Models\Ebook::all() as $ebook)
+                                                <option value="{{$ebook->file_path}}">
+                                                    {{ $ebook->title }}
+                                                    
+                                                </option>
+                                                @endforeach
+                                            </select>
                                             @error('file_path')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -73,8 +84,16 @@
                                     <div class="col-4">
                                         <div class="mb-3">
                                             <label for="how_to_use" class="form-label">Upload how to use </label>
-                                            <input type="file" name="how_to_use" class="form-control" id="how_to_use"
-                                                required>
+                                            <!--<input type="file" name="how_to_use" class="form-control" id="how_to_use"-->
+                                            <!--    required>-->
+                                                 <select name="how_to_use" class="form-control" id="how_to_use">
+                                                @foreach(\App\Models\Ebook::all() as $ebook)
+                                                <option value="{{$ebook->file_path}}">
+                                                    {{ $ebook->title }}
+                                                    
+                                                </option>
+                                                @endforeach
+                                            </select>
                                             @error('how_to_use')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -83,8 +102,16 @@
                                     <div class="col-4">
                                         <div class="mb-3">
                                             <label for="learning" class="form-label">Upload learning outcomes </label>
-                                            <input type="file" name="learning" class="form-control" id="learning"
-                                                required>
+                                            <!--<input type="file" name="learning" class="form-control" id="learning"-->
+                                            <!--    required>-->
+                                                 <select name="learning" class="form-control" id="learning">
+                                                @foreach(\App\Models\Ebook::all() as $ebook)
+                                                <option value="{{$ebook->file_path}}">
+                                                    {{ $ebook->title }}
+                                                    
+                                                </option>
+                                                @endforeach
+                                            </select>
                                             @error('learning')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror

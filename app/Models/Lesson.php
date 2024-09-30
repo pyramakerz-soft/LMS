@@ -38,4 +38,8 @@ class Lesson extends Model
     {
         return ($val !== null) ? asset( $val) : "";
     }
+         public function getFilePathAttribute($val)
+    {
+        return ($val !== null) ? asset('ebooks/'. $val) : "";
+    }
 }
