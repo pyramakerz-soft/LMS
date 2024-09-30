@@ -63,7 +63,7 @@
          <div class="p-3 text-[#667085] my-8">
             <i class="fa-solid fa-house mx-2"></i>
             <span class="mx-2 text-[#D0D5DD]">/</span>
-            <a href="#" class="mx-2 cursor-pointer">Theme</a>
+            <a href="#" class="mx-2 cursor-pointer">Assignment</a>
         </div>
 
         <a href="{{ route('assignments.create') }}">
@@ -131,11 +131,12 @@
                 {{-- @dd($Assignment->toArray()) --}}
                 @foreach ($Assignment as $row)
                 <tr class="border-t border-gray-300 text-lg md:text-xl {{ $loop->index % 2 === 0 ? 'bg-[#F4F4F4]' : 'bg-white' }}">
-                  <td class="py-5 px-6">
-                    <a href="{{ route('teacher.assignment.show') }}" class="text-blue-600 hover:underline">
+                  {{-- <td class="py-5 px-6">
+                    <a href="{{ route('assignments.show') }}" class="text-blue-600 hover:underline">
                       {{ $row['title'] }}
                   </a>
-                </td>
+                </td> --}}
+                  <td class="py-5 px-6">{{ $row['title'] }}</td>
                   <td class="py-5 px-6">{{ $row['due_date'] }}</td>
                   <td class="py-5 px-6">{{ $row['description'] }}</td>
                   <td class="py-5 px-6">{{ $row['path_file'] }}</td>
@@ -148,7 +149,16 @@
                     <a href="{{ route('assignments.edit', $row->id) }}">       {{-- add here['assignment_id' => $assignment->id] --}}
                       <i class="fas fa-edit text-[#101828] w-5 md:w-6"></i>
                   </a>
-                      <i class="fa fa-trash text-[#CC161D] ml-2 w-5 md:w-6"></i>
+                  <form action="{{ route('assignments.destroy', $row->id) }}" method="POST"
+                    style="display:inline-block;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger"
+                        onclick="return confirm('Are you sure you want to delete this assignment?');">
+                        <i class="fa fa-trash text-[#CC161D] ml-2 w-5 md:w-6"></i>
+                    </button>
+                </form>
+               
                   </td>
                 </tr>
                 @endforeach

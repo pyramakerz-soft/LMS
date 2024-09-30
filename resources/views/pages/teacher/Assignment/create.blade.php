@@ -14,7 +14,7 @@
 @section('content')
     <div class="container">
         <div class="m-5">
-            <h1 class="font-semibold text-2xl md:text-3xl ">Create Assignment</h1>
+            <h1 class="font-semibold text-2xl md:text-3xl ">Createeee Assignment</h1>
         </div>
         @if ($errors->any())
             <div class="alert alert-danger">

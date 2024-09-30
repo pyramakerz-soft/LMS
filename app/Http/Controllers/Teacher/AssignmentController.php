@@ -96,34 +96,134 @@ class AssignmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //\
-
-    }
+ 
+     public function show(string $id)
+     {
+         $assignment = Assignment::with(['lesson', 'school', 'students'])->findOrFail($id);
+         return view('admin.assignments.show', compact('assignment'));
+     }
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
         $assignment = Assignment::findOrFail($id);
+
+        // Fetch all lessons and schools
         $lessons = Lesson::all();
         $schools = School::all();
-        return view('pages.teacher.assignment.edit', compact('lessons', 'schools','assignment' ));
 
+        // Fetch stages for the selected school
+        $stages = DB::table('school_stage')
+            ->where('school_id', $assignment->school_id)
+            ->join('stages', 'school_stage.stage_id', '=', 'stages.id')
+            ->select('stages.id', 'stages.name')
+            ->get();
+
+        // Fetch the selected stage from the `assignment_stage` table
+        $selectedStage = DB::table('assignment_stage')
+            ->where('assignment_id', $assignment->id)
+            ->value('stage_id');
+
+        // Fetch all students of the selected stage
+        $students = DB::table('students')
+            ->where('stage_id', $selectedStage)
+            ->get();
+
+        // Fetch the selected students from `assignment_student` table
+        $selectedStudents = DB::table('assignment_student')
+            ->where('assignment_id', $assignment->id)
+            ->pluck('student_id')
+            ->toArray();
+
+        return view('pages.teacher.assignment.Edit', compact('assignment', 'lessons', 'schools', 'stages', 'students', 'selectedStage', 'selectedStudents'));
     }
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $assignment = Assignment::findOrFail($id);
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'school_id' => 'required|exists:schools,id',
+            'lesson_id' => 'required|exists:lessons,id',
+            'student_ids' => 'required|array',
+            'student_ids.*' => 'exists:students,id',
+            'path_file' => 'nullable|file',
+            'link' => 'nullable|url',
+            'start_date' => 'required|date',
+            'due_date' => 'required|date',
+            'marks' => 'required|integer',
+            'is_active' => 'nullable|boolean',
+        ]);
+
+        // Handle file upload if exists
+        if ($request->hasFile('path_file')) {
+            $filePath = $request->file('path_file')->store('assignments', 'public');
+            $assignment->path_file = $filePath;
+        }
+
+        // Update the assignment
+        $assignment->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'link' => $request->link,
+            'start_date' => $request->start_date,
+            'due_date' => $request->due_date,
+            'lesson_id' => $request->lesson_id,
+            'school_id' => $request->school_id,
+            'marks' => $request->marks,
+            'is_active' => $request->is_active ?? 0,
+        ]);
+
+        // Update assignment_stage
+        DB::table('assignment_stage')
+            ->where('assignment_id', $assignment->id)
+            ->update([
+                'school_id' => $request->school_id,
+                'stage_id' => $request->stage_id,
+                'updated_at' => now(),
+            ]);
+
+        // Update assignment_student
+        DB::table('assignment_student')
+            ->where('assignment_id', $assignment->id)
+            ->delete();
+
+        foreach ($request->student_ids as $studentId) {
+            DB::table('assignment_student')->insert([
+                'assignment_id' => $assignment->id,
+                'student_id' => $studentId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        return redirect()->route('assignments.index')->with('success', 'Assignment updated successfully.');
     }
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        // Find the assignment by id
+        $assignmentt = Assignment::find($id);
+    
+        // // Check if the assignment exists
+        // if (!$assignment) {
+        //     return redirect()->back()->with('error', 'Assignment not found.');
+        // }
+    
+        // Delete the assignment
+        $assignmentt->delete();
+    
+        // Redirect back with a success message
+        $Assignment = Assignment::where("teacher_id", auth()->user()->id)->with(relations: 'school')->with('lesson')->orderBy("created_at","desc")->get();
+
+        return view("pages.teacher.assignment.index", compact("Assignment"));
     }
+    
 }
