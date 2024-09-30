@@ -13,7 +13,9 @@ class AssignmentController extends Controller
      */
     public function index()
     {
-        //
+        $Assignment = Assignment::where("teacher_id", auth()->user()->id)->with(relations: 'school')->with('lesson')->orderBy("created_at","desc")->get();
+
+        return view("pages.teacher.assignment.index", compact("Assignment"));
     }
     /**
      * Show the form for creating a new resource.
@@ -96,14 +98,19 @@ class AssignmentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        //\
+
     }
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        //
+        $assignment = Assignment::findOrFail($id);
+        $lessons = Lesson::all();
+        $schools = School::all();
+        return view('pages.teacher.assignment.edit', compact('lessons', 'schools','assignment' ));
+
     }
     /**
      * Update the specified resource in storage.

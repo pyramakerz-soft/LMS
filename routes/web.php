@@ -172,11 +172,16 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::resource('assessments', StudentAssessmentController::class);
     Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
     Route::get('assessments/student/{student_id}', [StudentAssessmentController::class, 'showStudentAssessments'])->name('teacher.assessments.student');
-
+    
     Route::get('/api/schools/{school}/stages', function (School $school) {
         return response()->json($school->stages);
     });
-    
+
+
+    // Route::get('/teacher.assignment', [StudentAssignmentController::class, 'index'])->name('teacher.Assignment');
+    //     return view('pages.teacher.Assignment.index');
+    // })->name('teacher.Assignment');
+
     Route::get('/api/stages/{stage}/students', function (Stage $stage) {
         return response()->json($stage->students);
     });
@@ -185,6 +190,8 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
 
     Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
     Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
+
+
 
     Route::get('/teacher/stage/{stageId}/materials', [TeacherDashboardController::class, 'showMaterials'])->name('teacher.showMaterials');
     Route::get('/teacher/material/{materialId}/units', [TeacherDashboardController::class, 'showUnits'])->name('teacher.units');
@@ -200,9 +207,6 @@ Route::get('/create_assignment', function () {
     return view('pages.teacher.Assignment.create');
 })->name('teacher.Assignment.create');
 
-Route::get('/teacher/teacher.assignment', function () {
-    return view('pages.teacher.Assignment.index');
-})->name('teacher.Assignment');
 
 Route::get('/view_class', function () {
     return view('pages.teacher.Class.index');

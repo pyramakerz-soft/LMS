@@ -7,7 +7,7 @@
 @php
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('student.theme')],
-        ['label' => 'Assignments', 'icon' => 'fas fa-home', 'route' => route('student.assignment')],
+        ['label' => 'Assignments', 'icon' => 'fas fa-home', 'route' => route('assignments.index')],
     ];
 
 @endphp
@@ -66,7 +66,7 @@
             <a href="#" class="mx-2 cursor-pointer">Theme</a>
         </div>
 
-        <a href="{{ route('teacher.Assignment.create') }}">
+        <a href="{{ route('assignments.create') }}">
             <button class="rounded-md px-6 py-3 bg-[#17253E] text-white border-none">
                 Create
             </button>
@@ -98,29 +98,60 @@
                     Description <i class="fa-solid fa-arrow-down mx-2"></i>
                   </th>
                   <th class="py-4 px-6 min-w-[120px] whitespace-nowrap text-lg md:text-xl">
+                    Path File <i class="fa-solid fa-arrow-down mx-2"></i>
+                  </th>
+                  <th class="py-4 px-6 min-w-[120px] whitespace-nowrap text-lg md:text-xl">
+                    start_date <i class="fa-solid fa-arrow-down mx-2"></i>
+                  </th>
+                  <th class="py-4 px-6 min-w-[120px] whitespace-nowrap text-lg md:text-xl">
+                    marks <i class="fa-solid fa-arrow-down mx-2"></i>
+                  </th>
+                  <th class="py-4 px-6 min-w-[120px] whitespace-nowrap text-lg md:text-xl">
+                    Lesson <i class="fa-solid fa-arrow-down mx-2"></i>
+                  </th>
+                  <th class="py-4 px-6 min-w-[120px] whitespace-nowrap text-lg md:text-xl">
+                    School <i class="fa-solid fa-arrow-down mx-2"></i>
+                  </th>
+                  <th class="py-4 px-6 min-w-[120px] whitespace-nowrap text-lg md:text-xl">
                     Actions <i class="fa-solid fa-arrow-down mx-2"></i>
                   </th>
                 </tr>
               </thead>
               <tbody>
-               
+                @if(count($Assignment) === 0)
+                <tr>
+                  <td colspan="4" class="px-4 py-4 h-[72px] text-center border-t border-gray-300 text-lg md:text-xl">
+                    No Data Found
+                  </td>
+                </tr>
+                @endif
         
-                <tr class="border-t border-gray-300 text-lg md:text-xl  'bg-white' }}">
+
+
+                {{-- @dd($Assignment->toArray()) --}}
+                @foreach ($Assignment as $row)
+                <tr class="border-t border-gray-300 text-lg md:text-xl {{ $loop->index % 2 === 0 ? 'bg-[#F4F4F4]' : 'bg-white' }}">
                   <td class="py-5 px-6">
                     <a href="{{ route('teacher.assignment.show') }}" class="text-blue-600 hover:underline">
-                      title1
+                      {{ $row['title'] }}
                   </a>
                 </td>
-                  <td class="py-5 px-6">duedate</td>
-                  <td class="py-5 px-6">desc</td>
+                  <td class="py-5 px-6">{{ $row['due_date'] }}</td>
+                  <td class="py-5 px-6">{{ $row['description'] }}</td>
+                  <td class="py-5 px-6">{{ $row['path_file'] }}</td>
+                  <td class="py-5 px-6">{{ $row['start_date'] }}</td>
+                  <td class="py-5 px-6">{{ $row['marks'] }}</td>
+                  <td class="py-5 px-6">{{ $row['lesson']['title'] ?? 'N/A' }}</td>
+                  <td class="py-5 px-6">{{  $row['school']['name']?? 'N/A' }}</td>
+
                   <td class="py-5 px-6">
-                    <a href="{{ route('teacher.assignment.edit') }}">       {{-- add here['assignment_id' => $assignment->id] --}}
+                    <a href="{{ route('assignments.edit', $row->id) }}">       {{-- add here['assignment_id' => $assignment->id] --}}
                       <i class="fas fa-edit text-[#101828] w-5 md:w-6"></i>
                   </a>
                       <i class="fa fa-trash text-[#CC161D] ml-2 w-5 md:w-6"></i>
                   </td>
                 </tr>
-        
+                @endforeach
               </tbody>
             </table>
         </div>
