@@ -1,4 +1,4 @@
-@extends('admin.layouts.layout')
+@extends('pages.teacher.teacher')
 
 @section('content')
     <div class="wrapper">

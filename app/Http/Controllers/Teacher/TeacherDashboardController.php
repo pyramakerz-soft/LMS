@@ -16,11 +16,10 @@ class TeacherDashboardController extends Controller
     {
         $teacher = Auth::guard('teacher')->user();
 
-        // Fetch stages where the teacher has been assigned
         $stages = Stage::whereHas('teachers', function ($query) use ($teacher) {
             $query->where('teacher_id', $teacher->id);
         })->whereHas('schools', function ($query) use ($teacher) {
-            $query->where('school_id', $teacher->school_id); 
+            $query->where('school_id', $teacher->school_id);
         })->with('materials')->get();
         return view('pages.teacher.teacher', compact('stages'));
     }
@@ -58,10 +57,10 @@ class TeacherDashboardController extends Controller
         return view('pages.teacher.chapters', compact('unit'));
     }
     public function showLessons($chapterId)
-{
-    // Fetch chapter with related lessons
-    $chapter = Chapter::with('lessons')->findOrFail($chapterId);
+    {
+        // Fetch chapter with related lessons
+        $chapter = Chapter::with('lessons')->findOrFail($chapterId);
 
-    return view('pages.teacher.lessons', compact('chapter'));
-}
+        return view('pages.teacher.lessons', compact('chapter'));
+    }
 }

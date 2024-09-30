@@ -1,28 +1,21 @@
 @extends('layouts.app')
-
 @section('title')
     Teacher
 @endsection
-
 @php
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('student.theme')],
         ['label' => 'Assignment', 'icon' => 'fas fa-home', 'route' => route('student.assignment')],
     ];
-
 @endphp
 @section('sidebar')
     @include('components.sidebar', ['menuItems' => $menuItems])
 @endsection
-
-
 @section('content')
     <div class="container">
         <div class="m-5">
-            <h1 class="font-semibold text-2xl md:text-3xl ">Create Assignment</h1>
-
+            <h1 class="font-semibold text-2xl md:text-3xl ">Createeee Assignment</h1>
         </div>
-
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -32,10 +25,8 @@
                 </ul>
             </div>
         @endif
-
         <form action="{{ route('assignments.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-
             <div class="mb-3 border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F]">
                 <label for="school_id" class="form-label  block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C]">Select
                     School</label>
@@ -47,7 +38,6 @@
                     @endforeach
                 </select>
             </div>
-
             <div class="mb-3 border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F]">
                 <label for="stage_id"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select Stage</label>
@@ -56,7 +46,6 @@
                     <option value="">--Select Stage--</option>
                 </select>
             </div>
-
             <div class="mb-3 border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F]">
                 <label for="student_ids"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select
@@ -74,7 +63,6 @@
                     class="border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" id="title"
                     value="{{ old('title') }}" required>
             </div>
-
             <div class="mb-3 border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F]">
                 <label for="description"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Assignment
@@ -82,7 +70,6 @@
                 <textarea name="description"
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" id="summernote">{{ old('description') }}</textarea>
             </div>
-
             <div class="mb-3 border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F]">
                 <label for="path_file"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">File Upload</label>
@@ -90,7 +77,6 @@
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
                     id="path_file">
             </div>
-
             <div class="mb-3 border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F]">
                 <label for="link"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Link</label>
@@ -98,7 +84,6 @@
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
                     id="link" value="{{ old('link') }}">
             </div>
-
             <div class="mb-3 border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F]">
                 <label for="start_date"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Start Date</label>
@@ -106,7 +91,6 @@
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
                     id="start_date" value="{{ old('start_date') }}">
             </div>
-
             <div class="mb-3 border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F]">
                 <label for="due_date" class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Due
                     Date</label>
@@ -114,7 +98,6 @@
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
                     id="due_date" value="{{ old('due_date') }}">
             </div>
-
             <div class="mb-3 border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F]">
                 <label for="lesson_id"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select Lesson</label>
@@ -125,8 +108,6 @@
                     @endforeach
                 </select>
             </div>
-
-
             <div class="mb-3 border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F]">
                 <label for="marks"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Marks</label>
@@ -134,7 +115,6 @@
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
                     id="marks" value="{{ old('marks') }}">
             </div>
-
             <div
                 class="mb-3 border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F] form-check  flex items-center">
                 <input type="checkbox" name="is_active"
@@ -142,7 +122,6 @@
                     value="1">
                 <label class="form-check-label ml-3" for="is_active ">Active</label>
             </div>
-
             <button type="submit"
                 class="bg-[#17253E] text-white font-bold text-xs md:text-sm py-2 md:py-3 px-4 md:px-5 rounded-lg m-5">Create
                 Assignment</button>
@@ -163,7 +142,6 @@
                     });
                 });
         });
-
         document.getElementById('stage_id').addEventListener('change', function() {
             let stageId = this.value;
             fetch(`/teacher/api/stages/${stageId}/students`)
