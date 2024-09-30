@@ -1,4 +1,4 @@
-@extends('pages.student.student')
+@extends('layouts.app')
 
 @section('title')
     Assignment Details
@@ -6,32 +6,48 @@
 
 
 @php
-    $paths = [
-        ["name" => "Assignment", "url" => "student.assignment"],
-        ["name" => "Assignment Name", "url" => "student.assignment.show"],
-    ];
-    $data = [
-        'point' => '95',
-        'dueDate' => '2024-10-01',
-        'topic' => 'Mathematics',
-        'assignTo' => ['Class A', 'Class B'],
-        'title' => 'Homework Assignment',
-        'description' => 'Solve the problems in chapter 5.',
-        'uploadedFileName' =>
-        [
-            ['type' => 'photo', 'url' => 'images/Layer 2.png'],
-            ['type' => 'photo', 'url' => 'images/Layer 2.png'],
-            ['type' => 'video', 'url' => '/path/to/video.mp4'],
-            ['type' => 'video', 'url' => '/path/to/video.mp4'],
-            ['type' => 'pdf', 'url' => '/path/to/file.pdf', 'file_name' => 'HannahBusing_Resume.pdf', 'file_space' => '200 KB'],
-            ['type' => 'pdf', 'url' => '/path/to/file.pdf', 'file_name' => 'HannahBusing_Resume.pdf', 'file_space' => '200 KB'],
-            ['type' => 'pdf', 'url' => '/path/to/file.pdf', 'file_name' => 'HannahBusing_Resume.pdf', 'file_space' => '200 KB'],
-            ['type' => 'link', 'url' => 'https://example.com']
-        ],
+    $menuItems = [
+        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('student.theme')],
+        ['label' => 'Assignment', 'icon' => 'fas fa-home', 'route' => route('student.assignment')],
     ];
 @endphp
 
-@section("insideContent")
-    @include('components.path', ["paths" => $paths])
-    @include('components.AssignmentDetails', ['paths' => $paths, 'data' => $data])
+@section('sidebar')
+    @include('components.sidebar', ['menuItems' => $menuItems])
+@endsection
+
+@section("content")
+    <div class="p-3">
+        <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
+            <div class="flex items-center space-x-4">
+                <div>
+                    {{-- <img class="w-20 h-20 rounded-full" alt="avatar1" src="{{ Auth::guard('student')->user()->image }}" /> --}}
+                    @if ($userAuth->image)
+                        <img src="{{ asset('storage/' . $userAuth->image) }}" alt="Student Image"
+                            class="w-20 h-20 rounded-full object-cover">
+                    @else
+                        <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
+                            class="w-30 h-20 rounded-full object-cover">
+                    @endif
+                </div>
+
+                <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
+                    <div class="text-xl">
+                        {{ $userAuth->username }}
+                    </div>
+                    <div class="text-sm">
+                        {{ $userAuth->stage->name }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative">
+                <i class="fa-solid fa-bell text-[#FF7519] text-xl"></i>
+                <span
+                    class="absolute -top-2 -right-2 bg-black border-2 border-white text-white rounded-full text-[10px] px-1 py-0.25">5</span>
+            </div>
+        </div>
+    </div>
+
+    @include('components.AssignmentDetails', ['assignment' => $assignment])
 @endsection
