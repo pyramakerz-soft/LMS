@@ -73,10 +73,11 @@
                             <h2 class="text-primary mb-3">Stages</h2>
 
                             @foreach ($stages as $stage)
+                            
                                 <div class="card mb-4 shadow">
                                     <div class="card-header d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            <img src="{{ $stage->image ? Storage::url($stage->image) : asset('images/default-stage.png') }}"
+                                            <img src="{{ $stage->image ?? asset('images/default-stage.png') }}"
                                                 alt="{{ $stage->name }}" class="me-3" width="100" height="100">
                                             <h3 class="mb-0">{{ $stage->name }}</h3>
                                         </div>
@@ -97,7 +98,7 @@
                                                 <div class="material-card mb-3 p-3 bg-light border rounded">
                                                     <div class="d-flex align-items-center justify-content-between">
                                                         <div class="d-flex align-items-center">
-                                                            <img src="{{ $material->image ? Storage::url($material->image) : asset('images/default-material.png') }}"
+                                                            <img src="{{ $material->image ?? asset('images/default-material.png') }}"
                                                                 alt="{{ $material->name }}" class="material-image me-3"
                                                                 width="100" height="100">
                                                             <h5 class="mb-0">{{ $material->title }}</h5>
@@ -121,7 +122,7 @@
                                                                 <li
                                                                     class="unit-card mb-2 d-flex align-items-center justify-content-between">
                                                                     <div class="d-flex align-items-center">
-                                                                        <img src="{{ $unit->image ? Storage::url($unit->image) : asset('images/default-unit.png') }}"
+                                                                        <img src="{{ $unit->image ?? asset('images/default-unit.png') }}"
                                                                             alt="{{ $unit->title }}"
                                                                             class="unit-image me-2" width="100"
                                                                             height="100">
@@ -146,7 +147,7 @@
                                                                             <li
                                                                                 class="list-group-item d-flex align-items-center justify-content-between">
                                                                                 <div class="d-flex align-items-center">
-                                                                                    <img src="{{ $chapter->image ? Storage::url($chapter->image) : asset('images/default-chapter.png') }}"
+                                                                                    <img src="{{ $chapter->image ?? asset('images/default-chapter.png') }}"
                                                                                         alt="{{ $chapter->title }}"
                                                                                         class="chapter-image me-2"
                                                                                         width="100" height="100">
@@ -173,7 +174,7 @@
                                                                                             class="list-group-item d-flex align-items-center justify-content-between">
                                                                                             <div
                                                                                                 class="d-flex align-items-center">
-                                                                                                <img src="{{ $lesson->image ? Storage::url($lesson->image) : asset('images/default-lesson.png') }}"
+                                                                                                <img src="{{ $lesson->image ?? asset('images/default-lesson.png') }}"
                                                                                                     alt="{{ $lesson->title }}"
                                                                                                     class="lesson-image me-2"
                                                                                                     width="100"

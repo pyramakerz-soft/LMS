@@ -25,7 +25,7 @@ class ChapterController extends Controller
     public function create()
     {
         $units = Unit::all();
-        $materials = Material::with('stage')->get(); 
+        $materials = Material::with('stage')->get();
         return view('admin.chapters.create', compact('units', 'materials'));
     }
 
@@ -42,9 +42,11 @@ class ChapterController extends Controller
             'is_active' => 'nullable|boolean',
         ]);
 
-        $imagePath = null;
+
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('chapters', 'public');
+        } elseif ($request->existing_image) {
+            $imagePath = $request->existing_image;
         }
 
         Chapter::create([

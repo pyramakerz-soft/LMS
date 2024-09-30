@@ -20,6 +20,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentAssessmentController;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
 use App\Http\Controllers\Teacher\TeacherUnitController;
+use App\Http\Controllers\Student\StudentAssignmentController;
 use App\Http\Controllers\UnitController as ControllersUnitController;
 use App\Models\School;
 use App\Models\Stage;
@@ -78,6 +79,7 @@ Route::prefix('admin')->group(function () {
         Route::delete('/schools/{schoolId}/lessons/{lessonId}', [AdminController::class, 'removeLesson'])->name('school.removeLesson');
         // Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
+
         Route::get('/api/schools/{school}/stages', function (School $school) {
             return response()->json($school->stages);
         });
@@ -89,10 +91,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/api/stages/{stage}/classes', function (Stage $stage) {
             return response()->json($stage->classes);
         });
+
     });
 });
-
-
 
 
 
@@ -144,9 +145,10 @@ Route::get('/teacher/dashboard', function () {
 //     return view('pages.student.week.index');
 // })->name('student.week');
 
-Route::get('/assignment', function () {
-    return view('pages.student.assignment.index');
-})->name('student.assignment');
+// Route::get('/assignment', function () {
+//     return view('pages.student.assignment.index');
+// })->name('student.assignment');
+Route::get('/assignment', [StudentAssignmentController::class, 'index'])->name('student.assignment');
 
 Route::get('/assignment_show', function () {
     return view('pages.student.assignment.show');
@@ -174,8 +176,17 @@ Route::get('/create_lesson', function () {
 
 Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::resource('assessments', StudentAssessmentController::class);
+    Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
     Route::get('assessments/student/{student_id}', [StudentAssessmentController::class, 'showStudentAssessments'])->name('teacher.assessments.student');
 
+    Route::get('/api/schools/{school}/stages', function (School $school) {
+        return response()->json($school->stages);
+    });
+    
+    Route::get('/api/stages/{stage}/students', function (Stage $stage) {
+        return response()->json($stage->students);
+    });
+    
     // Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
 
     Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');

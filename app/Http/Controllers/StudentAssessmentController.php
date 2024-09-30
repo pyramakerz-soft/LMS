@@ -53,23 +53,20 @@ class StudentAssessmentController extends Controller
             'assessments.*.final_project_score' => 'nullable|integer|min:0|max:50',
         ]);
 
-        $today = now()->toDateString(); // Get the current date
+        $today = now()->toDateString(); 
 
         foreach ($request->assessments as $assessmentData) {
-            // Check if an assessment has already been created today for this student
             $existingAssessment = Student_assessment::where('student_id', $assessmentData['student_id'])
-                ->whereDate('created_at', $today) // Only look at assessments from today
+                ->whereDate('created_at', $today) 
                 ->first();
 
             if ($existingAssessment) {
-                // Skip creating another assessment if one already exists for today
                 continue;
             }
 
-            // Create a new assessment for the student if no assessment exists for today
             Student_assessment::create([
                 'student_id' => $assessmentData['student_id'],
-                'teacher_id' => Auth::id(), // The logged-in teacher
+                'teacher_id' => Auth::id(), 
                 'attendance_score' => $assessmentData['attendance_score'] ?? 0,
                 'classroom_participation_score' => $assessmentData['classroom_participation_score'] ?? 0,
                 'classroom_behavior_score' => $assessmentData['classroom_behavior_score'] ?? 0,
@@ -91,10 +88,8 @@ class StudentAssessmentController extends Controller
     }
     public function showStudentAssessments($student_id)
     {
-        // Get the student
         $student = Student::findOrFail($student_id);
 
-        // Fetch all previous assessments for this student
         $assessments = Student_assessment::where('student_id', $student_id)->get();
 
         return view('pages.teacher.assessments.student', compact('student', 'assessments'));
@@ -122,13 +117,11 @@ class StudentAssessmentController extends Controller
             'final_project_score' => 'nullable|integer|min:0|max:50',
         ]);
 
-        // Find or create the assessment
         $assessment = Student_assessment::firstOrCreate([
             'student_id' => $student_id,
             'teacher_id' => Auth::id(), // Current teacher's ID
         ]);
 
-        // Update the assessment with the new scores
         $assessment->update($request->only([
             'attendance_score',
             'classroom_participation_score',

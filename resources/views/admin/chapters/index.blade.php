@@ -40,7 +40,7 @@
                                     <td>{{ $chapter->material->stage->name }}</td> <!-- Add stage name -->
                                     <td>
                                         @if ($chapter->image)
-                                            <img src="{{ asset('storage/' . $chapter->image) }}" alt="{{ $chapter->title }}"
+                                            <img src="{{ asset( $chapter->image) }}" alt="{{ $chapter->title }}"
                                                 width="100">
                                         @else
                                             No Image

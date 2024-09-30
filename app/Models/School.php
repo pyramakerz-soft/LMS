@@ -52,10 +52,17 @@ class School extends Model
     {
         return $this->hasMany(Admin::class);
     }
+
     public function classes()
     {
         return $this->hasMany(Group::class);
     }
     
+
+     public function getImageAttribute($val)
+    {
+        return ($val !== null) ? asset( $val) : "";
+    }
+
 
 }

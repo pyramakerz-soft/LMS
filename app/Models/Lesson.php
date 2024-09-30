@@ -34,4 +34,8 @@ class Lesson extends Model
     {
         return $this->hasMany(Ebook::class);
     }
+     public function getImageAttribute($val)
+    {
+        return ($val !== null) ? asset( $val) : "";
+    }
 }

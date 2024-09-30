@@ -25,5 +25,9 @@ class Unit extends Model
     {
         return $this->hasMany(Chapter::class);
     }
+     public function getImageAttribute($val)
+    {
+        return ($val !== null) ? asset( $val) : "";
+    }
 
 }

@@ -33,8 +33,17 @@ class Stage extends Model
     {
         return $this->hasMany(Material::class);
     }
+
     public function classes()
     {
         return $this->hasMany(Group::class);
     }
+
+    
+     public function getImageAttribute($val)
+    {
+        return ($val !== null) ? asset( $val) : "";
+    }
+    
+
 }

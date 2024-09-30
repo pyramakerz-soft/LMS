@@ -29,43 +29,37 @@
                                             <input type="text" class="form-control" id="title" name="title"
                                                 required>
                                             @error('title')
-                                                <div class="text-danger">{{ $message }}
-                                                </div>
+                                                <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
                                     </div>
-                                    {{-- <div class="col-6">
+
+                                    <div class="col-6">
                                         <div class="mb-3">
-                                            <label for="image" class="form-label">Theme Image</label>
-                                            <input type="file" class="form-control" id="image" name="image">
+                                            <label for="material_image" class="form-label">Upload New Image</label>
+                                            <input type="file" name="image" class="form-control image-input"
+                                                id="material_image" accept="image/*">
                                             @error('image')
-                                                <div class="text-danger">{{ $message }}
-                                                </div>
+                                                <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                    </div> --}}
-
-                                    <div class="mb-3">
-                                        <label for="image" class="form-label">Upload New Image</label>
-                                        <input type="file" name="image" class="form-control" id="image"
-                                            accept="image/*">
-                                        @error('image')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
                                     </div>
 
                                     <div class="mb-3">
-                                        <button type="button" class="btn btn-secondary" id="chooseFromLibraryButton">
+                                        <button type="button" class="btn btn-secondary chooseFromLibraryButton"
+                                            data-target="existing_image_material" data-preview="material_preview">
                                             Choose from Library
                                         </button>
-                                        <input type="hidden" name="existing_image" id="existing_image" value="">
+                                        <input type="hidden" name="existing_image" id="existing_image_material"
+                                            value="">
                                     </div>
 
-                                    <div id="image-preview-container" style="display: none;">
+                                    <div id="material_preview-container" style="display: none;">
                                         <h5>Selected Image Preview:</h5>
-                                        <img id="image-preview" src="" alt="Selected Image"
+                                        <img id="material_preview" src="" alt="Selected Image"
                                             style="max-width: 200px; border-radius: 8px; box-shadow: 0px 0px 5px #ccc;">
                                     </div>
+
                                     <div class="col-4">
                                         <div class="mb-3">
                                             <label for="file_path" class="form-label">Upload Info </label>
@@ -97,8 +91,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
                                 <div class="mb-3">
                                     <label for="is_active" class="form-label">Active </label>
                                     <input type="checkbox" id="is_active" name="is_active" value="1">
@@ -107,18 +99,16 @@
                                         </div>
                                     @enderror
                                 </div>
+
                                 <button type="submit" class="btn btn-primary">Create Theme</button>
                             </form>
                         </div>
-
                     </div>
-
 
                     <!-- Unit Form -->
                     <div class="card mb-4">
                         <div class="card-header">
                             <h3>Create Unit</h3>
-
                         </div>
                         <div class="card-body">
                             <form action="{{ route('units.store') }}" method="POST" enctype="multipart/form-data">
@@ -126,9 +116,12 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="mb-3">
-                                            <label for="title" class="form-label">Unit Title</label>
-                                            <input type="text" class="form-control" id="title" name="title"
+                                            <label for="unit_title" class="form-label">Unit Title</label>
+                                            <input type="text" class="form-control" id="unit_title" name="title"
                                                 required>
+                                            @error('title')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-6">
@@ -137,27 +130,38 @@
                                             <select class="form-control" id="material_id" name="material_id" required>
                                                 <option value="">-- Select Theme --</option>
                                                 @foreach ($materials as $material)
-                                                    <option value="{{ $material->id }}">{{ $material->title }}
-                                                    </option>
+                                                    <option value="{{ $material->id }}">{{ $material->title }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="mb-3">
-                                            <label for="image" class="form-label">Unit Image</label>
-                                            <input type="file" class="form-control" id="image" name="image">
+                                            <label for="unit_image" class="form-label">Upload New Image</label>
+                                            <input type="file" name="image" class="form-control image-input"
+                                                id="unit_image" accept="image/*">
+                                            @error('image')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <button type="button" class="btn btn-secondary chooseFromLibraryButton"
+                                            data-target="existing_image_unit" data-preview="unit_preview">
+                                            Choose from Library
+                                        </button>
+                                        <input type="hidden" name="existing_image" id="existing_image_unit"
+                                            value="">
+                                    </div>
+
+                                    <div id="unit_preview-container" style="display: none;">
+                                        <h5>Selected Image Preview:</h5>
+                                        <img id="unit_preview" src="" alt="Selected Image"
+                                            style="max-width: 200px; border-radius: 8px; box-shadow: 0px 0px 5px #ccc;">
                                     </div>
                                 </div>
 
-
-
-
-                                <div class="mb-3">
-                                    <label for="is_active" class="form-label">Active </label>
-                                    <input type="checkbox" id="is_active" name="is_active" value="1">
-                                </div>
                                 <button type="submit" class="btn btn-primary">Create Unit</button>
                             </form>
                         </div>
@@ -174,9 +178,12 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="mb-3">
-                                            <label for="title" class="form-label">Chapter Title</label>
-                                            <input type="text" class="form-control" id="title" name="title"
+                                            <label for="chapter_title" class="form-label">Chapter Title</label>
+                                            <input type="text" class="form-control" id="chapter_title" name="title"
                                                 required>
+                                            @error('title')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-6">
@@ -185,8 +192,7 @@
                                             <select class="form-control" id="material_id" name="material_id" required>
                                                 <option value="">-- Select Theme --</option>
                                                 @foreach ($materials as $material)
-                                                    <option value="{{ $material->id }}">{{ $material->title }}
-                                                    </option>
+                                                    <option value="{{ $material->id }}">{{ $material->title }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -204,19 +210,31 @@
                                     </div>
                                     <div class="col-6">
                                         <div class="mb-3">
-                                            <label for="image" class="form-label">Chapter Image</label>
-                                            <input type="file" class="form-control" id="image" name="image">
+                                            <label for="chapter_image" class="form-label">Upload New Image</label>
+                                            <input type="file" name="image" class="form-control image-input"
+                                                id="chapter_image" accept="image/*">
+                                            @error('image')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <button type="button" class="btn btn-secondary chooseFromLibraryButton"
+                                            data-target="existing_image_chapter" data-preview="chapter_preview">
+                                            Choose from Library
+                                        </button>
+                                        <input type="hidden" name="existing_image" id="existing_image_chapter"
+                                            value="">
+                                    </div>
+
+                                    <div id="chapter_preview-container" style="display: none;">
+                                        <h5>Selected Image Preview:</h5>
+                                        <img id="chapter_preview" src="" alt="Selected Image"
+                                            style="max-width: 200px; border-radius: 8px; box-shadow: 0px 0px 5px #ccc;">
                                     </div>
                                 </div>
 
-
-
-
-                                <div class="mb-3">
-                                    <label for="is_active" class="form-label">Active </label>
-                                    <input type="checkbox" id="is_active" name="is_active" value="1">
-                                </div>
                                 <button type="submit" class="btn btn-primary">Create Chapter</button>
                             </form>
                         </div>
@@ -228,89 +246,110 @@
             @include('admin.layouts.footer')
         </div>
     </div>
-@endsection
 
-<div class="modal fade" id="imageLibraryModal" tabindex="-1" aria-labelledby="imageLibraryModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="imageLibraryModalLabel">Choose an Image from Library</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    @foreach ($images as $image)
-                        <div class="col-md-3 mb-3">
-                            <div class="card image-option" style="cursor: pointer;" data-path="{{ $image->path }}">
-                                <img src="{{ asset('storage/' . $image->path) }}" alt="Image"
-                                    class="card-img-top img-thumbnail selectable-image"
-                                    style="width: 100%; height: 150px; object-fit: cover;">
-                                <div class="card-body text-center">
-                                    <button class="btn btn-sm btn-primary select-image-button"
-                                        type="button">Select</button>
+    <!-- Image Library Modal -->
+    <div class="modal fade" id="imageLibraryModal" tabindex="-1" aria-labelledby="imageLibraryModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageLibraryModalLabel">Choose an Image from Library</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        @foreach ($images as $image)
+                            <div class="col-md-3 mb-3">
+                                <div class="card image-option" style="cursor: pointer;" data-path="{{ $image->path }}">
+                                    <img src="{{ asset('storage/' . $image->path) }}" alt="Image"
+                                        class="card-img-top img-thumbnail selectable-image"
+                                        style="width: 100%; height: 150px; object-fit: cover;">
+                                    <div class="card-body text-center">
+                                        <button class="btn btn-sm btn-primary select-image-button"
+                                            type="button">Select</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+@endsection
 
 @section('page_js')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const chooseFromLibraryButton = document.getElementById('chooseFromLibraryButton');
-            const existingImageInput = document.getElementById('existing_image');
-            const imagePreviewContainer = document.getElementById('image-preview-container');
-            const imagePreview = document.getElementById('image-preview');
-
-            chooseFromLibraryButton.addEventListener('click', function() {
-                const modal = new bootstrap.Modal(document.getElementById('imageLibraryModal'), {
-                    keyboard: false
+            // Open Image Library Modal
+            document.querySelectorAll('.chooseFromLibraryButton').forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetInputId = this.dataset.target;
+                    const previewId = this.dataset.preview;
+                    const modal = new bootstrap.Modal(document.getElementById(
+                    'imageLibraryModal'), {
+                        keyboard: false
+                    });
+                    document.getElementById('imageLibraryModal').dataset.targetInput =
+                    targetInputId;
+                    document.getElementById('imageLibraryModal').dataset.previewId = previewId;
+                    modal.show();
                 });
-                modal.show();
             });
 
+            // Select Image from Library
             document.querySelectorAll('.select-image-button').forEach(button => {
                 button.addEventListener('click', function() {
                     const imageCard = this.closest('.image-option');
                     const imagePath = imageCard.getAttribute('data-path');
+                    const modal = document.getElementById('imageLibraryModal');
+                    const targetInputId = modal.dataset.targetInput;
+                    const previewId = modal.dataset.previewId;
 
-                    existingImageInput.value = imagePath;
+                    // Set the selected image path
+                    if (targetInputId && previewId) {
+                        const hiddenInput = document.getElementById(targetInputId);
+                        const previewImage = document.getElementById(previewId);
+                        const previewContainer = document.getElementById(previewId + '-container');
 
-                    updateImagePreview("{{ asset('storage') }}/" + imagePath);
+                        hiddenInput.value = imagePath;
+                        if (previewImage && previewContainer) {
+                            previewImage.src = `{{ asset('storage') }}/${imagePath}`;
+                            previewContainer.style.display = 'block';
+                        }
 
-                    const modal = bootstrap.Modal.getInstance(document.getElementById(
-                        'imageLibraryModal'));
-                    modal.hide();
+                        // Close the modal
+                        const modalInstance = bootstrap.Modal.getInstance(modal);
+                        modalInstance.hide();
+                    }
                 });
             });
 
-            function updateImagePreview(src) {
-                if (src) {
-                    imagePreview.src = src;
-                    imagePreviewContainer.style.display = 'block';
-                } else {
-                    imagePreviewContainer.style.display = 'none';
-                }
-            }
+            // Update Preview when New Image is Uploaded
+            document.querySelectorAll('.image-input').forEach(fileInput => {
+                fileInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        const reader = new FileReader();
+                        const previewId = this.id.replace('image', 'preview');
+                        const previewContainer = document.getElementById(previewId + '-container');
+                        const previewImage = document.getElementById(previewId);
 
-            const newImageInput = document.getElementById('image');
-            newImageInput.addEventListener('change', function() {
-                if (this.files && this.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        updateImagePreview(e.target.result);
-                        existingImageInput.value =
-                            "";
-                    };
-                    reader.readAsDataURL(this.files[0]);
-                } else {
-                    updateImagePreview(null);
-                }
+                        reader.onload = function(e) {
+                            if (previewImage && previewContainer) {
+                                previewImage.src = e.target.result;
+                                previewContainer.style.display = 'block';
+                            }
+                        };
+                        reader.readAsDataURL(this.files[0]);
+
+                        // Clear the hidden input since a new image is selected
+                        const hiddenInputId = this.id.replace('image', 'existing_image');
+                        const hiddenInput = document.getElementById(hiddenInputId);
+                        if (hiddenInput) {
+                            hiddenInput.value = '';
+                        }
+                    }
+                });
             });
         });
     </script>
