@@ -143,10 +143,8 @@ Route::get('/teacher/dashboard', function () {
 //     return view('pages.student.assignment.index');
 // })->name('student.assignment');
 Route::get('/assignment', [StudentAssignmentController::class, 'index'])->name('student.assignment');
-
-Route::get('/assignment_show', function () {
-    return view('pages.student.assignment.show');
-})->name('student.assignment.show');
+Route::get('/assignment_show/{assignmentID}', [StudentAssignmentController::class, 'show'])->name('student.assignment.show');
+Route::post('/answer_assignment', [StudentAssignmentController::class, 'store'])->name('student.assignment.store');
 
 Route::get('/create_theme', function () {
     return view('pages.teacher.theme.create');
