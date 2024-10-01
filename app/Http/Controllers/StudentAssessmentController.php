@@ -15,13 +15,17 @@ class StudentAssessmentController extends Controller
 
     public function index()
     {
-        $teacher = Auth::user();
+        $userAuth = auth()->guard('student')->user();
+        if ($userAuth) {
+            $students = Student::with(['studentAssessment' => function($query) {
+                $query->latest(); // Fetch the latest assessment for each student
+            }])->get();
+        
+            return view('pages.teacher.assessments.index', compact('students', "userAuth"));
+        } else {
+            return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+        }
 
-        $students = Student::with(['studentAssessment' => function($query) {
-            $query->latest(); // Fetch the latest assessment for each student
-        }])->get();
-    
-        return view('pages.teacher.assessments.index', compact('students'));
     }
 
     /**
@@ -29,14 +33,16 @@ class StudentAssessmentController extends Controller
      */
     public function create()
     {
-        // Get the authenticated teacher
-        $teacher = Auth::user();
-
-        $students = Student::where('school_id', $teacher->school_id)
-            ->whereIn('stage_id', $teacher->stages->pluck('id'))
+        $userAuth =  Auth::user();
+        if ($userAuth) {
+            $students = Student::where('school_id', $userAuth->school_id)
+            ->whereIn('stage_id', $userAuth->stages->pluck('id'))
             ->get();
 
-        return view('pages.teacher.assessments.create', compact('students'));
+            return view('pages.teacher.assessments.create', compact('students', "userAuth"));
+        } else {
+            return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+        }
     }
 
     /**
@@ -88,11 +94,17 @@ class StudentAssessmentController extends Controller
     }
     public function showStudentAssessments($student_id)
     {
-        $student = Student::findOrFail($student_id);
-
-        $assessments = Student_assessment::where('student_id', $student_id)->get();
-
-        return view('pages.teacher.assessments.student', compact('student', 'assessments'));
+        $userAuth = auth()->guard('teacher')->user();
+        if ($userAuth) {
+            $student = Student::findOrFail($student_id);
+    
+            $assessments = Student_assessment::where('student_id', $student_id)->get();
+    
+            return view('pages.teacher.assessments.student', compact('student', 'assessments', "userAuth"));
+        } else {
+            return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+        }
+        
     }
     /**
      * Show the form for editing the specified resource.
