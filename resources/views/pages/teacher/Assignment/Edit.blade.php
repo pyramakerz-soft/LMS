@@ -5,7 +5,6 @@
 @php
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
-        ['label' => 'Assignments', 'icon' => 'fas fa-home', 'route' => route('assignments.index')],
     ];
 @endphp
 @section('sidebar')

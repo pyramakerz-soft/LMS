@@ -76,7 +76,7 @@
             <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
                 <div class=" bg-white  ">
                     <!-- Make the stage card a link -->
-                    <a href="" class="block h-full">
+                    <a href="{{route('assignments.index')}}" class="block h-full">
                         
                         <!-- Stage Image -->
                         <div class="p-4">
