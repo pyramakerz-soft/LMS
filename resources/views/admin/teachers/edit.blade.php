@@ -68,12 +68,33 @@
                             </select>
                         </div>
 
+                        <!-- Class Selection -->
+                        <div class="mb-3">
+                            <label for="class_ids" class="form-label">Classes</label>
+                            <select name="class_id[]" id="class_id" class="form-control" multiple required>
+
+                                @foreach ($classes as $class)
+
+                                {{-- <option value="{{ $class->class->id }}"
+                                    {{ in_array($class->id, $teacher->classes->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                    {{ $class->class->name }}
+                                </option> --}}
+                                <option value="{{ $class->class->id }}" selected>{{ $class->class->name }}</option>
+
+
+                                @endforeach
+                                @foreach ($classess as $cls)
+                                <option value="{{ $cls->id }}">{{ $cls->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <!-- Image Upload -->
                         <div class="mb-3">
                             <label for="image" class="form-label">Profile Image</label>
                             <input type="file" name="image" class="form-control" id="image" accept="image/*">
                             @if ($teacher->image)
-                                <p>Current Image: <img src="{{ asset( $teacher->image) }}" alt="Teacher Image"
+                                <p>Current Image: <img src="{{ asset($teacher->image) }}" alt="Teacher Image"
                                         width="100"></p>
                             @endif
                         </div>
@@ -96,24 +117,72 @@
 @endsection
 
 @section('page_js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
     <script>
-        document.getElementById('school_id').addEventListener('change', function() {
-            let schoolId = this.value;
-            if (schoolId) {
-                fetch(`/api/schools/${schoolId}/stages`)
-                    .then(response => response.json())
-                    .then(data => {
-                        let stageSelect = document.getElementById('stage_ids');
-                        stageSelect.innerHTML = '';
-                        data.forEach(stage => {
-                            stageSelect.innerHTML +=
-                                `<option value="${stage.id}">${stage.name}</option>`;
+        $(document).ready(function() {
+            // let classSelectO = $('#class_id');
+            // let classSelectOptions = $('#class_id option');
+
+
+
+            $('#stage_ids').select2({
+                placeholder: "Select Stages",
+                allowClear: true
+            });
+            $('#class_id').select2({
+                placeholder: "Select Classes",
+                allowClear: true
+            });
+
+            $('#school_id').on('change', function() {
+                let schoolId = this.value;
+                if (schoolId) {
+                    fetch(`/admin/api/schools/${schoolId}/stages`)
+                        .then(response => response.json())
+                        .then(data => {
+                            let stageSelect = $('#stage_ids');
+                            stageSelect.empty();
+                            $.each(data, function(key, value) {
+                                stageSelect.append(
+                                    `<option value="${value.id}">${value.name}</option>`);
+                            });
+                            stageSelect.prop('disabled', false);
                         });
-                        stageSelect.disabled = false; // Enable the stage select input
-                    });
-            } else {
-                document.getElementById('stage_ids').disabled = true; // Disable the select if no school is selected
-            }
+
+                    fetch(`/admin/api/schools/${schoolId}/classes`)
+                        .then(response => response.json())
+                        .then(data => {
+                            let classSelect = $('#class_id');
+                            classSelect.empty();
+                            $.each(data, function(key, value) {
+                                classSelect.append(
+                                    `<option value="${value.id}">${value.name}</option>`);
+                            });
+                            classSelect.prop('disabled', false);
+                        });
+                } else {
+                    $('#stage_ids').prop('disabled', true);
+                    $('#class_id').prop('disabled', true);
+                }
+            });
+
+            // if ($('#school_id').val() != null) {
+            //     let schoolId = $('#school_id').val();
+            //     $('#school_id').change();
+            //     var selectedItems =[];
+            //     console.log($('#school_id').val());
+            //     var value = $.map(classSelectOptions, function(option) {
+            //     selectedItems.push(option.value);
+            //         console.log(option)
+            //         // console.log(selectedItems)
+            //         // classSelectOptions.append(
+            //         //     `<option value="${value.id}">${value.name}</option>`);
+            //     });
+            //     console.log(selectedItems);
+            //     $('#class_id').select2('val',selectedItems );
+            // }
+
         });
     </script>
 @endsection

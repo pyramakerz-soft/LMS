@@ -29,8 +29,12 @@ class Teacher extends Authenticatable
     {
         return $this->hasMany(Student_assessment::class);
     }
+    // public function classes()
+    // {
+    //     return $this->belongsToMany(Group::class, 'teacher_classes');
+    // }
     public function classes()
-    {
-        return $this->belongsToMany(Group::class, 'teacher_classes');
-    }
+{
+    return $this->belongsToMany(Group::class, 'teacher_classes', 'teacher_id', 'class_id');
+}
 }

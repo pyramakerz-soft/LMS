@@ -1,4 +1,4 @@
-@extends('pages.teacher.teacher')
+@extends('admin.layouts.layout')
 
 @section('content')
     <div class="wrapper">
@@ -51,9 +51,15 @@
                         <div class="mb-3">
                             <label for="stage_ids" class="form-label">Stages</label>
                             <select name="stage_ids[]" id="stage_ids" class="form-control" multiple required disabled>
-                                <!-- Stages will be populated via AJAX based on the selected school -->
                             </select>
                         </div>
+                        <div class="mb-3">
+                            <label for="class_ids" class="form-label">Classes</label>
+                            <select name="class_id[]" id="class_id" class="form-control" multiple required disabled>
+                            </select>
+                        </div>
+
+
 
                         <!-- Image Upload -->
                         <div class="mb-3">
@@ -73,11 +79,25 @@
 @endsection
 
 @section('page_js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#stage_ids').select2({
+                placeholder: "Select Stages",
+                allowClear: true
+            });
+            $('#class_id').select2({
+                placeholder: "Select Classes",
+                allowClear: true
+            });
+        });
+    </script>
     <script>
         document.getElementById('school_id').addEventListener('change', function() {
             let schoolId = this.value;
             if (schoolId) {
-                fetch(`/LMS/lms_pyramakerz/public/admin/api/schools/${schoolId}/stages`)
+                fetch(`/admin/api/schools/${schoolId}/stages`)
                     .then(response => response.json())
                     .then(data => {
                         let stageSelect = document.getElementById('stage_ids');
@@ -89,7 +109,29 @@
                         stageSelect.disabled = false;
                     });
             } else {
-                document.getElementById('stage_ids').disabled = true; 
+                document.getElementById('stage_ids').disabled = true;
+            }
+        });
+        document.getElementById('school_id').addEventListener('change', function() {
+            let schoolId = this.value;
+            if (schoolId) {
+                fetch(`/admin/api/schools/${schoolId}/classes`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let classSelect = document.getElementById('class_id');
+                        classSelect.innerHTML = '';
+                        data.forEach(classData => {
+                            classSelect.innerHTML +=
+                                `<option value="${classData.id}">${classData.name}</option>`;
+                        });
+                        classSelect.disabled = false;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching classes:', error);
+                    });
+            } else {
+                document.getElementById('class_id').innerHTML = '';
+                document.getElementById('class_id').disabled = true;
             }
         });
     </script>

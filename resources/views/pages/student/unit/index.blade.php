@@ -52,7 +52,7 @@
     <div class="p-3 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="{{ route("student.theme") }}" class="mx-2 cursor-pointer">Theme</a>
+        <a href="{{ route('student.theme') }}" class="mx-2 cursor-pointer">Theme</a>
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="#" class="mx-2 cursor-pointer">Unit</a>
     </div>
@@ -79,11 +79,13 @@
                             @foreach ($unit->chapters as $chapter)
                                 <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white shadow-md rounded-xl">
                                     <div class="full">
-                                        <a class="cursor-pointer h-full flex flex-col justify-between" href="{{ route('student_lessons.index', $chapter->id) }}">
+                                        <a class="cursor-pointer h-full flex flex-col justify-between"
+                                            href="{{ route('student_lessons.index', $chapter->id) }}">
                                             <div class="overflow-hidden">
                                                 @if ($chapter->image)
                                                     <img src="{{ asset('storage/' . $chapter->image) }}"
-                                                        class="object-contain w-full rounded-xl" alt="{{ $chapter->name }}">
+                                                        class="object-contain w-full rounded-xl"
+                                                        alt="{{ $chapter->name }}">
                                                 @else
                                                     <img src="https://via.placeholder.com/150"
                                                         class="object-contain w-full h-[250px] rounded-xl" alt="No Image">
@@ -104,95 +106,7 @@
 
             </div>
 
-            {{-- <div class="mb-5">
 
-                <h2 id="accordion-collapse-heading-2">
-                    <button type="button"
-                        class="accordion-button flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-                        data-accordion-target="#accordion-collapse-body-2" aria-expanded="false"
-                        aria-controls="accordion-collapse-body-2">
-                        <span>Unit 2 Intermediate Level</span>
-                        <svg data-accordion-icon class="w-3 h-3 shrink-0" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 5 5 1 1 5" />
-                        </svg>
-                    </button>
-                </h2>
-                <div id="accordion-collapse-body-2" class="hidden" aria-labelledby="accordion-collapse-heading-2">
-                    <div class="flex flex-wrap items-center justify-start">
-                        @foreach ($material->units as $unit)
-                            <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
-                                <div class=" bg-white shadow-md border border-slate-200 rounded-md">
-                                    <a class="cursor-pointer" href="{{ route('student_chapters.index', $unit->id) }}">
-                                        <div class=" overflow-hidden">
-                                            @if ($unit->image)
-                                                <img src="{{ asset('storage/' . $unit->image) }}"
-                                                    class="w-full h-full object-fit" alt="{{ $unit->name }}">
-                                            @else
-                                                <img src="https://via.placeholder.com/150" class="w-full h-full object-fit"
-                                                    alt="No Image">
-                                            @endif
-                                        </div>
-                                        <div class="p-2">
-                                            <p class="text-slate-800 text-2xl font-semibold ">
-                                                {{ $unit->title }}
-                                            </p>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        @endforeach
-
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="mb-5"> 
-
-                <h2 id="accordion-collapse-heading-3">
-                    <button type="button"
-                        class="accordion-button flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-                        data-accordion-target="#accordion-collapse-body-3" aria-expanded="false"
-                        aria-controls="accordion-collapse-body-3">
-                        <span>Unit 3 Advanced Level</span>
-                        <svg data-accordion-icon class="w-3 h-3 shrink-0" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 5 5 1 1 5" />
-                        </svg>
-                    </button>
-                </h2>
-                <div id="accordion-collapse-body-3" class="hidden" aria-labelledby="accordion-collapse-heading-3">
-                    <div class="flex flex-wrap items-center justify-start">
-                        @foreach ($material->units as $unit)
-                            <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
-                                <div class=" bg-white shadow-md border border-slate-200 rounded-md">
-                                    <a class="cursor-pointer" href="{{ route('student_chapters.index', $unit->id) }}">
-                                        <div class=" overflow-hidden">
-                                            @if ($unit->image)
-                                                <img src="{{ asset('storage/' . $unit->image) }}"
-                                                    class="w-full h-full object-fit" alt="{{ $unit->name }}">
-                                            @else
-                                                <img src="https://via.placeholder.com/150"
-                                                    class="w-full h-full object-cover" alt="No Image">
-                                            @endif
-                                        </div>
-                                        <div class="p-2">
-                                            <p class="text-slate-800 text-2xl font-semibold ">
-                                                {{ $unit->title }}
-                                            </p>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-
-
-            </div> --}}
 
 
 
