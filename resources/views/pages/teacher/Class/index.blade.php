@@ -42,22 +42,24 @@
     <div class="p-2 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="{{ route('teacher.dashboard') }}" class="mx-2 cursor-pointer">Dashboard</a>
-        <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="#" class="mx-2 cursor-pointer">Classes</a>
+        <a href="#" class="mx-2 cursor-pointer">Assessments</a>
     </div>
 
     <!-- Display Chapters -->
-    @foreach ($classesTeachers as $classesTeacher)
-        <a href="{{ route('assessments.index') }}" class="h-[350px] bg-white shadow-md border border-slate-200 rounded-md">
-            {{-- @dd($classesTeacher) --}}
-            <h3 class="">{{ $classesTeacher->class->name }}</h3>
-
-            <!-- Chapter Image -->
-            <div class="p-4">
-                <img src="{{ $classesTeacher->class->image ? asset($classesTeacher->class->image) : asset('images/default-material.png') }}"
-                    alt="{{ $classesTeacher->class->name }}" class="object-cover w-full h-32 rounded-md">
+    <div class="flex flex-wrap ">
+            @foreach ($classesTeachers as $classesTeacher)
+            <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
+                <a href="{{ route('assessments.index') }}" class=" bg-white ">
+                    {{-- @dd($classesTeacher) --}}
+                    
+                    <!-- Chapter Image -->
+                    <div class="p-4">
+                        <img src="{{ $classesTeacher->class->image ? asset($classesTeacher->class->image) : asset('images/default-material.png') }}"
+                        alt="{{ $classesTeacher->class->name }}" class="object-cover w-full  rounded-md">
+                    </div>
+                    <h3 class="px-4 py-2 text-lg font-bold">{{ $classesTeacher->class->name }}</h3>
+                </a>
             </div>
-        </a>
-    @endforeach
+            @endforeach
+            </div>
 @endsection
