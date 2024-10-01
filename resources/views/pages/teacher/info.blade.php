@@ -53,7 +53,7 @@
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="{{ route('teacher.dashboard') }}" class="mx-2 cursor-pointer">Grade</a>
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="" class="mx-2 cursor-pointer">info</a>
+        <a href="" class="mx-2 cursor-pointer">Info</a>
     </div>
 
     <!-- Display Stages -->
@@ -90,7 +90,7 @@
             <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
                 <div class=" bg-white  ">
                     <!-- Make the stage card a link -->
-                    <a href="" class="block h-full">
+                    <a href="{{route('assessments.index')}}" class="block h-full">
                         
                         <!-- Stage Image -->
                         <div class="p-4">
