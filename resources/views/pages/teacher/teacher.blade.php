@@ -60,19 +60,23 @@
     <div class="flex flex-wrap">
         @foreach ($stages as $stage)
             <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
-                <div class="h-[400px] bg-white shadow-md border border-slate-200 rounded-md">
+                <div class=" bg-white ">
                     <!-- Make the stage card a link -->
                     <a href="{{ route('teacher.info', $stage->id) }}" class="block h-full">
-                        <h3 class="px-4 py-2 bg-gray-200 text-lg font-bold">{{ $stage->name }}</h3>
-
+                        
                         <!-- Stage Image -->
                         <div class="p-4">
                             <img src="{{ $stage->image ? asset('storage/' . $stage->image) : asset('images/default-stage.png') }}"
-                                alt="{{ $stage->name }}" class="object-cover w-full h-45 rounded-md">
+                            alt="{{ $stage->name }}" class="object-cover w-full h-45 rounded-md">
                         </div>
+                        <h3 class="px-4 py-2 text-lg font-bold">{{ $stage->name }}</h3>
                     </a>
                 </div>
             </div>
         @endforeach
     </div>
 @endsection
+
+
+
+
