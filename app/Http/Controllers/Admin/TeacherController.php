@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Group;
 use App\Models\School;
 use App\Models\Stage;
 use App\Models\Teacher;
+use App\Models\TeacherClass;
 use Hash;
 use Illuminate\Http\Request;
 use Str;
@@ -42,6 +44,8 @@ class TeacherController extends Controller
             'school_id' => 'required|exists:schools,id',
             'stage_ids' => 'required|array',
             'stage_ids.*' => 'exists:stages,id',
+            'class_id' => 'required|array',
+            'class_id.*' => 'exists:groups,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -61,6 +65,8 @@ class TeacherController extends Controller
             'is_active' => 1,
             'image' => $imagePath,
         ]);
+
+        $teacher->classes()->attach($request->input('class_id'));
 
         $teacher->stages()->attach($request->input('stage_ids'));
 
@@ -84,7 +90,9 @@ class TeacherController extends Controller
         $teacher = Teacher::findOrFail($id);
         $schools = School::all();
         $stages = Stage::all();
-        return view('admin.teachers.edit', compact('teacher', 'schools', 'stages'));
+        $classes = TeacherClass::with('class')->where('teacher_id', $teacher->id)->get();
+        $classess = Group::whereNotIn('id',$classes->pluck('class_id'))->get();
+        return view('admin.teachers.edit', compact('teacher', 'schools', 'stages', 'classes','classess'));
     }
 
     /**
@@ -100,6 +108,8 @@ class TeacherController extends Controller
             'school_id' => 'required|exists:schools,id',
             'stage_ids' => 'required|array',
             'stage_ids.*' => 'exists:stages,id',
+            'class_id' => 'required|array',
+            'class_id.*' => 'exists:groups,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -114,10 +124,8 @@ class TeacherController extends Controller
             'school_id' => $request->input('school_id'),
             'is_active' => $request->input('is_active') ?? 1,
         ]);
-
-        // Sync the selected stages
+        $teacher->classes()->sync($request->input('class_id'));
         $teacher->stages()->sync($request->input('stage_ids'));
-
         return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully.');
     }
 

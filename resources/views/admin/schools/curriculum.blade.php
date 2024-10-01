@@ -87,7 +87,7 @@
         document.getElementById('stage_id').addEventListener('change', function() {
             let stageId = this.value;
             if (stageId) {
-                fetch(`/LMS/lms_pyramakerz/public/api/stages/${stageId}/materials`)
+                fetch(`/api/stages/${stageId}/materials`)
                     .then(response => response.json())
                     .then(data => {
                         let materialSelect = document.getElementById('material_id');
@@ -106,7 +106,7 @@
         document.getElementById('material_id').addEventListener('change', function() {
             let materialId = this.value;
             if (materialId) {
-                fetch(`/LMS/lms_pyramakerz/public/api/materials/${materialId}/units`)
+                fetch(`/api/materials/${materialId}/units`)
                     .then(response => response.json())
                     .then(data => {
                         let unitSelect = document.getElementById('unit_id');
@@ -124,7 +124,7 @@
         document.getElementById('unit_id').addEventListener('change', function() {
             let unitId = this.value;
             if (unitId) {
-                fetch(`/LMS/lms_pyramakerz/public/api/units/${unitId}/chapters`)
+                fetch(`/api/units/${unitId}/chapters`)
                     .then(response => response.json())
                     .then(data => {
                         let chapterSelect = document.getElementById('chapter_id');
@@ -143,7 +143,7 @@
         document.getElementById('chapter_id').addEventListener('change', function() {
             let chapterId = this.value;
             if (chapterId) {
-                fetch(`/LMS/lms_pyramakerz/public/api/chapters/${chapterId}/lessons`)
+                fetch(`/api/chapters/${chapterId}/lessons`)
                     .then(response => response.json())
                     .then(data => {
                         let lessonSelect = document.getElementById('lesson_id');

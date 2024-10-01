@@ -22,6 +22,7 @@ use App\Http\Controllers\Teacher\TeacherDashboardController;
 use App\Http\Controllers\Teacher\TeacherUnitController;
 use App\Http\Controllers\Student\StudentAssignmentController;
 use App\Http\Controllers\UnitController as ControllersUnitController;
+use App\Models\Group;
 use App\Models\School;
 use App\Models\Stage;
 use Illuminate\Support\Facades\Route;
@@ -91,6 +92,10 @@ Route::prefix('admin')->group(function () {
         Route::get('/api/stages/{stage}/classes', function (Stage $stage) {
             return response()->json($stage->classes);
         });
+        Route::get('/api/schools/{school}/classes', function(School $school){
+            return response()->json($school->classes);
+        });
+
 
     });
 });
@@ -121,27 +126,6 @@ Route::get('/teacher/dashboard', function () {
 })->middleware('auth:teacher')->name('teacher.dashboard');
 
 
-
-
-
-
-// Route::get('/unit', function () {
-//     return view('pages.student.unit.index');
-// })->name('student.unit');
-
-
-
-// Route::get('/chapter', function () {
-//     return view('pages.student.chapter.index');
-// })->name('student.chapter');
-
-// Route::get('/week', function () {
-//     return view('pages.student.week.index');
-// })->name('student.week');
-
-// Route::get('/assignment', function () {
-//     return view('pages.student.assignment.index');
-// })->name('student.assignment');
 Route::get('/assignment', [StudentAssignmentController::class, 'index'])->name('student.assignment');
 Route::get('/assignment_show/{assignmentID}', [StudentAssignmentController::class, 'show'])->name('student.assignment.show');
 Route::post('/answer_assignment', [StudentAssignmentController::class, 'store'])->name('student.assignment.store');

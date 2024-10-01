@@ -44,10 +44,9 @@ class LoginController extends Controller
         ]);
     }
 
-    // Handle logout for both students and teachers
     public function logout(Request $request)
     {
-        Auth::guard()->logout(); // Log out the user
-        return redirect()->route('login'); // Redirect to the login page
+        Auth::guard()->logout();
+        return redirect()->route('login'); 
     }
 }

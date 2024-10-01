@@ -24,8 +24,12 @@ class Group extends Model
         return $this->hasMany(Student::class, 'class_id');
     }
 
+    // public function teachers()
+    // {
+    //     return $this->belongsToMany(TeacherClass::class);
+    // }
     public function teachers()
     {
-        return $this->belongsToMany(Teacher::class, 'teacher_classes');
+        return $this->belongsToMany(Teacher::class, 'teacher_classes', 'class_id', 'teacher_id');
     }
 }
