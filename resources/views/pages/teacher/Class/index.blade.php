@@ -47,19 +47,19 @@
 
     <!-- Display Chapters -->
     <div class="flex flex-wrap ">
-            @foreach ($classesTeachers as $classesTeacher)
+        @foreach ($classesTeachers as $classesTeacher)
             <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
-                <a href="{{ route('assessments.index') }}" class=" bg-white ">
+                <a href="{{ route('assessments.index', ['class_id' => $classesTeacher->class->id]) }}" class=" bg-white ">
                     {{-- @dd($classesTeacher) --}}
-                    
+
                     <!-- Chapter Image -->
                     <div class="p-4">
                         <img src="{{ $classesTeacher->class->image ? asset($classesTeacher->class->image) : asset('images/default-material.png') }}"
-                        alt="{{ $classesTeacher->class->name }}" class="object-cover w-full  rounded-md">
+                            alt="{{ $classesTeacher->class->name }}" class="object-cover w-full  rounded-md">
                     </div>
                     <h3 class="px-4 py-2 text-lg font-bold">{{ $classesTeacher->class->name }}</h3>
                 </a>
             </div>
-            @endforeach
-            </div>
+        @endforeach
+    </div>
 @endsection
