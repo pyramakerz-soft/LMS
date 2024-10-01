@@ -7,7 +7,6 @@
 @php
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
-        ['label' => 'Assignments', 'icon' => 'fas fa-home', 'route' => route('assignments.index')],
     ];
 
 @endphp
@@ -73,57 +72,64 @@
             @csrf
 
             @foreach ($students as  $i => $student)
-                <div class="">
-                    <div class="">
+                <div class="{{ $i !== count($students) - 1 ? 'mb-10' : '' }} border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F] mb-3">
+                    <div class="font-bold text-xl text-[#17253E] w-full border-2 p-4">
                         {{ $student->username }} ({{ $student->school->name }}, {{ $student->stage->name }})
                     </div>
-                    <div class="card-body">
+                    <div class="mt-3 w-full">
                         <input type="hidden" name="assessments[{{ $loop->index }}][student_id]"
                             value="{{ $student->id }}">
 
-                        <div class="mb-3">
-                            <label for="attendance_score_{{ $student->id }}" class="form-label">Attendance Score (Max
-                                10)</label>
+                        <div class="mb-3 flex items-center">
+                            <div class="w-1/2">
+                                <label for="attendance_score_{{ $student->id }}" class="mb-1 font-semibold text-[#3A3A3C]">Attendance Score (Max
+                                    10)</label>
+                            </div>
                             <input type="number" name="assessments[{{ $loop->index }}][attendance_score]"
-                                id="attendance_score_{{ $student->id }}" class="form-control" max="10">
+                                id="attendance_score_{{ $student->id }}" class="w-full border border-[#E5E5EA] rounded-lg p-2 md:p-4 text-xs md:text-base" max="10">
                         </div>
 
-                        <div class="mb-3">
-                            <label for="classroom_participation_score_{{ $student->id }}" class="form-label">Classroom
-                                Participation Score (Max 15)</label>
+                        <div class="mb-3 flex items-center">
+                            <div class="w-1/2">
+                                <label for="classroom_participation_score_{{ $student->id }}" class="mb-1 font-semibold text-[#3A3A3C]">Classroom
+                                    Participation Score (Max 15)</label>
+                            </div>
                             <input type="number" name="assessments[{{ $loop->index }}][classroom_participation_score]"
-                                id="classroom_participation_score_{{ $student->id }}" class="form-control" max="15">
+                                id="classroom_participation_score_{{ $student->id }}" class="w-full border border-[#E5E5EA] rounded-lg p-2 md:p-4 text-xs md:text-base" max="15">
                         </div>
 
-                        <div class="mb-3">
-                            <label for="classroom_behavior_score_{{ $student->id }}" class="form-label">Classroom Behavior
-                                Score (Max 15)</label>
+                        <div class="mb-3 flex items-center">
+                            <div class="w-1/2">
+                                <label for="classroom_behavior_score_{{ $student->id }}" class="mb-1 font-semibold text-[#3A3A3C]">Classroom Behavior
+                                    Score (Max 15)</label>
+                            </div>
                             <input type="number" name="assessments[{{ $loop->index }}][classroom_behavior_score]"
-                                id="classroom_behavior_score_{{ $student->id }}" class="form-control" max="15">
+                                id="classroom_behavior_score_{{ $student->id }}" class="w-full border border-[#E5E5EA] rounded-lg p-2 md:p-4 text-xs md:text-base" max="15">
                         </div>
 
-                        <div class="mb-3">
-                            <label for="homework_score_{{ $student->id }}" class="form-label">Homework Score (Max
-                                10)</label>
+                        <div class="mb-3 flex items-center">
+                            <div class="w-1/2">
+                                <label for="homework_score_{{ $student->id }}" class="mb-1 font-semibold text-[#3A3A3C]">Homework Score (Max
+                                    10)</label>
+                            </div>
                             <input type="number" name="assessments[{{ $loop->index }}][homework_score]"
-                                id="homework_score_{{ $student->id }}" class="form-control" max="10">
+                                id="homework_score_{{ $student->id }}" class="border w-full border-[#E5E5EA] rounded-lg p-2 md:p-4 text-xs md:text-base" max="10">
                         </div>
 
-                        <div class="mb-3">
-                            <label for="final_project_score_{{ $student->id }}" class="form-label">Final Project Score
-                                (Max 50)
-                            </label>
+                        <div class="mb-3 flex items-center">
+                            <div class="w-1/2">
+                                <label for="final_project_score_{{ $student->id }}" class="mb-1 font-semibold text-[#3A3A3C]">Final Project Score
+                                    (Max 50)
+                                </label>
+                            </div>
                             <input type="number" name="assessments[{{ $loop->index }}][final_project_score]"
-                                id="final_project_score_{{ $student->id }}" class="form-control" max="50">
+                                id="final_project_score_{{ $student->id }}" class="w-full border border-[#E5E5EA] rounded-lg p-2 md:p-4 text-xs md:text-base" max="50">
                         </div>
                     </div>
                 </div>
-                @if($i !== count($students) - 1)
-                    <hr class="border-[#ff751967] border-2 rounded-xl">
-                @endif
             @endforeach
 
-            <button type="submit" class="btn btn-primary">Submit Assessments</button>
+            <button type="submit" class="rounded-md px-6 py-3 bg-[#17253E] text-white border-none mt-5">Submit Assessments</button>
         </form>
     </div>
 
