@@ -5,6 +5,7 @@
 @endsection
 
 
+
 @php
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('student.theme')],
@@ -16,7 +17,7 @@
     @include('components.sidebar', ['menuItems' => $menuItems])
 @endsection
 
-@section("content")
+@section('content')
     <div class="p-3">
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
@@ -30,6 +31,7 @@
                             class="w-30 h-20 rounded-full object-cover">
                     @endif
                 </div>
+
 
                 <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
                     <div class="text-xl">
@@ -49,5 +51,11 @@
         </div>
     </div>
 
+    @if (session('success'))
+        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+            role="alert">
+            <span class="font-medium">{{ session('success') }}</span>
+        </div>
+    @endif
     @include('components.AssignmentDetails', ['assignment' => $assignment])
 @endsection
