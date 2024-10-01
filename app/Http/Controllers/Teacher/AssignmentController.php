@@ -18,7 +18,7 @@ class AssignmentController extends Controller
         if ($userAuth) {
             $Assignment = Assignment::where("teacher_id", auth()->user()->id)->with(relations: 'school')->with('lesson')->orderBy("created_at","desc")->get();
     
-            return view("pages.teacher.assignment.index", compact("Assignment", "userAuth"));
+            return view("pages.teacher.Assignment.index", compact("Assignment", "userAuth"));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
@@ -34,7 +34,7 @@ class AssignmentController extends Controller
             $lessons = Lesson::all();
             $schools = School::all();
     
-            return view('pages.teacher.assignment.create', compact('lessons', 'schools', "userAuth"));
+            return view('pages.teacher.Assignment.create', compact('lessons', 'schools', "userAuth"));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
@@ -152,7 +152,7 @@ class AssignmentController extends Controller
                 ->pluck('student_id')
                 ->toArray();
     
-            return view('pages.teacher.assignment.Edit', compact('assignment', 'lessons', 'schools', 'stages', 'students', 'selectedStage', 'selectedStudents',  "userAuth"));
+            return view('pages.teacher.Assignment.Edit', compact('assignment', 'lessons', 'schools', 'stages', 'students', 'selectedStage', 'selectedStudents',  "userAuth"));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
@@ -242,7 +242,7 @@ class AssignmentController extends Controller
         // Redirect back with a success message
         $Assignment = Assignment::where("teacher_id", auth()->user()->id)->with(relations: 'school')->with('lesson')->orderBy("created_at","desc")->get();
 
-        return view("pages.teacher.assignment.index", compact("Assignment"));
+        return view("pages.teacher.Assignment.index", compact("Assignment"));
     }
     
 }

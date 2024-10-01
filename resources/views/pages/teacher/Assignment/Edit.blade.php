@@ -18,7 +18,7 @@
                 <div>
                     {{-- <img class="w-20 h-20 rounded-full" alt="avatar1" src="{{ Auth::guard('student')->user()->image }}" /> --}}
                     @if ($userAuth->image)
-                        <img src="{{ asset('storage/' . $userAuth->image) }}" alt="Student Image"
+                        <img src="{{ asset($userAuth->image) }}" alt="Student Image"
                             class="w-20 h-20 rounded-full object-cover">
                     @else
                         <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
@@ -167,7 +167,7 @@
                     <input type="file" name="path_file"
                         class="border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" id="path_file">
                     @if ($assignment->path_file)
-                        <p>Current File: <a href="{{ asset('storage/' . $assignment->path_file) }}">Download</a></p>
+                        <p>Current File: <a href="{{ asset($assignment->path_file) }}">Download</a></p>
                     @endif
 
                     <label for="link"

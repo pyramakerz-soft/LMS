@@ -23,7 +23,7 @@
                 <div>
                     {{-- <img class="w-20 h-20 rounded-full" alt="avatar1" src="{{ Auth::guard('student')->user()->image }}" /> --}}
                     @if ($userAuth->image)
-                        <img src="{{ asset('storage/' . $userAuth->image) }}" alt="Student Image"
+                        <img src="{{ asset($userAuth->image) }}" alt="Student Image"
                             class="w-20 h-20 rounded-full object-cover">
                     @else
                         <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
@@ -62,7 +62,7 @@
                         href="{{ route('student_units.index', $material->id) }}">
                         @if ($material->image)
                           
-                            <img src="{{ asset('storage/' . $material->image) }}" alt="{{ $material->title }}"
+                            <img src="{{ $material->image }}" alt="{{ $material->title }}"
                                 class="object-cover object-top w-full h-[350px] rounded-xl">
                         @else
                             No Image
@@ -112,7 +112,7 @@
             </div>
         </div>
         {{-- Put the EBook Here --}}
-        <embed src="{{ asset('storage/' . $material->file_path . '/Index.html') }}" width="100%" height="90%" />
+        <embed src="{{ $material->file_path  }}" width="100%" height="90%" />
 
     </div>
 </div>
@@ -130,7 +130,7 @@
             </div>
         </div>
         {{-- Put the How To Use Here --}}
-        <embed src="{{ asset('storage/' . $material->how_to_use . '/Index.html') }}" width="100%" height="90%" />
+        <embed src="{{ $material->how_to_use }}" width="100%" height="90%" />
     </div>
 </div>
 
@@ -147,7 +147,7 @@
             </div>
         </div>
         {{-- Put the Learning Here --}}
-        <embed src="{{ asset('storage/' . $material->learning . '/Index.html') }}" width="100%" height="90%" />
+        <embed src="{{ $material->learning  }}" width="100%" height="90%" />
     </div>
 </div>
 

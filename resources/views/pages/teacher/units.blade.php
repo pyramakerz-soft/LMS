@@ -64,7 +64,7 @@
 
                         <!-- Unit Image -->
                         <div class="p-4">
-                            <img src="{{ $unit->image ? asset('storage/' . $unit->image) : asset('images/default-unit.png') }}"
+                            <img src="{{ $unit->image ? asset($unit->image) : asset('images/default-unit.png') }}"
                                 alt="{{ $unit->title }}" class="object-cover w-full h-32 rounded-md">
                         </div>
                     </div>
@@ -149,4 +149,4 @@
         </script>
 @endsection
 
-{{-- {{ asset('storage/' . $chapter->image) }} --}}
+{{-- {{ asset($chapter->image) }} --}}

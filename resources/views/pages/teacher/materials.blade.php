@@ -60,7 +60,7 @@
 
                         <!-- Material Image -->
                         <div class="p-4">
-                            <img src="{{ $material->image ? asset('storage/' . $material->image) : asset('images/default-material.png') }}"
+                            <img src="{{ $material->image ? asset($material->image) : asset('images/default-material.png') }}"
                                 alt="{{ $material->title }}" class="object-cover w-full h-32 rounded-md">
                         </div>
                     </div>

@@ -24,7 +24,7 @@ class Material extends Model
     }
      public function getImageAttribute($val)
     {
-        return ($val !== null) ? asset( $val) : "";
+        return ($val !== null) ? asset($val) : "";
     }
      public function getLearningAttribute($val)
     {

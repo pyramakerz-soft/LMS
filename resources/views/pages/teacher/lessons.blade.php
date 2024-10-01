@@ -65,7 +65,7 @@
         <!-- Lesson Image -->
         <div class="p-4">
             <button  onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');" class="object-cover w-full  ">
-                <img src="{{ $lesson->image ? asset('storage/' . $lesson->image) : asset('images/default-lesson.png') }}"
+                <img src="{{ $lesson->image ? asset($lesson->image) : asset('images/default-lesson.png') }}"
                 {{-- <img src="{{ asset('assets/img/teacherInfo1.png') }}" --}}
                 alt="{{ $lesson->title }}" >
             </button>
@@ -74,6 +74,7 @@
     </div>
 </div>
 @endforeach
+
     </div>
 @endsection
 
@@ -112,7 +113,7 @@
             </div>
         </div>
         {{-- Put the How To Use Here --}}
-        <embed src="{{ asset('storage/' . $lesson->how_to_use . '/Index.html') }}" width="800px" height="2100px" />
+        <embed src="{{ asset($lesson->how_to_use . '/Index.html') }}" width="800px" height="2100px" />
     </div>
 </div>
 
@@ -129,7 +130,7 @@
             </div>
         </div>
         {{-- Put the Learning Here --}}
-        <embed src="{{ asset('storage/' . $lesson->learning . '/Index.html') }}" width="800px" height="2100px" />
+        <embed src="{{ asset($lesson->learning . '/Index.html') }}" width="800px" height="2100px" />
     </div>
 </div>
 
