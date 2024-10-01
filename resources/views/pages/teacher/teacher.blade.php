@@ -21,7 +21,7 @@
                 <div>
                     {{-- <img class="w-20 h-20 rounded-full" alt="avatar" src="{{ Auth::guard('teacher')->user()->image }}" /> --}}
                     @if (Auth::guard('teacher')->user()->image)
-                        <img src="{{ asset('storage/' . Auth::guard('teacher')->user()->image) }}" alt="Teacher Image"
+                        <img src="{{ asset(Auth::guard('teacher')->user()->image) }}" alt="Teacher Image"
                             class="w-20 h-20 rounded-full">
                     @else
                         <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
@@ -65,8 +65,10 @@
                         
                         <!-- Stage Image -->
                         <div class="p-4">
+
                             <img src="{{ $stage->image ? asset('storage/' . $stage->image) : asset('images/default-stage.png') }}"
                             alt="{{ $stage->name }}" class="object-cover w-full h-45 rounded-md">
+
                         </div>
                         <h3 class="px-4 py-2 text-lg font-bold">{{ $stage->name }}</h3>
                     </a>

@@ -22,7 +22,7 @@
             ">
                 <div>
                     @if ($userAuth->image)
-                        <img src="{{ asset('storage/' . $userAuth->image) }}" alt="Student Image"
+                        <img src="{{ asset($userAuth->image) }}" alt="Student Image"
                             class="w-20 h-20 rounded-full object-cover">
                     @else
                         <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
@@ -83,7 +83,7 @@
                                             href="{{ route('student_lessons.index', $chapter->id) }}">
                                             <div class="overflow-hidden">
                                                 @if ($chapter->image)
-                                                    <img src="{{ asset('storage/' . $chapter->image) }}"
+                                                    <img src="{{ asset($chapter->image) }}"
                                                         class="object-contain w-full rounded-xl"
                                                         alt="{{ $chapter->name }}">
                                                 @else

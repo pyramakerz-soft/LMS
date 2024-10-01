@@ -21,7 +21,7 @@
             <div class="flex items-center space-x-4">
                 <div>
                     @if ($userAuth->image)
-                        <img src="{{ asset('storage/' . $userAuth->image) }}" alt="Student Image"
+                        <img src="{{ asset($userAuth->image) }}" alt="Student Image"
                             class="w-20 h-20 rounded-full object-cover">
                     @else
                         <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
@@ -66,7 +66,7 @@
                         <h3 class="px-4 py-2 bg-gray-200 text-lg font-bold">{{ $lesson->title }}</h3>
                         <div class="p-4">
                             @if ($lesson->image)
-                                <img src="{{ asset('storage/' . $lesson->image) }}"
+                                <img src="{{ asset($lesson->image) }}"
                                     class="object-contain w-full rounded-xl">
                             @else
                                 <img src="https://via.placeholder.com/150" class="object-contain w-full h-[250px] rounded-xl"
@@ -97,7 +97,7 @@
             </div>
         </div>
         {{-- Put the Learning Here --}}
-        <embed src="{{ asset('storage/'. $lesson->file_path . '/Index.html')}}" width="100%" height="90%" />
+        <embed src="{{ $lesson->file_path}}" width="100%" height="90%" />
     </div>
 </div>
 

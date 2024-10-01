@@ -20,7 +20,7 @@
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
-                    <img class="w-20 h-20 rounded-full" alt="avatar" src="{{ Auth::guard('teacher')->user()->image }}" />
+                    <img class="w-20 h-20 rounded-full" alt="avatar" src="{{ auth()->user()->image }}" />
                 </div>
 
                 <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
@@ -61,7 +61,7 @@
                         href="{{ route('teacher.units' ,$material->id ) }}">
                         @if ($material->image)
                           
-                            <img src="{{ asset('storage/' . $material->image) }}" alt="{{ $material->name }}"
+                            <img src="{{ asset($material->image) }}" alt="{{ $material->name }}"
                                 class="object-cover object-top w-full h-[350px] rounded-xl">
                         @else
                             No Image
@@ -129,7 +129,7 @@
             </div>
         </div>
         {{-- Put the How To Use Here --}}
-        <embed src="{{ asset('storage/' . $material->how_to_use . '/Index.html') }}" width="800px" height="2100px" />
+        <embed src="{{ $material->how_to_use }}" width="800px" height="2100px" />
     </div>
 </div>
 
@@ -146,7 +146,7 @@
             </div>
         </div>
         {{-- Put the Learning Here --}}
-        <embed src="{{ asset('storage/' . $material->learning . '/Index.html') }}" width="800px" height="2100px" />
+        <embed src="{{ $material->learning }}" width="800px" height="2100px" />
     </div>
 </div>
 

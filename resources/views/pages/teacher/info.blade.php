@@ -21,7 +21,7 @@
                 <div>
                     {{-- <img class="w-20 h-20 rounded-full" alt="avatar" src="{{ Auth::guard('teacher')->user()->image }}" /> --}}
                     @if (Auth::guard('teacher')->user()->image)
-                        <img src="{{ asset('storage/' . Auth::guard('teacher')->user()->image) }}" alt="Teacher Image"
+                        <img src="{{ asset(Auth::guard('teacher')->user()->image) }}" alt="Teacher Image"
                             class="w-20 h-20 rounded-full">
                     @else
                         <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
