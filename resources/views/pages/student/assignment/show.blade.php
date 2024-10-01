@@ -57,5 +57,13 @@
             <span class="font-medium">{{ session('success') }}</span>
         </div>
     @endif
+    <div class="p-3 text-[#667085] my-8">
+        <i class="fa-solid fa-house mx-2"></i>
+        <span class="mx-2 text-[#D0D5DD]">/</span>
+        <a href="{{ route("student.assignment") }}" class="mx-2 cursor-pointer">Assignment</a>
+        <span class="mx-2 text-[#D0D5DD]">/</span>
+        <a href="#" class="mx-2 cursor-pointer">View Assignment</a>
+    </div>
+
     @include('components.AssignmentDetails', ['assignment' => $assignment])
 @endsection

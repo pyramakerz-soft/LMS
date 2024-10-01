@@ -39,7 +39,7 @@ class TeacherDashboardController extends Controller
             ->with('materials')
             ->firstOrFail();
 
-        return view('pages.teacher.materials', compact('stage'));
+        return view('pages.teacher.teacherTheme', compact('stage'));
     }
 
     // Fetch and display units related to the material
@@ -60,6 +60,7 @@ class TeacherDashboardController extends Controller
     {
         // Fetch chapter with related lessons
         $chapter = Chapter::with('lessons')->findOrFail($chapterId);
+        
 
         return view('pages.teacher.lessons', compact('chapter'));
     }

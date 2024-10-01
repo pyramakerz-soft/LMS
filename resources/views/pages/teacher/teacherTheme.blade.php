@@ -5,9 +5,9 @@
 @endsection
 
 @php
-    $menuItems = [
-        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('student.theme')],
-        ['label' => 'Assignment', 'icon' => 'fas fa-home', 'route' => route('student.assignment')],
+   $menuItems = [
+        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
+        ['label' => 'Assignments', 'icon' => 'fas fa-home', 'route' => route('assignments.index')],
     ];
 
 @endphp
@@ -17,27 +17,19 @@
 
 
 @section('content')
-    <div class="p-3">
+    <div class="p-5">
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
-                    {{-- <img class="w-20 h-20 rounded-full" alt="avatar1" src="{{ Auth::guard('student')->user()->image }}" /> --}}
-                    @if ($userAuth->image)
-                        <img src="{{ asset('storage/' . $userAuth->image) }}" alt="Student Image"
-                            class="w-20 h-20 rounded-full object-cover">
-                    @else
-                        <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
-                            class="w-30 h-20 rounded-full object-cover">
-                    @endif
+                    <img class="w-20 h-20 rounded-full" alt="avatar" src="{{ Auth::guard('teacher')->user()->image }}" />
                 </div>
 
                 <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
                     <div class="text-xl">
-                        {{ $userAuth->username }}
+                        {{ Auth::guard('teacher')->user()->username }}
                     </div>
                     <div class="text-sm">
-                        {{ $userAuth->stage->name }}
-
+                        {{ Auth::guard('teacher')->user()->school->name }}
                     </div>
                 </div>
             </div>
@@ -48,28 +40,36 @@
                     class="absolute -top-2 -right-2 bg-black border-2 border-white text-white rounded-full text-[10px] px-1 py-0.25">5</span>
             </div>
         </div>
+        @yield('insideContent')
     </div>
+
     <div class="p-3 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
         <span class="mx-2 text-[#D0D5DD]">/</span>
+        <a href="{{ route('teacher.dashboard') }}" class="mx-2 cursor-pointer">Grade</a>
+        <span class="mx-2 text-[#D0D5DD]">/</span>
+        <a href="{{route('teacher.info', $stage->id) }}" class="mx-2 cursor-pointer">Material</a>
+        <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="#" class="mx-2 cursor-pointer">Theme</a>
+
     </div>
     <div class="p-3 flex flex-wrap justify-start">
-        @foreach ($materials as $material)
+        {{-- @dd($stage->materials) --}}
+        @foreach ($stage->materials as $material)
             <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white shadow-md rounded-xl min-h-[380px]">
                 <div class="h-full">
                     <a class="cursor-pointer h-full flex flex-col justify-between"
-                        href="{{ route('student_units.index', $material->id) }}">
+                        href="{{ route('teacher.units' ,$material->id ) }}">
                         @if ($material->image)
                           
-                            <img src="{{ asset('storage/' . $material->image) }}" alt="{{ $material->title }}"
+                            <img src="{{ asset('storage/' . $material->image) }}" alt="{{ $material->name }}"
                                 class="object-cover object-top w-full h-[350px] rounded-xl">
                         @else
                             No Image
                         @endif
                         <div class="text-slate-800">
                             <div class="flex justify-between items-center text-2xl">
-                                <p class="font-semibold">{{ $material->title }}</p>
+                                <p class="font-semibold">{{ $material->name }}</p>
                                 <button class="pt-2"
                                     onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');">
                                     <img src="{{ asset('images/Clip path group.png') }}">
@@ -112,14 +112,14 @@
             </div>
         </div>
         {{-- Put the EBook Here --}}
-        <embed src="{{ asset('storage/' . $material->file_path . '/Index.html') }}" width="100%" height="90%" />
+        <embed src="{{ $material->file_path }}" width="100%" height="90%" />
 
     </div>
 </div>
 
 {{-- How To Use Modal --}}
-<div id="use" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-10 hidden">
-    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll w-[90%]">
+<div id="use" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-10">
+    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll">
         <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <h3 class="text-lg font-semibold text-gray-900">
                 How To Use
@@ -130,13 +130,13 @@
             </div>
         </div>
         {{-- Put the How To Use Here --}}
-        <embed src="{{ asset('storage/' . $material->how_to_use . '/Index.html') }}" width="100%" height="90%" />
+        <embed src="{{ asset('storage/' . $material->how_to_use . '/Index.html') }}" width="800px" height="2100px" />
     </div>
 </div>
 
 {{-- Learning Modal --}}
-<div id="learn" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-10 hidden">
-    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll w-[90%]">
+<div id="learn" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-10">
+    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll">
         <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <h3 class="text-lg font-semibold text-gray-900">
                 Learning
@@ -147,7 +147,7 @@
             </div>
         </div>
         {{-- Put the Learning Here --}}
-        <embed src="{{ asset('storage/' . $material->learning . '/Index.html') }}" width="100%" height="90%" />
+        <embed src="{{ asset('storage/' . $material->learning . '/Index.html') }}" width="800px" height="2100px" />
     </div>
 </div>
 

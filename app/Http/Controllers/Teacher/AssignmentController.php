@@ -13,18 +13,31 @@ class AssignmentController extends Controller
      */
     public function index()
     {
-        $Assignment = Assignment::where("teacher_id", auth()->user()->id)->with(relations: 'school')->with('lesson')->orderBy("created_at","desc")->get();
+        $userAuth = auth()->guard('teacher')->user();
 
-        return view("pages.teacher.assignment.index", compact("Assignment"));
+        if ($userAuth) {
+            $Assignment = Assignment::where("teacher_id", auth()->user()->id)->with(relations: 'school')->with('lesson')->orderBy("created_at","desc")->get();
+    
+            return view("pages.teacher.assignment.index", compact("Assignment", "userAuth"));
+        } else {
+            return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+        }
     }
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $lessons = Lesson::all();
-        $schools = School::all();
-        return view('pages.teacher.assignment.create', compact('lessons', 'schools'));
+        $userAuth = auth()->guard('teacher')->user();
+
+        if ($userAuth) {
+            $lessons = Lesson::all();
+            $schools = School::all();
+    
+            return view('pages.teacher.assignment.create', compact('lessons', 'schools', "userAuth"));
+        } else {
+            return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+        }
     }
     /**
      * Store a newly created resource in storage.
@@ -107,36 +120,42 @@ class AssignmentController extends Controller
      */
     public function edit(string $id)
     {
-        $assignment = Assignment::findOrFail($id);
+        $userAuth = auth()->guard('teacher')->user();
 
-        // Fetch all lessons and schools
-        $lessons = Lesson::all();
-        $schools = School::all();
-
-        // Fetch stages for the selected school
-        $stages = DB::table('school_stage')
-            ->where('school_id', $assignment->school_id)
-            ->join('stages', 'school_stage.stage_id', '=', 'stages.id')
-            ->select('stages.id', 'stages.name')
-            ->get();
-
-        // Fetch the selected stage from the `assignment_stage` table
-        $selectedStage = DB::table('assignment_stage')
-            ->where('assignment_id', $assignment->id)
-            ->value('stage_id');
-
-        // Fetch all students of the selected stage
-        $students = DB::table('students')
-            ->where('stage_id', $selectedStage)
-            ->get();
-
-        // Fetch the selected students from `assignment_student` table
-        $selectedStudents = DB::table('assignment_student')
-            ->where('assignment_id', $assignment->id)
-            ->pluck('student_id')
-            ->toArray();
-
-        return view('pages.teacher.assignment.Edit', compact('assignment', 'lessons', 'schools', 'stages', 'students', 'selectedStage', 'selectedStudents'));
+        if ($userAuth) {
+            $assignment = Assignment::findOrFail($id);
+    
+            // Fetch all lessons and schools
+            $lessons = Lesson::all();
+            $schools = School::all();
+    
+            // Fetch stages for the selected school
+            $stages = DB::table('school_stage')
+                ->where('school_id', $assignment->school_id)
+                ->join('stages', 'school_stage.stage_id', '=', 'stages.id')
+                ->select('stages.id', 'stages.name')
+                ->get();
+    
+            // Fetch the selected stage from the `assignment_stage` table
+            $selectedStage = DB::table('assignment_stage')
+                ->where('assignment_id', $assignment->id)
+                ->value('stage_id');
+    
+            // Fetch all students of the selected stage
+            $students = DB::table('students')
+                ->where('stage_id', $selectedStage)
+                ->get();
+    
+            // Fetch the selected students from `assignment_student` table
+            $selectedStudents = DB::table('assignment_student')
+                ->where('assignment_id', $assignment->id)
+                ->pluck('student_id')
+                ->toArray();
+    
+            return view('pages.teacher.assignment.Edit', compact('assignment', 'lessons', 'schools', 'stages', 'students', 'selectedStage', 'selectedStudents',  "userAuth"));
+        } else {
+            return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+        }
     }
     /**
      * Update the specified resource in storage.

@@ -24,6 +24,7 @@ class ChapterController extends Controller
     }
     public function showLessons($chapterId)
     {
+        @dd("vfx");
         $userAuth = auth()->guard('student')->user();
         if ($userAuth) {
             $chapter = Chapter::findOrFail($chapterId);

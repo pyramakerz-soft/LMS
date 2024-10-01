@@ -180,6 +180,15 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::get('/units/{unitId}/chapters', [TeacherDashboardController::class, 'showChapters'])->name('teacher.chapters.index');
     Route::get('/chapters/{chapterId}/lessons', [TeacherDashboardController::class, 'showLessons'])->name('teacher.lessons.index');
 
+
+    Route::get('/teacher/info/{id}', function ($id) {
+        return view('pages.teacher.info', compact('id'));
+    })->name('teacher.info');
+
+    Route::get('/teacher/theme', function () {
+        return view('pages.teacher.teacherTheme');
+    })->name('teacher.TTheme');
+
     // Example route to show units for a material (adapt as needed)
 
 
