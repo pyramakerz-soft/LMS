@@ -14,21 +14,42 @@ class StudentAssessmentController extends Controller
      * Display a listing of the resource.
      */
 
-    public function index()
-    {
-        $userAuth = auth()->guard('student')->user();
-        if ($userAuth) {
-            $students = Student::with([
-                'studentAssessment' => function ($query) {
-                    $query->latest(); // Fetch the latest assessment for each student
-                }
-            ])->get();
+    // public function index()
+    // {
+    //     $userAuth = auth()->guard('student')->user();
+    //     if ($userAuth) {
+    //         $students = Student::with([
+    //             'studentAssessment' => function ($query) {
+    //                 $query->latest(); // Fetch the latest assessment for each student
+    //             }
+    //         ])->get();
 
-            return view('pages.teacher.assessments.index', compact('students', "userAuth"));
+    //         return view('pages.teacher.assessments.index', compact('students', "userAuth"));
+    //     } else {
+    //         return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+    //     }
+
+    // }
+    public function index(Request $request)
+    {
+        $userAuth = auth()->guard('teacher')->user();
+        if ($userAuth) {
+            // Get the class_id from the request
+            $classId = $request->input('class_id');
+
+            // Retrieve the students for the selected class
+            $students = Student::where('class_id', $classId)
+                ->with([
+                    'studentAssessment' => function ($query) {
+                        $query->latest(); // Fetch the latest assessment for each student
+                    }
+                ])
+                ->get();
+
+            return view('pages.teacher.assessments.index', compact('students', 'userAuth'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
-
     }
 
 

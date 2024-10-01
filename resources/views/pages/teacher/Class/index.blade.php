@@ -49,7 +49,8 @@
 
     <!-- Display Chapters -->
     @foreach ($classesTeachers as $classesTeacher)
-        <a href="{{ route('assessments.index') }}" class="h-[350px] bg-white shadow-md border border-slate-200 rounded-md">
+        <a href="{{ route('assessments.index', ['class_id' => $classesTeacher->class->id]) }}"
+            class="h-[350px] bg-white shadow-md border border-slate-200 rounded-md">
             {{-- @dd($classesTeacher) --}}
             <h3 class="">{{ $classesTeacher->class->name }}</h3>
 
@@ -60,4 +61,17 @@
             </div>
         </a>
     @endforeach
+
+    {{-- @foreach ($classesTeachers as $classesTeacher)
+        <a href="{{ route('assessments.index', ['class_id' => $classesTeacher->class->id]) }}"
+            class="h-[350px] bg-white shadow-md border border-slate-200 rounded-md">
+            <h3 class="">{{ $classesTeacher->class->name }}</h3>
+
+            <!-- Chapter Image -->
+            <div class="p-4">
+                <img src="{{ $classesTeacher->class->image ? asset($classesTeacher->class->image) : asset('images/default-material.png') }}"
+                    alt="{{ $classesTeacher->class->name }}" class="object-cover w-full h-32 rounded-md">
+            </div>
+        </a>
+    @endforeach --}}
 @endsection
