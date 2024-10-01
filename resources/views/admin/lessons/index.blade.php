@@ -34,7 +34,7 @@
                                 <tr>
                                     <td>{{ $lesson->title }}</td>
                                     <td>
-                                        <a href="{{ route('lesson.view', $lesson->id) }}" target="_blank"
+                                        <a href="{{ $lesson->file_path }}" 
                                             class="btn btn-success">View
 
 

@@ -23,7 +23,7 @@
                             <div class="col-md-4 col-lg-3">
                                 <div class="card mb-4 shadow-sm" style="height: 350px;">
                                     <div style="height: 250px; overflow: hidden;">
-                                        <img src="{{ asset('storage/' . $image->path) }}" alt="Image"
+                                        <img src="{{ asset($image->path) }}" alt="Image"
                                             class="card-img-top"
                                             style="height: 100%; width: 100%; object-fit: cover; cursor: pointer;"
                                             data-bs-toggle="modal" data-bs-target="#imageModal"
@@ -58,7 +58,7 @@
                                         <div class="carousel-inner">
                                             @foreach ($images as $key => $image)
                                                 <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                                    <img src="{{ asset('storage/' . $image->path) }}" class="d-block w-100"
+                                                    <img src="{{ asset($image->path) }}" class="d-block w-100"
                                                         alt="Image" style="height: 500px; object-fit: contain;">
                                                 </div>
                                             @endforeach

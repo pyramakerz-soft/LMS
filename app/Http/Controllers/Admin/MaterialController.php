@@ -104,81 +104,124 @@ class MaterialController extends Controller
 
     //     return redirect()->back()->with('success', 'Material created successfully.');
     // }
+public function store(Request $request)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'stage_id' => 'required|exists:stages,id',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+        'existing_image' => 'nullable|string',
+        'file_path' => 'required',
+        // 'file_path' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240',
+        'how_to_use' => 'required',
+        // 'how_to_use' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240',
+        'learning' => 'required',
+        // 'learning' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240',
+        'is_active' => 'nullable|boolean',
+    ]);
+// dd($request->all());
+    // Handle image upload or existing image
+    $imagePath = $request->hasFile('image') 
+        ? $request->file('image')->store('materials', 'public') 
+        : $request->existing_image;
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'stage_id' => 'required|exists:stages,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'existing_image' => 'nullable|string',
-            'file_path' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240',
-            'how_to_use' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240',
-            'learning' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240',
-            'is_active' => 'nullable|boolean',
-        ]);
+    // Handle file_path upload
+    // $filePath = $this->handleFileUpload($request->file('file_path'), 'ebooks');
+    // if ($filePath === false) {
+    //     return back()->withErrors(['file_path' => 'Failed to extract the zip file or missing index.html.']);
+    // }
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('materials', 'public');
-        } elseif ($request->existing_image) {
-            $imagePath = $request->existing_image;
-        }
+    // Handle how_to_use file upload
+    // $howToUsePath = $this->handleFileUpload($request->file('how_to_use'), 'ebooks');
+    // if ($howToUsePath === false) {
+    //     return back()->withErrors(['how_to_use' => 'Failed to extract the zip file or missing index.html.']);
+    // }
 
-        // $imagePath = $request->hasFile('image')
-        //     ? $request->file('image')->store('materials', 'public')
-        //     : null;
+    // Handle learning outcomes file upload
+    // $learningPath = $this->handleFileUpload($request->file('learning'), 'ebooks');
+    // if ($learningPath === false) {
+    //     return back()->withErrors(['learning' => 'Failed to extract the zip file or missing index.html.']);
+    // }
 
-        $filePath = $this->handleFileUpload($request->file('file_path'), 'ebooks');
-        if ($filePath === false) {
-            return back()->withErrors(['file_path' => 'Failed to extract the zip file or missing index.html.']);
-        }
-        
-        $howToUsePath = $this->handleFileUpload($request->file('how_to_use'), 'ebooks');
-        if ($howToUsePath === false) {
-            return back()->withErrors(['how_to_use' => 'Failed to extract the zip file or missing index.html.']);
-        }
+    // Create new material
+    $material = Material::create([
+        'title' => $request->title,
+        'stage_id' => $request->stage_id,
+        'image' => $imagePath,
+        'is_active' => $request->is_active ?? 0,
+        'file_path' => $request->file_path,
+        'how_to_use' => $request->how_to_use,
+        'learning' => $request->learning,
+    ]);
+// dd($material);
+    return redirect()->back()->with('success', 'Material created successfully.');
+}
 
-        $learningPath = $this->handleFileUpload($request->file('learning'), 'ebooks');
-        if ($learningPath === false) {
-            return back()->withErrors(['learning' => 'Failed to extract the zip file or missing index.html.']);
-        }
-
-        Material::create([
-            'title' => $request->title,
-            'stage_id' => $request->stage_id,
-            'image' => $imagePath,
-            'is_active' => $request->is_active ?? 0,
-            'file_path' => $filePath,
-            'how_to_use' => $howToUsePath,
-            'learning' => $learningPath,
-        ]);
-
-        return redirect()->back()->with('success', 'Material created successfully.');
+private function handleFileUpload($file, $storageFolder)
+{
+    // Check if ZipArchive is available
+    if (!class_exists('ZipArchive')) {
+        return false; // Return false if ZipArchive is not installed
     }
 
-    private function handleFileUpload($file, $storageFolder)
-    {
-        if ($file->getClientOriginalExtension() === 'zip') {
-            $storedPath = $file->store($storageFolder, 'public');
-            $extractPath = storage_path('app/public/' . $storageFolder . '/' . pathinfo($storedPath, PATHINFO_FILENAME));
+    if ($file->getClientOriginalExtension() === 'zip') {
+        $storedPath = $file->store($storageFolder, 'public');
+        $extractPath = storage_path('app/public/' . $storageFolder . '/' . pathinfo($storedPath, PATHINFO_FILENAME));
 
-            $zip = new \ZipArchive;
-            if ($zip->open(storage_path('app/public/' . $storedPath)) === TRUE) {
-                $zip->extractTo($extractPath);
+        // Ensure that the directory has write permissions
+        if (!is_writable(dirname($extractPath))) {
+            return false; // Return false if the directory is not writable
+        }
+
+        $zip = new \ZipArchive;
+        if ($zip->open(storage_path('app/public/' . $storedPath)) === TRUE) {
+            if (!$zip->extractTo($extractPath)) {
                 $zip->close();
-
-                $extractedPath = $storageFolder . '/' . pathinfo($storedPath, PATHINFO_FILENAME);
-                if (!file_exists(public_path('storage/' . $extractedPath . '/index.html'))) {
-                    return false;
-                }
-                return $extractedPath;
-            } else {
-                return false;
+                return false; // Return false if extraction fails
             }
+            $zip->close();
+
+            // Construct the path to the extracted folder
+            $extractedPath = $storageFolder . '/' . pathinfo($storedPath, PATHINFO_FILENAME);
+            if (!file_exists(public_path('storage/' . $extractedPath . '/index.html'))) {
+                return false; // Return false if index.html is missing
+            }
+
+            return $extractedPath;
         } else {
-            return $file->store($storageFolder, 'public');
+            return false; // Return false if unable to open ZIP file
         }
+    } else {
+        return $file->store($storageFolder, 'public'); // Return the stored path if not a zip file
     }
+}
+
+    
+    
+//     private function handleFileUpload($file, $storageFolder)
+//     {
+//       if ($file->getClientOriginalExtension() === 'zip') {
+//             $storedPath = $file->store($storageFolder, 'public');
+//             $extractPath = asset('/' . $storageFolder . '/' . pathinfo($storedPath, PATHINFO_FILENAME));
+//             mkdir('public/ebooks/'.$file, 0777);
+//             $zip = new \ZipArchive;
+// dd($storedPath,$extractPath,asset('/' . $storedPath),$zip->open(asset('/' . $storedPath)));
+//             if ($zip->open(asset('/' . $storedPath)) === TRUE) {
+//                 $zip->extractTo($extractPath);
+//                 $zip->close();
+
+//                 $extractedPath = $storageFolder . '/' . pathinfo($storedPath, PATHINFO_FILENAME);
+//                 if (!file_exists(public_path('/' . $extractedPath . '/index.html'))) {
+//                     return false;
+//                 }
+//                 return $extractedPath;
+//             } else {
+//                 return false;
+//             }
+//         } else {
+//             return $file->store($storageFolder, 'public');
+//         }
+//     }
 
 
     /**

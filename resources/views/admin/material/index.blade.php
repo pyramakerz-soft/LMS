@@ -24,6 +24,9 @@
                                 <th>Title</th>
                                 <th>Grade</th>
                                 <th>Image</th>
+                                <th>Ebook info</th>
+                                <th>Ebook learning</th>
+                                <th>Ebook how to use</th>
                                 <th>Active</th>
                                 <th>Actions</th>
                             </tr>
@@ -41,6 +44,9 @@
                                             No Image
                                         @endif
                                     </td>
+                                    <td><a href="{{ $material->file_path }}" > File info</a>   </td>
+                                    <td><a href="{{ $material->learning }}" > Learning</a></td>
+                                    <td><a href="{{ $material->how_to_use }}" > How to use</a></td>
                                     <td>{{ $material->is_active ? 'Active' : 'Inactive' }}</td>
                                     <td>
                                         <a href="{{ route('material.edit', $material->id) }}" class="btn btn-info">Edit</a>

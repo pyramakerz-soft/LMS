@@ -45,7 +45,14 @@
                         </div>
                         <div class="mb-3">
                             <label for="file_path" class="form-label">Upload Ebook </label>
-                            <input type="file" name="file_path" class="form-control" id="file_path" required>
+                             <select name="file_path" class="form-control" id="file_path">
+                                                @foreach(\App\Models\Ebook::all() as $ebook)
+                                                <option value="{{$ebook->file_path}}">
+                                                    {{ $ebook->title }}
+                                                    
+                                                </option>
+                                                @endforeach
+                                            </select>
                         </div>
 
                         <div class="mb-3 form-check">
