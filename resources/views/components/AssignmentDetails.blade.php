@@ -62,7 +62,7 @@
                 @if($assignment->link)
                     <div class="w-full">
                         <div class="flex space-x-2 items-center my-2">
-                            <img src="images/Group.png" alt="link icon">
+                            <img src="{{asset('images/Group.png')}}" alt="link icon">
                             <a href="{{ $assignment->link }}" target="_blank" class="underline text-black font-semibold">{{ $assignment->link }}</a>
                         </div>
                     </div>

@@ -66,7 +66,7 @@
                         <!-- Stage Image -->
                         <div class="p-4">
 
-                            <img src="{{ $stage->image ? asset('storage/' . $stage->image) : asset('images/default-stage.png') }}"
+                            <img src="{{ $stage->image ? asset($stage->image) : asset('images/default-stage.png') }}"
                             alt="{{ $stage->name }}" class="object-cover w-full h-45 rounded-md">
 
                         </div>

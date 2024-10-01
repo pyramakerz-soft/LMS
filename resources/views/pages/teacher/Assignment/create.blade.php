@@ -19,7 +19,7 @@
                 <div>
                     {{-- <img class="w-20 h-20 rounded-full" alt="avatar1" src="{{ Auth::guard('student')->user()->image }}" /> --}}
                     @if ($userAuth->image)
-                        <img src="{{ asset('storage/' . $userAuth->image) }}" alt="Student Image"
+                        <img src="{{ asset($userAuth->image) }}" alt="Student Image"
                             class="w-20 h-20 rounded-full object-cover">
                     @else
                         <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
@@ -165,7 +165,7 @@
     <script>
         document.getElementById('school_id').addEventListener('change', function() {
             let schoolId = this.value;
-            fetch(`/teacher/api/schools/${schoolId}/stages`)
+            fetch(`/LMS/lms_pyramakerz/public/teacher/api/schools/${schoolId}/stages`)
                 .then(response => response.json())
                 .then(data => {
                     let stageSelect = document.getElementById('stage_id');
@@ -177,7 +177,7 @@
         });
         document.getElementById('stage_id').addEventListener('change', function() {
             let stageId = this.value;
-            fetch(`/teacher/api/stages/${stageId}/students`)
+            fetch(`/LMS/lms_pyramakerz/public/teacher/api/stages/${stageId}/students`)
                 .then(response => response.json())
                 .then(data => {
                     let studentSelect = document.getElementById('student_ids');
