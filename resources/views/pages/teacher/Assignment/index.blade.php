@@ -35,12 +35,6 @@
                     {{ $userAuth->username }}
                 </div>
             </div>
-
-            <div class="relative">
-                <i class="fa-solid fa-bell text-[#FF7519] text-xl"></i>
-                <span
-                    class="absolute -top-2 -right-2 bg-black border-2 border-white text-white rounded-full text-[10px] px-1 py-0.25">5</span>
-            </div>
         </div>
         @yield('insideContent')
     </div>
