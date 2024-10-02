@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use App\Models\Student_assessment;
+use App\Models\TeacherClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,31 +14,55 @@ class StudentAssessmentController extends Controller
      * Display a listing of the resource.
      */
 
-    public function index()
+    // public function index()
+    // {
+    //     $userAuth = auth()->guard('student')->user();
+    //     if ($userAuth) {
+    //         $students = Student::with([
+    //             'studentAssessment' => function ($query) {
+    //                 $query->latest(); // Fetch the latest assessment for each student
+    //             }
+    //         ])->get();
+
+    //         return view('pages.teacher.assessments.index', compact('students', "userAuth"));
+    //     } else {
+    //         return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+    //     }
+
+    // }
+    public function index(Request $request)
     {
-        $userAuth = auth()->guard('student')->user();
+        $userAuth = auth()->guard('teacher')->user();
         if ($userAuth) {
-            $students = Student::with(['studentAssessment' => function($query) {
-                $query->latest(); // Fetch the latest assessment for each student
-            }])->get();
-        
-            return view('pages.teacher.assessments.index', compact('students', "userAuth"));
+            // Get the class_id from the request
+            $classId = $request->input('class_id');
+
+            // Retrieve the students for the selected class
+            $students = Student::where('class_id', $classId)
+                ->with([
+                    'studentAssessment' => function ($query) {
+                        $query->latest(); // Fetch the latest assessment for each student
+                    }
+                ])
+                ->get();
+
+            return view('pages.teacher.assessments.index', compact('students', 'userAuth'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
-
     }
+
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $userAuth =  Auth::user();
+        $userAuth = Auth::user();
         if ($userAuth) {
             $students = Student::where('school_id', $userAuth->school_id)
-            ->whereIn('stage_id', $userAuth->stages->pluck('id'))
-            ->get();
+                ->whereIn('stage_id', $userAuth->stages->pluck('id'))
+                ->get();
 
             return view('pages.teacher.assessments.create', compact('students', "userAuth"));
         } else {
@@ -47,7 +72,8 @@ class StudentAssessmentController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     */ public function store(Request $request)
+     */
+    public function store(Request $request)
     {
         $request->validate([
             'assessments' => 'required|array',
@@ -59,11 +85,11 @@ class StudentAssessmentController extends Controller
             'assessments.*.final_project_score' => 'nullable|integer|min:0|max:50',
         ]);
 
-        $today = now()->toDateString(); 
+        $today = now()->toDateString();
 
         foreach ($request->assessments as $assessmentData) {
             $existingAssessment = Student_assessment::where('student_id', $assessmentData['student_id'])
-                ->whereDate('created_at', $today) 
+                ->whereDate('created_at', $today)
                 ->first();
 
             if ($existingAssessment) {
@@ -72,7 +98,7 @@ class StudentAssessmentController extends Controller
 
             Student_assessment::create([
                 'student_id' => $assessmentData['student_id'],
-                'teacher_id' => Auth::id(), 
+                'teacher_id' => Auth::id(),
                 'attendance_score' => $assessmentData['attendance_score'] ?? 0,
                 'classroom_participation_score' => $assessmentData['classroom_participation_score'] ?? 0,
                 'classroom_behavior_score' => $assessmentData['classroom_behavior_score'] ?? 0,
@@ -97,14 +123,14 @@ class StudentAssessmentController extends Controller
         $userAuth = auth()->guard('teacher')->user();
         if ($userAuth) {
             $student = Student::findOrFail($student_id);
-    
+
             $assessments = Student_assessment::where('student_id', $student_id)->get();
-    
+
             return view('pages.teacher.assessments.student', compact('student', 'assessments', "userAuth"));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
-        
+
     }
     /**
      * Show the form for editing the specified resource.

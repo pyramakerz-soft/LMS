@@ -57,7 +57,7 @@
     </div>
 
     <!-- Display Stages -->
-    <div class="flex flex-wrap">
+    <div class="flex flex-wrap p-5">
             <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
                 <div class=" bg-white  ">
                     <!-- Make the stage card a link -->
@@ -90,7 +90,7 @@
             <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
                 <div class=" bg-white  ">
                     <!-- Make the stage card a link -->
-                    <a href="{{route('assessments.index')}}" class="block h-full">
+                    <a href="{{route('teacher_classes')}}" class="block h-full">
                         
                         <!-- Stage Image -->
                         <div class="p-4">

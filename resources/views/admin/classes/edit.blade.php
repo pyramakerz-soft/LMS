@@ -9,7 +9,8 @@
 
             <main class="content">
                 <div class="container-fluid p-0">
-                    <h1>Edit Student</h1>
+
+                    <h2>Edit Class</h2>
 
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -27,14 +28,23 @@
 
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" name="name" class="form-control" id="name"
-                                value="{{ $student->username }}" required>
+                            <input type="text" name="name" id="name" class="form-control"
+                                value="{{ old('name', $class->name) }}" required>
                         </div>
-
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Image (Optional)</label>
+                            <input type="file" name="image" id="image" class="form-control">
+                            @if ($class->image)
+                                <div class="mt-2">
+                                    <img src="{{ asset('storage/' . $class->image) }}" alt="Class Image" width="150">
+                                    <p>Current Image</p>
+                                </div>
+                            @endif
+                        </div>
 
                         <div class="mb-3">
                             <label for="school_id" class="form-label">School</label>
-                            <select name="school_id" class="form-control" id="school_id" required>
+                            <select name="school_id" id="school_id" class="form-control" required>
                                 @foreach ($schools as $school)
                                     <option value="{{ $school->id }}"
                                         {{ $class->school_id == $school->id ? 'selected' : '' }}>
@@ -46,7 +56,7 @@
 
                         <div class="mb-3">
                             <label for="stage_id" class="form-label">Grade</label>
-                            <select name="stage_id" class="form-control" id="stage_id" required>
+                            <select name="stage_id" id="stage_id" class="form-control" required>
                                 @foreach ($stages as $stage)
                                     <option value="{{ $stage->id }}"
                                         {{ $class->stage_id == $stage->id ? 'selected' : '' }}>
@@ -55,8 +65,6 @@
                                 @endforeach
                             </select>
                         </div>
-
-
 
                         <button type="submit" class="btn btn-primary">Update Class</button>
                     </form>

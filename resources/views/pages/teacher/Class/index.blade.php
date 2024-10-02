@@ -1,42 +1,65 @@
-@extends('pages.teacher.teacher')
+@extends('layouts.app')
 
-@section("title")
-    Class
+@section('title')
+    Classes
 @endsection
 
 @php
-    $tableDataa = [
-        [
-            'name' => 'John Doe',
-            'records' => [
-                ['attendance' => '7', 'participation' => '12', 'behavior' => '12', 'homework' => '6', 'final_project' => '50'],
-            ]
-        ],
-        [
-            'name' => 'Jane Smith',
-            'records' => [
-                ['attendance' => '7', 'participation' => '12', 'behavior' => '12', 'homework' => '6', 'final_project' => '50'],
-            ]
-        ]
-    ];
-
-    $paths = [
-        ["name" => "Grade", "url" => "teacher.theme"],
-        ["name" => "Material", "url" => "teacher.material"],
-        ["name" => "Theme", "url" => "teacher.theme"],
-        ["name" => "Unit", "url" => "teacher.unit"],
-        ["name" => "Chapter", "url" => "teacher.chapter"],
-        ["name" => "Lesson", "url" => "teacher.lesson"],
-        ["name" => "Assignments", "url" => "teacher.assignments_cards"],
-        ["name" => "Class", "url" => "teacher.class"]
-    ];
+    $menuItems = [['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')]];
 @endphp
 
-@section("InsideContent")
-    <div>
-        @include('components.path',['paths' => $paths])
+@section('sidebar')
+    @include('components.sidebar', ['menuItems' => $menuItems])
+@endsection
 
-        @include('components.GradesTable', ['tableData' => $tableDataa])
+@section('content')
+    <div class="p-5">
+        <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
+            <div class="flex items-center space-x-4">
+                <div>
+                    <img class="w-20 h-20 rounded-full" alt="avatar" src="{{ Auth::guard('teacher')->user()->image }}" />
+                </div>
 
+                <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
+                    <div class="text-xl">
+                        {{ Auth::guard('teacher')->user()->username }}
+                    </div>
+                    <div class="text-sm">
+                        {{ Auth::guard('teacher')->user()->school->name }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative">
+                <i class="fa-solid fa-bell text-[#FF7519] text-xl"></i>
+                <span
+                    class="absolute -top-2 -right-2 bg-black border-2 border-white text-white rounded-full text-[10px] px-1 py-0.25">5</span>
+            </div>
+        </div>
+        @yield('insideContent')
+    </div>
+
+    <div class="p-2 text-[#667085] my-8">
+        <i class="fa-solid fa-house mx-2"></i>
+        <span class="mx-2 text-[#D0D5DD]">/</span>
+        <a href="#" class="mx-2 cursor-pointer">Assessments</a>
+    </div>
+
+    <!-- Display Chapters -->
+    <div class="flex flex-wrap ">
+        @foreach ($classesTeachers as $classesTeacher)
+            <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
+                <a href="{{ route('assessments.index', ['class_id' => $classesTeacher->class->id]) }}" class=" bg-white ">
+                    {{-- @dd($classesTeacher) --}}
+
+                    <!-- Chapter Image -->
+                    <div class="p-4">
+                        <img src="{{ $classesTeacher->class->image ? asset($classesTeacher->class->image) : asset('images/default-material.png') }}"
+                            alt="{{ $classesTeacher->class->name }}" class="object-cover w-full  rounded-md">
+                    </div>
+                    <h3 class="px-4 py-2 text-lg font-bold">{{ $classesTeacher->class->name }}</h3>
+                </a>
+            </div>
+        @endforeach
     </div>
 @endsection
