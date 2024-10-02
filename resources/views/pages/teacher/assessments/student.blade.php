@@ -23,7 +23,7 @@
                 <div>
                     {{-- <img class="w-20 h-20 rounded-full" alt="avatar1" src="{{ Auth::guard('student')->user()->image }}" /> --}}
                     @if ($userAuth->image)
-                        <img src="{{ asset('storage/' . $userAuth->image) }}" alt="Student Image"
+                        <img src="{{ asset( $userAuth->image) }}" alt="Student Image"
                             class="w-20 h-20 rounded-full object-cover">
                     @else
                         <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
@@ -49,6 +49,8 @@
     <div class="p-3">
         <div class="text-[#667085] my-8">
             <i class="fa-solid fa-house mx-2"></i>
+            <span class="mx-2 text-[#D0D5DD]">/</span>
+            <a href="{{ route("teacher_classes") }}" class="mx-2 cursor-pointer">Classes</a>
             <span class="mx-2 text-[#D0D5DD]">/</span>
             <a href="{{ route("assessments.index") }}" class="mx-2 cursor-pointer">Assessments</a>
             <span class="mx-2 text-[#D0D5DD]">/</span>
