@@ -106,7 +106,7 @@
                                         <a class="cursor-pointer h-full flex flex-col justify-between" href="{{ route('teacher.lessons.index', $chapter->id) }}">
                                             <div class="overflow-hidden">
                                                 @if ($chapter->image)
-                                                    <img src="{{ asset('assets/img/teacherInfo2.png') }}"
+                                                    <img src="{{ asset($chapter->image) }}"
                                                         class="object-contain w-full rounded-xl" alt="{{ $chapter->name }}">
                                                 @else
                                                     <img src="https://via.placeholder.com/150"
