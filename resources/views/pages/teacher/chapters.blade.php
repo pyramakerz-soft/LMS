@@ -15,7 +15,7 @@
 @endsection
 
 @section('content')
-    <div class="p-5">
+    <div class="p-3">
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
@@ -35,7 +35,7 @@
         @yield('insideContent')
     </div>
 
-    <div class="p-2 text-[#667085] my-8">
+    <div class="p-3 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="{{ route('teacher.dashboard') }}" class="mx-2 cursor-pointer">Dashboard</a>
@@ -46,7 +46,7 @@
     <!-- Display Chapters -->
     <div class="flex flex-wrap">
         @foreach ($unit->chapters as $chapter)
-            <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
+            <div class="w-full sm:w-1/2 lg:w-1/4 p-3">
                 <!-- Make the card a clickable link -->
                 <a href="{{ route('teacher.lessons.index', $chapter->id) }}" class="block">
                     <div class="h-[350px] bg-white shadow-md border border-slate-200 rounded-md">

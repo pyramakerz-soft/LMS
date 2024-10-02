@@ -47,7 +47,7 @@
             </div>
         @endif
         @foreach ($classesTeachers as $classesTeacher)
-            <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
+            <div class="w-full sm:w-1/2 lg:w-1/4 p-3">
                 <a href="{{ route('assessments.index', ['class_id' => $classesTeacher->class->id]) }}" class=" bg-white ">
                     {{-- @dd($classesTeacher) --}}
 
