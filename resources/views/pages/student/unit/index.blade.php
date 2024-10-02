@@ -60,9 +60,10 @@
         <div id="accordion-collapse " class="w-full p-3">
             <div class="mb-5 ">
                 @foreach ($material->units as $unit)
+                <div class="m-3">
                     <h2 id="accordion-collapse-heading-{{ $unit->id }}">
                         <button type="button"
-                            class="accordion-button flex items-center justify-between w-full p-3 font-medium rtl:text-right text-gray-500 border border-gray-200 dark:border-gray-700 dark:text-gray-400 hover:bg-[#2E3646] rounded-md gap-3"
+                             class="accordion-button flex items-center justify-between w-full p-8 font-medium rtl:text-right text-gray-500 border border-gray-200 dark:border-gray-700 dark:text-gray-400 hover:bg-[#2E3646] rounded-md gap-3 "
                             data-accordion-target="#accordion-collapse-body-{{ $unit->id }}" aria-expanded="false"
                             aria-controls="accordion-collapse-body-{{ $unit->id }}">
                             <span> {{ $unit->title }}</span>
@@ -102,6 +103,7 @@
                             @endforeach
                         </div>
                     </div>
+                </div>
                 @endforeach
 
             </div>
