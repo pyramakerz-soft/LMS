@@ -192,8 +192,6 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     })->name('teacher.TTheme');
 
     // Example route to show units for a material (adapt as needed)
-
-
 });
 
 Route::get('/create_assignment', function () {
