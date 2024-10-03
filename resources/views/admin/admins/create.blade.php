@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="card-body">
                     <div class="mb-3">
                         <label for="class_name_${classCount}" class="form-label">Class Name</label>
-                        <input type="text" name="classes[${classCount}][class_name]" class="form-control" id="class_name_${classCount}" placeholder="Enter class name" required>
+                        <input type="text" name="classes[${classCount}][name]" class="form-control" id="class_name_${classCount}" placeholder="Enter class name" required>
                     </div>
 
                     <div class="mb-3">
@@ -147,6 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Event listener to add a new class group
     addClassBtn.addEventListener('click', addClassField);
 });
+
 
 </script>
 @endsection
