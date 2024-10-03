@@ -46,6 +46,9 @@
                                                 Delete
                                             </button>
                                         </form>
+
+                                        <!-- Import Students Button -->
+                                        <a href="{{ route('classes.import', $class->id) }}" class="btn btn-secondary">Import Students</a>
                                     </td>
                                 </tr>
                             @endforeach

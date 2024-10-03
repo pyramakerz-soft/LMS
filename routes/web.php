@@ -80,7 +80,9 @@ Route::prefix('admin')->group(function () {
         Route::delete('/schools/{schoolId}/chapters/{chapterId}', [AdminController::class, 'removeChapter'])->name('school.removeChapter');
         Route::delete('/schools/{schoolId}/lessons/{lessonId}', [AdminController::class, 'removeLesson'])->name('school.removeLesson');
         // Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-
+        Route::get('classes/{id}/import', [ClassController::class, 'showImportForm'])->name('classes.import');
+        Route::post('classes/{id}/import', [ClassController::class, 'importStudents'])->name('classes.importStudents');
+        
 
         Route::get('/api/schools/{school}/stages', function (School $school) {
             return response()->json($school->stages);
