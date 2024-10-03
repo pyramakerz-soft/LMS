@@ -18,7 +18,7 @@ class TeacherClasses extends Controller
             $classesTeachers = TeacherClass::where('teacher_id', $userAuth->id)->get();
 
 
-            return view('pages.teacher.class.index', compact('classesTeachers', "userAuth"));
+            return view('pages.teacher.Class.index', compact('classesTeachers', "userAuth"));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }

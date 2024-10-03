@@ -23,7 +23,7 @@
                 <div>
                     {{-- <img class="w-20 h-20 rounded-full" alt="avatar1" src="{{ Auth::guard('student')->user()->image }}" /> --}}
                     @if ($userAuth->image)
-                        <img src="{{ asset( $userAuth->image) }}" alt="Student Image"
+                        <img src="{{ asset($userAuth->image) }}" alt="Student Image"
                             class="w-20 h-20 rounded-full object-cover">
                     @else
                         <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"

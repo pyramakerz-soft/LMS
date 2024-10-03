@@ -14,7 +14,6 @@
     @include('components.sidebar', ['menuItems' => $menuItems])
 @endsection
 
-
 @section('content')
     <div class="p-3">
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
@@ -62,7 +61,7 @@
                         @endif
                         <div class="text-slate-800">
                             <div class="flex justify-between items-center text-2xl">
-                                <p class="font-semibold">{{ $material->name }}</p>
+                                <p class="font-semibold">{{ $material->title }}</p>
                                 <button class="pt-2"
                                     onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');">
                                     <img src="{{ asset('images/Clip path group.png') }}">
@@ -112,7 +111,7 @@
 
 {{-- How To Use Modal --}}
 <div id="use" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-10">
-    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll">
+    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll w-[90%]">
         <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <h3 class="text-lg font-semibold text-gray-900">
                 How To Use
@@ -123,13 +122,13 @@
             </div>
         </div>
         {{-- Put the How To Use Here --}}
-        <embed src="{{ $material->how_to_use }}" width="800px" height="2100px" />
+        <embed src="{{ $material->how_to_use }}" width="100%" height="90%" />
     </div>
 </div>
 
 {{-- Learning Modal --}}
 <div id="learn" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-10">
-    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll">
+    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll w-[90%]">
         <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <h3 class="text-lg font-semibold text-gray-900">
                 Learning
@@ -140,7 +139,7 @@
             </div>
         </div>
         {{-- Put the Learning Here --}}
-        <embed src="{{ $material->learning }}" width="800px" height="2100px" />
+        <embed src="{{ $material->learning }}" width="100%" height="90%" />
     </div>
 </div>
 

@@ -31,7 +31,7 @@
     
                 <div class="w-full text-start">
                     <label htmlFor="text" class="h-4 font-medium text-[#344054] block mb-1" >
-                        Email
+                        Username
                     </label>
                     <input id="email" name="username" type="text" placeholder="Enter your username" 
                     class="h5 w-full bg-white border rounded border-[#D0D5DD] shadow-sm shadow-[#1018280D] h-[22%]  py-[7.5px] px-[10.5px]"   [(ngModel)]="email">

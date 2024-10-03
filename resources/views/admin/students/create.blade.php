@@ -88,7 +88,7 @@
                     .then(response => response.json())
                     .then(data => {
                         let stageSelect = document.getElementById('stage_id');
-                        stageSelect.innerHTML = '<option value="">Select Stage</option>';
+                        stageSelect.innerHTML = '<option value="">Select Grade</option>';
                         data.forEach(stage => {
                             stageSelect.innerHTML +=
                                 `<option value="${stage.id}">${stage.name}</option>`;

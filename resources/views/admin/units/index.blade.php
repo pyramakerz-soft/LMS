@@ -32,7 +32,7 @@
                             @foreach ($units as $unit)
                                 <tr>
                                     <td>{{ $unit->title }}</td>
-                                    <td>{{ $unit->material->title }}</td>
+                                    <td>{{ $unit->material->title ?? ' '}}</td>
                                     <td>
                                         @if ($unit->image)
                                             <img src="{{ asset( $unit->image) }}" alt="{{ $unit->title }}"
