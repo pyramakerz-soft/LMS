@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Material;
 use App\Models\School;
 use App\Models\SchoolType;
 use App\Models\Stage;
@@ -37,8 +38,12 @@ class AdminController extends Controller
      */
     public function create()
     {
-        $types = SchoolType::get();
-        return view('admin.admins.create', compact('types'));
+        $stages = Stage::all();
+        $themes = Material::all();
+        $types = Type::get();
+
+        return view('admin.admins.create', compact('stages', 'themes', 'types'));
+
     }
 
     /**
@@ -46,12 +51,14 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
+    
         $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
             'type_id' => 'required|exists:types,id',
         ]);
+
 
         $school = School::create([
             'name' => $request->name,
@@ -60,6 +67,9 @@ class AdminController extends Controller
             'city' => $request->city,
             'type_id' => $request->type_id,
         ]);
+
+
+        
 
         // Admin::create([
         //     'name' => $request->admin_name,
