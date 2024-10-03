@@ -22,6 +22,12 @@
                 </a>
             </li>
 
+            <li class="sidebar-item {{ request()->is('admin/types') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('types.index') }}">
+                    <i class="align-middle" data-feather="types"></i> <span class="align-middle">
+                        Types</span>
+                </a>
+            </li>
             <li class="sidebar-item {{ request()->is('admin/admins') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('admins.index') }}">
                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">School</span>

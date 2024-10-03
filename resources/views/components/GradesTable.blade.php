@@ -94,10 +94,10 @@ $tableData = [
             <thead class="bg-[#F9FAFB]">  
                 <tr>
                     <th class="py-4 px-6 min-w-[220px] whitespace-nowrap">Name</th>
-                    <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Attendance</th>
-                    <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Classroom Participation</th>
-                    <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Classroom Behavior</th>
-                    <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Homework</th>
+                    <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">ATT</th>
+                    <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">CP</th>
+                    <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">CB</th>
+                    <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">H.W</th>
                     <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Final Project</th>
                 </tr>
             </thead>
@@ -119,13 +119,13 @@ $tableData = [
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $record['attendance'] ? $record['attendance'] : 0 }}"> 
+                                    <input class="w-[40px]" type="number"  value="{{ $record['attendance'] ? $record['attendance'] : 0 }}"> 
                                     <p>/10 </p>
                                 </div>
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{$record['participation'] ? $record['participation'] : 0 }}"> 
+                                    <input class="w-[40px]" type="number"  value="{{$record['participation'] ? $record['participation'] : 0 }}"> 
                                     <p>/20 </p>
                                 </div>
                             </td>
@@ -152,7 +152,7 @@ $tableData = [
                     <tr class="border-t border-gray-300 text-lg md:text-xl bg-[#DFE6FF]">
                         <td class="py-5 px-6">
                             <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                <input class="w-[40px]" type="number"> 
+                                <input class="w-[40px]" max="10" min="0" type="number"> 
                                 <p>/10 </p>
                             </div>
                         </td>

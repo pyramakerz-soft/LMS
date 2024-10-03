@@ -77,72 +77,72 @@ div#learn {
             sidebar.classList.toggle('hidden');
         });
        // Blur the content if Print Screen is pressed
-    document.addEventListener('keyup', function(e) {
-        if (e.key === 'PrintScreen') {
-            // Adding a blur effect
-            document.body.style.filter = 'blur(10px)';
-            setTimeout(() => {
-                document.body.style.filter = 'none';
-            }, 1000); // Revert the blur effect after 1 second
-            // alert("Screenshot feature is disabled for this page.");
-        }
-    });
+    // document.addEventListener('keyup', function(e) {
+    //     if (e.key === 'PrintScreen') {
+    //         // Adding a blur effect
+    //         document.body.style.filter = 'blur(10px)';
+    //         setTimeout(() => {
+    //             document.body.style.filter = 'none';
+    //         }, 1000); // Revert the blur effect after 1 second
+    //         // alert("Screenshot feature is disabled for this page.");
+    //     }
+    // });
 
-    // Disable context menu (right-click)
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        // alert("Right-click is disabled on this page.");
-    });
+    // // Disable context menu (right-click)
+    // document.addEventListener('contextmenu', function(e) {
+    //     e.preventDefault();
+    //     // alert("Right-click is disabled on this page.");
+    // });
 
-    // Disable certain key combinations (Ctrl+U, Ctrl+Shift+I, F12)
-    document.onkeydown = function(e) {
-        if (e.keyCode === 123) { // F12
-            return false;
-        }
-        if (e.ctrlKey && e.shiftKey && e.keyCode === 'I'.charCodeAt(0)) {
-            return false;
-        }
-        if (e.ctrlKey && e.shiftKey && e.keyCode === 'J'.charCodeAt(0)) {
-            return false;
-        }
-        if (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0)) {
-            return false;
-        }
-    };
+    // // Disable certain key combinations (Ctrl+U, Ctrl+Shift+I, F12)
+    // document.onkeydown = function(e) {
+    //     if (e.keyCode === 123) { // F12
+    //         return false;
+    //     }
+    //     if (e.ctrlKey && e.shiftKey && e.keyCode === 'I'.charCodeAt(0)) {
+    //         return false;
+    //     }
+    //     if (e.ctrlKey && e.shiftKey && e.keyCode === 'J'.charCodeAt(0)) {
+    //         return false;
+    //     }
+    //     if (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0)) {
+    //         return false;
+    //     }
+    // };
 
-    // Adding an overlay to make screenshot capturing difficult
-    const screenshotProtector = document.createElement('div');
-    screenshotProtector.className = 'screenshot-protector';
-    document.body.appendChild(screenshotProtector);
+    // // Adding an overlay to make screenshot capturing difficult
+    // const screenshotProtector = document.createElement('div');
+    // screenshotProtector.className = 'screenshot-protector';
+    // document.body.appendChild(screenshotProtector);
 
-    // Add styles for the screenshot protector
-    const style = document.createElement('style');
-    style.innerHTML = `
-        .screenshot-protector {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(255, 255, 255, 0.01);
-            pointer-events: none;
-            z-index: 9999;
-        }
-    `;
-    document.head.appendChild(style);
+    // // Add styles for the screenshot protector
+    // const style = document.createElement('style');
+    // style.innerHTML = `
+    //     .screenshot-protector {
+    //         position: fixed;
+    //         top: 0;
+    //         left: 0;
+    //         width: 100vw;
+    //         height: 100vh;
+    //         background: rgba(255, 255, 255, 0.01);
+    //         pointer-events: none;
+    //         z-index: 9999;
+    //     }
+    // `;
+    // document.head.appendChild(style);
 
-    $(window).on('blur', function() {
-        $('#content').hide(); // Hide content
-        $('#blackout').show(); // Show black overlay
-    });
+    // $(window).on('blur', function() {
+    //     $('#content').hide(); // Hide content
+    //     $('#blackout').show(); // Show black overlay
+    // });
 
-    $(window).on('focus', function() {
-         setTimeout(function() {
-        $('#blackout').hide();
-    }, 2000); 
-         // Hide black overlay
-        $('#content').show(); // Show content
-    });
+    // $(window).on('focus', function() {
+    //      setTimeout(function() {
+    //     $('#blackout').hide();
+    // }, 2000); 
+    //      // Hide black overlay
+    //     $('#content').show(); // Show content
+    // });
 
     </script>
 

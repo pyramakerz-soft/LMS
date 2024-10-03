@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\School;
+use App\Models\SchoolType;
 use App\Models\Stage;
 use App\Models\Student;
 use App\Models\Teacher;
+use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -35,7 +37,8 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('admin.admins.create');
+        $types = SchoolType::get();
+        return view('admin.admins.create', compact('types'));
     }
 
     /**
@@ -47,7 +50,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
-            'type' => 'required|in:international,national',
+            'type_id' => 'required|exists:types,id',
         ]);
 
         $school = School::create([
@@ -55,7 +58,7 @@ class AdminController extends Controller
             'is_active' => 1,
             'address' => $request->address,
             'city' => $request->city,
-            'type' => $request->type,
+            'type_id' => $request->type_id,
         ]);
 
         // Admin::create([
@@ -83,7 +86,8 @@ class AdminController extends Controller
     public function edit($id)
     {
         $school = School::findOrFail($id);
-        return view('admin.admins.edit', compact('school'));
+        $types = Type::all();
+        return view('admin.admins.edit', compact('school', 'types'));
     }
 
 
@@ -98,7 +102,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
-            'type' => 'required|in:international,national',
+            'type_id' => 'required|exists:types,id',
             'is_active' => 'required|boolean',
         ]);
 
@@ -107,7 +111,7 @@ class AdminController extends Controller
             'name' => $request->name,
             'address' => $request->address,
             'city' => $request->city,
-            'type' => $request->type,
+            'type_id' => $request->type_id,
             'is_active' => $request->is_active,
         ]);
 

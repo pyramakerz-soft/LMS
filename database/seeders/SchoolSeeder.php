@@ -18,7 +18,6 @@ class SchoolSeeder extends Seeder
             'is_active' => 1,
             'address' => 'Zezinia',
             'city' => 'Cairo',
-            'type' => 'international',
         ]);
 
         School::create([
@@ -26,7 +25,6 @@ class SchoolSeeder extends Seeder
             'is_active' => 1,
             'address' => 'Zezinia',
             'city' => 'Alexandria',
-            'type' => 'national',
         ]);
     }
 }
