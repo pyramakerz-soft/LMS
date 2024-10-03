@@ -86,6 +86,7 @@ class StudentAssessmentController extends Controller
         ]);
 
         $today = now()->toDateString();
+         
 
         foreach ($request->assessments as $assessmentData) {
             $existingAssessment = Student_assessment::where('student_id', $assessmentData['student_id'])
@@ -95,6 +96,7 @@ class StudentAssessmentController extends Controller
             if ($existingAssessment) {
                 continue;
             }
+          
 
             Student_assessment::create([
                 'student_id' => $assessmentData['student_id'],
@@ -106,8 +108,11 @@ class StudentAssessmentController extends Controller
                 'final_project_score' => $assessmentData['final_project_score'] ?? 0,
             ]);
         }
+$userAuth = auth()->guard('teacher')->user();
+$student = $assessmentData['student_id'];
+$assessments = Student_assessment::where('student_id', $assessmentData['student_id'])->get();
 
-        return redirect()->route('assessments.index')->with('success', 'Assessments added successfully.');
+        return view('pages.teacher.assessments.student', compact('student', 'assessments', "userAuth"))->with('success', 'Assessments added successfully.');
     }
 
 

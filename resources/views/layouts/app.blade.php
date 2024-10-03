@@ -18,10 +18,38 @@
     <link rel='stylesheet'
         href='https://cdn-uicons.flaticon.com/2.5.1/uicons-regular-straight/css/uicons-regular-straight.css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    .screenshot-protector {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.001); /* Very low opacity */
+    pointer-events: none;
+    z-index: 9999;
+}
+.bg-white.rounded-lg.shadow-lg.h-\[95vh\].overflow-y-scroll.w-\[9\*.\30 \%\] , .bg-white.rounded-lg.shadow-lg.h-\[95vh\].overflow-y-scroll.w-\[90\%\] {
+    width: 60%;
+}
+div#ebook ,
+div#use ,
+div#learn {
+    width: 125%;
+}
 
+@media (max-width: 991px) {
+    body {
+        display: none;
+    }
+}
+</style>
 </head>
 
 <body>
+    <div class="screenshot-protector"></div>
+<div id="blackout" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: black; z-index: 9999;"></div>
+
     <div class="grid grid-cols-12">
         <div id="sidebar"
             class="lg:col-span-3 bg-[#17253E] min-h-[100vh] h-full border-r-[1.33px] border-[#2E3545] hidden lg:block absolute lg:static lg:z-auto z-20 transform translate-y-16 lg:translate-y-0">
@@ -42,13 +70,82 @@
     </div>
 
     @yield('login')
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         document.getElementById('burger').addEventListener('click', function() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('hidden');
         });
+       // Blur the content if Print Screen is pressed
+    document.addEventListener('keyup', function(e) {
+        if (e.key === 'PrintScreen') {
+            // Adding a blur effect
+            document.body.style.filter = 'blur(10px)';
+            setTimeout(() => {
+                document.body.style.filter = 'none';
+            }, 1000); // Revert the blur effect after 1 second
+            // alert("Screenshot feature is disabled for this page.");
+        }
+    });
+
+    // Disable context menu (right-click)
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        // alert("Right-click is disabled on this page.");
+    });
+
+    // Disable certain key combinations (Ctrl+U, Ctrl+Shift+I, F12)
+    document.onkeydown = function(e) {
+        if (e.keyCode === 123) { // F12
+            return false;
+        }
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 'I'.charCodeAt(0)) {
+            return false;
+        }
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 'J'.charCodeAt(0)) {
+            return false;
+        }
+        if (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0)) {
+            return false;
+        }
+    };
+
+    // Adding an overlay to make screenshot capturing difficult
+    const screenshotProtector = document.createElement('div');
+    screenshotProtector.className = 'screenshot-protector';
+    document.body.appendChild(screenshotProtector);
+
+    // Add styles for the screenshot protector
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .screenshot-protector {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.01);
+            pointer-events: none;
+            z-index: 9999;
+        }
+    `;
+    document.head.appendChild(style);
+
+    $(window).on('blur', function() {
+        $('#content').hide(); // Hide content
+        $('#blackout').show(); // Show black overlay
+    });
+
+    $(window).on('focus', function() {
+         setTimeout(function() {
+        $('#blackout').hide();
+    }, 2000); 
+         // Hide black overlay
+        $('#content').show(); // Show content
+    });
+
     </script>
+
     @yield('page_js')
 
 </body>
