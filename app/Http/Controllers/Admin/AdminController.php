@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Material;
 use App\Models\School;
 use App\Models\Stage;
 use App\Models\Student;
@@ -35,7 +36,9 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('admin.admins.create');
+        $stages = Stage::all();
+        $themes = Material::all();
+        return view('admin.admins.create' , compact('stages' ,'themes'));
     }
 
     /**
