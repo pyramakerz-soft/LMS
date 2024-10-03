@@ -64,7 +64,8 @@ class StudentAssessmentController extends Controller
                 ->whereIn('stage_id', $userAuth->stages->pluck('id'))
                 ->get();
 
-            return view('pages.teacher.assessments.create', compact('students', "userAuth"));
+                $classId = $students[0]->class_id;
+            return view('pages.teacher.assessments.create', compact('students', "userAuth", "classId"));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
@@ -130,8 +131,8 @@ $assessments = Student_assessment::where('student_id', $assessmentData['student_
             $student = Student::findOrFail($student_id);
 
             $assessments = Student_assessment::where('student_id', $student_id)->get();
-
-            return view('pages.teacher.assessments.student', compact('student', 'assessments', "userAuth"));
+            $classId = $student->class_id;
+            return view('pages.teacher.assessments.student', compact('student', 'assessments', "userAuth", 'classId'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
@@ -182,7 +183,8 @@ $assessments = Student_assessment::where('student_id', $assessmentData['student_
     public function destroy(string $id)
     {
         $assessment = Student_assessment::findOrFail($id);
+        $classId = $assessment->class_id;
         $assessment->delete();
-        return redirect()->route('teacher.assessments.index')->with('success', 'Assessment deleted successfully.');
+        return redirect()->route('teacher.assessments.index', ['class_id' => $classId])->with('success', 'Assessment deleted successfully.');
     }
 }
