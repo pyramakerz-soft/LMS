@@ -175,11 +175,8 @@ $tableData = [
                             </div>
                         </td>
                         <td class="py-5 px-6">
-                            <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                <input class="w-[40px]" type="number"> 
-                                <p>/50 </p>
-                            </div>
-                        </td>
+   
+                        </td> 
                     </tr>
 
                     @if($loop->index != count($tableData) - 1)
