@@ -36,6 +36,7 @@ class StudentController extends Controller
         }
 
         $students = $StudentQuery->get();
+        $students = $StudentQuery->paginate(10);
         return view('admin.students.index', compact('students', 'schools', 'classes'));
     }
 
@@ -99,11 +100,13 @@ class StudentController extends Controller
      */
     public function edit(string $id)
     {
-        $student = Student::findOrFail($id);
+        $student = Student::with('classes')->findOrFail($id);
         $schools = School::all();
-        $stages = Stage::all();
+        $stages = $student->school ? $student->school->stages : []; 
+        $classes = \DB::table('groups')->where('stage_id', $student->stage_id)->get();
 
-        return view('admin.students.edit', compact('student', 'schools', 'stages'));
+        return view('admin.students.edit', compact('student', 'schools', 'stages', 'classes'));
+
     }
 
     /**
@@ -132,12 +135,10 @@ class StudentController extends Controller
             'gender' => $request->input('gender'),
             'school_id' => $request->input('school_id'),
             'stage_id' => $request->input('stage_id'),
+            'class_id' => $request->input('class_id'),
             'is_active' => $request->input('is_active') ?? 1,
         ]);
-        StudentClass::updateOrCreate(
-            ['student_id' => $student->id],
-            ['class_id' => $request->class_id]
-        );
+
         return redirect()->route('students.index')->with('success', 'Student updated successfully.');
     }
 

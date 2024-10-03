@@ -9,46 +9,41 @@
 
             <main class="content">
                 <div class="container-fluid p-0">
-                    <h1>Classes</h1>
+                    <h1>Types</h1>
 
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    <!-- Button to create a new student -->
-                    <a href="{{ route('classes.create') }}" class="btn btn-primary mb-3">Add class</a>
+                    <a href="{{ route('types.create') }}" class="btn btn-primary mb-3">Add New Type</a>
 
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>School</th>
-                                <th>Grade</th>
+                                <th>type</th>
+
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($classes as $class)
+                            @foreach ($types as $type)
                                 <tr>
-                                    <td>{{ $class->name }}</td>
-                                    <td>{{ $class->school->name }}</td>
-                                    <td>{{ $class->stage->name }}</td>
+
+                                    <td>{{ $type->name }}</td>
+
                                     <td>
-                                        <a href="{{ route('classes.edit', $class->id) }}" class="btn btn-info">Edit</a>
+                                        <a href="{{ route('types.edit', $type->id) }}" class="btn btn-info">Edit</a>
 
                                         <!-- Delete button -->
-                                        <form action="{{ route('classes.destroy', $class->id) }}" method="POST"
+                                        <form action="{{ route('types.destroy', $type->id) }}" method="POST"
                                             style="display:inline-block;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger"
-                                                onclick="return confirm('Are you sure you want to delete this class?');">
+                                                onclick="return confirm('Are you sure you want to delete this type?');">
                                                 Delete
                                             </button>
                                         </form>
-
-                                        <!-- Import Students Button -->
-                                        <a href="{{ route('classes.import', $class->id) }}" class="btn btn-secondary">Import Students</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -56,6 +51,8 @@
                     </table>
 
                 </div>
+                {{ $types->links('pagination::bootstrap-5') }}
+
             </main>
 
             @include('admin.layouts.footer')

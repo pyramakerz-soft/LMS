@@ -23,7 +23,24 @@ class TeacherClasses extends Controller
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
     }
+    public function students(string $class_id)
+    {
+        $userAuth = auth()->guard('teacher')->user();
 
+        if ($userAuth) {
+            $class = TeacherClass::with('students')->where('class_id', $class_id)->where('teacher_id', $userAuth->id)->first();
+
+            if (!$class) {
+                return redirect()->route('teacher_classes')->withErrors(['error' => 'Class not found or unauthorized access.']);
+            }
+
+            $students = $class->students;
+
+            return view('pages.teacher.Class.students', compact('students', 'class'));
+        } else {
+            return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      */

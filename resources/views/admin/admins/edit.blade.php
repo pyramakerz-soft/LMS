@@ -40,12 +40,15 @@
 
                         <!-- Type -->
                         <div class="mb-3">
-                            <label for="type" class="form-label">School Type</label>
-                            <select name="type" class="form-control" required>
-                                <option value="international" {{ $school->type == 'international' ? 'selected' : '' }}>
-                                    International</option>
-                                <option value="national" {{ $school->type == 'national' ? 'selected' : '' }}>National
-                                </option>
+                            <label for="type" class="form-label">Type</label>
+                            <select name="type_id" id="type" class="form-control">
+                                <option value="" selected disabled>Select type</option>
+                        
+                                @foreach ($types as $type)
+                                    <option value="{{ $type->id }}" {{ old('type_id') == $type->id ? 'selected' : '' }}>
+                                        {{ $type->name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
 

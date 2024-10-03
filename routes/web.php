@@ -17,11 +17,13 @@ use App\Http\Controllers\ChapterController as ControllersChapterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SchoolTypeController;
 use App\Http\Controllers\StudentAssessmentController;
 use App\Http\Controllers\Teacher\TeacherClasses;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
 use App\Http\Controllers\Teacher\TeacherUnitController;
 use App\Http\Controllers\Student\StudentAssignmentController;
+use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UnitController as ControllersUnitController;
 use App\Models\Group;
 use App\Models\School;
@@ -70,6 +72,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('teachers', TeacherController::class);
         Route::resource('admins', AdminController::class);
         Route::resource('images', ImageController::class);
+        Route::resource('types', TypeController::class);
 
         Route::get('school/{schoolId}/curriculum', [AdminController::class, 'assignCurriculum'])->name('school.curriculum.assign');
         Route::post('school/{schoolId}/curriculum', [AdminController::class, 'storeCurriculum'])->name('school.curriculum.store');
@@ -80,6 +83,8 @@ Route::prefix('admin')->group(function () {
         Route::delete('/schools/{schoolId}/chapters/{chapterId}', [AdminController::class, 'removeChapter'])->name('school.removeChapter');
         Route::delete('/schools/{schoolId}/lessons/{lessonId}', [AdminController::class, 'removeLesson'])->name('school.removeLesson');
         // Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('classes/{id}/import', [ClassController::class, 'showImportForm'])->name('classes.import');
+        Route::post('classes/{id}/import', [ClassController::class, 'importStudents'])->name('classes.importStudents');
 
 
         Route::get('/api/schools/{school}/stages', function (School $school) {
@@ -154,6 +159,8 @@ Route::get('/create_lesson', function () {
 Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::resource('assessments', StudentAssessmentController::class);
     Route::get('teacher_classes', [TeacherClasses::class, 'index'])->name('teacher_classes');
+    Route::get('students_classess/{class_id}', [TeacherClasses::class, 'students'])->name('students_classess');
+
     Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
     Route::get('assessments/student/{student_id}', [StudentAssessmentController::class, 'showStudentAssessments'])->name('teacher.assessments.student');
 
@@ -204,8 +211,14 @@ Route::get('/view_class', function () {
 })->name('teacher.class');
 
 Route::get('/view_student_grade', function () {
-    return view('pages.teacher.StudentGrades.index');
+    return view('components.GradesTable');
 })->name('teacher.student.grade');
+
+
+Route::get('/view_student_gradessss', function () {
+    return view('components.GradeTableForOneStudent');
+})->name('teacher.student.grade');
+
 
 Route::get('/Show_Assignment', function () {
     return view('pages.teacher.Assignment.details');

@@ -52,10 +52,11 @@
                                 <tr>
                                     <td>
                                         @if ($student->image)
-                                            <img src="{{ asset( $student->image) }}" alt="Student Image"
-                                                width="50" height="50" class="rounded-circle">
+                                            <img src="{{ asset($student->image) }}" alt="Student Image" width="50"
+                                                height="50" class="rounded-circle">
                                         @else
-                                            No Image
+                                            <img src="https://w7.pngwing.com/pngs/184/113/png-transparent-user-profile-computer-icons-profile-heroes-black-silhouette-thumbnail.png"
+                                                alt="Student Image" width="50" height="50" class="rounded-circle">
                                         @endif
                                     </td>
                                     <td>{{ $student->username }}</td>
@@ -84,8 +85,9 @@
                     </table>
 
                 </div>
-            </main>
+                {{ $students->links('pagination::bootstrap-5') }}
 
+            </main>
             @include('admin.layouts.footer')
         </div>
     </div>

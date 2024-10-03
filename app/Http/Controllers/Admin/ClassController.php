@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Imports\StudentsImport;
 use App\Models\Group;
 use App\Models\School;
 use App\Models\Stage;
+use App\Models\Student;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ClassController extends Controller
 {
@@ -116,4 +119,28 @@ class ClassController extends Controller
         return redirect()->route('classes.index')->with('success', 'Class deleted successfully.');
 
     }
+    public function showImportForm($id)
+    {
+        $class = Group::findOrFail($id);
+        return view('admin.classes.import', compact('class'));
+    }
+    public function importStudents(Request $request, $id)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        try {
+            Excel::import(new StudentsImport($id), $request->file('file'));
+            return redirect()->route('classes.index')->with('success', 'Students imported successfully.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == 23000) {
+                return back()->withErrors(['file' => 'A student with the same username already exists.']);
+            }
+
+            return back()->withErrors(['file' => 'Error processing file: ' . $e->getMessage()]);
+        }
+    }
+
+
 }

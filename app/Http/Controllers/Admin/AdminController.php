@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Group;
+use App\Models\Material;
 use App\Models\School;
+use App\Models\SchoolType;
 use App\Models\Stage;
 use App\Models\Student;
 use App\Models\Teacher;
+use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -35,7 +39,12 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('admin.admins.create');
+        $stages = Stage::all();
+        $themes = Material::all();
+        $types = Type::get();
+
+        return view('admin.admins.create', compact('stages', 'themes', 'types'));
+
     }
 
     /**
@@ -43,20 +52,65 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
+
+        // $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'address' => 'nullable|string|max:255',
+        //     'city' => 'nullable|string|max:255',
+        //     'type_id' => 'required|exists:types,id',
+        // ]);
+
+
+        // $school = School::create([
+        //     'name' => $request->name,
+        //     'is_active' => 1,
+        //     'address' => $request->address,
+        //     'city' => $request->city,
+        //     'type_id' => $request->type_id,
+        // ]);
+
+
         $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
-            'type' => 'required|in:international,national',
+            'type_id' => 'required|exists:types,id',
+            'stage_id' => 'required|array', // Ensure stage_id is an array
+            'stage_id.*' => 'exists:stages,id', // Ensure each stage ID exists in stages table
+            'classes' => 'required|array', // Ensure classes is an array
+            'classes.*.name' => 'required|string|max:255', // Validate each class name
+            'classes.*.stage_id' => 'required|exists:stages,id', // Validate each class's stage_id
         ]);
 
+        // Create the school
         $school = School::create([
             'name' => $request->name,
             'is_active' => 1,
             'address' => $request->address,
             'city' => $request->city,
-            'type' => $request->type,
+            'type_id' => $request->type_id,
         ]);
+
+        // Create classes for this school
+        foreach ($request->input('classes') as $class) {
+            Group::create([
+                'name' => $class['name'],
+                'school_id' => $school->id,
+                'stage_id' => $class['stage_id'], // Each class has its own stage_id
+            ]);
+        }
+
+        // Create stages for this school
+        $school->stages()->sync($request->input('stage_id'));
+
+        // foreach ($request->input('stage_id') as $stageId) {
+        //     School::create([
+        //         'school_id' => $school->id,
+        //         'stage_id' => $stageId,
+        //     ]);
+        // }
+
+
 
         // Admin::create([
         //     'name' => $request->admin_name,
@@ -83,7 +137,8 @@ class AdminController extends Controller
     public function edit($id)
     {
         $school = School::findOrFail($id);
-        return view('admin.admins.edit', compact('school'));
+        $types = Type::all();
+        return view('admin.admins.edit', compact('school', 'types'));
     }
 
 
@@ -98,7 +153,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
-            'type' => 'required|in:international,national',
+            'type_id' => 'required|exists:types,id',
             'is_active' => 'required|boolean',
         ]);
 
@@ -107,7 +162,7 @@ class AdminController extends Controller
             'name' => $request->name,
             'address' => $request->address,
             'city' => $request->city,
-            'type' => $request->type,
+            'type_id' => $request->type_id,
             'is_active' => $request->is_active,
         ]);
 

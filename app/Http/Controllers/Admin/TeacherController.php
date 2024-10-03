@@ -19,7 +19,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        $teachers = Teacher::with('school', 'stages')->get();
+        $teachers = Teacher::with('school', 'stages')->paginate(10);
         return view('admin.teachers.index', compact('teachers'));
     }
 
