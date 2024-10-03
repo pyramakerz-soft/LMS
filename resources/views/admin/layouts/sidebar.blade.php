@@ -9,54 +9,54 @@
                 Pages
             </li>
 
-            <li class="sidebar-item active">
+            <li class="sidebar-item {{ request()->is('admin') ? 'active' : '' }}">
 
                 <a class="sidebar-link" href="{{ route('admin.dashboard') }}">
 
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
                 </a>
             </li>
-            <li class="sidebar-item ">
+            <li class="sidebar-item {{ request()->is('admin/images') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('images.index') }}">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Images</span>
                 </a>
             </li>
 
-            <li class="sidebar-item">
+            <li class="sidebar-item {{ request()->is('admin/admins') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('admins.index') }}">
                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">School</span>
                 </a>
             </li>
-            <li class="sidebar-item">
+            <li class="sidebar-item {{ request()->is('admin/stages') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('stages.index') }}">
                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">Grade</span>
                 </a>
             </li>
-            <li class="sidebar-item">
+            <li class="sidebar-item {{ request()->is('admin/classes') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('classes.index') }}">
                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">Class</span>
                 </a>
             </li>
 
-            <li class="sidebar-item">
+            <li class="sidebar-item {{ request()->is('admin/material') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('material.index') }}">
                     <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Theme</span>
                 </a>
             </li>
 
-            <li class="sidebar-item">
+            <li class="sidebar-item {{ request()->is('admin/units') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('units.index') }}">
                     <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Unit
                     </span>
                 </a>
             </li>
 
-            <li class="sidebar-item">
+            <li class="sidebar-item {{ request()->is('admin/chapters') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('chapters.index') }}">
                     <i class="align-middle" data-feather="book"></i> <span class="align-middle">Chapter</span>
                 </a>
             </li>
-            <li class="sidebar-item">
+            <li class="sidebar-item {{ request()->is('admin/lessons') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('lessons.index') }}">
                     <i class="align-middle" data-feather="book"></i> <span class="align-middle">Lesson</span>
                 </a>
@@ -69,12 +69,12 @@
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Ebook</span>
                 </a>
             </li> --}}
-            <li class="sidebar-item">
+            <li class="sidebar-item {{ request()->is('admin/students') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('students.index') }}">
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Student</span>
                 </a>
             </li>
-            <li class="sidebar-item">
+            <li class="sidebar-item {{ request()->is('admin/teachers') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('teachers.index') }}">
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Teacher</span>
                 </a>
