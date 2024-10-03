@@ -204,8 +204,14 @@ Route::get('/view_class', function () {
 })->name('teacher.class');
 
 Route::get('/view_student_grade', function () {
-    return view('pages.teacher.StudentGrades.index');
+    return view('components.GradesTable');
 })->name('teacher.student.grade');
+
+
+Route::get('/view_student_gradessss', function () {
+    return view('components.GradeTableForOneStudent');
+})->name('teacher.student.grade');
+
 
 Route::get('/Show_Assignment', function () {
     return view('pages.teacher.Assignment.details');
