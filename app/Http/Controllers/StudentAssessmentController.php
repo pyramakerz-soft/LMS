@@ -64,7 +64,7 @@ class StudentAssessmentController extends Controller
                 ->whereIn('stage_id', $userAuth->stages->pluck('id'))
                 ->get();
 
-            $classId = $students[0]->class_id;
+                $classId = $students[0]->class_id;
             return view('pages.teacher.assessments.create', compact('students', "userAuth", "classId"));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
