@@ -46,7 +46,7 @@
             <span class="mx-2 text-[#D0D5DD]">/</span>
             <a href="{{ route("teacher_classes") }}" class="mx-2 cursor-pointer">Classes</a>
             <span class="mx-2 text-[#D0D5DD]">/</span>
-            <a href="{{ route("assessments.index") }}" class="mx-2 cursor-pointer">Assessments</a>
+            <a href="{{ route("assessments.index", ['class_id' => $classId]) }}" class="mx-2 cursor-pointer">Assessments</a>
             <span class="mx-2 text-[#D0D5DD]">/</span>
             <a href="#" class="mx-2 cursor-pointer">Student Assessment</a>
         </div>
