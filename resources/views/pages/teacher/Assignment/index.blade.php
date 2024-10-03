@@ -99,7 +99,7 @@
           <tbody>
             @if(count($Assignment) === 0)
             <tr>
-              <td colspan="4" class="px-4 py-4 h-[72px] text-center border-t border-gray-300 text-lg md:text-xl">
+              <td colspan="8" class="px-4 py-4 h-[72px] text-center border-t border-gray-300 text-lg md:text-xl">
                 No Data Found
               </td>
             </tr>

@@ -48,7 +48,10 @@ div#learn {
 
 <body>
     <div class="screenshot-protector"></div>
-<div id="blackout" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: black; z-index: 9999;"></div>
+    <div class="flex flex-col space-y-4 justify-center items-center" id="blackout" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgb(255, 255, 255); z-index: 9999;">
+        <img src="{{asset('images/Paragraph container.png')}}">
+        <p>Click on the screen</p>
+    </div>
 
     <div class="grid grid-cols-12">
         <div id="sidebar"
@@ -88,10 +91,15 @@ div#learn {
         }
     });
 
-    // Disable context menu (right-click)
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        // alert("Right-click is disabled on this page.");
+    document.addEventListener('keydown', function(e) {
+        if (e.shiftKey) {
+            document.body.style.filter = 'blur(10px)';
+            setTimeout(() => {
+                document.body.style.filter = 'none';
+            }, 1000); 
+            
+            e.preventDefault();
+        }
     });
 
     // Disable certain key combinations (Ctrl+U, Ctrl+Shift+I, F12)

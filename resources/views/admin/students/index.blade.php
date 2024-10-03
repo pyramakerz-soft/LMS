@@ -18,6 +18,22 @@
                     <!-- Button to create a new student -->
                     <a href="{{ route('students.create') }}" class="btn btn-primary mb-3">Add Student</a>
 
+                    <form id="filterForm" action="{{ route('students.index') }}" method="GET" class="d-flex justify-content-evenly mb-3">
+                        <select name="school" id="school" class="form-select w-25">
+                            <option disabled selected hidden>Filter By School</option>
+                            @foreach($schools as $school)
+                                <option value="{{ $school->id }}" {{ request('school') == $school->id ? 'selected' : '' }}>{{ $school->name }}</option>
+                            @endforeach 
+                        </select>
+                        <select name="class" id="class" class="form-select w-25">
+                            <option disabled selected hidden>Filter By Class</option>
+                            @foreach($classes as $class)
+                                <option value="{{ $class->id }}" {{ request('class') == $class->id ? 'selected' : '' }}>{{ $class->name }}</option>
+                            @endforeach 
+                        </select>
+                        <a class="btn btn-secondary" href="{{ route('students.index') }}">Clear</a> 
+                    </form>
+
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -74,3 +90,22 @@
         </div>
     </div>
 @endsection
+
+@section('page_js')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#school, #class').change(function() {
+                $('#filterForm').submit();
+            });
+        });
+
+        $('#clearFilters').click(function(e) {
+            e.preventDefault();
+            $('#school').val('').prop('selected', true);
+            $('#class').val('').prop('selected', true); 
+            $('#filterForm').submit();
+        });
+    </script>
+@endsection
+

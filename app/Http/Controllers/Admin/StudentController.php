@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\School;
 use App\Models\Stage;
 use App\Models\Student;
+use App\Models\Group;
 use App\Models\StudentClass;
 use Hash;
 use Illuminate\Http\Request;
@@ -16,10 +17,26 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $students = Student::with('school', 'stage')->get();
-        return view('admin.students.index', compact('students'));
+        $StudentQuery = Student::with('school', 'stage');
+
+        $schools = School::all();
+        $classes = Group::all();
+
+        if($request){
+            
+            if ($request->has('school') && $request->school != null) {
+                $StudentQuery->where('school_id', $request->school);
+            }
+        
+            if ($request->has('class') && $request->class != null) {
+                $StudentQuery->where('class_id', $request->class);
+            }
+        }
+
+        $students = $StudentQuery->get();
+        return view('admin.students.index', compact('students', 'schools', 'classes'));
     }
 
     /**
