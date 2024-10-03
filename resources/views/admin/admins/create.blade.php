@@ -61,17 +61,7 @@
                         </div>
 
 
-                        <!-- Theme Selection -->
 
-                        <div class="mb-3">
-                            <label for="Theme_ids" class="form-label">Theme</label>
-                            <select name="Theme_id[]" id="Theme_id" class="form-control" multiple required>
-                                @foreach ($themes as $theme)
-                                    <option value="{{ $theme->id }}">{{ $theme->title }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    
 
 
                         <div class="mb-3">
@@ -94,16 +84,6 @@
                         </div>
 
 
-                        <!-- Type Selection -->
-                        <div class="mb-3">
-                            <label for="type" class="form-label">Type</label>
-                            <select name="type_id" id="type" class="form-control" required>
-                                <option value="" selected disabled>Select type</option>
-                                @foreach ($types as $type)
-                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
 
                         <button type="submit" class="btn btn-primary">Add School</button>
                     </form>
