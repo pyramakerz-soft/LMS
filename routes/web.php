@@ -159,6 +159,8 @@ Route::get('/create_lesson', function () {
 Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::resource('assessments', StudentAssessmentController::class);
     Route::get('teacher_classes', [TeacherClasses::class, 'index'])->name('teacher_classes');
+    Route::get('students_classess/{class_id}', [TeacherClasses::class, 'students'])->name('students_classess');
+
     Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
     Route::get('assessments/student/{student_id}', [StudentAssessmentController::class, 'showStudentAssessments'])->name('teacher.assessments.student');
 
