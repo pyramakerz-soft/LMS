@@ -17,11 +17,13 @@ use App\Http\Controllers\ChapterController as ControllersChapterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SchoolTypeController;
 use App\Http\Controllers\StudentAssessmentController;
 use App\Http\Controllers\Teacher\TeacherClasses;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
 use App\Http\Controllers\Teacher\TeacherUnitController;
 use App\Http\Controllers\Student\StudentAssignmentController;
+use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UnitController as ControllersUnitController;
 use App\Models\Group;
 use App\Models\School;
@@ -70,6 +72,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('teachers', TeacherController::class);
         Route::resource('admins', AdminController::class);
         Route::resource('images', ImageController::class);
+        Route::resource('types', TypeController::class);
 
         Route::get('school/{schoolId}/curriculum', [AdminController::class, 'assignCurriculum'])->name('school.curriculum.assign');
         Route::post('school/{schoolId}/curriculum', [AdminController::class, 'storeCurriculum'])->name('school.curriculum.store');
@@ -82,7 +85,7 @@ Route::prefix('admin')->group(function () {
         // Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
         Route::get('classes/{id}/import', [ClassController::class, 'showImportForm'])->name('classes.import');
         Route::post('classes/{id}/import', [ClassController::class, 'importStudents'])->name('classes.importStudents');
-        
+
 
         Route::get('/api/schools/{school}/stages', function (School $school) {
             return response()->json($school->stages);

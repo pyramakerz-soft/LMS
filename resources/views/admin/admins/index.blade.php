@@ -35,7 +35,7 @@
                                     <td>{{ $school->name ?? '-' }}</td>
                                     <td>{{ $school->address ?? '-' }}</td>
                                     <td>{{ $school->city ?? '-' }}</td>
-                                    <td>{{ $school->type ?? '-' }}</td>
+                                    <td>{{ $school->type->name ?? '-' }}</td>
                                     <td>{{ $school->students->count() ?? '-' }}</td>
                                     <td>
                                         <a href="{{ route('admins.edit', $school->id) }}" class="btn btn-info">Edit</a>

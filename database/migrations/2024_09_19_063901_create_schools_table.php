@@ -17,7 +17,8 @@ return new class extends Migration
             $table->boolean('is_active')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();
-            $table->enum('type' , ['international' , 'national'])->nullable();
+            $table->unsignedBigInteger('type_id')->nullable();
+            $table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');
             $table->timestamps();
         });
     }

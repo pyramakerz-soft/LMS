@@ -58,7 +58,10 @@ class School extends Model
         return $this->hasMany(Group::class);
     }
     
-
+    public function type()
+    {
+        return $this->belongsTo(Type::class, 'type_id');
+    }
      public function getImageAttribute($val)
     {
         return ($val !== null) ? asset( $val) : "";
