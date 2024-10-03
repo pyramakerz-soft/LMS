@@ -25,7 +25,6 @@
                     <form action="{{ route('admins.store') }}" method="POST">
                         @csrf
 
-                        <h2>School Information</h2>
 
                         <div class="mb-3">
                             <label for="school_name" class="form-label">School Name</label>
@@ -75,7 +74,7 @@
                             </select>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mt-3">
                             <h2>Classes</h2>
                             <div id="class-container">
                                 <!-- Dynamic class fields will appear here -->
@@ -85,7 +84,7 @@
 
 
 
-                        <button type="submit" class="btn btn-primary">Add School</button>
+                        <button type="submit" class="btn btn-primary mt-5">Add School</button>
                     </form>
 
 
