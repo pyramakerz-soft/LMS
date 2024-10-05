@@ -24,7 +24,7 @@
 
             <li class="sidebar-item {{ request()->is('admin/types') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('types.index') }}">
-                    <i class="align-middle" data-feather="types"></i> <span class="align-middle">
+                    <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
                         Types</span>
                 </a>
             </li>

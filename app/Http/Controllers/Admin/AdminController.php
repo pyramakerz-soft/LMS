@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Chapter;
 use App\Models\Group;
+use App\Models\Lesson;
 use App\Models\Material;
 use App\Models\School;
 use App\Models\SchoolType;
@@ -12,6 +14,7 @@ use App\Models\Stage;
 use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Type;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -44,7 +47,6 @@ class AdminController extends Controller
         $types = Type::get();
 
         return view('admin.admins.create', compact('stages', 'themes', 'types'));
-
     }
 
     /**
@@ -178,7 +180,6 @@ class AdminController extends Controller
         $school->delete();
 
         return redirect()->route('admins.index')->with('success', 'School deleted successfully.');
-
     }
 
     public function viewCurriculum($schoolId)
@@ -221,58 +222,46 @@ class AdminController extends Controller
     public function storeCurriculum(Request $request, $schoolId)
     {
         $school = School::findOrFail($schoolId);
-
-        // Validate the request
         $request->validate([
             'stage_id' => 'required|exists:stages,id',
-            'material_id' => 'required|exists:materials,id',
-            'unit_id' => 'required|exists:units,id',
-            'chapter_id' => 'required|exists:chapters,id',
-            'lesson_id' => 'required|exists:lessons,id',
+            'material_id' => 'required|array',
+            'material_id.*' => 'exists:materials,id',
         ]);
-
-        // Check if the stage is already assigned to the school
-        $isStageAssigned = $school->stages()->wherePivot('stage_id', $request->stage_id)->exists();
-
+        $stageId = $request->stage_id;
+        $materialIds = $request->material_id;
+        $isStageAssigned = $school->stages()->wherePivot('stage_id', $stageId)->exists();
         if (!$isStageAssigned) {
-            $school->stages()->attach($request->stage_id); // Attach the stage to the school
+            $school->stages()->attach($stageId);
         }
+        foreach ($materialIds as $materialId) {
+            $isMaterialAssigned = $school->materials()->wherePivot('material_id', $materialId)->exists();
 
-        // Check if the material is already assigned to the school under this stage
-        $isMaterialAssigned = $school->materials()->wherePivot('material_id', $request->material_id)->exists();
+            if (!$isMaterialAssigned) {
+                $school->materials()->attach($materialId);
+            }
+            $units = Unit::where('material_id', $materialId)->get();
+            foreach ($units as $unit) {
+                $isUnitAssigned = $school->units()->wherePivot('unit_id', $unit->id)->exists();
+                if (!$isUnitAssigned) {
+                    $school->units()->attach($unit->id);
+                }
+                $chapters = Chapter::where('unit_id', $unit->id)->get();
+                foreach ($chapters as $chapter) {
+                    $isChapterAssigned = $school->chapters()->wherePivot('chapter_id', $chapter->id)->exists();
+                    if (!$isChapterAssigned) {
+                        $school->chapters()->attach($chapter->id);
+                    }
+                    $lessons = Lesson::where('chapter_id', $chapter->id)->get();
 
-        if (!$isMaterialAssigned) {
-            $school->materials()->attach($request->material_id);
-        }
+                    foreach ($lessons as $lesson) {
+                        $isLessonAssigned = $school->lessons()->wherePivot('lesson_id', $lesson->id)->exists();
 
-        // Check if the unit is already assigned to the school under this material
-        $isUnitAssigned = $school->units()->wherePivot('unit_id', $request->unit_id)
-            ->whereHas('material', function ($query) use ($request) {
-                $query->where('material_id', $request->material_id);
-            })->exists();
-
-        if (!$isUnitAssigned) {
-            $school->units()->attach($request->unit_id);
-        }
-
-        // Check if the chapter is already assigned to the school under this unit
-        $isChapterAssigned = $school->chapters()->wherePivot('chapter_id', $request->chapter_id)
-            ->whereHas('unit', function ($query) use ($request) {
-                $query->where('unit_id', $request->unit_id);
-            })->exists();
-
-        if (!$isChapterAssigned) {
-            $school->chapters()->attach($request->chapter_id);
-        }
-
-        // Check if the lesson is already assigned to the school under this chapter
-        $isLessonAssigned = $school->lessons()->wherePivot('lesson_id', $request->lesson_id)
-            ->whereHas('chapter', function ($query) use ($request) {
-                $query->where('chapter_id', $request->chapter_id);
-            })->exists();
-
-        if (!$isLessonAssigned) {
-            $school->lessons()->attach($request->lesson_id);
+                        if (!$isLessonAssigned) {
+                            $school->lessons()->attach($lesson->id);
+                        }
+                    }
+                }
+            }
         }
 
         return redirect()->route('admins.index')->with('success', 'Curriculum assigned successfully.');
@@ -362,11 +351,4 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Lesson removed successfully.');
     }
-
-
-
-
-
-
-
 }

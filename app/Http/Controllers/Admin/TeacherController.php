@@ -48,6 +48,7 @@ class TeacherController extends Controller
             'class_id.*' => 'exists:groups,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+        $username = str_replace(' ', '_', $request->input('username'));
 
         $password = Str::random(8);
 
@@ -57,7 +58,7 @@ class TeacherController extends Controller
         }
 
         $teacher = Teacher::create([
-            'username' => $request->input('username'),
+            'username' => $username,
             'password' => Hash::make($password),
             'plain_password' => $password,
             'gender' => $request->input('gender'),
@@ -71,7 +72,6 @@ class TeacherController extends Controller
         $teacher->stages()->attach($request->input('stage_ids'));
 
         return redirect()->route('teachers.index')->with('success', 'Teacher created successfully.');
-
     }
 
     /**
@@ -91,8 +91,8 @@ class TeacherController extends Controller
         $schools = School::all();
         $stages = Stage::all();
         $classes = TeacherClass::with('class')->where('teacher_id', $teacher->id)->get();
-        $classess = Group::whereNotIn('id',$classes->pluck('class_id'))->get();
-        return view('admin.teachers.edit', compact('teacher', 'schools', 'stages', 'classes','classess'));
+        $classess = Group::whereNotIn('id', $classes->pluck('class_id'))->get();
+        return view('admin.teachers.edit', compact('teacher', 'schools', 'stages', 'classes', 'classess'));
     }
 
     /**
@@ -112,6 +112,7 @@ class TeacherController extends Controller
             'class_id.*' => 'exists:groups,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+        $username = str_replace(' ', '_', $request->input('username'));
 
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('teachers', 'public');
@@ -119,7 +120,7 @@ class TeacherController extends Controller
         }
 
         $teacher->update([
-            'username' => $request->input('username'),
+            'username' => $username,
             'gender' => $request->input('gender'),
             'school_id' => $request->input('school_id'),
             'is_active' => $request->input('is_active') ?? 1,

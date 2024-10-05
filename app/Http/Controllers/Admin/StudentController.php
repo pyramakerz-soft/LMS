@@ -24,12 +24,12 @@ class StudentController extends Controller
         $schools = School::all();
         $classes = Group::all();
 
-        if($request){
-            
+        if ($request) {
+
             if ($request->has('school') && $request->school != null) {
                 $StudentQuery->where('school_id', $request->school);
             }
-        
+
             if ($request->has('class') && $request->class != null) {
                 $StudentQuery->where('class_id', $request->class);
             }
@@ -64,6 +64,9 @@ class StudentController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        // Replace spaces with underscores in the username
+        $username = str_replace(' ', '_', $request->input('username'));
+
         $password = Str::random(8);
 
         $imagePath = null;
@@ -72,7 +75,7 @@ class StudentController extends Controller
         }
 
         $student = Student::create([
-            'username' => $request->input('username'),
+            'username' => $username,
             'password' => Hash::make($password),
             'plain_password' => $password,
             'gender' => $request->input('gender'),
@@ -81,11 +84,11 @@ class StudentController extends Controller
             'is_active' => 1,
             'image' => $imagePath,
             'class_id' => $request->class_id,
-
         ]);
 
         return redirect()->route('students.index')->with('success', 'Student created successfully.');
     }
+
 
     /**
      * Display the specified resource.
@@ -102,11 +105,10 @@ class StudentController extends Controller
     {
         $student = Student::with('classes')->findOrFail($id);
         $schools = School::all();
-        $stages = $student->school ? $student->school->stages : []; 
+        $stages = $student->school ? $student->school->stages : [];
         $classes = \DB::table('groups')->where('stage_id', $student->stage_id)->get();
 
         return view('admin.students.edit', compact('student', 'schools', 'stages', 'classes'));
-
     }
 
     /**
@@ -124,6 +126,7 @@ class StudentController extends Controller
             'class_id' => 'required|exists:groups,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+        $username = str_replace(' ', '_', $request->input('username'));
 
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('students', 'public');
@@ -131,7 +134,7 @@ class StudentController extends Controller
         }
 
         $student->update([
-            'username' => $request->input('username'),
+            'username' => $username,
             'gender' => $request->input('gender'),
             'school_id' => $request->input('school_id'),
             'stage_id' => $request->input('stage_id'),

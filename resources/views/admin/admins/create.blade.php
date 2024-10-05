@@ -97,22 +97,27 @@
 @endsection
 
 @section('page_js')
+    <script>
+        $(document).ready(function() {
+            $('#stage_id').select2({
+                placeholder: "Select Grades",
+                allowClear: true
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const addClassBtn = document.getElementById('add-class-btn');
+            const classContainer = document.getElementById('class-container');
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const addClassBtn = document.getElementById('add-class-btn');
-    const classContainer = document.getElementById('class-container');
+            let classCount = 0; // To track the number of classes
 
-    let classCount = 0; // To track the number of classes
+            // Function to add a new class field group
+            function addClassField() {
+                classCount++;
+                const classGroup = document.createElement('div');
+                classGroup.classList.add('class-group', 'mb-3');
+                classGroup.setAttribute('id', `class-group-${classCount}`);
 
-    // Function to add a new class field group
-    function addClassField() {
-        classCount++;
-        const classGroup = document.createElement('div');
-        classGroup.classList.add('class-group', 'mb-3');
-        classGroup.setAttribute('id', `class-group-${classCount}`);
-
-        classGroup.innerHTML = `
+                classGroup.innerHTML = `
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="mb-3">
@@ -134,21 +139,17 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
         `;
 
-        classContainer.appendChild(classGroup);
+                classContainer.appendChild(classGroup);
 
-        // Attach remove event to the newly added button
-        classGroup.querySelector('.remove-class-btn').addEventListener('click', function () {
-            const classId = this.getAttribute('data-class-id');
-            document.getElementById(`class-group-${classId}`).remove();
+                // Attach remove event to the newly added button
+                classGroup.querySelector('.remove-class-btn').addEventListener('click', function() {
+                    const classId = this.getAttribute('data-class-id');
+                    document.getElementById(`class-group-${classId}`).remove();
+                });
+            }
+
+            // Event listener to add a new class group
+            addClassBtn.addEventListener('click', addClassField);
         });
-    }
-
-    // Event listener to add a new class group
-    addClassBtn.addEventListener('click', addClassField);
-});
-
-
-</script>
+    </script>
 @endsection
-
-
