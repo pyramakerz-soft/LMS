@@ -87,6 +87,9 @@
                                         <a href="{{ route('assignments.edit', $row->id) }}">
                                             <i class="fas fa-edit text-[#101828] w-5 md:w-6"></i>
                                         </a>
+                                        <a href="{{ route('assignments.students', $row->id) }}">
+                                            <i class="fas fa-eye text-[#101828] w-5 md:w-6 mx-2"></i>
+                                        </a>
                                         <form action="{{ route('assignments.destroy', $row->id) }}" method="POST"
                                             style="display:inline-block;">
                                             @csrf

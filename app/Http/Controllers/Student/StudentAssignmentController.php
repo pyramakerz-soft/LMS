@@ -14,12 +14,18 @@ class StudentAssignmentController extends Controller
         $userAuth = auth()->guard('student')->user();
 
         if ($userAuth) {
-            $assignments = $userAuth->assignments()->with('students')->get();
+            $assignments = \DB::table('assignments')
+                ->join('assignment_student', 'assignments.id', '=', 'assignment_student.assignment_id')
+                ->where('assignment_student.student_id', $userAuth->id)
+                ->select('assignments.*', 'assignment_student.marks as student_marks')
+                ->get();
+
             return view('pages.student.assignment.index', compact('assignments', 'userAuth'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
     }
+
 
     public function show($assignmentId)
     {
@@ -56,7 +62,7 @@ class StudentAssignmentController extends Controller
             $studentAssignment = $userAuth->assignments()->where('assignment_id', $assignmentId)->first();
 
 
-            
+
             if ($studentAssignment) {
                 $studentAssignment->pivot->submitted_at = $currentTime->toDateString();
                 $studentAssignment->pivot->path_file = $filePath;

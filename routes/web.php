@@ -159,9 +159,12 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::resource('assessments', StudentAssessmentController::class);
     Route::get('teacher_classes', [TeacherClasses::class, 'index'])->name('teacher_classes');
     Route::get('students_classess/{class_id}', [TeacherClasses::class, 'students'])->name('students_classess');
-
+    Route::post('store-assessment', [TeacherClasses::class, 'storeAssessment'])->name('teacher.storeAssessment');
     Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
     Route::get('assessments/student/{student_id}', [StudentAssessmentController::class, 'showStudentAssessments'])->name('teacher.assessments.student');
+
+    Route::get('assignments/{id}/students', [\App\Http\Controllers\Teacher\AssignmentController::class, 'viewAssignedStudents'])->name('assignments.students');
+    Route::post('assignments/{id}/students/{studentId}/update', [\App\Http\Controllers\Teacher\AssignmentController::class, 'updateStudentMarks'])->name('assignments.students.update');
 
     Route::get('/api/schools/{school}/stages', function (School $school) {
         return response()->json($school->stages);

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\Models\Student_assessment;
 use App\Models\TeacherClass;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TeacherClasses extends Controller
 {
@@ -27,20 +29,75 @@ class TeacherClasses extends Controller
     {
         $userAuth = auth()->guard('teacher')->user();
 
-        if ($userAuth) {
-            $class = TeacherClass::with('students')->where('class_id', $class_id)->where('teacher_id', $userAuth->id)->first();
-
-            if (!$class) {
-                return redirect()->route('teacher_classes')->withErrors(['error' => 'Class not found or unauthorized access.']);
-            }
-
-            $students = $class->students;
-
-            return view('pages.teacher.Class.students', compact('students', 'class'));
-        } else {
+        if (!$userAuth) {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
+
+        // Find the class assigned to this teacher
+        $class = TeacherClass::with('students')
+            ->where('class_id', $class_id)
+            ->where('teacher_id', $userAuth->id)
+            ->first();
+
+        if (!$class) {
+            return redirect()->route('teacher_classes')->withErrors(['error' => 'Class not found or unauthorized access.']);
+        }
+
+        // Get all students in the class
+        $students = $class->students;
+
+        // Define the number of weeks you want to display
+        $numberOfWeeks = 8;
+        $weeks = range(1, $numberOfWeeks);
+
+        // Pass the students, weeks, and class to the view
+        return view('pages.teacher.Class.students', compact('students', 'class', 'weeks'));
     }
+
+
+
+
+
+    public function storeAssessment(Request $request)
+    {
+        $request->validate([
+            'student_id' => 'required|exists:students,id',
+            'week' => 'required|integer|min:1|max:8',
+            'attendance_score' => 'nullable|integer|min:0|max:10',
+            'classroom_participation_score' => 'nullable|integer|min:0|max:20',
+            'classroom_behavior_score' => 'nullable|integer|min:0|max:20',
+            'homework_score' => 'nullable|integer|min:0|max:10',
+            'final_project_score' => 'nullable|integer|min:0|max:50',
+        ]);
+
+        // Fetch or create the assessment for the student for the given week
+        $assessment = Student_assessment::firstOrNew([
+            'student_id' => $request->student_id,
+            'teacher_id' => auth()->guard('teacher')->id(),
+            // 'week' => $request->week,
+        ]);
+        dd($assessment);
+
+        // Update the fields
+        $assessment->attendance_score = $request->attendance_score ?? $assessment->attendance_score;
+        $assessment->classroom_participation_score = $request->classroom_participation_score ?? $assessment->classroom_participation_score;
+        $assessment->classroom_behavior_score = $request->classroom_behavior_score ?? $assessment->classroom_behavior_score;
+        $assessment->homework_score = $request->homework_score ?? $assessment->homework_score;
+
+        if ($request->week == 8) {
+            $assessment->final_project_score = $request->final_project_score ?? $assessment->final_project_score;
+        }
+
+        // Save the assessment
+        $assessment->save();
+
+        return response()->json(['success' => true, 'message' => 'Assessment saved successfully.']);
+    }
+
+
+
+
+
     /**
      * Show the form for creating a new resource.
      */

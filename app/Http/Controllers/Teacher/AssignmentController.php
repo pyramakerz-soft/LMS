@@ -310,4 +310,29 @@ class AssignmentController extends Controller
         // Redirect back with a success message
         return redirect()->route('assignments.index')->with('success', 'Assignment deleted successfully.');
     }
+    public function viewAssignedStudents(string $id)
+    {
+        $assignment = Assignment::with(['lesson', 'school'])->findOrFail($id);
+
+        $students = DB::table('assignment_student')
+            ->join('students', 'assignment_student.student_id', '=', 'students.id')
+            ->where('assignment_student.assignment_id', $id)
+            ->select('students.id as student_id', 'students.username as student_name', 'assignment_student.marks', 'assignment_student.path_file', 'assignment_student.submitted_at')
+            ->get();
+
+        return view('pages.teacher.assignment.students', compact('assignment', 'students'));
+    }
+    public function updateStudentMarks(Request $request, string $id, string $studentId)
+    {
+        $request->validate([
+            'marks' => 'required|integer|min:0',
+        ]);
+
+        DB::table('assignment_student')
+            ->where('assignment_id', $id)
+            ->where('student_id', $studentId)
+            ->update(['marks' => $request->marks]);
+
+        return redirect()->route('assignments.students', $id)->with('success', 'Marks updated successfully.');
+    }
 }

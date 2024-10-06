@@ -86,7 +86,10 @@
               <td class="py-5 px-6">{{ $assignment->description }}</td>
               <td class="py-5 px-6">{{ $assignment->start_date }}</td>
               <td class="py-5 px-6">{{ $assignment->due_date }}</td>
-              <td class="py-5 px-6">{{ $assignment->marks }}</td>
+              {{-- <td class="py-5 px-6">{{ $assignment->marks }}</td> --}}
+              <td class="py-5 px-6">
+                {{ $assignment->student_marks ?? 'Not Graded' }} / {{ $assignment->marks }}
+            </td>
               <td class="py-5 px-6">
                 <a href="{{route('student.assignment.show', $assignment->id)}}" class="text-[#FF7519] cursor-pointer"> 
                     View Assignments
