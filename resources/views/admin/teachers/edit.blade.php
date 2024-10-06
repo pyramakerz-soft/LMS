@@ -69,22 +69,29 @@
                         </div>
 
                         <!-- Class Selection -->
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <label for="class_ids" class="form-label">Classes</label>
                             <select name="class_id[]" id="class_id" class="form-control" multiple required>
 
                                 @foreach ($classes as $class)
 
-                                {{-- <option value="{{ $class->class->id }}"
-                                    {{ in_array($class->id, $teacher->classes->pluck('id')->toArray()) ? 'selected' : '' }}>
-                                    {{ $class->class->name }}
-                                </option> --}}
                                 <option value="{{ $class->class->id }}" selected>{{ $class->class->name }}</option>
 
 
                                 @endforeach
                                 @foreach ($classess as $cls)
                                 <option value="{{ $cls->id }}">{{ $cls->name }}</option>
+                                @endforeach
+                            </select>
+                        </div> --}}
+                        <div class="mb-3">
+                            <label for="class_ids" class="form-label">Classes</label>
+                            <select name="class_id[]" id="class_id" class="form-control" multiple required>
+                                @foreach ($classes as $class)
+                                    <option value="{{ $class->id }}"
+                                        {{ in_array($class->id, $teacher->classes->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                        {{ $class->name }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>

@@ -3,9 +3,7 @@
     Teacher
 @endsection
 @php
-    $menuItems = [
-        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
-    ];
+    $menuItems = [['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')]];
 @endphp
 
 @section('sidebar')
@@ -17,7 +15,6 @@
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
-                    {{-- <img class="w-20 h-20 rounded-full" alt="avatar1" src="{{ Auth::guard('student')->user()->image }}" /> --}}
                     @if ($userAuth->image)
                         <img src="{{ asset($userAuth->image) }}" alt="Student Image"
                             class="w-20 h-20 rounded-full object-cover">
@@ -26,7 +23,6 @@
                             class="w-30 h-20 rounded-full object-cover">
                     @endif
                 </div>
-
                 <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
                     <div class="text-xl">
                         {{ $userAuth->username }}
@@ -48,7 +44,7 @@
 
     <div class="p-3">
         <div>
-            <h1 class="font-semibold text-2xl md:text-3xl ">Create Assignment</h1>
+            <h1 class="font-semibold text-2xl md:text-3xl">Create Assignment</h1>
         </div>
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -63,18 +59,17 @@
             @csrf
             <div class="mb-3 border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F]">
                 <label for="title"
-                    class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C]">Assignment
-                    Title</label>
+                    class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C]">Assignment Title</label>
                 <input type="text" name="title"
                     class="border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" id="title"
                     value="{{ old('title') }}" required>
-                    
+
                 <label for="description"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Assignment
                     Description</label>
                 <textarea name="description"
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" id="summernote">{{ old('description') }}</textarea>
-                
+
                 <label for="start_date"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Start Date</label>
                 <input type="date" name="start_date"
@@ -87,29 +82,25 @@
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
                     id="due_date" value="{{ old('due_date') }}">
 
-                <label for="school_id" class="form-label  block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select
-                    School</label>
-                <select name="school_id" id="school_id"
-                    class="form-control w-full p-2 md:p-4 border border-[#E5E5EA] rounded-xl" required>
-                    <option value="">--Select School--</option>
-                    @foreach ($schools as $school)
-                        <option value="{{ $school->id }}">{{ $school->name }}</option>
-                    @endforeach
-                </select>
-                
                 <label for="stage_id"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select Stage</label>
                 <select name="stage_id" id="stage_id"
                     class="form-control w-full p-2 md:p-4 border border-[#E5E5EA] rounded-xl" required>
                     <option value="">--Select Stage--</option>
+                    @foreach ($stages as $stage)
+                        <option value="{{ $stage->id }}">{{ $stage->name }}</option>
+                    @endforeach
                 </select>
-                
-                <label for="student_ids"
+
+                <label for="class_ids"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select
-                    Students</label>
-                <select name="student_ids[]" id="student_ids"
+                    Classes</label>
+                <select name="class_ids[]" id="class_ids"
                     class="form-control w-full p-2 md:p-4 border border-[#E5E5EA] rounded-xl" multiple required>
-                    <option value="">--Select Students--</option>
+                    <option value="">--Select Classes--</option>
+                    @foreach ($classes as $class)
+                        <option value="{{ $class->id }}">{{ $class->name }}</option>
+                    @endforeach
                 </select>
 
                 <label for="lesson_id"
@@ -121,13 +112,13 @@
                         <option value="{{ $lesson->id }}">{{ $lesson->title }}</option>
                     @endforeach
                 </select>
-                
+
                 <label for="marks"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Marks</label>
                 <input type="number" name="marks"
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
                     id="marks" value="{{ old('marks') }}">
-                
+
                 <label for="path_file"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">File Upload</label>
                 <input type="file" name="path_file"
@@ -139,12 +130,12 @@
                 <input type="url" name="link"
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
                     id="link" value="{{ old('link') }}">
-                    
-                <div class="flex items-center mt-5"> 
+
+                <div class="flex items-center mt-5">
                     <input type="checkbox" name="is_active"
-                        class="form-check-input block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-3 "
+                        class="form-check-input block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-3"
                         id="is_active" value="1">
-                    <label class="form-check-label ml-3" for="is_active ">Active</label>
+                    <label class="form-check-label ml-3" for="is_active">Active</label>
                 </div>
 
                 <button type="submit"
@@ -157,37 +148,11 @@
 
 @section('page_js')
     <script>
-        document.getElementById('school_id').addEventListener('change', function() {
-            let schoolId = this.value;
-            fetch(`/LMS/lms_pyramakerz/public/teacher/api/schools/${schoolId}/stages`)
-                .then(response => response.json())
-                .then(data => {
-                    let stageSelect = document.getElementById('stage_id');
-                    stageSelect.innerHTML = '<option value="">--Select Stage--</option>';
-                    data.forEach(stage => {
-                        stageSelect.innerHTML += `<option value="${stage.id}">${stage.name}</option>`;
-                    });
-                });
-        });
-        document.getElementById('stage_id').addEventListener('change', function() {
-            let stageId = this.value;
-            fetch(`/LMS/lms_pyramakerz/public/teacher/api/stages/${stageId}/students`)
-                .then(response => response.json())
-                .then(data => {
-                    let studentSelect = document.getElementById('student_ids');
-                    studentSelect.innerHTML = '<option value="">--Select Students--</option>';
-                    data.forEach(student => {
-                        studentSelect.innerHTML +=
-                            `<option value="${student.id}">${student.username}</option>`;
-                    });
-                });
+        $(document).ready(function() {
+            $('#class_ids').select2({
+                placeholder: "Select Classes",
+                allowClear: true
+            });
         });
     </script>
-    {{-- <script>
-    $(document).ready(function() {
-        $('#summernote').summernote({
-            height: 200
-        });
-    });
-</script> --}}
 @endsection

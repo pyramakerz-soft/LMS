@@ -91,16 +91,16 @@ div#learn {
     //     }
     // });
 
-    document.addEventListener('keydown', function(e) {
-        if (e.shiftKey) {
-            document.body.style.filter = 'blur(10px)';
-            setTimeout(() => {
-                document.body.style.filter = 'none';
-            }, 1000); 
+    // document.addEventListener('keydown', function(e) {
+    //     if (e.shiftKey) {
+    //         document.body.style.filter = 'blur(10px)';
+    //         setTimeout(() => {
+    //             document.body.style.filter = 'none';
+    //         }, 1000); 
             
-            e.preventDefault();
-        }
-    });
+    //         e.preventDefault();
+    //     }
+    // });
 
     // // Disable context menu (right-click)
     // document.addEventListener('contextmenu', function(e) {

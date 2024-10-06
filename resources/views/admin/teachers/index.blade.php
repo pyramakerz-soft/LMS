@@ -17,7 +17,51 @@
 
                     <!-- Button to create a new teacher -->
                     <a href="{{ route('teachers.create') }}" class="btn btn-primary mb-3">Add New Teacher</a>
-                    <!-- Add New Teacher Button -->
+
+                    <!-- Add Button to Generate New Teachers -->
+                    <button type="button" class="btn btn-secondary mb-3" data-bs-toggle="modal"
+                        data-bs-target="#generateTeachersModal">
+                        Generate New Teachers
+                    </button>
+
+                    <!-- Modal for Generating Teachers -->
+                    <div class="modal fade" id="generateTeachersModal" tabindex="-1"
+                        aria-labelledby="generateTeachersModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="{{ route('teachers.generate') }}" method="POST">
+                                    @csrf
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="generateTeachersModalLabel">Generate New Teachers</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="number_of_teachers" class="form-label">Number of Teachers to
+                                                Generate</label>
+                                            <input type="number" name="number_of_teachers" class="form-control"
+                                                id="number_of_teachers" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="school_id" class="form-label">Select School</label>
+                                            <select name="school_id" class="form-control" id="school_id" required>
+                                                <option value="">--Select School--</option>
+                                                @foreach ($schools as $school)
+                                                    <option value="{{ $school->id }}">{{ $school->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Generate Teachers</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
 
                     <table class="table table-bordered">
                         <thead>
@@ -35,11 +79,11 @@
                                 <tr>
                                     <td>
                                         @if ($teacher->image)
-                                            <img src="{{ asset($teacher->image) }}" alt="Tracher Image" width="50"
+                                            <img src="{{ asset($teacher->image) }}" alt="Teacher Image" width="50"
                                                 height="50" class="rounded-circle">
                                         @else
                                             <img src="https://w7.pngwing.com/pngs/184/113/png-transparent-user-profile-computer-icons-profile-heroes-black-silhouette-thumbnail.png"
-                                                alt="Student Image" width="50" height="50" class="rounded-circle">
+                                                alt="Teacher Image" width="50" height="50" class="rounded-circle">
                                         @endif
                                     </td>
                                     <td>{{ $teacher->username }}</td>
@@ -67,7 +111,6 @@
 
                 </div>
                 {{ $teachers->links('pagination::bootstrap-5') }}
-
             </main>
 
             @include('admin.layouts.footer')

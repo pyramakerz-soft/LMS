@@ -32,6 +32,11 @@ class Group extends Model
     {
         return $this->belongsToMany(Teacher::class, 'teacher_classes', 'class_id', 'teacher_id');
     }
+    public function assignments()
+{
+    return $this->belongsToMany(Assignment::class, 'assignment_class', 'class_id', 'assignment_id');
+}
+
     public function getImageAttribute($val)
     {
         return ($val !== null) ? asset($val) : "";

@@ -34,4 +34,8 @@ class Assignment extends Model
     {
         return $this->belongsTo(Teacher::class);
     }
+    public function classes()
+    {
+        return $this->belongsToMany(Group::class, 'assignment_class', 'assignment_id', 'class_id');
+    }
 }

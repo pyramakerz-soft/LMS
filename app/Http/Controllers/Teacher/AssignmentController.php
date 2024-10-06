@@ -1,11 +1,15 @@
 <?php
+
 namespace App\Http\Controllers\Teacher;
+
 use App\Http\Controllers\Controller;
 use App\Models\Assignment;
+use App\Models\Group;
 use App\Models\Lesson;
 use App\Models\School;
 use DB;
 use Illuminate\Http\Request;
+
 class AssignmentController extends Controller
 {
     /**
@@ -16,8 +20,8 @@ class AssignmentController extends Controller
         $userAuth = auth()->guard('teacher')->user();
 
         if ($userAuth) {
-            $Assignment = Assignment::where("teacher_id", auth()->user()->id)->with(relations: 'school')->with('lesson')->orderBy("created_at","desc")->get();
-    
+            $Assignment = Assignment::where("teacher_id", auth()->user()->id)->with(relations: 'school')->with('lesson')->orderBy("created_at", "desc")->get();
+
             return view("pages.teacher.Assignment.index", compact("Assignment", "userAuth"));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
@@ -26,31 +30,71 @@ class AssignmentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+    // public function create()
+    // {
+    //     $userAuth = auth()->guard('teacher')->user();
+
+    //     if ($userAuth) {
+    //         $lessons = Lesson::all();
+    //         $schools = School::all();
+
+    //         return view('pages.teacher.Assignment.create', compact('lessons', 'schools', "userAuth"));
+    //     } else {
+    //         return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+    //     }
+    // }
+    // public function create()
+    // {
+    //     $userAuth = auth()->guard('teacher')->user();
+
+    //     if ($userAuth) {
+    //         $lessons = Lesson::all();
+    //         $schools = School::all();
+
+    //         // Fetch all classes for the authenticated teacher's school
+    //         $classes = Group::where('school_id', $userAuth->school_id)->get();
+
+    //         return view('pages.teacher.Assignment.create', compact('lessons', 'schools', 'classes', 'userAuth'));
+    //     } else {
+    //         return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+    //     }
+    // }
     public function create()
     {
         $userAuth = auth()->guard('teacher')->user();
 
         if ($userAuth) {
+            // Fetch all lessons
             $lessons = Lesson::all();
-            $schools = School::all();
-    
-            return view('pages.teacher.Assignment.create', compact('lessons', 'schools', "userAuth"));
+
+            // Get all stages assigned to this teacher
+            $stages = $userAuth->stages;
+
+            // Fetch all classes for the authenticated teacher's school
+            $classes = Group::where('school_id', $userAuth->school_id)->get();
+
+            return view('pages.teacher.assignment.create', compact('lessons', 'stages', 'classes', 'userAuth'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
     }
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
+        $userAuth = auth()->guard('teacher')->user();
+
+        if (!$userAuth) {
+            return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+        }
+
+        // Validate the incoming request
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'school_id' => 'required|exists:schools,id',
             'lesson_id' => 'required|exists:lessons,id',
-            'student_ids' => 'required|array',
-            'student_ids.*' => 'exists:students,id',
+            'stage_id' => 'required|exists:stages,id',
+            'class_ids' => 'required|array',
+            'class_ids.*' => 'exists:groups,id',
             'path_file' => 'nullable|file',
             'link' => 'nullable|url',
             'start_date' => 'nullable|date',
@@ -58,10 +102,14 @@ class AssignmentController extends Controller
             'marks' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
         ]);
+
+        // Handle file upload if it exists
         $filePath = null;
         if ($request->hasFile('path_file')) {
             $filePath = $request->file('path_file')->store('assignments', 'public');
         }
+
+        // Create the assignment
         $assignment = Assignment::create([
             'title' => $request->title,
             'description' => $request->description,
@@ -70,51 +118,58 @@ class AssignmentController extends Controller
             'start_date' => $request->start_date,
             'due_date' => $request->due_date,
             'lesson_id' => $request->lesson_id,
-            'school_id' => $request->school_id,
+            'school_id' => $userAuth->school_id, // Automatically set the school from the authenticated teacher
             'marks' => $request->marks,
             'is_active' => $request->is_active ?? 0,
-            'teacher_id' => auth()->user()->id,
+            'teacher_id' => $userAuth->id,
         ]);
-        // Attach students to the assignment
+
+        // Insert stage into the assignment_stage table
         DB::table('assignment_stage')->insert([
             'assignment_id' => $assignment->id,
-            'school_id' => $request->school_id,
             'stage_id' => $request->stage_id,
+            'school_id' => $userAuth->school_id,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        foreach ($request->student_ids as $studentId) {
-            DB::table('assignment_student')->insert([
+
+        // Attach assignment to selected classes and students in those classes
+        foreach ($request->class_ids as $classId) {
+            DB::table('assignment_class')->insert([
                 'assignment_id' => $assignment->id,
-                'student_id' => $studentId,
+                'class_id' => $classId,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
+            // Attach assignment to all students in the class
+            $students = DB::table('students')->where('class_id', $classId)->get();
+            foreach ($students as $student) {
+                DB::table('assignment_student')->insert([
+                    'assignment_id' => $assignment->id,
+                    'student_id' => $student->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
         }
-        // $assignment->students()->attach($request->student_ids);
-        // Assignment::create([
-        //     'title' => $request->title,
-        //     'description' => $request->description,
-        //     'path_file' => $filePath,
-        //     'link' => $request->link,
-        //     'start_date' => $request->start_date,
-        //     'due_date' => $request->due_date,
-        //     'lesson_id' => $request->lesson_id,
-        //     'school_id' => $request->school_id,
-        //     'marks' => $request->marks,
-        //     'is_active' => $request->is_active ?? 0,
-        // ]);
+
         return redirect()->route('assignments.index')->with('success', 'Assignment created successfully.');
     }
+
+
+
+
+
     /**
      * Display the specified resource.
      */
- 
-     public function show(string $id)
-     {
-         $assignment = Assignment::with(['lesson', 'school', 'students'])->findOrFail($id);
-         return view('admin.assignments.show', compact('assignment'));
-     }
+
+    public function show(string $id)
+    {
+        $assignment = Assignment::with(['lesson', 'school', 'students'])->findOrFail($id);
+        return view('admin.assignments.show', compact('assignment'));
+    }
     /**
      * Show the form for editing the specified resource.
      */
@@ -124,53 +179,54 @@ class AssignmentController extends Controller
 
         if ($userAuth) {
             $assignment = Assignment::findOrFail($id);
-    
-            // Fetch all lessons and schools
+
             $lessons = Lesson::all();
-            $schools = School::all();
-    
-            // Fetch stages for the selected school
-            $stages = DB::table('school_stage')
-                ->where('school_id', $assignment->school_id)
-                ->join('stages', 'school_stage.stage_id', '=', 'stages.id')
+
+            $school = School::find($userAuth->school_id);
+
+            $stages = DB::table('teacher_stage')
+                ->where('teacher_id', $userAuth->id)
+                ->join('stages', 'teacher_stage.stage_id', '=', 'stages.id')
                 ->select('stages.id', 'stages.name')
                 ->get();
-    
-            // Fetch the selected stage from the `assignment_stage` table
+
             $selectedStage = DB::table('assignment_stage')
                 ->where('assignment_id', $assignment->id)
                 ->value('stage_id');
-    
-            // Fetch all students of the selected stage
-            $students = DB::table('students')
-                ->where('stage_id', $selectedStage)
-                ->get();
-    
-            // Fetch the selected students from `assignment_student` table
-            $selectedStudents = DB::table('assignment_student')
+
+            $classes = Group::where('school_id', $userAuth->school_id)->get();
+
+            $selectedClasses = DB::table('assignment_class')
                 ->where('assignment_id', $assignment->id)
-                ->pluck('student_id')
+                ->pluck('class_id')
                 ->toArray();
-    
-            return view('pages.teacher.Assignment.Edit', compact('assignment', 'lessons', 'schools', 'stages', 'students', 'selectedStage', 'selectedStudents',  "userAuth"));
+
+            return view('pages.teacher.Assignment.edit', compact('assignment', 'lessons', 'stages', 'classes', 'selectedStage', 'selectedClasses', 'userAuth'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
     }
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, string $id)
     {
+        // Get the authenticated teacher
+        $userAuth = auth()->guard('teacher')->user();
+
+        if (!$userAuth) {
+            return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+        }
+
+        // Find the assignment
         $assignment = Assignment::findOrFail($id);
 
+        // Validate the incoming request
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'school_id' => 'required|exists:schools,id',
             'lesson_id' => 'required|exists:lessons,id',
-            'student_ids' => 'required|array',
-            'student_ids.*' => 'exists:students,id',
+            'stage_id' => 'required|exists:stages,id',
+            'class_ids' => 'required|array',
+            'class_ids.*' => 'exists:groups,id',
             'path_file' => 'nullable|file',
             'link' => 'nullable|url',
             'start_date' => 'required|date',
@@ -185,7 +241,7 @@ class AssignmentController extends Controller
             $assignment->path_file = $filePath;
         }
 
-        // Update the assignment
+        // Update the assignment details
         $assignment->update([
             'title' => $request->title,
             'description' => $request->description,
@@ -193,56 +249,65 @@ class AssignmentController extends Controller
             'start_date' => $request->start_date,
             'due_date' => $request->due_date,
             'lesson_id' => $request->lesson_id,
-            'school_id' => $request->school_id,
+            'school_id' => $userAuth->school_id, // Automatically set the school_id based on the teacher's school
             'marks' => $request->marks,
             'is_active' => $request->is_active ?? 0,
         ]);
 
-        // Update assignment_stage
+        // Sync the assignment with selected stages and classes
         DB::table('assignment_stage')
-            ->where('assignment_id', $assignment->id)
-            ->update([
-                'school_id' => $request->school_id,
-                'stage_id' => $request->stage_id,
-                'updated_at' => now(),
-            ]);
+            ->updateOrInsert(
+                ['assignment_id' => $assignment->id],
+                ['stage_id' => $request->stage_id, 'updated_at' => now()]
+            );
 
-        // Update assignment_student
-        DB::table('assignment_student')
-            ->where('assignment_id', $assignment->id)
-            ->delete();
+        // Update classes related to the assignment
+        DB::table('assignment_class')->where('assignment_id', $assignment->id)->delete();
+        DB::table('assignment_student')->where('assignment_id', $assignment->id)->delete();
 
-        foreach ($request->student_ids as $studentId) {
-            DB::table('assignment_student')->insert([
+        foreach ($request->class_ids as $classId) {
+            DB::table('assignment_class')->insert([
                 'assignment_id' => $assignment->id,
-                'student_id' => $studentId,
+                'class_id' => $classId,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
+            // Attach assignment to all students in the class
+            $students = DB::table('students')->where('class_id', $classId)->get();
+            foreach ($students as $student) {
+                DB::table('assignment_student')->insert([
+                    'assignment_id' => $assignment->id,
+                    'student_id' => $student->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
         }
 
         return redirect()->route('assignments.index')->with('success', 'Assignment updated successfully.');
     }
+
+
+
     /**
      * Remove the specified resource from storage.
      */
+
     public function destroy(string $id)
     {
         // Find the assignment by id
-        $assignmentt = Assignment::find($id);
-    
-        // Check if the assignment exists
-        if (!$assignmentt) {
-            return redirect()->back()->with('error', 'Assignment not found.');
-        }
-    
-        // Delete the assignment
-        $assignmentt->delete();
-    
-        // Redirect back with a success message
-        $Assignment = Assignment::where("teacher_id", auth()->user()->id)->with(relations: 'school')->with('lesson')->orderBy("created_at","desc")->get();
+        $assignment = Assignment::find($id);
 
-        return view("pages.teacher.Assignment.index", compact("Assignment"));
+        // Check if the assignment exists
+        if (!$assignment) {
+            return redirect()->route('assignments.index')->with('error', 'Assignment not found.');
+        }
+
+        // Delete the assignment
+        $assignment->delete();
+
+        // Redirect back with a success message
+        return redirect()->route('assignments.index')->with('success', 'Assignment deleted successfully.');
     }
-    
 }

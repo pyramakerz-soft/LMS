@@ -86,6 +86,7 @@ Route::prefix('admin')->group(function () {
         Route::get('classes/{id}/import', [ClassController::class, 'showImportForm'])->name('classes.import');
         Route::post('classes/{id}/import', [ClassController::class, 'importStudents'])->name('classes.importStudents');
 
+        Route::post('teachers/generate', [TeacherController::class, 'generate'])->name('teachers.generate');
 
         Route::get('/api/schools/{school}/stages', function (School $school) {
             return response()->json($school->stages);
@@ -101,8 +102,6 @@ Route::prefix('admin')->group(function () {
         Route::get('/api/schools/{school}/classes', function (School $school) {
             return response()->json($school->classes);
         });
-
-
     });
 });
 

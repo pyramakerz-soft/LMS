@@ -20,7 +20,8 @@ class TeacherController extends Controller
     public function index()
     {
         $teachers = Teacher::with('school', 'stages')->paginate(10);
-        return view('admin.teachers.index', compact('teachers'));
+        $schools = School::all();  // Fetch schools to use in the modal
+        return view('admin.teachers.index', compact('teachers', 'schools'));
     }
 
     /**
@@ -73,7 +74,34 @@ class TeacherController extends Controller
 
         return redirect()->route('teachers.index')->with('success', 'Teacher created successfully.');
     }
+    public function generate(Request $request)
+    {
+        $request->validate([
+            'number_of_teachers' => 'required|integer|min:1',
+            'school_id' => 'required|exists:schools,id',
+        ]);
 
+        $numberOfTeachers = $request->input('number_of_teachers');
+        $schoolId = $request->input('school_id');
+        $school = School::findOrFail($schoolId);
+
+        $currentCount = Teacher::where('school_id', $schoolId)->count();
+
+        for ($i = 1; $i <= $numberOfTeachers; $i++) {
+            $username = str_replace(' ', '_', strtolower($school->name)) . '_' . ($currentCount + $i);
+            $password = Str::random(8);
+
+            Teacher::create([
+                'username' => $username,
+                'password' => Hash::make($password),
+                'plain_password' => $password,
+                'school_id' => $schoolId,
+                'is_active' => 1,
+            ]);
+        }
+
+        return redirect()->route('teachers.index')->with('success', "$numberOfTeachers teachers generated successfully.");
+    }
     /**
      * Display the specified resource.
      */
@@ -90,14 +118,48 @@ class TeacherController extends Controller
         $teacher = Teacher::findOrFail($id);
         $schools = School::all();
         $stages = Stage::all();
-        $classes = TeacherClass::with('class')->where('teacher_id', $teacher->id)->get();
-        $classess = Group::whereNotIn('id', $classes->pluck('class_id'))->get();
-        return view('admin.teachers.edit', compact('teacher', 'schools', 'stages', 'classes', 'classess'));
+
+        $classes = Group::where('school_id', $teacher->school_id)->get();
+
+        return view('admin.teachers.edit', compact('teacher', 'schools', 'classes', 'stages'));
     }
 
     /**
      * Update the specified resource in storage.
      */
+    // public function update(Request $request, string $id)
+    // {
+    //     $teacher = Teacher::findOrFail($id);
+
+    //     $request->validate([
+    //         'username' => 'required|unique:teachers,username,' . $teacher->id,
+    //         'gender' => 'required',
+    //         'school_id' => 'required|exists:schools,id',
+    //         'stage_ids' => 'required|array',
+    //         'stage_ids.*' => 'exists:stages,id',
+    //         'class_id' => 'required|array',
+    //         'class_id.*' => 'exists:groups,id',
+    //         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    //     ]);
+    //     $username = str_replace(' ', '_', $request->input('username'));
+
+    //     if ($request->hasFile('image')) {
+    //         $imagePath = $request->file('image')->store('teachers', 'public');
+    //         $teacher->image = $imagePath;
+    //     }
+
+    //     $teacher->update([
+    //         'username' => $username,
+    //         'gender' => $request->input('gender'),
+    //         'school_id' => $request->input('school_id'),
+    //         'is_active' => $request->input('is_active') ?? 1,
+    //     ]);
+    //     $teacher->classes()->sync($request->input('class_id'));
+    //     $teacher->stages()->sync($request->input('stage_ids'));
+    //     return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully.');
+    // }
+
+
     public function update(Request $request, string $id)
     {
         $teacher = Teacher::findOrFail($id);
@@ -112,6 +174,7 @@ class TeacherController extends Controller
             'class_id.*' => 'exists:groups,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
         $username = str_replace(' ', '_', $request->input('username'));
 
         if ($request->hasFile('image')) {
@@ -125,10 +188,13 @@ class TeacherController extends Controller
             'school_id' => $request->input('school_id'),
             'is_active' => $request->input('is_active') ?? 1,
         ]);
+
         $teacher->classes()->sync($request->input('class_id'));
         $teacher->stages()->sync($request->input('stage_ids'));
+
         return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.
