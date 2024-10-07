@@ -111,7 +111,18 @@ $tableData = [
                 @foreach ($students as $student)
                     {{-- @dd($student->toArray(  )) --}}
                     @foreach($student as $s)
-            
+                    {{-- @dd($s->studentAssessment->pluck("attendance_score")->sum()); --}}
+                    @php
+                        $count = $s->studentAssessment->count();
+                        $attendance_score = $s->studentAssessment->pluck("attendance_score")->sum();
+                        $attendance_avg = $attendance_score / $count ; 
+                        $cp_score = $s->studentAssessment->pluck("classroom_participation_score")->sum();
+                        $cp_avg = $cp_score / $count ; 
+                        $cb_score = $s->studentAssessment->pluck("classroom_behavior_score")->sum();
+                        $cb_avg = $cb_score / $count ; 
+                        $hw_score = $s->studentAssessment->pluck("homework_score")->sum();
+                        $hw_avg = $hw_score / $count ; 
+                    @endphp
                     <tr class="border-t border-gray-300 text-lg md:text-xl">    
                         <td class="py-5 px-6" rowspan="2">
                             <a href="{{ route('teacher.assessments.student' ,  $s->id) }}" class="text-blue-600 hover:underline">
@@ -126,25 +137,25 @@ $tableData = [
                         </td> --}}
                         <td class="py-5 px-6">
                             <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                <input class="w-[40px]" type="number"  value="{{$s->attendance_score ? $s->attendance_score : 0 }}"> 
+                                <input class="w-[40px]" type="number"  value="{{$attendance_avg ?? 0 }}"> 
                                 <p>/20 </p>
                             </div>
                         </td>
                         <td class="py-5 px-6">
                             <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                <input class="w-[40px]" type="number" value="{{$s->attendance_score?$s->attendance_score: 0 }}"> 
+                                <input class="w-[40px]" type="number" value="{{$cp_avg ?? 0 }}"> 
                                 <p>/20 </p>
                             </div>
                         </td>
                         <td class="py-5 px-6">
                             <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                <input class="w-[40px]" type="number" value="{{ $s->attendance_score ? $s->attendance_score : 0 }}"> 
+                                <input class="w-[40px]" type="number" value="{{ $cb_avg ?? 0 }}"> 
                                 <p>/10 </p>
                             </div>
                         </td>
                         <td class="py-5 px-6">
                             <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                <input class="w-[40px]" type="number" value="{{ $s->attendance_score ? $s->attendance_score : 0 }}"> 
+                                <input class="w-[40px]" type="number" value="{{ $hw_avg ?? 0 }}"> 
                                 <p>/50 </p>
                             </div>
                         </td>

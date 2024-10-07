@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Models\Student_assessment;
 use App\Models\TeacherClass;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -38,7 +39,6 @@ class TeacherClasses extends Controller
             ->where('class_id', $class_id)
             ->where('teacher_id', $userAuth->id)
             ->get();
-
         if (!$class) {
             return redirect()->route('teacher_classes')->withErrors(['error' => 'Class not found or unauthorized access.']);
         }
@@ -76,11 +76,19 @@ class TeacherClasses extends Controller
         ]);
 
         // Fetch or create the assessment for the student for the given week
-        $assessment = Student_assessment::firstOrNew([
+        // dd(Carbon::parse(date('Y-m-d')));
+        $assessment = Student_assessment::where([
             'student_id' => $request->student_id,
             'teacher_id' => auth()->guard('teacher')->id(),
             // 'week' => $request->week,
-        ]);
+        ])->whereBetween('created_at',[Carbon::parse(date('Y-m-d'))->startOfDay(),Carbon::parse(date('Y-m-d'))->endOfDay()])->first();
+if(!$assessment){
+$assessment = Student_assessment::where([
+    'student_id' => $request->student_id,
+    'teacher_id' => auth()->guard('teacher')->id(),
+    // 'week' => $request->week,
+]);
+}
         // dd($assessment);
 
         // Update the fields
