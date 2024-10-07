@@ -128,11 +128,12 @@ $assessments = Student_assessment::where('student_id', $assessmentData['student_
     {
         $userAuth = auth()->guard('teacher')->user();
         if ($userAuth) {
-            $student = Student::findOrFail($student_id);
+            $student2 = Student::findOrFail($student_id);
 
             $assessments = Student_assessment::where('student_id', $student_id)->get();
-            $classId = $student->class_id;
-            return view('pages.teacher.assessments.student', compact('student', 'assessments', "userAuth", 'classId'));
+            $classId = $student2->class_id;
+            // dd($student);
+            return view('components.GradeTableForOneStudent', compact('student2', 'assessments', "userAuth", 'classId'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }

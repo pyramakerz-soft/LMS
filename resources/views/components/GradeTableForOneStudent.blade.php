@@ -114,7 +114,7 @@ $menuItems = [
     <span class="mx-2 text-[#D0D5DD]">/</span>
     <a href="" class="mx-2 cursor-pointer">Assaasments</a>
     <span class="mx-2 text-[#D0D5DD]">/</span>
-    <a href="" class="mx-2 cursor-pointer">Student name</a>
+    <a href="" class="mx-2 cursor-pointer">{{$student2->username}}</a>
 </div>
 
 
@@ -133,70 +133,72 @@ $menuItems = [
                 </tr>
             </thead>
             <tbody>
-                @foreach ($tableData as $student)
-                    <tr class="{{ $loop->index % 2 === 0 ? 'bg-white' : 'bg-[#DFE6FF]' }}">
-                        <td class="bg-white p-5" rowspan="{{ count($student['records']) }}">Rana Mohamed</td>
-                        <td class="py-5 px-6">
-                            <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                <input class="w-[40px]" type="number" value="{{ $student['records'][0]['attendance'] ? $student['records'][0]['attendance'] : 0 }}"> 
-                                <p>/10 </p>
-                            </div>
-                        </td>
-                        <td class="py-5 px-6">
-                            <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                <input class="w-[40px]" type="number" value="{{$student['records'][0]['participation'] ? $student['records'][0]['participation'] : 0 }}"> 
-                                <p>/20 </p>
-                            </div>
-                        </td>
-                        <td class="py-5 px-6">
-                            <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                <input class="w-[40px]" type="number" value="{{ $student['records'][0]['behavior']? $student['records'][0]['behavior']: 0 }}"> 
-                                <p>/20 </p>
-                            </div>
-                        </td>
-                        <td class="py-5 px-6">
-                            <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                <input class="w-[40px]" type="number" value="{{ $student['records'][0]['homework'] ? $student['records'][0]['homework'] : 0 }}"> 
-                                <p>/10 </p>
-                            </div>
-                        </td>
-                        <td class="py-5 px-6" rowspan="{{ count($student['records']) }}"> 
-                            <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                <input class="w-[40px]" type="number" value="{{ $student['records'][0]['final_project'] ? $student['records'][0]['final_project'] : 0 }}"> 
-                                <p>/50 </p>
-                            </div>
-                        </td>
-                    </tr>
-                    
-                    @foreach (array_slice($student['records'], 1) as $record)
-                        <tr class="border-t border-gray-300 text-lg md:text-xl {{ $loop->index % 2 === 0 ? 'bg-[#DFE6FF]' : 'bg-white' }}">
+                {{-- @dd($assessments); --}}
+                @foreach ($assessments as $student)
+                    @if($loop->index == 0)
+                        <tr class="bg-white">
+                            <td class="bg-white p-5" rowspan="{{ count($assessments) }}">{{$student2->username}}</td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $record['attendance'] ? $record['attendance'] : 0 }}"> 
+                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
                                     <p>/10 </p>
                                 </div>
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $record['participation'] ? $record['participation'] : 0 }}"> 
+                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
                                     <p>/20 </p>
                                 </div>
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $record['behavior'] ? $record['behavior'] : 0 }}"> 
+                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
                                     <p>/20 </p>
                                 </div>
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $record['homework'] ? $record['homework'] : 0 }}"> 
+                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
+                                    <p>/10 </p>
+                                </div>
+                            </td>
+                            <td class="py-5 px-6" rowspan="{{ count($assessments) }}"> 
+                                <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
+                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
+                                    <p>/50 </p>
+                                </div>
+                            </td>
+                        </tr>
+                    @else
+                        <tr class="border-t border-gray-300 text-lg md:text-xl {{ $loop->index % 2 === 0 ? 'bg-white' : 'bg-[#DFE6FF]' }}">
+                            <td class="py-5 px-6">
+                                <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
+                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
+                                    <p>/10 </p>
+                                </div>
+                            </td>
+                            <td class="py-5 px-6">
+                                <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
+                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
+                                    <p>/20 </p>
+                                </div>
+                            </td>
+                            <td class="py-5 px-6">
+                                <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
+                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
+                                    <p>/20 </p>
+                                </div>
+                            </td>
+                            <td class="py-5 px-6">
+                                <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
+                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
                                     <p>/10 </p>
                                 </div>
                             </td>
                         </tr>
-                    @endforeach
+                    @endif
                 @endforeach
+                    
             </tbody>
         </table>
     </div>

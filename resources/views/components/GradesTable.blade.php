@@ -102,82 +102,86 @@ $tableData = [
                 </tr>
             </thead>
             <tbody>
-                @if(count($tableData) === 0)
+                @if(count($students) === 0)
                     <tr>
                         <td colspan="6" class="px-4 py-4 h-[72px] text-center border-t border-gray-300 text-lg md:text-xl">No Data Found</td>
                     </tr>
                 @endif
                 
-                @foreach ($tableData as $student)
-                    
-                    @foreach ($student['records'] as $record)
-                        <tr class="border-t border-gray-300 text-lg md:text-xl">    
-                            <td class="py-5 px-6" rowspan="2">
-                                <a href="{{ route('teacher.student.grade') }}" class="text-blue-600 hover:underline">
-                                    {{ $student['name'] }}
-                                </a>
-                            </td>
-                            <td class="py-5 px-6">
-                                <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number"  value="{{ $record['attendance'] ? $record['attendance'] : 0 }}"> 
-                                    <p>/10 </p>
-                                </div>
-                            </td>
-                            <td class="py-5 px-6">
-                                <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number"  value="{{$record['participation'] ? $record['participation'] : 0 }}"> 
-                                    <p>/20 </p>
-                                </div>
-                            </td>
-                            <td class="py-5 px-6">
-                                <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $record['behavior']? $record['behavior']: 0 }}"> 
-                                    <p>/20 </p>
-                                </div>
-                            </td>
-                            <td class="py-5 px-6">
-                                <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $record['homework'] ? $record['homework'] : 0 }}"> 
-                                    <p>/10 </p>
-                                </div>
-                            </td>
-                            <td class="py-5 px-6">
-                                <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $record['final_project'] ? $record['final_project'] : 0 }}"> 
-                                    <p>/50 </p>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
+                @foreach ($students as $student)
+                    {{-- @dd($student->toArray(  )) --}}
+                    @foreach($student as $s)
+            
+                    <tr class="border-t border-gray-300 text-lg md:text-xl">    
+                        <td class="py-5 px-6" rowspan="2">
+                            <a href="{{ route('teacher.assessments.student' ,  $s->id) }}" class="text-blue-600 hover:underline">
+                                {{ $s->username }}
+                            </a>
+                        </td>
+                        {{-- <td class="py-5 px-6">
+                            <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
+                                <input class="w-[40px]" type="number"  value="{{ $s->pluck('attendance_score') ? $s->pluck('attendance_score') : 0 }}"> 
+                                <p>/10 </p>
+                            </div>
+                        </td> --}}
+                        <td class="py-5 px-6">
+                            <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
+                                <input class="w-[40px]" type="number"  value="{{$s->attendance_score ? $s->attendance_score : 0 }}"> 
+                                <p>/20 </p>
+                            </div>
+                        </td>
+                        <td class="py-5 px-6">
+                            <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
+                                <input class="w-[40px]" type="number" value="{{$s->attendance_score?$s->attendance_score: 0 }}"> 
+                                <p>/20 </p>
+                            </div>
+                        </td>
+                        <td class="py-5 px-6">
+                            <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
+                                <input class="w-[40px]" type="number" value="{{ $s->attendance_score ? $s->attendance_score : 0 }}"> 
+                                <p>/10 </p>
+                            </div>
+                        </td>
+                        <td class="py-5 px-6">
+                            <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
+                                <input class="w-[40px]" type="number" value="{{ $s->attendance_score ? $s->attendance_score : 0 }}"> 
+                                <p>/50 </p>
+                            </div>
+                        </td>
+                    </tr>
                     <tr class="border-t border-gray-300 text-lg md:text-xl bg-[#DFE6FF]">
                         <td class="py-5 px-6">
                             <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                <input class="w-[40px]" max="10" min="0" type="number"> 
+                                <input class="w-[40px] assessment-input" max="10" min="0" type="number" name="attendance_score" data-student-id="{{ $s->id }}" value="attendance_score"> 
                                 <p>/10 </p>
                             </div>
                         </td>
                         <td class="py-5 px-6">
                             <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                <input class="w-[40px]" type="number"> 
+                                <input class="w-[40px] assessment-input" type="number" name="classroom_participation_score" data-student-id="{{ $s->id }}" value="classroom_participation_score"> 
                                 <p>/20 </p>
                             </div>
                         </td>
                         <td class="py-5 px-6">
                             <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                <input class="w-[40px]" type="number"> 
+                                <input class="w-[40px] assessment-input" type="number" name="classroom_behavior_score" data-student-id="{{ $s->id }}" value="classroom_behavior_score"> 
                                 <p>/20 </p>
                             </div>
                         </td>
                         <td class="py-5 px-6">
                             <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                <input class="w-[40px]" type="number"> 
+                                <input class="w-[40px] assessment-input" type="number" name="homework_score" data-student-id="{{ $s->id }}" value="homework_score"> 
                                 <p>/10 </p>
                             </div>
                         </td>
                         <td class="py-5 px-6">
-   
+                            <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
+                                <input class="w-[40px] assessment-input" type="number" name="final_project_score" data-student-id="{{ $s->id }}" value="final_project_score"> 
+                                <p>/50 </p>
+                            </div>
                         </td> 
                     </tr>
+                    
 
                     @if($loop->index != count($tableData) - 1)
                         <tr class="bg-white border border-x border-x-white">
@@ -186,6 +190,7 @@ $tableData = [
                             </td>
                         </tr>
                     @endif
+                    @endforeach
                 @endforeach
 
 
@@ -195,4 +200,47 @@ $tableData = [
 
 </div>
 
+@endsection
+
+@section('page_js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('.assessment-input');
+        inputs.forEach(input => {
+            input.addEventListener('change', function() {
+                const studentId = this.dataset.studentId;
+                const fieldName = this.name;
+                const value = this.value;
+    
+                const data = {
+                    student_id: studentId,
+                    [fieldName]: value,
+                    week: 8 // You can dynamically pass the week or change it accordingly.
+                };
+    
+                // Send AJAX request to save the assessment
+                fetch("{{ route('teacher.storeAssessment') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // alert(data.message);
+                    } else {
+                        alert('Error saving the assessment');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+    });
+    
+</script>
 @endsection

@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('student_assessments', function (Blueprint $table) {
-            $table->foreignId('term_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('term_id')->nullable();
+            $table->foreign('term_id')->references('id')->on('terms')->onUpdate('cascade')->onDelete('cascade');
 
         });
     }
