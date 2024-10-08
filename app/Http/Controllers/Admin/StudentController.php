@@ -36,7 +36,7 @@ class StudentController extends Controller
         }
 
         $students = $StudentQuery->get();
-        $students = $StudentQuery->paginate(10);
+        $students = $StudentQuery->paginate(30);
         return view('admin.students.index', compact('students', 'schools', 'classes'));
     }
 

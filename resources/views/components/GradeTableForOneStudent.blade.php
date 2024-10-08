@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('title')
@@ -7,11 +6,10 @@
 @php
 
 $menuItems = [
-        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
-    ];
+    ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
+];
 
-
-    $tableData = [
+$tableData = [
     [
         'records' => [
             [
@@ -19,64 +17,16 @@ $menuItems = [
                 'participation' => 18,
                 'behavior' => 20,
                 'homework' => 8,
-                'final_project' => 45
+                'final_project' => 45,
             ],
             [
                 'attendance' => 8,
                 'participation' => 19,
                 'behavior' => 17,
                 'homework' => 9,
-                'final_project' => 48
+                'final_project' => 48,
             ],
-            [
-                'attendance' => 8,
-                'participation' => 19,
-                'behavior' => 17,
-                'homework' => 9,
-                'final_project' => 48
-            ],
-            [
-                'attendance' => 8,
-                'participation' => 19,
-                'behavior' => 17,
-                'homework' => 9,
-                'final_project' => 48
-            ],
-            [
-                'attendance' => 8,
-                'participation' => 19,
-                'behavior' => 17,
-                'homework' => 9,
-                'final_project' => 48
-            ],
-            [
-                'attendance' => 8,
-                'participation' => 19,
-                'behavior' => 17,
-                'homework' => 9,
-                'final_project' => 48
-            ],
-            [
-                'attendance' => 8,
-                'participation' => 19,
-                'behavior' => 17,
-                'homework' => 9,
-                'final_project' => 48
-            ],
-            [
-                'attendance' => 8,
-                'participation' => 19,
-                'behavior' => 17,
-                'homework' => 9,
-                'final_project' => 48
-            ],
-            [
-                'attendance' => 8,
-                'participation' => 19,
-                'behavior' => 17,
-                'homework' => 9,
-                'final_project' => 48
-            ],
+            // Add more records as needed
         ],
     ]
 ];
@@ -108,7 +58,6 @@ $menuItems = [
     @yield('insideContent')
 </div>
 
-
 <div class="p-3 text-[#667085] my-8">
     <i class="fa-solid fa-house mx-2"></i>
     <span class="mx-2 text-[#D0D5DD]">/</span>
@@ -119,7 +68,6 @@ $menuItems = [
     <a href="#" class="mx-2 cursor-pointer">{{$student2->username}}</a>
 </div>
 
-
 <div class="">
 
     <div class="mt-5 overflow-x-auto rounded-2xl border border-[#EAECF0]">
@@ -127,7 +75,6 @@ $menuItems = [
             <thead class="bg-[#F9FAFB]">  
                 <tr>
                     <th class="py-4 px-6 min-w-[220px] whitespace-nowrap">Name</th>
-                    <th class="py-4 px-6 min-w-[220px] whitespace-nowrap">Week</th>
                     <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Attendance</th>
                     <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Classroom Participation</th>
                     <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Classroom Behavior</th>
@@ -140,7 +87,6 @@ $menuItems = [
                     @if($loop->index == 0)
                         <tr class="bg-white">
                             <td class="bg-white p-5" rowspan="{{ count($assessments) }}">{{$student2->username}}</td>
-                            <td class="bg-white p-5">Week 1</td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
                                     <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
@@ -174,7 +120,6 @@ $menuItems = [
                         </tr>
                     @else
                         <tr class="border-t border-gray-300 text-lg md:text-xl {{ $loop->index % 2 === 0 ? 'bg-white' : 'bg-[#DFE6FF]' }}">
-                            <td class="bg-white p-5">Week 1</td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
                                     <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
@@ -183,7 +128,7 @@ $menuItems = [
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->classroom_participation_score ? $student->attendance_score : 0 }}"> 
+                                    <input class="w-[40px]" type="number" value="{{ $student->classroom_participation_score ? $student->classroom_participation_score : 0 }}"> 
                                     <p>/20 </p>
                                 </div>
                             </td>
@@ -202,7 +147,6 @@ $menuItems = [
                         </tr>
                     @endif
                 @endforeach
-                    
             </tbody>
         </table>
     </div>

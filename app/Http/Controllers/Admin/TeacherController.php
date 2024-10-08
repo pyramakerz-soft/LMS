@@ -17,11 +17,28 @@ class TeacherController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $teacherQuery = Teacher::with('school');
+
+        $schools = School::all();
+        $classes = Group::all();
+
+        if ($request) {
+
+            if ($request->has('school') && $request->school != null) {
+                $teacherQuery->where('school_id', $request->school);
+            }
+
+            if ($request->has('class') && $request->class != null) {
+                $teacherQuery->where('class_id', $request->class);
+            }
+        }
+
+        $teacherss = $teacherQuery->get();
         $teachers = Teacher::with('school', 'stages')->paginate(10);
         $schools = School::all();  // Fetch schools to use in the modal
-        return view('admin.teachers.index', compact('teachers', 'schools'));
+        return view('admin.teachers.index', compact('teachers', 'schools', 'teacherss', 'classes'));
     }
 
     /**
