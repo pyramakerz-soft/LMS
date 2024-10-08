@@ -167,7 +167,7 @@ $menuItems = [
                             </div>
                         </td>
                     </tr>
-                    
+                       
                     @foreach (array_slice($student['records'], 1) as $record)
                         <tr class="border-t border-gray-300 text-lg md:text-xl {{ $loop->index % 2 === 0 ? 'bg-[#DFE6FF]' : 'bg-white' }}">
                             <td class="py-5 px-6">
