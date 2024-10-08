@@ -72,35 +72,41 @@
 
     </div>
 
-    <form method="POST" action={{ route("student.assignment.store") }} enctype="multipart/form-data">
-        @csrf
-        <div class="border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F] mt-7 text-center">
-            <div class="w-full md:w-2/5 mx-auto">
-                <label for="file-upload" class="cursor-pointer flex flex-col items-center border border-dashed border-[#CACACA] rounded-xl px-6 py-3 lg:py-5">
-                    <div id="upload-icon">
-                        <i class="fa-solid fa-upload text-[#FF7519] bg-[#F5F5F5] rounded-full p-3"></i>
-                    </div>
-                    <div id="uploaded-image" class="hidden">
-                        <img class="w-8" src="{{ asset('images/FileAttached.png') }}" alt="Uploaded" />
-                    </div>
-                    <p class="my-2"><span class="text-[#FF7519]">Click to Upload</span> or drag and drop</p>
-                    <p> (Max. File size: 25 MB) </p>
-                </label>
-                <input id="file-upload" name="file_upload" type="file" class="hidden" accept=".xlsx, .xls" onchange="handleFileChange()" />
-                <input id="assignment_id" name="assignment_id" value="{{$assignment->id}}" type="text" class="hidden" />
-            </div>
-            @if ($errors->any())
-                <div id="error-section" class="mt-5 text-red-500">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-            <button type="submit" class="p-2 px-4 bg-[#FF7519] text-white rounded-md mt-5">Submit</button>
+    @if(true)
+        <div class="border border-[#ECECEC] rounded-lg p-4 shadow-md shadow-[#0000001F] text-center">
+            <p class="p-2 px-4 bg-[#2E3646] text-white rounded-md mt-5">Already Submited</p>
         </div>
-    </form>
+    @else
+        <form method="POST" action={{ route("student.assignment.store") }} enctype="multipart/form-data">
+            @csrf
+            <div class="border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F] mt-7 text-center">
+                <div class="w-full md:w-2/5 mx-auto">
+                    <label for="file-upload" class="cursor-pointer flex flex-col items-center border border-dashed border-[#CACACA] rounded-xl px-6 py-3 lg:py-5">
+                        <div id="upload-icon">
+                            <i class="fa-solid fa-upload text-[#FF7519] bg-[#F5F5F5] rounded-full p-3"></i>
+                        </div>
+                        <div id="uploaded-image" class="hidden">
+                            <img class="w-8" src="{{ asset('images/FileAttached.png') }}" alt="Uploaded" />
+                        </div>
+                        <p class="my-2"><span class="text-[#FF7519]">Click to Upload</span> or drag and drop</p>
+                        <p> (Max. File size: 25 MB) </p>
+                    </label>
+                    <input id="file-upload" name="file_upload" type="file" class="hidden" accept=".xlsx, .xls" onchange="handleFileChange()" />
+                    <input id="assignment_id" name="assignment_id" value="{{$assignment->id}}" type="text" class="hidden" />
+                </div>
+                @if ($errors->any())
+                    <div id="error-section" class="mt-5 text-red-500">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <button type="submit" class="p-2 px-4 bg-[#FF7519] text-white rounded-md mt-5">Submit</button>
+            </div>
+        </form>
+    @endif
 </div>
 
 

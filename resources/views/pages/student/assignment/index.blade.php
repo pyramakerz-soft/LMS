@@ -88,12 +88,18 @@
               <td class="py-5 px-6">{{ $assignment->due_date }}</td>
               {{-- <td class="py-5 px-6">{{ $assignment->marks }}</td> --}}
               <td class="py-5 px-6">
-                {{ $assignment->student_marks ?? 'Not Graded' }} / {{ $assignment->marks }}
-            </td>
+                  {{ $assignment->student_marks ?? 'Not Graded' }} / {{ $assignment->marks }}
+              </td>
               <td class="py-5 px-6">
-                <a href="{{route('student.assignment.show', $assignment->id)}}" class="text-[#FF7519] cursor-pointer"> 
-                    View Assignments
-                </a>
+                @if($assignment->student_marks)
+                  <p class="text-gray-500"> 
+                      View Assignments
+                  </p>
+                  @else
+                    <a href="{{route('student.assignment.show', $assignment->id)}}" class="text-[#FF7519] cursor-pointer"> 
+                        View Assignments
+                    </a>
+                @endif
               </td>
             </tr>
             @endforeach
