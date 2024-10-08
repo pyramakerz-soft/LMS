@@ -56,7 +56,8 @@
                     <tr class="border-t border-gray-300 text-lg md:text-xl">
                         <td class="py-5 px-6 font-bold">Name</td>
                         @foreach ($students as $student)
-                            <td class="py-5 px-6 text-blue-600">{{ $student->username }}</td>
+                        @dd($student)
+                            {{-- <td class="py-5 px-6 text-blue-600">{{ $student->username }}</td> --}}
                         @endforeach
                     </tr>
 
@@ -91,6 +92,7 @@
                     const field = this.dataset.field;
                     const value = this.value;
 
+                    
                     // Send AJAX request to save the assessment
                     fetch("{{ route('teacher.storeAssessment') }}", {
                             method: 'POST',

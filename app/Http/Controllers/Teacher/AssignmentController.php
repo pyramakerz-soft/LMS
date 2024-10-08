@@ -7,6 +7,7 @@ use App\Models\Assignment;
 use App\Models\Group;
 use App\Models\Lesson;
 use App\Models\School;
+use App\Models\Student_assessment;
 use DB;
 use Illuminate\Http\Request;
 
@@ -332,6 +333,16 @@ class AssignmentController extends Controller
             ->where('assignment_id', $id)
             ->where('student_id', $studentId)
             ->update(['marks' => $request->marks]);
+        $assignment = DB::table('assignment_student')
+        ->where('assignment_id', $id)
+        ->where('student_id', $studentId)->first();
+        // dd($assignment->id);
+        $student_assignments = Student_assessment::where('assignment_student_id',$assignment->id)->first();
+        $student_assignments->homework_score = $request->marks/3;
+        $student_assignments->save();
+        // dd($student_assignments);
+        // $student_assignments
+
 
         return redirect()->route('assignments.students', $id)->with('success', 'Marks updated successfully.');
     }

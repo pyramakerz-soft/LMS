@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Models\Student_assessment;
 use App\Models\TeacherClass;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -32,27 +33,31 @@ class TeacherClasses extends Controller
         if (!$userAuth) {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
-
+        // dd( TeacherClass::with('students')->where('class_id', $class_id)->with('student_assessments')->get());
         // Find the class assigned to this teacher
-        $class = TeacherClass::with('students')
+        $class = TeacherClass::with(['students.studentAssessment'])
             ->where('class_id', $class_id)
             ->where('teacher_id', $userAuth->id)
-            ->first();
-
+            ->get();
         if (!$class) {
             return redirect()->route('teacher_classes')->withErrors(['error' => 'Class not found or unauthorized access.']);
         }
 
-        // Get all students in the class
-        $students = $class->students;
+        //  dd($class->pluck('students')->toArray());
+        // dd($class->toArray() ,$class->pluck('students')->toArray());  
 
-        // Define the number of weeks you want to display
+        // Get all students in the class
+        $students = $class->pluck('students');
         $numberOfWeeks = 8;
         $weeks = range(1, $numberOfWeeks);
 
+        // dd($students);
         // Pass the students, weeks, and class to the view
-        return view('pages.teacher.Class.students', compact('students', 'class', 'weeks'));
+        // return view('pages.teacher.Class.students', compact('students', 'class', 'weeks'));
+
+        return view('components.GradesTable', compact('students', 'class', 'weeks'));
     }
+
 
 
 
@@ -71,12 +76,20 @@ class TeacherClasses extends Controller
         ]);
 
         // Fetch or create the assessment for the student for the given week
-        $assessment = Student_assessment::firstOrNew([
+        // dd(Carbon::parse(date('Y-m-d')));
+        $assessment = Student_assessment::where([
             'student_id' => $request->student_id,
             'teacher_id' => auth()->guard('teacher')->id(),
             // 'week' => $request->week,
-        ]);
-        dd($assessment);
+        ])->whereBetween('created_at',[Carbon::parse(date('Y-m-d'))->startOfDay(),Carbon::parse(date('Y-m-d'))->endOfDay()])->first();
+if(!$assessment){
+$assessment = Student_assessment::where([
+    'student_id' => $request->student_id,
+    'teacher_id' => auth()->guard('teacher')->id(),
+    // 'week' => $request->week,
+]);
+}
+        // dd($assessment);
 
         // Update the fields
         $assessment->attendance_score = $request->attendance_score ?? $assessment->attendance_score;
@@ -119,7 +132,22 @@ class TeacherClasses extends Controller
      */
     public function show(string $id)
     {
-        //
+        $userAuth = auth()->guard('teacher')->user();
+
+        if (!$userAuth) {
+            return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+        }
+        
+        $StudentAssessment = Student_assessment::where('student_id', $id)->get();
+
+        if (!$StudentAssessment) {
+            return redirect()->route('teacher_classes')->withErrors(['error' => 'Class not found or unauthorized access.']);
+        }
+
+        dd($StudentAssessment);
+       
+
+        return view('components.GradeTableForOneStudent', compact('StudentAssessment')); 
     }
 
     /**
