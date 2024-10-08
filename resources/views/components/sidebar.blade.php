@@ -3,10 +3,10 @@
         <div class="px-3 md:px-5 py-3 md:py-4 bg-[#2E3646] rounded-md flex justify-between items-center">
             <img src="{{ asset('images/Paragraph container.png') }}" class="w-2/3 md:w-[90%]" />
             @if (Auth::guard('student')->user())
-                <div class="relative">
+                {{-- <div class="relative">
                     <i class="fa-solid fa-bell text-[#FF7519] text-xl"></i>
                     <span class="absolute -top-2 -right-2 bg-black border-2 border-white text-white rounded-full text-[10px] px-1 py-0.25">5</span>
-                </div>
+                </div> --}}
             @endif
         </div>
     </div>
