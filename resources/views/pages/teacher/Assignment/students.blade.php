@@ -62,6 +62,8 @@
                                     </td>
                                     <td class="py-5 px-6">{{ $student->marks ?? 'Not Graded' }}</td>
                                     <td class="py-5 px-6">
+                                        @if ($student->submitted_at)
+                                        
                                         <form
                                             action="{{ route('assignments.students.update', [$assignment->id, $student->student_id]) }}"
                                             method="POST" style="display:inline-block;">
@@ -70,6 +72,15 @@
                                                 class="border border-gray-300 rounded p-1 w-20">
                                             <button type="submit" class="btn btn-primary ml-2">Update</button>
                                         </form>
+
+                                        @else
+                                        
+                                        <div
+                                            class=" flex items-center justify-start px-5">
+                                            <div class="w-[50px] h-[1px] bg-[#475467]"></div>
+                                        </div>
+                                    
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

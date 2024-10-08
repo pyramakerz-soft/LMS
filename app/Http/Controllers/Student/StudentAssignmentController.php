@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Assignment;
 use Carbon\Carbon;
+use DB;
 
 class StudentAssignmentController extends Controller
 {
@@ -30,15 +31,21 @@ class StudentAssignmentController extends Controller
     public function show($assignmentId)
     {
         $userAuth = auth()->guard('student')->user();
-
+        
         if ($userAuth) {
             $assignment = Assignment::find($assignmentId);
+            
+            $studentAssignment = DB::table('assignment_student')
+            ->where('assignment_id', $assignmentId)
+            ->where('student_id', $userAuth->id)
+            ->first();
+
             if (file_exists($assignment->path_file)) {
                 $assignment->file_size = filesize($assignment->path_file);
             } else {
                 $assignment->file_size = 'File not found';
             }
-            return view('pages.student.assignment.show', compact('assignment', 'userAuth'));
+            return view('pages.student.assignment.show', compact('assignment', 'userAuth', 'studentAssignment'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
