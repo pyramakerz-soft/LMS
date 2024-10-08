@@ -75,7 +75,11 @@
 
                                         @else
                                         
-                                        N/A
+                                        <div
+                                            class=" flex items-center justify-start px-5">
+                                            <div class="w-[50px] h-[1px] bg-[#475467]"></div>
+                                        </div>
+                                    
                                         @endif
                                     </td>
                                 </tr>

@@ -183,7 +183,7 @@ $menuItems = [
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->classroom_participation_score ? $student->attendance_score : 0 }}"> 
+                                    <input class="w-[40px]" type="number" value="{{ $student->classroom_participation_score ? $student->classroom_participation_score : 0 }}"> 
                                     <p>/20 </p>
                                 </div>
                             </td>
