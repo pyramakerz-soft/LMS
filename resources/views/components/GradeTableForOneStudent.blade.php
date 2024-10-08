@@ -112,9 +112,11 @@ $menuItems = [
 <div class="p-3 text-[#667085] my-8">
     <i class="fa-solid fa-house mx-2"></i>
     <span class="mx-2 text-[#D0D5DD]">/</span>
-    <a href="" class="mx-2 cursor-pointer">Assaasments</a>
+    <a href="{{ route('teacher_classes') }}" class="mx-2 cursor-pointer">Classes</a>
     <span class="mx-2 text-[#D0D5DD]">/</span>
-    <a href="" class="mx-2 cursor-pointer">{{$student2->username}}</a>
+    <a href="{{ route('students_classess', ['class_id' => $classId]) }}" class="mx-2 cursor-pointer">Class Assessments</a>
+    <span class="mx-2 text-[#D0D5DD]">/</span>
+    <a href="#" class="mx-2 cursor-pointer">{{$student2->username}}</a>
 </div>
 
 
@@ -125,6 +127,7 @@ $menuItems = [
             <thead class="bg-[#F9FAFB]">  
                 <tr>
                     <th class="py-4 px-6 min-w-[220px] whitespace-nowrap">Name</th>
+                    <th class="py-4 px-6 min-w-[220px] whitespace-nowrap">Week</th>
                     <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Attendance</th>
                     <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Classroom Participation</th>
                     <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Classroom Behavior</th>
@@ -133,11 +136,11 @@ $menuItems = [
                 </tr>
             </thead>
             <tbody>
-                {{-- @dd($assessments); --}}
                 @foreach ($assessments as $student)
                     @if($loop->index == 0)
                         <tr class="bg-white">
                             <td class="bg-white p-5" rowspan="{{ count($assessments) }}">{{$student2->username}}</td>
+                            <td class="bg-white p-5">Week 1</td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
                                     <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
@@ -146,31 +149,32 @@ $menuItems = [
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
+                                    <input class="w-[40px]" type="number" value="{{ $student->classroom_participation_score ? $student->classroom_participation_score : 0 }}"> 
                                     <p>/20 </p>
                                 </div>
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
+                                    <input class="w-[40px]" type="number" value="{{ $student->classroom_behavior_score ? $student->classroom_behavior_score : 0 }}"> 
                                     <p>/20 </p>
                                 </div>
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
+                                    <input class="w-[40px]" type="number" value="{{ $student->homework_score ? $student->homework_score : 0 }}"> 
                                     <p>/10 </p>
                                 </div>
                             </td>
                             <td class="py-5 px-6" rowspan="{{ count($assessments) }}"> 
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
+                                    <input class="w-[40px]" type="number" value="{{ $student->final_project_score ? $student->final_project_score : 0 }}"> 
                                     <p>/50 </p>
                                 </div>
                             </td>
                         </tr>
                     @else
                         <tr class="border-t border-gray-300 text-lg md:text-xl {{ $loop->index % 2 === 0 ? 'bg-white' : 'bg-[#DFE6FF]' }}">
+                            <td class="bg-white p-5">Week 1</td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
                                     <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
@@ -179,19 +183,19 @@ $menuItems = [
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
+                                    <input class="w-[40px]" type="number" value="{{ $student->classroom_participation_score ? $student->attendance_score : 0 }}"> 
                                     <p>/20 </p>
                                 </div>
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
+                                    <input class="w-[40px]" type="number" value="{{ $student->classroom_behavior_score ? $student->classroom_behavior_score : 0 }}"> 
                                     <p>/20 </p>
                                 </div>
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
+                                    <input class="w-[40px]" type="number" value="{{ $student->homework_score ? $student->homework_score : 0 }}"> 
                                     <p>/10 </p>
                                 </div>
                             </td>
