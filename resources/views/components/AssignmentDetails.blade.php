@@ -72,7 +72,7 @@
 
     </div>
 
-    @if(true)
+    @if($studentAssignment->submitted_at)
         <div class="border border-[#ECECEC] rounded-lg p-4 shadow-md shadow-[#0000001F] text-center">
             <p class="p-2 px-4 bg-[#2E3646] text-white rounded-md mt-5">Already Submited</p>
         </div>

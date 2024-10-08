@@ -61,5 +61,5 @@
         <a href="#" class="mx-2 cursor-pointer">View Assignment</a>
     </div>
 
-    @include('components.AssignmentDetails', ['assignment' => $assignment])
+    @include('components.AssignmentDetails', ['assignment' => $assignment, 'studentAssignment' => $studentAssignment])
 @endsection
