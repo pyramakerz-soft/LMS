@@ -78,7 +78,7 @@
                                     <td class="py-5 px-6">{{ $student->submitted_at ? 'Submitted' : 'Not Submitted' }}</td>
                                     <td class="py-5 px-6">
                                         @if ($student->submitted_at)
-                                            {{ $student->submitted_at }}
+                                            {{ date('Y-m-d',strtotime($student->submitted_at)) }}
                                     </td>
                                 @else
                                     <div class=" flex items-center justify-center px-5">

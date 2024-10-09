@@ -145,7 +145,7 @@
             $('#school_id').on('change', function() {
                 let schoolId = this.value;
                 if (schoolId) {
-                    fetch(`/admin/api/schools/${schoolId}/stages`)
+                    fetch(`/LMS/lms_pyramakerz/public/admin/api/schools/${schoolId}/stages`)
                         .then(response => response.json())
                         .then(data => {
                             let stageSelect = $('#stage_ids');
@@ -157,7 +157,7 @@
                             stageSelect.prop('disabled', false);
                         });
 
-                    fetch(`/admin/api/schools/${schoolId}/classes`)
+                    fetch(`/LMS/lms_pyramakerz/public/admin/api/schools/${schoolId}/classes`)
                         .then(response => response.json())
                         .then(data => {
                             let classSelect = $('#class_id');

@@ -75,7 +75,7 @@ class AssignmentController extends Controller
             // Fetch all classes for the authenticated teacher's school
             $classes = Group::where('school_id', $userAuth->school_id)->get();
 
-            return view('pages.teacher.assignment.create', compact('lessons', 'stages', 'classes', 'userAuth'));
+            return view('pages.teacher.Assignment.create', compact('lessons', 'stages', 'classes', 'userAuth'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
@@ -203,7 +203,7 @@ class AssignmentController extends Controller
                 ->pluck('class_id')
                 ->toArray();
 
-            return view('pages.teacher.Assignment.edit', compact('assignment', 'lessons', 'stages', 'classes', 'selectedStage', 'selectedClasses', 'userAuth'));
+            return view('pages.teacher.Assignment.Edit', compact('assignment', 'lessons', 'stages', 'classes', 'selectedStage', 'selectedClasses', 'userAuth'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
@@ -323,7 +323,7 @@ class AssignmentController extends Controller
             ->select('students.id as student_id', 'students.username as student_name', 'assignment_student.marks', 'assignment_student.path_file', 'assignment_student.submitted_at')
             ->simplePaginate(5);
 
-        return view('pages.teacher.assignment.students', compact('assignment', 'students'));
+        return view('pages.teacher.Assignment.students', compact('assignment', 'students'));
     }
     public function updateStudentMarks(Request $request, string $id, string $studentId)
     {
@@ -339,9 +339,9 @@ class AssignmentController extends Controller
             ->where('assignment_id', $id)
             ->where('student_id', $studentId)->first();
         // dd($assignment->id);
-        $student_assignments = Student_assessment::where('assignment_student_id', $assignment->id)->first();
-        $student_assignments->homework_score = $request->marks / 3;
-        $student_assignments->save();
+        //$student_assignments = Student_assessment::where('assignment_student_id', $assignment->id)->first();
+        //$student_assignments->homework_score = $request->marks / 3;
+        //$student_assignments->save();
         // dd($student_assignments);
         // $student_assignments
 
