@@ -311,6 +311,7 @@ class AssignmentController extends Controller
         // Redirect back with a success message
         return redirect()->route('assignments.index')->with('success', 'Assignment deleted successfully.');
     }
+
     public function viewAssignedStudents(string $id)
     {
         $assignment = Assignment::with(['lesson', 'school'])->findOrFail($id);
@@ -319,7 +320,7 @@ class AssignmentController extends Controller
             ->join('students', 'assignment_student.student_id', '=', 'students.id')
             ->where('assignment_student.assignment_id', $id)
             ->select('students.id as student_id', 'students.username as student_name', 'assignment_student.marks', 'assignment_student.path_file', 'assignment_student.submitted_at')
-            ->get();
+            ->simplePaginate(5);
 
         return view('pages.teacher.assignment.students', compact('assignment', 'students'));
     }
@@ -334,11 +335,11 @@ class AssignmentController extends Controller
             ->where('student_id', $studentId)
             ->update(['marks' => $request->marks]);
         $assignment = DB::table('assignment_student')
-        ->where('assignment_id', $id)
-        ->where('student_id', $studentId)->first();
+            ->where('assignment_id', $id)
+            ->where('student_id', $studentId)->first();
         // dd($assignment->id);
-        $student_assignments = Student_assessment::where('assignment_student_id',$assignment->id)->first();
-        $student_assignments->homework_score = $request->marks/3;
+        $student_assignments = Student_assessment::where('assignment_student_id', $assignment->id)->first();
+        $student_assignments->homework_score = $request->marks / 3;
         $student_assignments->save();
         // dd($student_assignments);
         // $student_assignments
