@@ -68,14 +68,9 @@
                             <option disabled selected hidden>Filter By School</option>
                             @foreach ($schools as $school)
                                 <option value="{{ $school->id }}"
-                                    {{ request('school') == $school->id ? 'selected' : '' }}>{{ $school->name }}</option>
-                            @endforeach
-                        </select>
-                        <select name="class" id="class" class="form-select w-25">
-                            <option disabled selected hidden>Filter By Class</option>
-                            @foreach ($classes as $class)
-                                <option value="{{ $class->id }}" {{ request('class') == $class->id ? 'selected' : '' }}>
-                                    {{ $class->name }}</option>
+                                    {{ request('school') == $school->id ? 'selected' : '' }}>
+                                    {{ $school->name }}
+                                </option>
                             @endforeach
                         </select>
                         <a class="btn btn-secondary" href="{{ route('teachers.index') }}">Clear</a>
@@ -128,10 +123,22 @@
                     </table>
 
                 </div>
-                {{ $teachers->links('pagination::bootstrap-5') }}
+                {{-- {{ $teachers->links('pagination::bootstrap-5') }} --}}
+                {{ $teachers->appends(request()->input())->links('pagination::bootstrap-5') }}
+
             </main>
 
             @include('admin.layouts.footer')
         </div>
     </div>
+@endsection
+@section('page_js')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#school').change(function() {
+                $('#filterForm').submit();
+            });
+        });
+    </script>
 @endsection

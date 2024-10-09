@@ -24,19 +24,16 @@ class StudentController extends Controller
         $schools = School::all();
         $classes = Group::all();
 
-        if ($request) {
-
-            if ($request->has('school') && $request->school != null) {
-                $StudentQuery->where('school_id', $request->school);
-            }
-
-            if ($request->has('class') && $request->class != null) {
-                $StudentQuery->where('class_id', $request->class);
-            }
+        if ($request->has('school') && $request->school != null) {
+            $StudentQuery->where('school_id', $request->school);
         }
 
-        $students = $StudentQuery->get();
-        $students = $StudentQuery->paginate(30);
+        if ($request->has('class') && $request->class != null) {
+            $StudentQuery->where('class_id', $request->class);
+        }
+
+        $students = $StudentQuery->paginate(30)->appends($request->query());
+
         return view('admin.students.index', compact('students', 'schools', 'classes'));
     }
 

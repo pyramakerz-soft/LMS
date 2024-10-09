@@ -20,27 +20,17 @@ class TeacherController extends Controller
     public function index(Request $request)
     {
         $teacherQuery = Teacher::with('school');
-
+    
         $schools = School::all();
-        $classes = Group::all();
-
-        if ($request) {
-
-            if ($request->has('school') && $request->school != null) {
-                $teacherQuery->where('school_id', $request->school);
-            }
-
-            if ($request->has('class') && $request->class != null) {
-                $teacherQuery->where('class_id', $request->class);
-            }
+    
+        if ($request->has('school') && $request->school != null) {
+            $teacherQuery->where('school_id', $request->school);
         }
-
-        $teacherss = $teacherQuery->get();
-        $teachers = Teacher::with('school', 'stages')->paginate(10);
-        $schools = School::all();  // Fetch schools to use in the modal
-        return view('admin.teachers.index', compact('teachers', 'schools', 'teacherss', 'classes'));
+    
+        $teachers = $teacherQuery->paginate(10)->appends($request->query());
+    
+        return view('admin.teachers.index', compact('teachers', 'schools'));
     }
-
     /**
      * Show the form for creating a new resource.
      */
