@@ -93,7 +93,7 @@
                 {{ $students->appends(request()->input())->links('pagination::bootstrap-5') }}
 
             </main>
-            @include('admin.layouts.footer')
+             
         </div>
     </div>
 @endsection
