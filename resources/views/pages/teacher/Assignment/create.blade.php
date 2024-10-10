@@ -82,6 +82,22 @@
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
                     id="due_date" value="{{ old('due_date') }}">
 
+                <label for="week"
+                    class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select Week</label>
+                <select name="week" id="week"
+                    class="form-control w-full p-2 md:p-4 border border-[#E5E5EA] rounded-xl" required>
+                    <option value="">--Select Week--</option>
+
+                    <option value="1">week 1</option>
+                    <option value="2">week 2</option>
+                    <option value="3">week 3</option>
+                    <option value="4">week 4</option>
+                    <option value="5">week 5</option>
+                    <option value="6">week 6</option>
+                    <option value="7">week 7</option>
+                    <option value="8">week 8</option>
+
+                </select>
                 <label for="stage_id"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select Stage</label>
                 <select name="stage_id" id="stage_id"

@@ -96,6 +96,7 @@ class AssignmentController extends Controller
             'lesson_id' => 'required|exists:lessons,id',
             'stage_id' => 'required|exists:stages,id',
             'class_ids' => 'required|array',
+            'week' => 'required',
             'class_ids.*' => 'exists:groups,id',
             'path_file' => 'nullable|file',
             'link' => 'nullable|url',
@@ -124,6 +125,7 @@ class AssignmentController extends Controller
             'marks' => $request->marks,
             'is_active' => $request->is_active ?? 0,
             'teacher_id' => $userAuth->id,
+            'week' => $request->week,
         ]);
 
         // Insert stage into the assignment_stage table
@@ -181,7 +183,7 @@ class AssignmentController extends Controller
 
         if ($userAuth) {
             $assignment = Assignment::findOrFail($id);
-
+            $selectedWeek = $assignment->week;
             $lessons = Lesson::all();
 
             $school = School::find($userAuth->school_id);
@@ -203,7 +205,7 @@ class AssignmentController extends Controller
                 ->pluck('class_id')
                 ->toArray();
 
-            return view('pages.teacher.Assignment.Edit', compact('assignment', 'lessons', 'stages', 'classes', 'selectedStage', 'selectedClasses', 'userAuth'));
+            return view('pages.teacher.Assignment.Edit', compact('assignment', 'lessons', 'stages', 'classes', 'selectedWeek', 'selectedStage', 'selectedClasses', 'userAuth'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
@@ -235,6 +237,9 @@ class AssignmentController extends Controller
             'due_date' => 'required|date',
             'marks' => 'required|integer',
             'is_active' => 'nullable|boolean',
+            'week' => 'required',
+
+
         ]);
 
         // Handle file upload if exists
@@ -254,6 +259,8 @@ class AssignmentController extends Controller
             'school_id' => $userAuth->school_id, // Automatically set the school_id based on the teacher's school
             'marks' => $request->marks,
             'is_active' => $request->is_active ?? 0,
+            'week' => $request->week,
+
         ]);
 
         // Sync the assignment with selected stages and classes

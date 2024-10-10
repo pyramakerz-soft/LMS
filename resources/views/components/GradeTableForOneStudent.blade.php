@@ -101,31 +101,31 @@ $tableData = [
                                 </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
+                                    <input class="w-[40px]" readonly type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
                                     <p>/10 </p>
                                 </div>
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->classroom_participation_score ? $student->classroom_participation_score : 0 }}"> 
+                                    <input class="w-[40px]" readonly type="number" value="{{ $student->classroom_participation_score ? $student->classroom_participation_score : 0 }}"> 
                                     <p>/20 </p>
                                 </div>
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->classroom_behavior_score ? $student->classroom_behavior_score : 0 }}"> 
+                                    <input class="w-[40px]" readonly type="number" value="{{ $student->classroom_behavior_score ? $student->classroom_behavior_score : 0 }}"> 
                                     <p>/20 </p>
                                 </div>
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->homework_score ? $student->homework_score : 0 }}"> 
+                                    <input class="w-[40px]" readonly type="number" value="{{ $student->homework_score ? $student->homework_score : 0 }}"> 
                                     <p>/10 </p>
                                 </div>
                             </td>
                             <td class="py-5 px-6" rowspan="{{ count($assessments) }}"> 
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->final_project_score ? $student->final_project_score : 0 }}"> 
+                                    <input class="w-[40px]" readonly type="number" value="{{ $student->final_project_score ? $student->final_project_score : 0 }}"> 
                                     <p>/50 </p>
                                 </div>
                             </td>
@@ -141,25 +141,25 @@ $tableData = [
                                 </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
+                                    <input class="w-[40px]" readonly type="number" value="{{ $student->attendance_score ? $student->attendance_score : 0 }}"> 
                                     <p>/10 </p>
                                 </div>
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->classroom_participation_score ? $student->classroom_participation_score : 0 }}"> 
+                                    <input class="w-[40px]" readonly type="number" value="{{ $student->classroom_participation_score ? $student->classroom_participation_score : 0 }}"> 
                                     <p>/20 </p>
                                 </div>
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->classroom_behavior_score ? $student->classroom_behavior_score : 0 }}"> 
+                                    <input class="w-[40px]" readonly type="number" value="{{ $student->classroom_behavior_score ? $student->classroom_behavior_score : 0 }}"> 
                                     <p>/20 </p>
                                 </div>
                             </td>
                             <td class="py-5 px-6">
                                 <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                    <input class="w-[40px]" type="number" value="{{ $student->homework_score ? $student->homework_score : 0 }}"> 
+                                    <input class="w-[40px]" readonly type="number" value="{{ $student->homework_score ? $student->homework_score : 0 }}"> 
                                     <p>/10 </p>
                                 </div>
                             </td>

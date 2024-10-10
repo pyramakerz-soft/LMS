@@ -90,6 +90,23 @@
                     class="border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" id="due_date"
                     value="{{ $assignment->due_date }}">
 
+                <label for="week"
+                    class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select Week</label>
+                <select name="week" id="week"
+                    class="form-control w-full p-2 md:p-4 border border-[#E5E5EA] rounded-xl" required>
+                    <option value="">--Select Week--</option>
+
+                    <option value="1" {{ $selectedWeek == 1 ? 'selected' : '' }}>week 1</option>
+                    <option value="2" {{ $selectedWeek == 2 ? 'selected' : '' }}>week 2</option>
+                    <option value="3" {{ $selectedWeek == 3 ? 'selected' : '' }}>week 3</option>
+                    <option value="4" {{ $selectedWeek == 4 ? 'selected' : '' }}>week 4</option>
+                    <option value="5" {{ $selectedWeek == 5 ? 'selected' : '' }}>week 5</option>
+                    <option value="6" {{ $selectedWeek == 6 ? 'selected' : '' }}>week 6</option>
+                    <option value="7" {{ $selectedWeek == 7 ? 'selected' : '' }}>week 7</option>
+                    <option value="8" {{ $selectedWeek == 8 ? 'selected' : '' }}>week 8</option>
+
+                </select>
+
                 <!-- Select Stage -->
                 <label for="stage_id"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select Stage</label>

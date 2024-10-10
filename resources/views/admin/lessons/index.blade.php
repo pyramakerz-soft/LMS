@@ -34,12 +34,11 @@
                                 <tr>
                                     <td>{{ $lesson->title }}</td>
                                     <td>
-                                        <a href="{{ $lesson->file_path }}" 
-                                            class="btn btn-success">View
-
-
-
-                                            Ebook</a>
+                                        <button class="btn btn-success" data-bs-toggle="modal" 
+                                                data-bs-target="#ebookModal" 
+                                                data-file="{{ asset($lesson->file_path) }}">
+                                            View Ebook
+                                        </button>
                                     </td>
                                     <td>{{ $lesson->chapter->title }}</td>
                                     <td>
@@ -71,4 +70,45 @@
             @include('admin.layouts.footer')
         </div>
     </div>
+
+    {{-- Modal --}}
+    <div class="modal fade" id="ebookModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ebook</h5>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+                <div class="modal-body">
+                    <embed src="" id="ebookEmbed" width="100%" height="500px" style="border: none;"></embed>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('page_js')
+    <script>
+        $(document).ready(function() {
+            // Handle the event when the modal is about to be shown
+            $('#ebookModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget); // Button that triggered the modal
+                var file = button.data('file'); // Extract the file path from data-file attribute
+
+                var modal = $(this);
+                var embed = modal.find('#ebookEmbed');
+
+                console.log(file);
+                
+                // Set the src attribute of the embed to the eBook file path
+                embed.attr('src', file);
+            });
+
+            // Clear the embed src when the modal is hidden to stop the loading
+            $('#ebookModal').on('hide.bs.modal', function() {
+                var embed = $(this).find('#ebookEmbed');
+                embed.attr('src', '');
+            });
+        });
+    </script>
 @endsection
