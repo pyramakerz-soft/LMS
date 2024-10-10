@@ -73,15 +73,15 @@ class AdminController extends Controller
 
 
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:schools,name',
             'address' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
             'type_id' => 'required|exists:types,id',
             'stage_id' => 'required|array', // Ensure stage_id is an array
             'stage_id.*' => 'exists:stages,id', // Ensure each stage ID exists in stages table
-            'classes' => 'required|array', // Ensure classes is an array
-            'classes.*.name' => 'required|string|max:255', // Validate each class name
-            'classes.*.stage_id' => 'required|exists:stages,id', // Validate each class's stage_id
+            'classes' => 'array', // Ensure classes is an array
+            'classes.*.name' => 'nullable|string|max:255', // Validate each class name
+            'classes.*.stage_id' => 'nullable|exists:stages,id', // Validate each class's stage_id
         ]);
 
         // Create the school
@@ -94,13 +94,16 @@ class AdminController extends Controller
         ]);
 
         // Create classes for this school
-        foreach ($request->input('classes') as $class) {
+        if($request->input('classes') != null){
+             foreach ($request->input('classes') as $class) {
             Group::create([
                 'name' => $class['name'],
                 'school_id' => $school->id,
                 'stage_id' => $class['stage_id'], // Each class has its own stage_id
             ]);
         }
+        }
+       
 
         // Create stages for this school
         $school->stages()->sync($request->input('stage_id'));
@@ -139,37 +142,65 @@ class AdminController extends Controller
     public function edit($id)
     {
         $school = School::findOrFail($id);
-        $types = Type::all();
-        return view('admin.admins.edit', compact('school', 'types'));
+    $types = Type::all();
+    $stages = Stage::all(); // Fetch all stages
+    return view('admin.admins.edit', compact('school', 'types', 'stages'));
+
     }
 
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
-    {
-        $school = School::findOrFail($id);
+public function update(Request $request, $id)
+{
+    $school = School::findOrFail($id);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'address' => 'nullable|string|max:255',
-            'city' => 'nullable|string|max:255',
-            'type_id' => 'required|exists:types,id',
-            'is_active' => 'required|boolean',
-        ]);
+    $request->validate([
+        'name' => 'required|string|max:255|unique:schools,name,' . $school->id,
+        'address' => 'nullable|string|max:255',
+        'city' => 'nullable|string|max:255',
+        'type_id' => 'required|exists:types,id',
+        'is_active' => 'required|boolean',
+        'stage_id' => 'required|array',
+        'stage_id.*' => 'exists:stages,id',
+        'classes' => 'array',
+        'classes.*.name' => 'nullable|string|max:255',
+        'classes.*.stage_id' => 'nullable|exists:stages,id',
+    ]);
 
-        // Update school details
-        $school->update([
-            'name' => $request->name,
-            'address' => $request->address,
-            'city' => $request->city,
-            'type_id' => $request->type_id,
-            'is_active' => $request->is_active,
-        ]);
+    // Update school details
+    $school->update([
+        'name' => $request->name,
+        'address' => $request->address,
+        'city' => $request->city,
+        'type_id' => $request->type_id,
+        'is_active' => $request->is_active,
+    ]);
 
-        return redirect()->route('admins.index')->with('success', 'School updated successfully.');
+    // Sync stages
+    $school->stages()->sync($request->input('stage_id'));
+
+    // Update existing classes and add new ones
+    foreach ($request->input('classes', []) as $key => $class) {
+        if (str_starts_with($key, 'new_')) {
+            Group::create([
+                'name' => $class['name'],
+                'school_id' => $school->id,
+                'stage_id' => $class['stage_id'],
+            ]);
+        } else {
+            $group = Group::findOrFail($key);
+            $group->update([
+                'name' => $class['name'],
+                'stage_id' => $class['stage_id'],
+            ]);
+        }
     }
+
+    return redirect()->route('admins.index')->with('success', 'School updated successfully.');
+}
+
 
     /**
      * Remove the specified resource from storage.

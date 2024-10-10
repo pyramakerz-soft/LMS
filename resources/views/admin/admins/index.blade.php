@@ -10,13 +10,13 @@
             <main class="content">
                 <div class="container-fluid p-0">
 
-                    <h1>School Admins</h1>
+                    <h1>Schools</h1>
 
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    <a href="{{ route('admins.create') }}" class="btn btn-primary mb-3">Add School Admin</a>
+                    <a href="{{ route('admins.create') }}" class="btn btn-primary mb-3">Add School </a>
 
                     <table class="table table-bordered">
                         <thead>
@@ -58,7 +58,7 @@
                             @endforeach
                         </tbody>
                     </table>
-
+ {{ $schools->links('pagination::bootstrap-5') }} 
                 </div>
             </main>
 

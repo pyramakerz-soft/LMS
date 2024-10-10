@@ -7,10 +7,16 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 
+
     @include('admin.layouts.header')
     @yield('page_css')
 </head>
+<style >
+.buttonBar.left {
+    display: none;
+}
 
+</style>
 <body>
 
     @yield('content')
