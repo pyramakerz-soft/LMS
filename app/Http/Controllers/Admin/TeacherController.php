@@ -17,13 +17,20 @@ class TeacherController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $teachers = Teacher::with('school', 'stages')->paginate(10);
-        $schools = School::all();  // Fetch schools to use in the modal
+        $teacherQuery = Teacher::with('school');
+    
+        $schools = School::all();
+    
+        if ($request->has('school') && $request->school != null) {
+            $teacherQuery->where('school_id', $request->school);
+        }
+    
+        $teachers = $teacherQuery->paginate(10)->appends($request->query());
+    
         return view('admin.teachers.index', compact('teachers', 'schools'));
     }
-
     /**
      * Show the form for creating a new resource.
      */

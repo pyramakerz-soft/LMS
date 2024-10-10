@@ -89,7 +89,8 @@
                     </table>
 
                 </div>
-                {{ $students->links('pagination::bootstrap-5') }}
+                {{-- {{ $students->links('pagination::bootstrap-5') }} --}}
+                {{ $students->appends(request()->input())->links('pagination::bootstrap-5') }}
 
             </main>
             @include('admin.layouts.footer')

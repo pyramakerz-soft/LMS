@@ -70,7 +70,7 @@
         document.getElementById('stage_id').addEventListener('change', function() {
             let stageId = this.value;
             if (stageId) {
-                fetch(`/api/stages/${stageId}/materials`)
+                fetch(`/LMS/lms_pyramakerz/public/api/stages/${stageId}/materials`)
                     .then(response => response.json())
                     .then(data => {
                         let materialSelect = document.getElementById('material_id');
