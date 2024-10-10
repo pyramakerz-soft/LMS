@@ -73,7 +73,7 @@
                 </div>
             </main>
 
-            @include('admin.layouts.footer')
+             
         </div>
     </div>
 @endsection
