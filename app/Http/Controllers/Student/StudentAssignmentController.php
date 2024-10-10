@@ -35,7 +35,7 @@ class StudentAssignmentController extends Controller
         if ($userAuth) {
             $assignment = Assignment::find($assignmentId);
             
-            $studentAssignment = DB::table('assignment_student')
+            $studentAssignment = DB::table('assignment_student')    
             ->where('assignment_id', $assignmentId)
             ->where('student_id', $userAuth->id)
             ->first();
