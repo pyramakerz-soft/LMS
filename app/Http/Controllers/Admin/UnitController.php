@@ -30,15 +30,51 @@ class UnitController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'material_id' => 'required|exists:materials,id',
+    //         'image' => 'nullable|mimes:jpeg,png,jpg,gif',
+    //         'existing_image' => 'nullable|string',            'is_active' => 'nullable|boolean',
+    //     ]);
+
+    //     $imagePath = null;
+    //     if ($request->hasFile('image')) {
+    //         $imagePath = $request->file('image')->store('units', 'public');
+    //     } elseif ($request->existing_image) {
+    //         $imagePath = $request->existing_image;
+    //     }
+
+    //     Unit::create([
+    //         'title' => $request->title,
+    //         'material_id' => $request->material_id,
+    //         'image' => $imagePath,
+    //         'is_active' => $request->is_active ?? 0,
+    //     ]);
+
+    //     return redirect()->back()->with('success', 'Unit created successfully.');
+    // }
+
     public function store(Request $request)
     {
-        $request->validate([
+        // Validate the request with named error bag for unit form
+        $validator = \Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'material_id' => 'required|exists:materials,id',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif',
-            'existing_image' => 'nullable|string',            'is_active' => 'nullable|boolean',
+            'existing_image' => 'nullable|string',
+            'is_active' => 'nullable|boolean',
         ]);
 
+        if ($validator->fails()) {
+            // Return validation errors for the unit form only
+            return redirect()->back()
+                ->withErrors($validator, 'unit')
+                ->withInput();
+        }
+
+        // Handle image upload or existing image
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('units', 'public');
@@ -46,6 +82,7 @@ class UnitController extends Controller
             $imagePath = $request->existing_image;
         }
 
+        // Create the unit
         Unit::create([
             'title' => $request->title,
             'material_id' => $request->material_id,
@@ -55,6 +92,7 @@ class UnitController extends Controller
 
         return redirect()->back()->with('success', 'Unit created successfully.');
     }
+
 
     /**
      * Display the specified resource.
