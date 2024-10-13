@@ -38,46 +38,49 @@
                                         <td>{{ $material->stage->name }}</td>
                                         <td>
                                             @if ($material->image)
-                                                <img src="{{ asset($material->image) }}" alt="{{ $material->title }}"
-                                                    width="100">
+                                                <img src="{{ asset($material->image) }}" alt="{{ $material->title }}" width="100">
                                             @else
                                                 No Image
                                             @endif
                                         </td>
-                                        <td>
+                            
+                                        <!-- Set fixed width and prevent wrapping -->
+                                        <td style="white-space: nowrap; width: 150px;">
                                             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ebookModal"
                                                 data-file="{{ asset($material->file_path) }}">
                                                 File info
                                             </button>
                                         </td>
-
-                                        <td>
+                                        
+                                        <td style="white-space: nowrap; width: 150px;">
                                             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ebookModal"
-                                                 style="display:inline;"
                                                 data-file="{{ asset($material->learning) }}">
                                                 Learning
                                             </button>
                                         </td>
-
-                                        <td>
+                                        
+                                        <td style="white-space: nowrap; width: 150px;">
                                             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ebookModal"
                                                 data-file="{{ asset($material->how_to_use) }}">
                                                 How to use
                                             </button>
                                         </td>
+                                        
                                         <td>{{ $material->is_active ? 'Active' : 'Inactive' }}</td>
-                                        <td class="d-flex justify-content-between">
+                                        <td class="d-flex justify-content-between align-items-center" >
                                             <a href="{{ route('material.edit', $material->id) }}" class="btn btn-info">Edit</a>
-                                            <form action="{{ route('material.destroy', $material->id) }}" method="POST"
-                                                style="display:inline; margin-left: 10px;">
+                                            <form action="{{ route('material.destroy', $material->id) }}" method="POST" style="display:inline-block; margin-left: 10px;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger">Delete</button>
                                             </form>
                                         </td>
+                                        
                                     </tr>
                                 @endforeach
                             </tbody>
+                            
+                            
                         </table>
                     </div>
                     <!-- End of scrollable table container -->
