@@ -39,7 +39,7 @@ class UnitController extends Controller
             'existing_image' => 'nullable|string',            'is_active' => 'nullable|boolean',
         ]);
 
-      
+        $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('units', 'public');
         } elseif ($request->existing_image) {
