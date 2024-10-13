@@ -48,7 +48,7 @@
                             <input type="file" name="image" class="form-control" id="image" accept="image/*">
                             @if ($lesson->image)
                                 <p>Current Image:</p>
-                                <img src="{{ asset('storage/' . $lesson->image) }}" alt="{{ $lesson->title }}"
+                                <img src="{{ asset( $lesson->image) }}" alt="{{ $lesson->title }}"
                                     width="100">
                             @endif
                         </div>

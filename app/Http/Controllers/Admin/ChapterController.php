@@ -38,11 +38,11 @@ class ChapterController extends Controller
             'title' => 'required|string|max:255',
             'unit_id' => 'required|exists:units,id',
             'material_id' => 'required|exists:materials,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif',
             'is_active' => 'nullable|boolean',
         ]);
 
-
+        $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('chapters', 'public');
         } elseif ($request->existing_image) {
@@ -90,7 +90,7 @@ class ChapterController extends Controller
             'title' => 'required|string|max:255',
             'unit_id' => 'required|exists:units,id',
             'material_id' => 'required|exists:materials,id', // Validate material
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif',
             'is_active' => 'nullable|boolean',
         ]);
 

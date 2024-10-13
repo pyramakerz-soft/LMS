@@ -35,11 +35,11 @@ class UnitController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'material_id' => 'required|exists:materials,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif',
             'existing_image' => 'nullable|string',            'is_active' => 'nullable|boolean',
         ]);
 
-      
+        $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('units', 'public');
         } elseif ($request->existing_image) {
@@ -84,7 +84,7 @@ class UnitController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'material_id' => 'required|exists:materials,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif',
             'is_active' => 'nullable|boolean',
         ]);
 

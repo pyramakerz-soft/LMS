@@ -33,6 +33,7 @@
                         <div class="mb-3">
                             <label for="gender" class="form-label">Gender</label>
                             <select name="gender" id="gender" class="form-control" required>
+                                <option selected disabled hidden></option>
                                 <option value="boy">Boy</option>
                                 <option value="girl">Girl</option>
                             </select>

@@ -35,7 +35,7 @@ class StageController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'required|mimes:jpeg,png,jpg,gif',
         ]);
 
         $imagePath = null;
@@ -77,7 +77,7 @@ class StageController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'image|mimes:jpeg,png,jpg,gif',
+            'image' => 'mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($request->hasFile('image')) {

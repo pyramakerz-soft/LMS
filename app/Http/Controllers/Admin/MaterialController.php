@@ -252,7 +252,7 @@ private function handleFileUpload($file, $storageFolder)
         $request->validate([
             'title' => 'required|string|max:255',
             'stage_id' => 'required|exists:stages,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif',
             'is_active' => 'nullable|boolean',
         ]);
 

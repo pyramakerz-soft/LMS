@@ -182,7 +182,7 @@
                                             value="">
                                     </div>
 
-                                    <div id="unit_preview-container" style="display: none;">
+                                    <div class="mb-3" id="unit_preview-container" style="display: none;">
                                         <h5>Selected Image Preview:</h5>
                                         <img id="unit_preview" src="" alt="Selected Image"
                                             style="max-width: 200px; border-radius: 8px; box-shadow: 0px 0px 5px #ccc;">
@@ -255,7 +255,7 @@
                                             value="">
                                     </div>
 
-                                    <div id="chapter_preview-container" style="display: none;">
+                                    <div class="mb-3" id="chapter_preview-container" style="display: none;">
                                         <h5>Selected Image Preview:</h5>
                                         <img id="chapter_preview" src="" alt="Selected Image"
                                             style="max-width: 200px; border-radius: 8px; box-shadow: 0px 0px 5px #ccc;">
