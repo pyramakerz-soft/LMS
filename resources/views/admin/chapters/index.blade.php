@@ -18,7 +18,8 @@
 
                     {{-- <a href="{{ route('chapters.create') }}" class="btn btn-primary mb-3">Add Chapter</a> --}}
 
-
+                  
+                    <div class="table-responsive" style="overflow-x: auto;">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -47,20 +48,20 @@
                                         @endif
                                     </td>
                                     <td>{{ $chapter->is_active ? 'Active' : 'Inactive' }}</td>
-                                    <td>
+                                    <td class="d-flex justify-content-between">
                                         <a href="{{ route('chapters.edit', $chapter->id) }}" class="btn btn-info">Edit</a>
                                         <form action="{{ route('chapters.destroy', $chapter->id) }}" method="POST"
                                             style="display:inline-block;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                            <button type="submit" class="btn btn-danger" style="margin-left: 10px;">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-
+                    </div>
 
                 </div>
             </main>
