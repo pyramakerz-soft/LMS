@@ -30,7 +30,7 @@
                                 @foreach ($types as $type)
                                     <tr>
                                         <td>{{ $type->name }}</td>
-                                        <td class="d-flex justify-content-between">
+                                        <td class="d-flex justify-content-start">
                                             <a href="{{ route('types.edit', $type->id) }}" class="btn btn-info">Edit</a>
 
                                             <!-- Delete button -->

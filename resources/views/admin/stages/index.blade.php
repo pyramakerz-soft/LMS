@@ -39,7 +39,7 @@
                                                 No Image
                                             @endif
                                         </td>
-                                        <td class="d-flex justify-content-between ">
+                                        <td class="d-flex justify-content-start ">
                                             <a href="{{ route('material.unit.chapter.create', $stage->id) }}" class="btn btn-primary" >Add Material</a>
                                             <a href="{{ route('stages.edit', $stage->id) }}" class="btn btn-info" style="display:inline; margin-left: 10px;">Edit</a>
                                             <form action="{{ route('stages.destroy', $stage->id) }}" method="POST" style="display:inline-block; margin-left: 10px;">

@@ -104,44 +104,87 @@ class MaterialController extends Controller
 
     //     return redirect()->back()->with('success', 'Material created successfully.');
     // }
+// public function store(Request $request)
+// {
+//     $request->validate([
+//         'title' => 'required|string|max:255',
+//         'stage_id' => 'required|exists:stages,id',
+//         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+//         'existing_image' => 'nullable|string',
+//         'file_path' => 'required',
+//         // 'file_path' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240',
+//         'how_to_use' => 'required',
+//         // 'how_to_use' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240',
+//         'learning' => 'required',
+//         // 'learning' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240',
+//         'is_active' => 'nullable|boolean',
+//     ]);
+
+// // dd($request->all());
+//     // Handle image upload or existing image
+//     $imagePath = $request->hasFile('image') 
+//         ? $request->file('image')->store('materials', 'public') 
+//         : $request->existing_image;
+
+//     // Handle file_path upload
+//     // $filePath = $this->handleFileUpload($request->file('file_path'), 'ebooks');
+//     // if ($filePath === false) {
+//     //     return back()->withErrors(['file_path' => 'Failed to extract the zip file or missing index.html.']);
+//     // }
+
+//     // Handle how_to_use file upload
+//     // $howToUsePath = $this->handleFileUpload($request->file('how_to_use'), 'ebooks');
+//     // if ($howToUsePath === false) {
+//     //     return back()->withErrors(['how_to_use' => 'Failed to extract the zip file or missing index.html.']);
+//     // }
+
+//     // Handle learning outcomes file upload
+//     // $learningPath = $this->handleFileUpload($request->file('learning'), 'ebooks');
+//     // if ($learningPath === false) {
+//     //     return back()->withErrors(['learning' => 'Failed to extract the zip file or missing index.html.']);
+//     // }
+
+    
+
+//     // Create new material
+//     $material = Material::create([
+//         'title' => $request->title,
+//         'stage_id' => $request->stage_id,
+//         'image' => $imagePath,
+//         'is_active' => $request->is_active ?? 0,
+//         'file_path' => $request->file_path,
+//         'how_to_use' => $request->how_to_use,
+//         'learning' => $request->learning,
+//     ]);
+// // dd($material);
+//     return redirect()->back()->with('success', 'Material created successfully.');
+// }
+
 public function store(Request $request)
 {
-    $request->validate([
+    // Validate the request with named error bag for material form
+    $validator = \Validator::make($request->all(), [
         'title' => 'required|string|max:255',
         'stage_id' => 'required|exists:stages,id',
         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         'existing_image' => 'nullable|string',
         'file_path' => 'required',
-        // 'file_path' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240',
         'how_to_use' => 'required',
-        // 'how_to_use' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240',
         'learning' => 'required',
-        // 'learning' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240',
         'is_active' => 'nullable|boolean',
     ]);
-// dd($request->all());
+
+    if ($validator->fails()) {
+        // Return validation errors for the material form only
+        return redirect()->back()
+                         ->withErrors($validator, 'material')
+                         ->withInput();
+    }
+
     // Handle image upload or existing image
     $imagePath = $request->hasFile('image') 
         ? $request->file('image')->store('materials', 'public') 
         : $request->existing_image;
-
-    // Handle file_path upload
-    // $filePath = $this->handleFileUpload($request->file('file_path'), 'ebooks');
-    // if ($filePath === false) {
-    //     return back()->withErrors(['file_path' => 'Failed to extract the zip file or missing index.html.']);
-    // }
-
-    // Handle how_to_use file upload
-    // $howToUsePath = $this->handleFileUpload($request->file('how_to_use'), 'ebooks');
-    // if ($howToUsePath === false) {
-    //     return back()->withErrors(['how_to_use' => 'Failed to extract the zip file or missing index.html.']);
-    // }
-
-    // Handle learning outcomes file upload
-    // $learningPath = $this->handleFileUpload($request->file('learning'), 'ebooks');
-    // if ($learningPath === false) {
-    //     return back()->withErrors(['learning' => 'Failed to extract the zip file or missing index.html.']);
-    // }
 
     // Create new material
     $material = Material::create([
@@ -153,7 +196,7 @@ public function store(Request $request)
         'how_to_use' => $request->how_to_use,
         'learning' => $request->learning,
     ]);
-// dd($material);
+
     return redirect()->back()->with('success', 'Material created successfully.');
 }
 

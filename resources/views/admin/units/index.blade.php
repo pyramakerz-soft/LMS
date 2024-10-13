@@ -42,7 +42,7 @@
                                             @endif
                                         </td>
                                         <td>{{ $unit->is_active ? 'Active' : 'Inactive' }}</td>
-                                        <td class="d-flex justify-content-between">
+                                        <td class="d-flex justify-content-start">
                                             <a href="{{ route('units.edit', $unit->id) }}" class="btn btn-info">Edit</a>
                                             <form action="{{ route('units.destroy', $unit->id) }}" method="POST"
                                                 style="display:inline-block;">

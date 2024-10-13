@@ -48,7 +48,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $chapter->is_active ? 'Active' : 'Inactive' }}</td>
-                                    <td class="d-flex justify-content-between">
+                                    <td class="d-flex justify-content-start">
                                         <a href="{{ route('chapters.edit', $chapter->id) }}" class="btn btn-info">Edit</a>
                                         <form action="{{ route('chapters.destroy', $chapter->id) }}" method="POST"
                                             style="display:inline-block;">
