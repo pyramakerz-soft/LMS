@@ -189,6 +189,15 @@
                                     </div>
                                 </div>
 
+                                <div class="mb-3">
+                                    <label for="is_active" class="form-label">Active </label>
+                                    <input type="checkbox" id="is_active" name="is_active" value="1">
+                                    @error('is_active')
+                                        <div class="text-danger">{{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                
                                 <button type="submit" class="btn btn-primary">Create Unit</button>
                             </form>
                         </div>
