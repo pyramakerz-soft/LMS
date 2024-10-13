@@ -106,7 +106,7 @@
                                         <td>{{ ucfirst($teacher->gender) }}</td>
                                         <td>{{ $teacher->school->name }}</td>
                                         <td>{{ $teacher->plain_password }}</td>
-                                        <td class="d-flex justify-content-between">
+                                        <td class="d-flex justify-content-start">
                                             <a href="{{ route('teachers.edit', $teacher->id) }}" class="btn btn-info">Edit</a>
                                         
                                             <!-- Delete button -->

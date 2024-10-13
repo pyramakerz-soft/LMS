@@ -70,7 +70,7 @@
                                     <td>{{ $student->school->name }}</td>
                                     <td>{{ $student->stage->name }}</td>
                                     <td>{{ $student->classes->name }}</td>
-                                    <td>
+                                    <td class="d-flex justify-content-start">
                                         <a href="{{ route('students.edit', $student->id) }}" class="btn btn-info">Edit</a>
 
                                         <!-- Delete button -->
@@ -79,6 +79,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger"
+                                            style="margin-left: 10px;"
                                                 onclick="return confirm('Are you sure you want to delete this student?');">
                                                 Delete
                                             </button>
