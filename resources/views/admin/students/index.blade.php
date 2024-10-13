@@ -37,6 +37,7 @@
                         <a class="btn btn-secondary" href="{{ route('students.index') }}">Clear</a>
                     </form>
 
+                    <div class="table-responsive" style="overflow-x: auto;">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -87,6 +88,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    </div>
 
                 </div>
                 {{-- {{ $students->links('pagination::bootstrap-5') }} --}}

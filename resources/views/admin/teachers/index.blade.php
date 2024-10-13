@@ -62,6 +62,7 @@
                             </div>
                         </div>
                     </div>
+
                     <form id="filterForm" action="{{ route('teachers.index') }}" method="GET"
                         class="d-flex justify-content-evenly mb-3">
                         <select name="school" id="school" class="form-select w-25">
@@ -76,58 +77,61 @@
                         <a class="btn btn-secondary" href="{{ route('teachers.index') }}">Clear</a>
                     </form>
 
-                    <!-- Add table-fixed class for fixed width -->
-                    <table class="table table-bordered table-fixed">
-                        <thead>
-                            <tr>
-                                <th style="width: 10%">Profile image</th>
-                                <th style="width: 20%">Username</th>
-                                <th style="width: 10%">Gender</th>
-                                <th style="width: 20%">School</th>
-                                <th style="width: 15%">Plain Password</th>
-                                <th style="width: 15%">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($teachers as $teacher)
+                    <!-- Add scrollable wrapper for horizontal scroll -->
+                    <div class="table-responsive" style="overflow-x: auto;">
+                        <table class="table table-bordered">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        @if ($teacher->image)
-                                            <img src="{{ asset($teacher->image) }}" alt="Teacher Image" width="50"
-                                                height="50" class="rounded-circle">
-                                        @else
-                                            <img src="https://w7.pngwing.com/pngs/184/113/png-transparent-user-profile-computer-icons-profile-heroes-black-silhouette-thumbnail.png"
-                                                alt="Teacher Image" width="50" height="50" class="rounded-circle">
-                                        @endif
-                                    </td>
-                                    <td>{{ $teacher->username }}</td>
-                                    <td>{{ ucfirst($teacher->gender) }}</td>
-                                    <td>{{ $teacher->school->name }}</td>
-                                    <td>{{ $teacher->plain_password }}</td>
-                                    <td>
-                                        <a href="{{ route('teachers.edit', $teacher->id) }}" class="btn btn-info">Edit</a>
-
-                                        <!-- Delete button -->
-                                        <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST"
-                                            style="display:inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger"
-                                                onclick="return confirm('Are you sure you want to delete this teacher?');">
-                                                Delete
-                                            </button>
-                                        </form>
-                                    </td>
+                                    <th>Profile image</th>
+                                    <th>Username</th>
+                                    <th>Gender</th>
+                                    <th>School</th>
+                                    <th>Plain Password</th>
+                                    <th>Actions</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($teachers as $teacher)
+                                    <tr>
+                                        <td>
+                                            @if ($teacher->image)
+                                                <img src="{{ asset($teacher->image) }}" alt="Teacher Image" width="50"
+                                                    height="50" class="rounded-circle">
+                                            @else
+                                                <img src="https://w7.pngwing.com/pngs/184/113/png-transparent-user-profile-computer-icons-profile-heroes-black-silhouette-thumbnail.png"
+                                                    alt="Teacher Image" width="50" height="50" class="rounded-circle">
+                                            @endif
+                                        </td>
+                                        <td>{{ $teacher->username }}</td>
+                                        <td>{{ ucfirst($teacher->gender) }}</td>
+                                        <td>{{ $teacher->school->name }}</td>
+                                        <td>{{ $teacher->plain_password }}</td>
+                                        <td class="d-flex justify-content-between">
+                                            <a href="{{ route('teachers.edit', $teacher->id) }}" class="btn btn-info">Edit</a>
+                                        
+                                            <!-- Delete button -->
+                                            <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST" style="margin-left: 10px;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this teacher?');">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </td>
+                                        
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End of scrollable wrapper -->
 
                 </div>
+                {{-- {{ $teachers->links('pagination::bootstrap-5') }} --}}
                 {{ $teachers->appends(request()->input())->links('pagination::bootstrap-5') }}
+
             </main>
 
-             
         </div>
     </div>
 @endsection
@@ -142,17 +146,3 @@
         });
     </script>
 @endsection
-
-<!-- Add CSS for table-fixed class -->
-<style>
-    .table-fixed {
-        table-layout: fixed;
-        width: 100%;
-    }
-
-    .table-fixed th, .table-fixed td {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-</style>

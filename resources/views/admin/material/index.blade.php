@@ -16,73 +16,78 @@
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    {{-- <a href="{{ route('material.create') }}" class="btn btn-primary mb-3">Add Material</a> --}}
-
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Grade</th>
-                                <th>Image</th>
-                                <th>Ebook info</th>
-                                <th>Ebook learning</th>
-                                <th>Ebook how to use</th>
-                                <th>Active</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($materials as $material)
+                    <!-- Wrap table in a scrollable container -->
+                    <div class="table-responsive" style="overflow-x: auto;">
+                        <table class="table table-bordered">
+                            <thead>
                                 <tr>
-                                    <td>{{ $material->title }}</td>
-                                    <td>{{ $material->stage->name }}</td>
-                                    <td>
-                                        @if ($material->image)
-                                            <img src="{{ asset($material->image) }}" alt="{{ $material->title }}"
-                                                width="100">
-                                        @else
-                                            No Image
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ebookModal"
-                                            data-file="{{ asset($material->file_path) }}">
-                                            File info
-                                        </button>
-                                    </td>
-
-                                    <td>
-                                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ebookModal"
-                                            data-file="{{ asset($material->learning) }}">
-                                            Learning
-                                        </button>
-                                    </td>
-
-                                    <td>
-                                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ebookModal"
-                                            data-file="{{ asset($material->how_to_use) }}">
-                                            How to use
-                                        </button>
-                                    </td>
-                                    <td>{{ $material->is_active ? 'Active' : 'Inactive' }}</td>
-                                    <td>
-                                        <a href="{{ route('material.edit', $material->id) }}" class="btn btn-info">Edit</a>
-                                        <form action="{{ route('material.destroy', $material->id) }}" method="POST"
-                                            style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form>
-                                    </td>
+                                    <th>Title</th>
+                                    <th>Grade</th>
+                                    <th>Image</th>
+                                    <th>Ebook info</th>
+                                    <th>Ebook learning</th>
+                                    <th>Ebook how to use</th>
+                                    <th>Active</th>
+                                    <th>Actions</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($materials as $material)
+                                    <tr>
+                                        <td>{{ $material->title }}</td>
+                                        <td>{{ $material->stage->name }}</td>
+                                        <td>
+                                            @if ($material->image)
+                                                <img src="{{ asset($material->image) }}" alt="{{ $material->title }}" width="100">
+                                            @else
+                                                No Image
+                                            @endif
+                                        </td>
+                            
+                                        <!-- Set fixed width and prevent wrapping -->
+                                        <td style="white-space: nowrap; width: 150px;">
+                                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ebookModal"
+                                                data-file="{{ asset($material->file_path) }}">
+                                                File info
+                                            </button>
+                                        </td>
+                                        
+                                        <td style="white-space: nowrap; width: 150px;">
+                                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ebookModal"
+                                                data-file="{{ asset($material->learning) }}">
+                                                Learning
+                                            </button>
+                                        </td>
+                                        
+                                        <td style="white-space: nowrap; width: 150px;">
+                                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ebookModal"
+                                                data-file="{{ asset($material->how_to_use) }}">
+                                                How to use
+                                            </button>
+                                        </td>
+                                        
+                                        <td>{{ $material->is_active ? 'Active' : 'Inactive' }}</td>
+                                        <td class="d-flex justify-content-between align-items-center" >
+                                            <a href="{{ route('material.edit', $material->id) }}" class="btn btn-info">Edit</a>
+                                            <form action="{{ route('material.destroy', $material->id) }}" method="POST" style="display:inline-block; margin-left: 10px;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </td>
+                                        
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                            
+                            
+                        </table>
+                    </div>
+                    <!-- End of scrollable table container -->
 
                 </div>
             </main>
 
-             
         </div>
     </div>
 
@@ -109,8 +114,6 @@
             $('#ebookModal').on('show.bs.modal', function(event) {
                 var button = $(event.relatedTarget); // Button that triggered the modal
                 var file = button.data('file'); // Extract the file path from data-file attribute
-                // file='https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/ebooks/G1%20-%20Urban%20city%20Un1.%20Ch1.L1/'
-
                 var modal = $(this);
                 var embed = modal.find('#ebookEmbed');
 
