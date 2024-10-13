@@ -65,7 +65,7 @@
 
                                     <div class="col-4">
                                         <div class="mb-3">
-                                            <label for="file_path" class="form-label">Upload Info </label>
+                                            <label for="file_path" class="form-label">Choose Info </label>
                                             <!--<input type="file" name="file_path" class="form-control" id="file_path"-->
                                             <!--    required>-->
                                             <select name="file_path" class="form-control" id="file_path">
@@ -83,7 +83,7 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="mb-3">
-                                            <label for="how_to_use" class="form-label">Upload how to use </label>
+                                            <label for="how_to_use" class="form-label">Choose how to use </label>
                                             <!--<input type="file" name="how_to_use" class="form-control" id="how_to_use"-->
                                             <!--    required>-->
                                                  <select name="how_to_use" class="form-control" id="how_to_use">
@@ -101,7 +101,7 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="mb-3">
-                                            <label for="learning" class="form-label">Upload learning outcomes </label>
+                                            <label for="learning" class="form-label">Choose learning outcomes </label>
                                             <!--<input type="file" name="learning" class="form-control" id="learning"-->
                                             <!--    required>-->
                                                  <select name="learning" class="form-control" id="learning">
