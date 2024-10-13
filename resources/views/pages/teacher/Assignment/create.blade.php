@@ -131,9 +131,11 @@
 
                 <label for="marks"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Marks</label>
-                <input type="number" name="marks"
+
+                <input type="text" name="marks"
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
-                    id="marks" value="{{ old('marks') }}">
+                    id="marks" value="{{ old('marks') }}"
+                    oninput="filterNumericInput(event)">
 
                 <label for="path_file"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">File Upload</label>
@@ -170,5 +172,16 @@
                 allowClear: true
             });
         });
+
+        function filterNumericInput(event) {
+            const input = event.target;
+            let previousValue = input.value;
+
+            input.value = input.value.replace(/[^0-9.]/g, '');
+
+            if (input.value.split('.').length > 2) {
+                input.value = previousValue; 
+            }
+        }
     </script>
 @endsection

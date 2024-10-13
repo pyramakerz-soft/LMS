@@ -50,46 +50,47 @@
     </div>
     <div class="p-3 flex flex-wrap justify-start">
         @foreach ($materials as $material)
-    <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white shadow-md rounded-xl min-h-[380px]">
-        <div class="h-full">
-            <a class="cursor-pointer h-full flex flex-col justify-between"
-                href="{{ route('student_units.index', $material->id) }}">
-                @if ($material->image)
-                    <img src="{{ $material->image }}" alt="{{ $material->title }}"
-                        class="object-cover object-top w-full h-[350px] rounded-xl">
-                @else
-                    No Image
-                @endif
-                <div class="text-slate-800">
-                    <div class="flex justify-between items-center text-2xl ">
-                        <!-- Update to handle long titles -->
-                        <p class="font-semibold truncate" style="max-width: 80%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                            {{ $material->title }}
-                        </p>
-                        <button class="pt-2"
-                            onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');">
-                            <img src="{{ asset('images/Clip path group.png') }}">
-                        </button>
-                    </div>
-                    <div class="flex justify-between items-center mt-4">
-                        <div>
-                            <button class="bg-[#17253E] p-2 text-white rounded-md"
-                                onclick="event.stopPropagation(); event.preventDefault(); openModal('use');">
-                                How To Use
-                            </button>
+            <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white shadow-md rounded-xl min-h-[380px]">
+                <div class="h-full">
+                    <a class="cursor-pointer h-full flex flex-col justify-between"
+                        href="{{ route('student_units.index', $material->id) }}">
+                        @if ($material->image)
+                            <img src="{{ $material->image }}" alt="{{ $material->title }}"
+                                class="object-cover object-top w-full h-[350px] rounded-xl">
+                        @else
+                            No Image
+                        @endif
+                        <div class="text-slate-800">
+                            <div class="flex justify-between items-center text-2xl ">
+                                <!-- Update to handle long titles -->
+                                <p class="font-semibold truncate"
+                                    style="max-width: 80%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                                    {{ $material->title }}
+                                </p>
+                                <button class="pt-2"
+                                    onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');">
+                                    <img src="{{ asset('images/Clip path group.png') }}">
+                                </button>
+                            </div>
+                            <div class="flex justify-between items-center mt-4">
+                                <div>
+                                    <button class="bg-[#17253E] p-2 text-white rounded-md"
+                                        onclick="event.stopPropagation(); event.preventDefault(); openModal('use');">
+                                        How To Use
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="bg-white border border-[#FF7519] p-2 text-black font-semibold rounded-md"
+                                        onclick="event.stopPropagation(); event.preventDefault(); openModal('learn');">
+                                        Learning Outcomes
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <button class="bg-white border border-[#FF7519] p-2 text-black font-semibold rounded-md"
-                                onclick="event.stopPropagation(); event.preventDefault(); openModal('learn');">
-                                Learning Outcomes
-                            </button>
-                        </div>
-                    </div>
+                    </a>
                 </div>
-            </a>
-        </div>
-    </div>
-@endforeach
+            </div>
+        @endforeach
 
     </div>
 @endsection
@@ -109,9 +110,12 @@
                     class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
             </div>
         </div>
-        {{-- Put the EBook Here --}}
-        <embed src="{{ $material->file_path  }}" width="100%" height="90%" />
 
+        <div class="relative">
+            <embed src="{{ $material->file_path }}" width="100%" height="90%" />
+            <img src="{{ asset('assets/img/watermark 2.png') }}"
+                class="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+        </div>
     </div>
 </div>
 
@@ -127,8 +131,12 @@
                     class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
             </div>
         </div>
-        {{-- Put the How To Use Here --}}
-        <embed src="{{ $material->how_to_use }}" width="100%" height="90%" />
+
+        <div class="relative">
+            <embed src="{{ $material->how_to_use }}" width="100%" height="90%" />
+            <img src="{{ asset('assets/img/watermark 2.png') }}"
+                class="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+        </div>
     </div>
 </div>
 
@@ -144,8 +152,12 @@
                     class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
             </div>
         </div>
-        {{-- Put the Learning Here --}}
-        <embed src="{{ $material->learning  }}" width="100%" height="90%" />
+
+        <div class="relative">
+            <embed src="{{ $material->learning }}" width="100%" height="90%" />
+            <img src="{{ asset('assets/img/watermark 2.png') }}"
+                class="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+        </div>
     </div>
 </div>
 

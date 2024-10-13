@@ -103,9 +103,11 @@
                     class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
             </div>
         </div>
-        {{-- Put the EBook Here --}}
-        <embed src="{{ $material->file_path }}" width="100%" height="90%" />
 
+        <div class="relative">
+            <embed src="{{ $material->file_path }}" width="100%" height="90%" />
+            <img src="{{  asset('assets/img/watermark 2.png') }}" class="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+        </div>
     </div>
 </div>
 
@@ -121,8 +123,11 @@
                     class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
             </div>
         </div>
-        {{-- Put the How To Use Here --}}
-        <embed src="{{ $material->how_to_use }}" width="100%" height="90%" />
+
+        <div class="relative">
+            <embed src="{{ $material->how_to_use }}" width="100%" height="90%" />
+            <img src="{{  asset('assets/img/watermark 2.png') }}" class="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+        </div>
     </div>
 </div>
 
@@ -138,8 +143,11 @@
                     class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
             </div>
         </div>
-        {{-- Put the Learning Here --}}
-        <embed src="{{ $material->learning }}" width="100%" height="90%" />
+        
+        <div class="relative">
+            <embed src="{{ $material->learning }}" width="100%" height="90%" />
+            <img src="{{  asset('assets/img/watermark 2.png') }}" class="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+        </div>
     </div>
 </div>
 
