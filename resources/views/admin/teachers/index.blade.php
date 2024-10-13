@@ -76,15 +76,16 @@
                         <a class="btn btn-secondary" href="{{ route('teachers.index') }}">Clear</a>
                     </form>
 
-                    <table class="table table-bordered">
+                    <!-- Add table-fixed class for fixed width -->
+                    <table class="table table-bordered table-fixed">
                         <thead>
                             <tr>
-                                <th>Profile image</th>
-                                <th>Username</th>
-                                <th>Gender</th>
-                                <th>School</th>
-                                <th>Plain Password</th>
-                                <th>Actions</th>
+                                <th style="width: 10%">Profile image</th>
+                                <th style="width: 20%">Username</th>
+                                <th style="width: 10%">Gender</th>
+                                <th style="width: 20%">School</th>
+                                <th style="width: 15%">Plain Password</th>
+                                <th style="width: 15%">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -123,15 +124,14 @@
                     </table>
 
                 </div>
-                {{-- {{ $teachers->links('pagination::bootstrap-5') }} --}}
                 {{ $teachers->appends(request()->input())->links('pagination::bootstrap-5') }}
-
             </main>
 
              
         </div>
     </div>
 @endsection
+
 @section('page_js')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -142,3 +142,17 @@
         });
     </script>
 @endsection
+
+<!-- Add CSS for table-fixed class -->
+<style>
+    .table-fixed {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .table-fixed th, .table-fixed td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>

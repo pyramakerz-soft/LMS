@@ -18,15 +18,16 @@
 
                     <a href="{{ route('admins.create') }}" class="btn btn-primary mb-3">Add School Admin</a>
 
-                    <table class="table table-bordered">
+                    <!-- Add table-fixed class for fixed width -->
+                    <table class="table table-bordered table-fixed">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>City</th>
-                                <th>Type</th>
-                                <th>Students Count</th>
-                                <th>Actions</th>
+                                <th style="width: 20%">Name</th>
+                                <th style="width: 20%">Address</th>
+                                <th style="width: 10%">City</th>
+                                <th style="width: 10%">Type</th>
+                                <th style="width: 10%">Students Count</th>
+                                <th style="width: 30%">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,3 +67,17 @@
         </div>
     </div>
 @endsection
+
+<!-- Add CSS for table-fixed class -->
+<style>
+    .table-fixed {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .table-fixed th, .table-fixed td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
