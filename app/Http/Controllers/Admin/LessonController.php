@@ -35,7 +35,7 @@ class LessonController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'chapter_id' => 'required|exists:chapters,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif',
             'is_active' => 'nullable|boolean',
             'file_path' => 'required',
         ]);
@@ -132,7 +132,7 @@ class LessonController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'chapter_id' => 'required|exists:chapters,id',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'required|mimes:jpeg,png,jpg,gif',
             'file_path' => 'nullable|file|mimes:pdf,ppt,pptx,doc,docx,html,txt,zip|max:10240',
 
             'is_active' => 'nullable|boolean',

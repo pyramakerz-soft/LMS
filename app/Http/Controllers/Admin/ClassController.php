@@ -42,7 +42,7 @@ class ClassController extends Controller
             'name' => 'required',
             'school_id' => 'required|exists:schools,id',
             'stage_id' => 'required|exists:stages,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $imagePath = null;
@@ -86,13 +86,14 @@ class ClassController extends Controller
     {
         $class = Group::findOrFail($id);
 
-        // $request->validate([
-        //     'name' => 'required'. $class->id,
-        //     'school_id' => 'required|exists:schools,id',
-        //     'stage_id' => 'required|exists:stages,id',
-        //     'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-        // ]);
+        $request->validate([
+            // 'name' => 'required'. $class->id,
+            'school_id' => 'required|exists:schools,id',
+            'stage_id' => 'required|exists:stages,id',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif',
+        ]);
 
+        $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('classes', 'public');
             $class->image = $imagePath;

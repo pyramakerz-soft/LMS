@@ -54,7 +54,7 @@ class TeacherController extends Controller
             'stage_ids.*' => 'exists:stages,id',
             'class_id' => 'required|array',
             'class_id.*' => 'exists:groups,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
         $username = str_replace(' ', '_', $request->input('username'));
 
@@ -179,7 +179,7 @@ class TeacherController extends Controller
             'stage_ids.*' => 'exists:stages,id',
             'class_id' => 'required|array',
             'class_id.*' => 'exists:groups,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $username = str_replace(' ', '_', $request->input('username'));
