@@ -84,7 +84,7 @@
                             aria-labelledby="accordion-collapse-heading-{{ $unit->id }}">
                             <div class="p-3 flex flex-wrap justify-start">
                                 @foreach ($unit->chapters as $chapter)
-                                    <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white shadow-md rounded-xl">
+                                    <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white  rounded-xl">
                                         <div class="full">
                                             <a class="cursor-pointer h-full flex flex-col justify-between"
                                                 href="{{ route('student_lessons.index', $chapter->id) }}">

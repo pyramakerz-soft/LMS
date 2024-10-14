@@ -51,7 +51,7 @@
     <div class="flex flex-wrap">
         @foreach ($unit->chapters as $chapter)
             <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
-                <div class="h-[350px] bg-white shadow-md border border-slate-200 rounded-md">
+                <div class="h-[350px] bg-white border border-slate-200 rounded-md">
                     <a class="cursor-pointer" href="{{ route('student_lessons.index', $chapter->id) }}">
                         @if ($chapter->image)
                             <img src="{{ asset('storage/' . $chapter->image) }}" class="card-img-top" alt="{{ $chapter->title }}">

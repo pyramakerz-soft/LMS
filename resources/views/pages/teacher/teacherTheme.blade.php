@@ -48,12 +48,11 @@
     <div class="p-3 flex flex-wrap justify-start">
         {{-- @dd($stage->materials) --}}
         @foreach ($stage->materials as $material)
-            <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white shadow-md rounded-xl min-h-[380px]">
+            <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white rounded-xl min-h-[380px]">
                 <div class="h-full">
                     <a class="cursor-pointer h-full flex flex-col justify-between"
-                        href="{{ route('teacher.units' ,$material->id ) }}">
+                        href="{{ route('teacher.units', $material->id) }}">
                         @if ($material->image)
-                          
                             <img src="{{ asset($material->image) }}" alt="{{ $material->name }}"
                                 class="object-cover object-top w-full h-[350px] rounded-xl">
                         @else
@@ -61,7 +60,7 @@
                         @endif
                         <div class="text-slate-800">
                             <div class="flex justify-between items-center text-2xl">
-                                <p class="font-semibold">{{ $material->title }}</p>
+                                <p class="font-semibold truncate">{{ $material->title }}</p>
                                 <button class="pt-2"
                                     onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');">
                                     <img src="{{ asset('images/Clip path group.png') }}" class="w-[50px] h-[44.21px] rounded-[2.44px]">
@@ -72,13 +71,13 @@
                                     <button class="bg-[#17253E] p-2 text-white rounded-md"
                                         onclick="event.stopPropagation(); event.preventDefault(); openModal('use');">
                                         How To Use
-                                        <button>
+                                    </button>
                                 </div>
                                 <div>
                                     <button class="bg-white border border-[#FF7519] p-2 text-black font-semibold rounded-md"
                                         onclick="event.stopPropagation(); event.preventDefault(); openModal('learn');">
                                         Learning Outcomes
-                                        <button>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -87,6 +86,7 @@
             </div>
         @endforeach
     </div>
+    
 @endsection
 
 {{-- ------------------------------------------------------------------------------------- --}}
