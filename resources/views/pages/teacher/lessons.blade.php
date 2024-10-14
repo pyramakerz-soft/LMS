@@ -37,27 +37,21 @@
         <i class="fa-solid fa-house mx-2"></i>
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="{{ route('teacher.dashboard') }}" class="mx-2 cursor-pointer">Grade</a>
-        {{-- <span class="mx-2 text-[#D0D5DD]">/</span>
-         <a href="{{ route('') }}" class="mx-2 cursor-pointer">Info</a>
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="{{ url()->previous() }}" class="mx-2 cursor-pointer">Theme</a> --}}
-        <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="{{ route('student_units.index', $chapter->unit_id) }}" class="mx-2 cursor-pointer">Units</a>
+        <a href="{{ route('teacher.units', $chapter->unit_id) }}" class="mx-2 cursor-pointer">Units</a>
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="#" class="mx-2 cursor-pointer">Lessons</a>
     </div>
 
-    {{-- @dd($chapter) --}}
     <!-- Display Lessons -->
     <div class="flex flex-wrap">
         @foreach ($chapter->lessons as $lesson)
             <div class="w-full sm:w-1/2 lg:w-1/4 p-3">
                 <div class=" bg-white ">
 
-                    <!-- Lesson Image -->
                     <div class="p-4">
-                        <button onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');"
-                            class="object-cover w-full  ">
+
+                        <button onclick="event.stopPropagation(); event.preventDefault(); openModal({{ $lesson->id }}, '{{ $lesson->file_path }}');" class="object-cover w-full">
                             <img src="{{ $lesson->image ? asset($lesson->image) : asset('images/defaultCard.webp') }}" alt="{{ $lesson->title }}">
                         </button>
                     </div>
@@ -65,7 +59,9 @@
                 </div>
             </div>
         @endforeach
-
+        @if(count($chapter->lessons) == 0)
+            <p class="m-auto text-gray-500">No Lessons yet</p>
+        @endif
     </div>
 @endsection
 
@@ -85,17 +81,21 @@
                     class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
             </div>
         </div>
-        
-        <div class="relative">
-            <embed src="{{ $lesson->file_path }}" width="100%" height="90%" />
-            <img src="{{  asset('assets/img/watermark 2.png') }}" class="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+
+        <div id="ebook-content" class="relative">
         </div>
     </div>
 </div>
 
 <script>
-    function openModal(id) {
-        document.getElementById(id).classList.remove("hidden");
+    function openModal(lessonId, filePath) {
+        const modalContent = `
+            <embed src="${filePath}" width="100%" height="90%" />
+            <img src="{{ asset('assets/img/watermark 2.png') }}" class="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+        `;
+        document.getElementById('ebook-content').innerHTML = modalContent;
+
+        document.getElementById('ebook').classList.remove("hidden");
     }
 
     function closeModal(id) {
