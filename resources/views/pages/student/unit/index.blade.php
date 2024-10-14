@@ -48,7 +48,7 @@
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="{{ route('student.theme') }}" class="mx-2 cursor-pointer">Theme</a>
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="#" class="mx-2 cursor-pointer">Unit</a>
+        <a href="#" class="mx-2 cursor-pointer">Unitttttt</a>
     </div>
     <div class="flex flex-wrap">
         <div id="accordion-collapse " class="w-full p-3">
@@ -60,7 +60,10 @@
                              class="accordion-button flex items-center justify-between w-full p-8 font-medium rtl:text-right text-gray-500 border border-gray-200 dark:border-gray-700 dark:text-gray-400 hover:bg-[#2E3646] rounded-md gap-3 "
                             data-accordion-target="#accordion-collapse-body-{{ $unit->id }}" aria-expanded="false"
                             aria-controls="accordion-collapse-body-{{ $unit->id }}">
-                            <span> {{ $unit->title }}</span>
+                            <div class="flex justify-start space-x-2 align-items: center;">
+                                <img src="{{ asset('images/unit1.png') }}" class="w-[50px] h-[44.21px] rounded-[2.44px]">
+                                <span class="mt-2"> {{ $unit->title }}</span>
+                            </div>
                             <svg data-accordion-icon class="w-3 h-3 shrink-0" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
