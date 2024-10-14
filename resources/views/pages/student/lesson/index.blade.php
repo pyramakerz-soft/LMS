@@ -45,9 +45,9 @@
     <div class="p-3 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="{{ route("student.theme") }}" class="mx-2 cursor-pointer">Theme</a>
+        <a href="{{ route('student.theme') }}" class="mx-2 cursor-pointer">Theme</a>
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="{{ route("student_units.index", $chapter->unit_id) }}" class="mx-2 cursor-pointer">Unit</a>
+        <a href="{{ route('student_units.index', $chapter->unit_id) }}" class="mx-2 cursor-pointer">Unit</a>
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="#" class="mx-2 cursor-pointer">lessons</a>
     </div>
@@ -56,16 +56,19 @@
         @foreach ($chapter->lessons as $lesson)
             <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white shadow-md rounded-xl">
                 <div class="w-full">
-                    <a onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');" class="cursor-pointer h-full flex flex-col justify-between">
+                    <a onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');"
+                        class="cursor-pointer h-full flex flex-col justify-between">
                         <!-- Updated title to handle long text -->
-                        <h3 class="px-4 py-2 bg-gray-200 text-lg font-bold truncate" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                        <h3 class="px-4 py-2 bg-gray-200 text-lg font-bold truncate"
+                            style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                             {{ $lesson->title }}
                         </h3>
                         <div class="p-4">
                             @if ($lesson->image)
                                 <img src="{{ asset($lesson->image) }}" class="object-contain w-full rounded-xl">
                             @else
-                                <img src="https://via.placeholder.com/150" class="object-contain w-full h-[250px] rounded-xl" alt="No Image">
+                                <img src="https://via.placeholder.com/150"
+                                    class="object-contain w-full h-[250px] rounded-xl" alt="No Image">
                             @endif
                         </div>
                     </a>
@@ -73,12 +76,11 @@
             </div>
         @endforeach
     </div>
-    
 @endsection
 
 
 
-{{----------------------------------------------------------------------------------------------------------------------}}
+{{-- ------------------------------------------------------------------------------------------------------------------ --}}
 
 {{-- Learning Modal --}}
 <div id="ebook" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-10 hidden">
@@ -92,8 +94,12 @@
                     class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
             </div>
         </div>
-        {{-- Put the Learning Here --}}
-        <embed src="{{ $lesson->file_path}}" width="100%" height="90%" />
+
+        <div class="relative">
+            <embed src="{{ $lesson->file_path }}" width="100%" height="90%" />
+            <img src="{{ asset('assets/img/watermark 2.png') }}"
+                class="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+        </div>
     </div>
 </div>
 
@@ -107,7 +113,3 @@
         document.getElementById(id).classList.add("hidden");
     }
 </script>
-
-
-
-

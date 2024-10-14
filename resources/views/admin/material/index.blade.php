@@ -99,8 +99,9 @@
                     <h5 class="modal-title">Ebook</h5>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
-                <div class="modal-body" style="height: calc(100% - 60px);">
+                <div class="position-relative modal-body" style="height: calc(100% - 60px);">
                     <embed src="" id="ebookEmbed" width="100%" height="100%" style="border: none;"></embed>
+                    <img src="{{ asset('assets/img/watermark 2.png') }}" class="position-absolute top-0 start-0 w-100 h-100" style="pointer-events: none; opacity: 0.5;">
                 </div>
             </div>
         </div>
