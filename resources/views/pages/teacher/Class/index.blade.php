@@ -63,7 +63,7 @@
                 <a href="{{ route('students_classess', ['class_id' => $classesTeacher->class->id]) }}" class="bg-white">
                     <!-- Chapter Image -->
                     <div class="p-4">
-                        <img src="{{ $classesTeacher->class->image ? asset($classesTeacher->class->image) : asset('images/default-material.png') }}"
+                        <img src="{{ $classesTeacher->class->image ? asset($classesTeacher->class->image) : asset('images/defaultCard.webp') }}"
                             alt="{{ $classesTeacher->class->name }}" class="object-cover w-full rounded-md">
                     </div>
                     <h3 class="px-4 py-2 text-lg font-bold">{{ $classesTeacher->class->name }}</h3>
