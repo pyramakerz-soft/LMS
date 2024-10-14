@@ -21,13 +21,16 @@
         <div class="flex items-center space-x-4">
             <div>
                 {{-- <img class="w-20 h-20 rounded-full" alt="avatar1" src="{{ Auth::guard('student')->user()->image }}" /> --}}
-                @if ($userAuth->image)
+                {{-- @if ($userAuth->image)
                     <img src="{{ asset($userAuth->image) }}" alt="Student Image"
                         class="w-20 h-20 rounded-full object-cover">
                 @else
                     <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
                         class="w-30 h-20 rounded-full object-cover">
-                @endif
+                @endif --}}
+
+                <img  class="w-20 h-20 rounded-full object-cover" alt="avatar" src="{{ $userAuth->image ? $userAuth->image  : asset('images/default_user.jpg') }}" />
+
             </div>
 
             <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
