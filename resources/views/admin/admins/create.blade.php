@@ -151,5 +151,9 @@
             // Event listener to add a new class group
             addClassBtn.addEventListener('click', addClassField);
         });
+
+        document.getElementById('city').addEventListener('input', function (event) {
+            this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+        });
     </script>
 @endsection
