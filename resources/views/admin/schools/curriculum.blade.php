@@ -35,7 +35,7 @@
                                 @endforeach
                             </select>
                         </div>
-
+                       {{-- @dd($stages)  --}}
                         <!-- Material Selection (Multiple) -->
                         <div class="mb-3">
                             <label for="material_id" class="form-label">Select Materials</label>
@@ -50,7 +50,6 @@
                 </div>
             </main>
 
-             
         </div>
     </div>
 @endsection
