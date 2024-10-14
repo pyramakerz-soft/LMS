@@ -75,7 +75,7 @@ class LessonController extends Controller
         // } else {
         //     $filePath = $file->store('ebooks', 'public');
         // }
-        
+
 
         Lesson::create([
             'title' => $request->title,
@@ -125,28 +125,64 @@ class LessonController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // public function update(Request $request, string $id)
+    // {
+    //     $lesson = Lesson::findOrFail($id);
+
+    //     dd($request);
+    //     $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'chapter_id' => 'required|exists:chapters,id',
+    //         'image' => 'required|mimes:jpeg,png,jpg,gif',
+    //         'file_path' => 'nullable|file|mimes:pdf,ppt,pptx,doc,docx,html,txt,zip|max:10240',
+
+    //         'is_active' => 'nullable|boolean',
+    //     ]);
+
+    //     if ($request->hasFile('image')) {
+    //         $imagePath = $request->file('image')->store('lessons', 'public');
+    //         $lesson->image = $imagePath;
+    //     }
+    //     if ($request->hasFile('file_path')) {
+    //         $filePath = $request->file('file_path')->store('ebooks', 'public');
+    //         $lesson->file_path = $filePath;
+    //     }
+
+    //     $lesson->update([
+    //         'title' => $request->title,
+    //         'chapter_id' => $request->chapter_id,
+    //         'is_active' => $request->is_active ?? 0,
+    //     ]);
+
+    //     return redirect()->route('lessons.index')->with('success', 'Lesson updated successfully.');
+    // }
+
     public function update(Request $request, string $id)
     {
         $lesson = Lesson::findOrFail($id);
 
+        // Validate the request. The image is not required on update.
         $request->validate([
             'title' => 'required|string|max:255',
             'chapter_id' => 'required|exists:chapters,id',
-            'image' => 'required|mimes:jpeg,png,jpg,gif',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048', // Image is not required
             'file_path' => 'nullable|file|mimes:pdf,ppt,pptx,doc,docx,html,txt,zip|max:10240',
-
             'is_active' => 'nullable|boolean',
         ]);
 
+        // If a new image is uploaded, store it and update the image field.
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('lessons', 'public');
             $lesson->image = $imagePath;
         }
+
+        // If a new file is uploaded, store it and update the file_path field.
         if ($request->hasFile('file_path')) {
             $filePath = $request->file('file_path')->store('ebooks', 'public');
             $lesson->file_path = $filePath;
         }
 
+        // Update the lesson with the rest of the fields.
         $lesson->update([
             'title' => $request->title,
             'chapter_id' => $request->chapter_id,
@@ -155,6 +191,7 @@ class LessonController extends Controller
 
         return redirect()->route('lessons.index')->with('success', 'Lesson updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.

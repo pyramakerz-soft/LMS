@@ -140,37 +140,96 @@ class AdminController extends Controller
     {
         $school = School::findOrFail($id);
         $types = Type::all();
-        return view('admin.admins.edit', compact('school', 'types'));
+        $classes = Group::where('school_id', $id)->get();
+        $stages = Stage::all();
+        // $schoolStages = $school->stages()->pluck('id')->toArray();
+        // dd( $classes);
+
+        return view('admin.admins.edit', compact('school', 'types', 'classes', 'stages'));
     }
+
 
 
     /**
      * Update the specified resource in storage.
      */
+    // public function update(Request $request, $id)
+    // {
+    //     $school = School::findOrFail($id);
+
+
+    //     $request->validate([
+    //         'name' => 'required|string|max:255',
+    //         'address' => 'nullable|string|max:255',
+    //         'city' => 'nullable|string|max:255',
+    //         'type_id' => 'required|exists:types,id',
+    //         'is_active' => 'required|boolean',
+    //     ]);
+
+    //     // Update school details
+    //     $school->update([
+    //         'name' => $request->name,
+    //         'address' => $request->address,
+    //         'city' => $request->city,
+    //         'type_id' => $request->type_id,
+    //         'is_active' => $request->is_active,
+    //     ]);
+
+    //     return redirect()->route('admins.index')->with('success', 'School updated successfully.');
+    // }
+
     public function update(Request $request, $id)
     {
         $school = School::findOrFail($id);
-
+    
         $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
             'type_id' => 'required|exists:types,id',
-            'is_active' => 'required|boolean',
+            'stage_id' => 'nullable|array',
+            'stage_id.*' => 'exists:stages,id',
+            'classes' => 'required|array',
+            'classes.*.name' => 'required|string|max:255',
+            'classes.*.stage_id' => 'required|exists:stages,id',
         ]);
-
-        // Update school details
+    
+        // Update school
         $school->update([
             'name' => $request->name,
             'address' => $request->address,
             'city' => $request->city,
             'type_id' => $request->type_id,
-            'is_active' => $request->is_active,
+            'is_active' => $request->is_active ?? 0,
         ]);
-
+    
+        // Sync stages
+        $school->stages()->sync($request->stage_id);
+    
+        // Update or create classes
+        foreach ($request->classes as $classData) {
+            if (!empty($classData['id'])) {
+                // If the class ID exists, update the class
+                $class = Group::find($classData['id']);
+                if ($class) {
+                    $class->update([
+                        'name' => $classData['name'],
+                        'stage_id' => $classData['stage_id'],
+                    ]);
+                }
+            } else {
+                // If no ID exists, create a new class
+                Group::create([
+                    'name' => $classData['name'],
+                    'school_id' => $school->id,
+                    'stage_id' => $classData['stage_id'],
+                ]);
+            }
+        }
+    
         return redirect()->route('admins.index')->with('success', 'School updated successfully.');
     }
-
+    
     /**
      * Remove the specified resource from storage.
      */
