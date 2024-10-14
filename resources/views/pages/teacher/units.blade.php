@@ -78,13 +78,21 @@
                     <div class="m-3">
                         <h2 id="accordion-collapse-heading-{{ $unit->id }}">
                             <button type="button"
-                                class="accordion-button flex items-center justify-between w-full p-8 font-medium rtl:text-right text-gray-500 border border-gray-200 dark:border-gray-700 dark:text-gray-400 hover:bg-[#2E3646] rounded-md gap-3 "
+                                class="accordion-button flex items-center justify-between w-full p-2 font-medium rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-[#2E3646] hover:text-white  rounded-md gap-3"
                                 data-accordion-target="#accordion-collapse-body-{{ $unit->id }}" aria-expanded="false"
                                 aria-controls="accordion-collapse-body-{{ $unit->id }}">
-                                <div>
-                                    <img src="{{ asset('images/unit1.png') }}" class="w-[50px] h-[44.21px] rounded-[2.44px]">
-                                    <span> {{ $unit->title }}</span>
-
+                                <div class="flex justify-start space-x-2 align-items: center;">
+                                    @if ($loop->iteration == 1)
+                                        <img src="{{ asset('images/unit1.png') }}"
+                                            class="w-[50px] h-[44.21px] rounded-[2.44px]">
+                                    @elseif ($loop->iteration == 2)
+                                        <img src="{{ asset('images/unit2.png') }}"
+                                            class="w-[50px] h-[44.21px] rounded-[2.44px]">
+                                    @else
+                                        <img src="{{ asset('images/unit3.png') }}"
+                                            class="w-[50px] h-[44.21px] rounded-[2.44px]">
+                                    @endif
+                                    <span class="mt-1 text-2xl"> {{ $unit->title }}</span>
                                 </div>
                                 <svg data-accordion-icon class="w-3 h-3 shrink-0" aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
