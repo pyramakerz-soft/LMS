@@ -20,13 +20,15 @@
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
-                    @if ($userAuth->image)
+                    {{-- @if ($userAuth->image)
                         <img src="{{ asset($userAuth->image) }}" alt="Student Image"
                             class="w-20 h-20 rounded-full object-cover">
                     @else
                         <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
                             class="w-30 h-20 rounded-full object-cover">
-                    @endif
+                    @endif --}}
+                    <img  class="w-20 h-20 rounded-full object-cover" alt="avatar" src="{{ $userAuth->image ? $userAuth->image  : asset('images/default_user.jpg') }}" />
+
                 </div>
 
                 <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
@@ -64,12 +66,14 @@
                             {{ $lesson->title }}
                         </h3>
                         <div class="p-4">
-                            @if ($lesson->image)
+                            {{-- @if ($lesson->image)
                                 <img src="{{ asset($lesson->image) }}" class="object-contain w-full rounded-xl">
                             @else
                                 <img src="https://via.placeholder.com/150"
                                     class="object-contain w-full h-[250px] rounded-xl" alt="No Image">
-                            @endif
+                            @endif --}}
+                            <img class="object-contain w-full h-[250px] rounded-xl" src="{{ $lesson->image ? asset('storage/' . asset($lesson->image) ) : asset('images/defaultCard.webp') }}" alt="{{ $lesson->title}}">
+
                         </div>
                     </a>
                 </div>

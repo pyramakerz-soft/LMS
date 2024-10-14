@@ -17,7 +17,7 @@
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
-                    <img class="w-20 h-20 rounded-full" alt="avatar" src="{{ Auth::guard('teacher')->user()->image }}" />
+                    <img class="w-20 h-20 rounded-full" alt="avatar" src="{{ Auth::guard('teacher')->user()->image ? Auth::guard('teacher')->user()->image  : asset('images/default_user.jpg') }}" />
                 </div>
 
                 <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
@@ -58,7 +58,7 @@
                     <div class="p-4">
                         <button onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');"
                             class="object-cover w-full  ">
-                            <img src="{{ $lesson->image ? asset($lesson->image) : asset('images/default-lesson.png') }}" alt="{{ $lesson->title }}">
+                            <img src="{{ $lesson->image ? asset($lesson->image) : asset('images/defaultCard.webp') }}" alt="{{ $lesson->title }}">
                         </button>
                     </div>
                     <h3 class="px-4 py-2 text-lg font-bold truncate">{{ $lesson->title }}</h3>
