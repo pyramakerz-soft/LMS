@@ -68,20 +68,20 @@
                                     {{ $material->title }}
                                 </p>
                                 <button class="pt-2"
-                                    onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');">
+                                    onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook', '{{ $material->file_path }}');">
                                     <img src="{{ asset('images/Clip path group.png') }}">
                                 </button>
                             </div>
                             <div class="flex justify-between items-center mt-4">
                                 <div>
                                     <button class="bg-[#17253E] p-2 text-white rounded-md"
-                                        onclick="event.stopPropagation(); event.preventDefault(); openModal('use');">
+                                        onclick="event.stopPropagation(); event.preventDefault();openModal('use', '{{ $material->how_to_use }}');">
                                         How To Use
                                     </button>
                                 </div>
                                 <div>
                                     <button class="bg-white border border-[#FF7519] p-2 text-black font-semibold rounded-md"
-                                        onclick="event.stopPropagation(); event.preventDefault(); openModal('learn');">
+                                        onclick="event.stopPropagation(); event.preventDefault(); openModal('learn', '{{ $material->learning }}');">
                                         Learning Outcomes
                                     </button>
                                 </div>
@@ -91,7 +91,9 @@
                 </div>
             </div>
         @endforeach
-
+        @if(count($materials) == 0)
+            <p class="m-auto text-gray-500">No Themes yet</p>
+        @endif
     </div>
 @endsection
 
@@ -111,10 +113,7 @@
             </div>
         </div>
 
-        <div class="relative">
-            <embed src="{{ $material->file_path }}" width="100%" height="90%" />
-            <img src="{{ asset('assets/img/watermark 2.png') }}"
-                class="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+        <div class="relative" id="ebook-content">
         </div>
     </div>
 </div>
@@ -132,10 +131,7 @@
             </div>
         </div>
 
-        <div class="relative">
-            <embed src="{{ $material->how_to_use }}" width="100%" height="90%" />
-            <img src="{{ asset('assets/img/watermark 2.png') }}"
-                class="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+        <div class="relative" id="use-content">
         </div>
     </div>
 </div>
@@ -153,17 +149,19 @@
             </div>
         </div>
 
-        <div class="relative">
-            <embed src="{{ $material->learning }}" width="100%" height="90%" />
-            <img src="{{ asset('assets/img/watermark 2.png') }}"
-                class="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+        <div class="relative" id="learn-content">
         </div>
     </div>
 </div>
 
 
 <script>
-    function openModal(id) {
+    function openModal(id, filePath) {
+        let modalContent = `
+            <embed src="${filePath}" width="100%" height="90%" />
+            <img src="{{ asset('assets/img/watermark 2.png') }}" class="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+        `;
+        document.getElementById(id + '-content').innerHTML = modalContent;
         document.getElementById(id).classList.remove("hidden");
     }
 

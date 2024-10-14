@@ -56,7 +56,7 @@
         @foreach ($chapter->lessons as $lesson)
             <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white shadow-md rounded-xl">
                 <div class="w-full">
-                    <a onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');"
+                    <a onclick="event.stopPropagation(); event.preventDefault(); openModal('{{ $lesson->id }}', '{{ $lesson->file_path }}');"
                         class="cursor-pointer h-full flex flex-col justify-between">
                         <!-- Updated title to handle long text -->
                         <h3 class="px-4 py-2 bg-gray-200 text-lg font-bold truncate"
@@ -72,9 +72,12 @@
                             @endif
                         </div>
                     </a>
-                </div>
+                </div>  
             </div>
         @endforeach
+        @if(count($chapter->lessons) == 0)
+            <p class="m-auto text-gray-500">No Lessons yet</p>
+        @endif
     </div>
 @endsection
 
@@ -95,18 +98,21 @@
             </div>
         </div>
 
-        <div class="relative">
-            <embed src="{{ $lesson->file_path }}" width="100%" height="90%" />
-            <img src="{{ asset('assets/img/watermark 2.png') }}"
-                class="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+        <div id="ebook-content" class="relative">
         </div>
     </div>
 </div>
 
 
 <script>
-    function openModal(id) {
-        document.getElementById(id).classList.remove("hidden");
+     function openModal(lessonId, filePath) {
+        const modalContent = `
+            <embed src="${filePath}" width="100%" height="90%" />
+            <img src="{{ asset('assets/img/watermark 2.png') }}" class="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+        `;
+        document.getElementById('ebook-content').innerHTML = modalContent;
+
+        document.getElementById('ebook').classList.remove("hidden");
     }
 
     function closeModal(id) {
