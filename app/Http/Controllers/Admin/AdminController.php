@@ -143,7 +143,7 @@ class AdminController extends Controller
         $classes = Group::where('school_id', $id)->get();
         $stages = Stage::all();
         // $schoolStages = $school->stages()->pluck('id')->toArray();
-        // dd( $classes);
+    
 
         return view('admin.admins.edit', compact('school', 'types', 'classes', 'stages'));
     }
@@ -180,8 +180,9 @@ class AdminController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request);
         $school = School::findOrFail($id);
-    
+
         $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
@@ -193,7 +194,7 @@ class AdminController extends Controller
             'classes.*.name' => 'required|string|max:255',
             'classes.*.stage_id' => 'required|exists:stages,id',
         ]);
-    
+
         // Update school
         $school->update([
             'name' => $request->name,
@@ -202,34 +203,21 @@ class AdminController extends Controller
             'type_id' => $request->type_id,
             'is_active' => $request->is_active ?? 0,
         ]);
-    
+
         // Sync stages
         $school->stages()->sync($request->stage_id);
-    
+
         // Update or create classes
         foreach ($request->classes as $classData) {
-            if (!empty($classData['id'])) {
-                // If the class ID exists, update the class
-                $class = Group::find($classData['id']);
-                if ($class) {
-                    $class->update([
-                        'name' => $classData['name'],
-                        'stage_id' => $classData['stage_id'],
-                    ]);
-                }
-            } else {
-                // If no ID exists, create a new class
-                Group::create([
-                    'name' => $classData['name'],
-                    'school_id' => $school->id,
-                    'stage_id' => $classData['stage_id'],
-                ]);
-            }
+            Group::updateOrCreate(
+                ['school_id' => $school->id, 'stage_id' => $classData['stage_id']],
+                ['name' => $classData['name']]
+            );
         }
-    
-        return redirect()->route('admins.index')->with('success', 'School updated successfully.');
-    }
-    
+
+    return redirect()->route('admins.index')->with('success', 'School updated successfully.');
+}
+
     /**
      * Remove the specified resource from storage.
      */
