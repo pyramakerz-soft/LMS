@@ -54,7 +54,7 @@
                             <img src="{{ $lesson->image ? asset($lesson->image) : asset('images/default-lesson.png') }}" alt="{{ $lesson->title }}">
                         </button>
                     </div>
-                    <h3 class="px-4 py-2 text-lg font-bold">{{ $lesson->title }}</h3>
+                    <h3 class="px-4 py-2 text-lg font-bold truncate">{{ $lesson->title }}</h3>
                 </div>
             </div>
         @endforeach

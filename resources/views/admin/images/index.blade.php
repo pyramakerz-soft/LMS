@@ -21,7 +21,7 @@
                     <div class="row">
                         @foreach ($images as $key => $image)
                             <div class="col-md-4 col-lg-3">
-                                <div class="card mb-4 shadow-sm" style="height: 350px;">
+                                <div class="card mb-4 " style="height: 350px;">
                                     <div style="height: 250px; overflow: hidden;">
                                         <img src="{{ asset($image->path) }}" alt="Image"
                                             class="card-img-top"

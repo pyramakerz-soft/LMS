@@ -54,7 +54,7 @@
 
     <div class="flex flex-wrap p-3">
         @foreach ($chapter->lessons as $lesson)
-            <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white shadow-md rounded-xl">
+            <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white  rounded-xl">
                 <div class="w-full">
                     <a onclick="event.stopPropagation(); event.preventDefault(); openModal('{{ $lesson->id }}', '{{ $lesson->file_path }}');"
                         class="cursor-pointer h-full flex flex-col justify-between">
