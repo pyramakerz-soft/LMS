@@ -25,22 +25,35 @@ class LoginController extends Controller
 
         // Attempt to authenticate as a student
         $student = Student::where('username', $request->input('username'))->first();
-        if ($student && Hash::check($request->input('password'), $student->password)) {
-            Auth::guard('student')->login($student); // Log in the student
 
-            // Redirect to student's dashboard or theme page
-            return redirect()->route('student.dashboard');
+        if ($student) {
+            if (Hash::check($request->input('password'), $student->password)) {
+                Auth::guard('student')->login($student); // Log in the student
+                return redirect()->route('student.dashboard');
+            } else {
+                // Password is incorrect
+                return back()->withErrors([
+                    'password' => 'The provided Password is incorrect.',
+                ]);
+            }
         }
 
         // Attempt to authenticate as a teacher
         $teacher = Teacher::where('username', $request->input('username'))->first();
-        if ($teacher && Hash::check($request->input('password'), $teacher->password)) {
-            Auth::guard('teacher')->login($teacher); // Log in the teacher
-            return redirect()->route('teacher.dashboard');
+        if ($teacher) {
+            if (Hash::check($request->input('password'), $teacher->password)) {
+                Auth::guard('teacher')->login($teacher); // Log in the teacher
+                return redirect()->route('teacher.dashboard');
+            } else {
+                // Password is incorrect
+                return back()->withErrors([
+                    'password' => 'The provided Password is incorrect.',
+                ]);
+            }
         }
 
         return back()->withErrors([
-            'username' => 'The provided credentials are incorrect.',
+            'username' => 'The provided Username is incorrect.',
         ]);
     }
 

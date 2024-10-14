@@ -10,7 +10,7 @@
             <main class="content">
                 <div class="container-fluid p-0">
 
-                    <h1>Materials</h1>
+                    <h1>Theme</h1>
 
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>

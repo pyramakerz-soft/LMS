@@ -82,7 +82,7 @@ class StageController extends Controller
 
         if ($request->hasFile('image')) {
             if ($stage->image) {
-                \Storage::disk('public')->delete($stage->image);
+                Storage::disk('public')->delete($stage->image);
             }
             $imagePath = $request->file('image')->store('stages', 'public');
             $stage->image = $imagePath;
@@ -94,7 +94,7 @@ class StageController extends Controller
 
         $stage->save();
 
-        return redirect()->route('stages.index')->with('success', 'Stage updated successfully.');
+        return redirect()->route('stages.index')->with('success', 'Grade updated successfully.');
     }
 
     /**
@@ -105,7 +105,7 @@ class StageController extends Controller
         $stage = Stage::findOrFail($id);
         $stage->delete();
 
-        return redirect()->route('stages.index')->with('success', 'Stage deleted successfully.');
+        return redirect()->route('stages.index')->with('success', 'Grade deleted successfully.');
     }
 
     public function createMaterial($stageId)
