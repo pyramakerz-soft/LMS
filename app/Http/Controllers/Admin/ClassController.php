@@ -10,6 +10,7 @@ use App\Models\Stage;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Storage;
 
 class ClassController extends Controller
 {
@@ -87,7 +88,7 @@ class ClassController extends Controller
         $class = Group::findOrFail($id);
 
         $request->validate([
-            // 'name' => 'required'. $class->id,
+            'name' => 'required',
             'school_id' => 'required|exists:schools,id',
             'stage_id' => 'required|exists:stages,id',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif',
@@ -96,6 +97,9 @@ class ClassController extends Controller
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('classes', 'public');
+            if ($class->image) {
+                Storage::disk('public')->delete($class->image);
+            }
             $class->image = $imagePath;
         }
 
@@ -103,11 +107,11 @@ class ClassController extends Controller
             'name' => $request->input('name'),
             'school_id' => $request->input('school_id'),
             'stage_id' => $request->input('stage_id'),
-            'image' => $imagePath,
         ]);
 
-        return redirect()->route('classes.index')->with('success', 'Class updated successfully.');
+        $class->save();
 
+        return redirect()->route('classes.index')->with('success', 'Class updated successfully.');
     }
 
     /**

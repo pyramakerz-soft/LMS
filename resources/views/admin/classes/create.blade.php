@@ -30,6 +30,10 @@
                             <input type="text" name="name" id="name" class="form-control" required>
                         </div>
 
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Image (Optional)</label>
+                            <input type="file" name="image" id="image" class="form-control">
+                        </div>
 
                         <div class="mb-3">
                             <label for="school_id" class="form-label">School</label>

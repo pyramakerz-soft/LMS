@@ -152,6 +152,8 @@ class ChapterController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $chapter = Chapter::findOrFail($id);
+        $chapter->delete();
+        return redirect()->route('chapters.index')->with('success', 'Chapter deleted successfully.');
     }
 }
