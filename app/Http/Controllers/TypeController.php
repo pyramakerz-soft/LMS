@@ -69,7 +69,9 @@ class TypeController extends Controller
     {
         $types = Type::findOrFail($id);
 
-
+        $request->validate([
+            'name' => 'required|unique:types,name',
+        ]);
 
         $types->update([
             'name' => $request->input('name'),

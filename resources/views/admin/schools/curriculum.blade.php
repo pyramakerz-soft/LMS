@@ -10,7 +10,7 @@
             <main class="content">
                 <div class="container-fluid p-0">
 
-                    <h1>Assign Curriculum to {{ $school->name }}</h1>
+                    <h1>Add Curriculum to {{ $school->name }}</h1>
 
                     @if ($errors->any())
                         <div class="alert alert-danger">

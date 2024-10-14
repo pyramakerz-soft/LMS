@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -20,13 +22,18 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::guard('admin')->attempt($credentials)) {
-            return redirect()->route('admin.dashboard')->with('success', 'Logged in successfully.');
+        $admin = Admin::where('email', $request->input('email'))->first();
+        if ($admin) {
+            if (Hash::check($request->input('password'), $admin->password)) {
+                // Log the admin in
+                Auth::guard('admin')->login($admin);
+                return redirect()->route('admin.dashboard')->with('success', 'Logged in successfully.');
+            } else {
+                return redirect()->back()->withErrors(['password' => 'The provided Password is incorrect.']);
+            }
         }
 
-        return redirect()->back()->withErrors(['error' => 'Invalid email or password.']);
+        return redirect()->back()->withErrors(['email' => 'The provided Email is incorrect.']);
     }
 
     public function logout()

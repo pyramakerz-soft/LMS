@@ -102,7 +102,7 @@ class MaterialController extends Controller
     //         'learning' => $learningPath, // Save learning outcomes file path
     //     ]);
 
-    //     return redirect()->back()->with('success', 'Material created successfully.');
+    //     return redirect()->back()->with('success', 'Theme created successfully.');
     // }
 // public function store(Request $request)
 // {
@@ -157,7 +157,7 @@ class MaterialController extends Controller
 //         'learning' => $request->learning,
 //     ]);
 // // dd($material);
-//     return redirect()->back()->with('success', 'Material created successfully.');
+//     return redirect()->back()->with('success', 'Theme created successfully.');
 // }
 
 public function store(Request $request)
@@ -197,7 +197,7 @@ public function store(Request $request)
         'learning' => $request->learning,
     ]);
 
-    return redirect()->back()->with('success', 'Material created successfully.');
+    return redirect()->back()->with('success', 'Theme created successfully.');
 }
 
 private function handleFileUpload($file, $storageFolder)
@@ -312,7 +312,7 @@ private function handleFileUpload($file, $storageFolder)
             'is_active' => $request->is_active ?? 0,
         ]);
 
-        return redirect()->route('material.index')->with('success', 'Material updated successfully.');
+        return redirect()->route('material.index')->with('success', 'Theme updated successfully.');
     }
 
     /**
@@ -323,6 +323,6 @@ private function handleFileUpload($file, $storageFolder)
         $material = Material::findOrFail($id);
         $material->delete();
 
-        return redirect()->route('material.index')->with('success', 'Material deleted successfully.');
+        return redirect()->route('material.index')->with('success', 'Theme deleted successfully.');
     }
 }
