@@ -20,13 +20,6 @@
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
-                    {{-- @if ($userAuth->image)
-                        <img src="{{ asset($userAuth->image) }}" alt="Student Image"
-                            class="w-20 h-20 rounded-full object-cover">
-                    @else
-                        <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
-                            class="w-30 h-20 rounded-full object-cover">
-                    @endif --}}
                     <img  class="w-20 h-20 rounded-full object-cover" alt="avatar" src="{{ $userAuth->image ? $userAuth->image  : asset('images/default_user.jpg') }}" />
 
                 </div>
@@ -58,7 +51,7 @@
         @foreach ($chapter->lessons as $lesson)
             <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white  rounded-xl">
                 <div class="w-full">
-                    <a onclick="event.stopPropagation(); event.preventDefault(); openModal('{{ $lesson->id }}', '{{ $lesson->file_path }}');"
+                    <a onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook', '{{ $lesson->file_path }}');"
                         class="cursor-pointer h-full flex flex-col justify-between">
                         <!-- Updated title to handle long text -->
                         <h3 class="px-4 py-2 bg-gray-200 text-lg font-bold truncate"

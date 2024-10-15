@@ -13,25 +13,7 @@
 @endsection
 
 @section('content')
-    <div class="p-3">
-        <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
-            <div class="flex items-center space-x-4">
-                <div>
-                    <img class="w-20 h-20 rounded-full" alt="avatar" src="{{ Auth::guard('teacher')->user()->image ? Auth::guard('teacher')->user()->image  : asset('images/default_user.jpg') }}" />
-                </div>
-
-                <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
-                    <div class="text-xl">
-                        {{ Auth::guard('teacher')->user()->username }}
-                    </div>
-                    <div class="text-sm">
-                        {{ Auth::guard('teacher')->user()->school->name }}
-                    </div>
-                </div>
-            </div>
-        </div>
-        @yield('insideContent')
-    </div>
+    @include('components.profile')
 
     <div class="p-3 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
@@ -44,32 +26,6 @@
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="" class="mx-2 cursor-pointer">Units</a>
     </div>
-
-    <!-- Display Units -->
-    {{-- <div class="flex flex-wrap">
-        @foreach ($material->units as $unit)
-            <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
-                <!-- Make the card a clickable link -->
-                <a href="{{ route('teacher.chapters.index', $unit->id) }}" class="block">
-                    <div class="h-[350px] bg-white shadow-md border border-slate-200 rounded-md">
-                        <h3 class="px-4 py-2 bg-gray-200 text-lg font-bold">{{ $unit->title }}</h3>
-
-                        <!-- Unit Image -->
-                        <div class="p-4">
-                            <img src="{{ $unit->image ? asset($unit->image) : asset('images/default-unit.png') }}"
-                                alt="{{ $unit->title }}" class="object-cover w-full h-32 rounded-md">
-                        </div>
-                    </div>
-                </a>
-            </div>
-        @endforeach
-    </div> --}}
-
-
-
-
-    {{-- @dd($material) --}}
-
 
     <div class="flex flex-wrap">
         <div id="accordion-collapse " class="w-full p-3">
@@ -120,7 +76,8 @@
                                                             alt="No Image">
                                                     @endif --}}
                                                     <img src="{{ $chapter->image ? asset($chapter->image) : asset('images/defaultCard.webp') }}"
-                                                    alt="{{ $chapter->title }}" class="object-contain w-full h-[250px] rounded-xl">
+                                                        alt="{{ $chapter->title }}"
+                                                        class="object-contain w-full h-[250px] rounded-xl">
                                                 </div>
                                                 <div class="p-2">
                                                     <p class="text-slate-800 text-2xl font-semibold truncate">
@@ -157,5 +114,3 @@
             });
         </script>
     @endsection
-
-    {{-- {{ asset($chapter->image) }} --}}
