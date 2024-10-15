@@ -18,7 +18,6 @@
 
 @section('content')
 @dd(Auth::guard('student')->user())
-{{-- @dd(Auth::guard('teacher')->user()) --}}
     <div class="p-3">
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">

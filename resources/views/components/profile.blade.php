@@ -11,8 +11,6 @@
                         class="w-30 h-20 rounded-full">
                 @endif
             </div>
-{{-- @dd(Auth::guard('student')->user()) --}}
-{{-- @dd(Auth::guard('teacher')->user()) --}}
             <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
                 <div class="text-xl">
                     {{ Auth::guard('teacher')->user()->username }}
