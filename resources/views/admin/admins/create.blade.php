@@ -99,57 +99,75 @@
 @section('page_js')
     <script>
         $(document).ready(function() {
-            $('#stage_id').select2({
-                placeholder: "Select Grades",
-                allowClear: true
-            });
+    $('#stage_id').select2({
+        placeholder: "Select Grades",
+        allowClear: true
+    });
+
+    const addClassBtn = document.getElementById('add-class-btn');
+    const classContainer = document.getElementById('class-container');
+    let classCount = 0;
+
+    function addClassField(stages) {
+        classCount++;
+        const classGroup = document.createElement('div');
+        classGroup.classList.add('class-group', 'mb-3');
+        classGroup.setAttribute('id', `class-group-${classCount}`);
+
+        let stageOptions = '';
+        stages.forEach(stage => {
+            stageOptions += `<option value="${stage.id}">${stage.text}</option>`;
         });
-        document.addEventListener('DOMContentLoaded', function() {
-            const addClassBtn = document.getElementById('add-class-btn');
-            const classContainer = document.getElementById('class-container');
 
-            let classCount = 0; // To track the number of classes
-
-            // Function to add a new class field group
-            function addClassField() {
-                classCount++;
-                const classGroup = document.createElement('div');
-                classGroup.classList.add('class-group', 'mb-3');
-                classGroup.setAttribute('id', `class-group-${classCount}`);
-
-                classGroup.innerHTML = `
+        classGroup.innerHTML = `
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="mb-3">
                         <label for="class_name_${classCount}" class="form-label">Class Name</label>
                         <input type="text" name="classes[${classCount}][name]" class="form-control" id="class_name_${classCount}" placeholder="Enter class name" required>
                     </div>
-
                     <div class="mb-3">
                         <label for="class_stage_${classCount}" class="form-label">Grade</label>
                         <select name="classes[${classCount}][stage_id]" id="class_stage_${classCount}" class="form-control" required>
-                            @foreach ($stages as $stage)
-                                <option value="{{ $stage->id }}">{{ $stage->name }}</option>
-                            @endforeach
+                            ${stageOptions}
                         </select>
                     </div>
-
                     <button type="button" class="btn btn-danger remove-class-btn" data-class-id="${classCount}">Remove Class</button>
                 </div>
             </div>
         `;
 
-                classContainer.appendChild(classGroup);
+        classContainer.appendChild(classGroup);
 
-                // Attach remove event to the newly added button
-                classGroup.querySelector('.remove-class-btn').addEventListener('click', function() {
-                    const classId = this.getAttribute('data-class-id');
-                    document.getElementById(`class-group-${classId}`).remove();
-                });
-            }
-
-            // Event listener to add a new class group
-            addClassBtn.addEventListener('click', addClassField);
+        classGroup.querySelector('.remove-class-btn').addEventListener('click', function() {
+            const classId = this.getAttribute('data-class-id');
+            document.getElementById(`class-group-${classId}`).remove();
         });
+    }
+
+    $('#stage_id').on('change', function() {
+        const selectedStages = $('#stage_id').select2('data'); // Get selected stages
+        if (selectedStages.length > 0) {
+            addClassBtn.disabled = false;
+        } else {
+            addClassBtn.disabled = true;
+        }
+
+        classContainer.innerHTML = '';
+    });
+
+    addClassBtn.addEventListener('click', function() {
+        const selectedStages = $('#stage_id').select2('data');
+        if (selectedStages.length > 0) {
+            const formattedStages = selectedStages.map(stage => ({
+                id: stage.id,
+                text: stage.text
+            }));
+            addClassField(formattedStages);
+        }
+    });
+});
+
+
     </script>
 @endsection

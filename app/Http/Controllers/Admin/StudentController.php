@@ -53,7 +53,11 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'username' => 'required|unique:students',
+            'username' => [
+            'required',
+            'unique:students',
+            'regex:/^[a-zA-Z][a-zA-Z0-9_]*$/',
+        ],
             'gender' => 'required',
             'school_id' => 'required|exists:schools,id',
             'stage_id' => 'required|exists:stages,id',
@@ -116,7 +120,11 @@ class StudentController extends Controller
         $student = Student::findOrFail($id);
 
         $request->validate([
-            'username' => 'required|unique:students,username,' . $student->id,
+            'username' => [
+            'required',
+            'unique:students,username,' . $student->id,
+            'regex:/^[a-zA-Z][a-zA-Z0-9_]*$/', // Ensures username starts with a letter and contains only letters, numbers, and underscores
+        ],
             'gender' => 'required',
             'school_id' => 'required|exists:schools,id',
             'stage_id' => 'required|exists:stages,id',

@@ -23,7 +23,7 @@ class LessonController extends Controller
      */
     public function create()
     {
-        $chapters = Chapter::all();
+        $chapters = Chapter::with('material.stage')->get();
         return view('admin.lessons.create', compact('chapters'));
     }
 
@@ -117,7 +117,7 @@ class LessonController extends Controller
     public function edit(string $id)
     {
         $lesson = Lesson::findOrFail($id);
-        $chapters = Chapter::all();
+         $chapters = Chapter::with('material.stage')->get();
         return view('admin.lessons.edit', compact('lesson', 'chapters'));
     }
 
@@ -132,8 +132,8 @@ class LessonController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'chapter_id' => 'required|exists:chapters,id',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
-            'file_path' => 'nullable|file|mimes:pdf,ppt,pptx,doc,docx,html,txt,zip|max:10240',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'file_path' => 'required',
 
             'is_active' => 'nullable|boolean',
         ]);
@@ -150,6 +150,7 @@ class LessonController extends Controller
         $lesson->update([
             'title' => $request->title,
             'chapter_id' => $request->chapter_id,
+            'file_path' => $request->file_path,
             'is_active' => $request->is_active ?? 0,
         ]);
 

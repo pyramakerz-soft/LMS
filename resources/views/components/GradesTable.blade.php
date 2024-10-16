@@ -162,6 +162,8 @@
                                 @php
                                     $now = Carbon::now();
                                     $isSameWeek = $studentDegree->created_at->isSameWeek($now);
+                                        $last_att_score = $studentDegree->attendance_score;
+
                                     if($isSameWeek){
                                         $last_att_score = $studentDegree->attendance_score;
                                         $last_cp_score = $studentDegree->classroom_participation_score;
@@ -180,7 +182,7 @@
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
                                         <input class="w-[40px] assessment-input" max="10" min="0"
                                             type="number" name="attendance_score" data-student-id="{{ $s->id }}"
-                                            value="{{$last_att_score}}">
+                                            value="{{$last_att_score ?? null}}">
                                         <p>/10 </p>
                                     </div>
                                 </td>
@@ -189,7 +191,7 @@
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
                                         <input class="w-[40px] assessment-input" type="number"
                                             name="classroom_participation_score" data-student-id="{{ $s->id }}"
-                                            value="{{$last_cp_score}}">
+                                            value="{{$last_cp_score ?? null}}">
                                         <p>/20 </p>
                                     </div>
                                 </td>
@@ -198,7 +200,7 @@
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
                                         <input class="w-[40px] assessment-input" type="number"
                                             name="classroom_behavior_score" data-student-id="{{ $s->id }}"
-                                            value="{{$last_cb_score}}">
+                                            value="{{$last_cb_score ?? null}}">
                                         <p>/20 </p>
                                     </div>
                                 </td>
@@ -206,7 +208,7 @@
                                     <div
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
                                         <input class="w-[40px] assessment-input" type="number" name="homework_score"
-                                            data-student-id="{{ $s->id }}" value="{{$last_hw_score}}">
+                                            data-student-id="{{ $s->id }}" value="{{$last_hw_score ?? null}}">
                                         <p>/10 </p>
                                     </div>
                                 </td>
@@ -214,7 +216,7 @@
                                     <div
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
                                         <input class="w-[40px] assessment-input" type="number" name="final_project_score"
-                                            data-student-id="{{ $s->id }}" value="{{$last_final_score}}">
+                                            data-student-id="{{ $s->id }}" value="{{$last_final_score ?? null}}">
                                         <p>/50 </p>
                                     </div>
                                 </td>

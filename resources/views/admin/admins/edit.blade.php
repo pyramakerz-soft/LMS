@@ -138,6 +138,12 @@
 
 @section('page_js')
    <script>
+           $(document).ready(function() {
+            $('#stage_id').select2({
+                placeholder: "Select Grades",
+                allowClear: true
+            });
+        });
     document.addEventListener('DOMContentLoaded', function() {
         let classCount = {{ $school->groups ? $school->groups->count() : 0 }};
         

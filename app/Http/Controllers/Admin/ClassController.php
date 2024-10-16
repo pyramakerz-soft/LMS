@@ -82,32 +82,25 @@ class ClassController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        $class = Group::findOrFail($id);
+   public function update(Request $request, string $id)
+{
+    $class = Group::findOrFail($id);
 
-        // $request->validate([
-        //     'name' => 'required'. $class->id,
-        //     'school_id' => 'required|exists:schools,id',
-        //     'stage_id' => 'required|exists:stages,id',
-        //     'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-        // ]);
-
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('classes', 'public');
-            $class->image = $imagePath;
-        }
-
-        $class->update([
-            'name' => $request->input('name'),
-            'school_id' => $request->input('school_id'),
-            'stage_id' => $request->input('stage_id'),
-            'image' => $imagePath,
-        ]);
-
-        return redirect()->route('classes.index')->with('success', 'Class updated successfully.');
-
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('classes', 'public');
+    } else {
+        $imagePath = $class->image;
     }
+
+    $class->update([
+        'name' => $request->input('name'),
+        'school_id' => $request->input('school_id'),
+        'stage_id' => $request->input('stage_id'),
+        'image' => $imagePath,
+    ]);
+
+    return redirect()->route('classes.index')->with('success', 'Class updated successfully.');
+}
 
     /**
      * Remove the specified resource from storage.

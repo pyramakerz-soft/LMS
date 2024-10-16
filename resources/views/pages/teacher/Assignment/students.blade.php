@@ -102,7 +102,7 @@
                                         action="{{ route('assignments.students.update', [$assignment->id, $student->student_id]) }}"
                                         method="POST" style="display:inline-block;">
                                         @csrf
-                                        <input type="number" name="marks" value="{{ $student->marks }}"
+                                        <input type="number" min="1" name="marks" value="{{ $student->marks }}"
                                             class="border border-gray-300 rounded p-1 w-20">
                                         <button type="submit" class="btn btn-primary ml-2">Update</button>
                                     </form>

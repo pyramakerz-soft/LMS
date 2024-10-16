@@ -40,7 +40,7 @@
                                         <div class="mb-3">
                                             <label for="number_of_teachers" class="form-label">Number of Teachers to
                                                 Generate</label>
-                                            <input type="number" name="number_of_teachers" class="form-control"
+                                            <input type="number" name="number_of_teachers" min="1" max="20" class="form-control"
                                                 id="number_of_teachers" required>
                                         </div>
                                         <div class="mb-3">

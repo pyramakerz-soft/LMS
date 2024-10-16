@@ -27,12 +27,12 @@
 
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" name="username" id="username" class="form-control" required>
+                            <input type="text" value="{{ old('username') }}" name="username" id="username" class="form-control" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="gender" class="form-label">Gender</label>
-                            <select name="gender" id="gender" class="form-control" required>
+                            <select name="gender"  id="gender" class="form-control" required>
                                 <option value="boy">Boy</option>
                                 <option value="girl">Girl</option>
                             </select>
