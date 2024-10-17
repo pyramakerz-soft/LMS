@@ -11,7 +11,6 @@
                 <div class="container-fluid p-0">
 
                     <h1>School</h1>
-
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
