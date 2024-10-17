@@ -83,6 +83,7 @@ class ClassController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
     public function update(Request $request, string $id)
     {
         $class = Group::findOrFail($id);
@@ -112,7 +113,8 @@ class ClassController extends Controller
         $class->save();
 
         return redirect()->route('classes.index')->with('success', 'Class updated successfully.');
-    }
+
+}
 
     /**
      * Remove the specified resource from storage.
