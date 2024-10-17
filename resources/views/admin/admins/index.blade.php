@@ -10,7 +10,7 @@
             <main class="content">
                 <div class="container-fluid p-0">
 
-                    <h1>Schools</h1>
+                    <h1>Schoolss</h1>
 
 
                     @if (session('success'))
