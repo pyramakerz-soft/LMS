@@ -42,13 +42,12 @@
                                             @endif
                                         </td>
                                         <td>{{ $unit->is_active ? 'Active' : 'Inactive' }}</td>
-                                        <td class="d-flex justify-content-start">
+                                        <td class="d-flex align-items-center gap-2">
                                             <a href="{{ route('units.edit', $unit->id) }}" class="btn btn-info">Edit</a>
-                                            <form action="{{ route('units.destroy', $unit->id) }}" method="POST"
-                                                style="display:inline-block;">
+                                            <form action="{{ route('units.destroy', $unit->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger" style="margin-left: 10px;">Delete</button>
+                                                <button type="submit" class="btn btn-danger">Delete</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -56,7 +55,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- End of scrollable wrapper -->
 
                 </div>
             </main>

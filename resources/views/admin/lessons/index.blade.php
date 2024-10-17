@@ -18,51 +18,52 @@
 
                     <a href="{{ route('lessons.create') }}" class="btn btn-primary mb-3">Add Lesson</a>
 
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>File</th>
-                                <th>Chapter</th>
-                                <th>Image</th>
-                                <th>Active</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($lessons as $lesson)
+                    <div class="table-responsive" style="overflow-x: auto;">
+                        <table class="table table-bordered">
+                            <thead>
                                 <tr>
-                                    <td>{{ $lesson->title }}</td>
-                                    <td>
-                                        <button class="btn btn-success" data-bs-toggle="modal" 
-                                                data-bs-target="#ebookModal" 
-                                                data-file="{{ asset($lesson->file_path) }}">
-                                            View Ebook
-                                        </button>
-                                    </td>
-                                    <td>{{ $lesson->chapter->title }}</td>
-                                    <td>
-                                        @if ($lesson->image)
-                                            <img src="{{ asset($lesson->image) }}" alt="{{ $lesson->title }}"
-                                                width="100">
-                                        @else
-                                            No Image
-                                        @endif
-                                    </td>
-                                    <td>{{ $lesson->is_active ? 'Active' : 'Inactive' }}</td>
-                                    <td>
-                                        <a href="{{ route('lessons.edit', $lesson->id) }}" class="btn btn-info">Edit</a>
-                                        <form action="{{ route('lessons.destroy', $lesson->id) }}" method="POST"
-                                            style="display:inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form>
-                                    </td>
+                                    <th>Title</th>
+                                    <th>File</th>
+                                    <th>Chapter</th>
+                                    <th>Image</th>
+                                    <th>Active</th>
+                                    <th>Actions</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($lessons as $lesson)
+                                    <tr>
+                                        <td>{{ $lesson->title }}</td>
+                                        <td>
+                                            <button class="btn btn-success" data-bs-toggle="modal" 
+                                                    data-bs-target="#ebookModal" 
+                                                    data-file="{{ asset($lesson->file_path) }}">
+                                                View Ebook
+                                            </button>
+                                        </td>
+                                        <td>{{ $lesson->chapter->title }}</td>
+                                        <td>
+                                            @if ($lesson->image)
+                                                <img src="{{ asset($lesson->image) }}" alt="{{ $lesson->title }}"
+                                                    width="100">
+                                            @else
+                                                No Image
+                                            @endif
+                                        </td>
+                                        <td>{{ $lesson->is_active ? 'Active' : 'Inactive' }}</td>
+                                        <td class="d-flex align-items-center gap-2">
+                                            <a href="{{ route('lessons.edit', $lesson->id) }}" class="btn btn-info">Edit</a>
+                                            <form action="{{ route('lessons.destroy', $lesson->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
             </main>

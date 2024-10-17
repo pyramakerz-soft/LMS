@@ -30,12 +30,11 @@
                                 @foreach ($types as $type)
                                     <tr>
                                         <td>{{ $type->name }}</td>
-                                        <td class="d-flex justify-content-start">
+                                        <td class="d-flex align-items-center gap-2">
                                             <a href="{{ route('types.edit', $type->id) }}" class="btn btn-info">Edit</a>
 
                                             <!-- Delete button -->
-                                            <form action="{{ route('types.destroy', $type->id) }}" method="POST"
-                                                style="display:inline-block; margin-left: 10px;" >
+                                            <form action="{{ route('types.destroy', $type->id) }}" method="POST" >
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger"

@@ -67,9 +67,9 @@
                                         </td>
                                         
                                         <td>{{ $material->is_active ? 'Active' : 'Inactive' }}</td>
-                                        <td class="d-flex justify-content-start align-items-center" >
+                                        <td class="d-flex align-items-center gap-2" >
                                             <a href="{{ route('material.edit', $material->id) }}" class="btn btn-info">Edit</a>
-                                            <form action="{{ route('material.destroy', $material->id) }}" method="POST" style="display:inline-block; margin-left: 10px;">
+                                            <form action="{{ route('material.destroy', $material->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger">Delete</button>

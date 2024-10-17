@@ -15,7 +15,6 @@
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    <!-- Button to create a new student -->
                     <a href="{{ route('students.create') }}" class="btn btn-primary mb-3">Add Student</a>
 
                     <form id="filterForm" action="{{ route('students.index') }}" method="GET"
@@ -38,57 +37,56 @@
                     </form>
 
                     <div class="table-responsive" style="overflow-x: auto;">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Image</th>
-                                <th>Username</th>
-                                <th>Password</th>
-                                <th>Gender</th>
-                                <th>School</th>
-                                <th>Stage</th>
-                                <th>Class</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($students as $student)
+                        <table class="table table-bordered">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        @if ($student->image)
-                                            <img src="{{ asset($student->image) }}" alt="Student Image" width="50"
-                                                height="50" class="rounded-circle">
-                                        @else
-                                            <img src="https://w7.pngwing.com/pngs/184/113/png-transparent-user-profile-computer-icons-profile-heroes-black-silhouette-thumbnail.png"
-                                                alt="Teacher Image" width="50" height="50" class="rounded-circle">
-                                        @endif
-                                        
-                                    </td>
-                                    <td>{{ $student->username }}</td>
-                                    <td>{{ $student->plain_password }}</td>
-                                    <td>{{ ucfirst($student->gender) }}</td>
-                                    <td>{{ $student->school->name }}</td>
-                                    <td>{{ $student->stage->name }}</td>
-                                    <td>{{ $student->classes->name }}</td>
-                                    <td class="d-flex justify-content-start">
-                                        <a href="{{ route('students.edit', $student->id) }}" class="btn btn-info">Edit</a>
-
-                                        <!-- Delete button -->
-                                        <form action="{{ route('students.destroy', $student->id) }}" method="POST"
-                                            style="display:inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger"
-                                            style="margin-left: 10px;"
-                                                onclick="return confirm('Are you sure you want to delete this student?');">
-                                                Delete
-                                            </button>
-                                        </form>
-                                    </td>
+                                    <th>Image</th>
+                                    <th>Username</th>
+                                    <th>Password</th>
+                                    <th>Gender</th>
+                                    <th>School</th>
+                                    <th>Stage</th>
+                                    <th>Class</th>
+                                    <th>Actions</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($students as $student)
+                                    <tr>
+                                        <td>
+                                            @if ($student->image)
+                                                <img src="{{ asset($student->image) }}" alt="Student Image" width="50"
+                                                    height="50" class="rounded-circle">
+                                            @else
+                                                <img src="https://w7.pngwing.com/pngs/184/113/png-transparent-user-profile-computer-icons-profile-heroes-black-silhouette-thumbnail.png"
+                                                    alt="Teacher Image" width="50" height="50" class="rounded-circle">
+                                            @endif
+                                            
+                                        </td>
+                                        <td>{{ $student->username }}</td>
+                                        <td>{{ $student->plain_password }}</td>
+                                        <td>{{ ucfirst($student->gender) }}</td>
+                                        <td>{{ $student->school->name }}</td>
+                                        <td>{{ $student->stage->name }}</td>
+                                        <td>{{ $student->classes->name }}</td>
+                                        <td class="d-flex align-items-center gap-2">
+                                            <a href="{{ route('students.edit', $student->id) }}" class="btn btn-info">Edit</a>
+
+                                            <!-- Delete button -->
+                                            <form action="{{ route('students.destroy', $student->id) }}" method="POST"
+                                                style="display:inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this student?');">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
 
                 </div>
