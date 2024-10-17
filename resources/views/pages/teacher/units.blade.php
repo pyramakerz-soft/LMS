@@ -1,20 +1,15 @@
 @extends('layouts.app')
-
 @section('title')
     Units for {{ $material->title }}
 @endsection
-
 @php
     $menuItems = [['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')]];
 @endphp
-
 @section('sidebar')
     @include('components.sidebar', ['menuItems' => $menuItems])
 @endsection
-
 @section('content')
     @include('components.profile')
-
     <div class="p-3 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
         <span class="mx-2 text-[#D0D5DD]">/</span>
@@ -26,7 +21,6 @@
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="" class="mx-2 cursor-pointer">Units</a>
     </div>
-
     <div class="flex flex-wrap">
         <div id="accordion-collapse " class="w-full p-3">
             <div class="mb-5 ">
@@ -40,13 +34,13 @@
                                 <div class="flex justify-start space-x-2 align-items: center;">
                                     @if ($loop->iteration == 1)
                                         <img src="{{ asset('images/unit1.png') }}"
-                                            class="w-[50px] h-[44.21px] rounded-[2.44px]">
+                                            class="w-[70px] h-[70.21px] rounded-[2.44px]">
                                     @elseif ($loop->iteration == 2)
                                         <img src="{{ asset('images/unit2.png') }}"
-                                            class="w-[50px] h-[44.21px] rounded-[2.44px]">
+                                            class="w-[70px] h-[70.21px] rounded-[2.44px]">
                                     @else
                                         <img src="{{ asset('images/unit3.png') }}"
-                                            class="w-[50px] h-[44.21px] rounded-[2.44px]">
+                                            class="w-[70px] h-[70.21px] rounded-[2.44px]">
                                     @endif
                                     <span class="mt-1 text-2xl"> {{ $unit->title }}</span>
                                 </div>
@@ -92,17 +86,13 @@
                         </div>
                     </div>
                 @endforeach
-
             </div>
-
         </div>
-
         <script>
             document.querySelectorAll('.accordion-button').forEach(button => {
                 button.addEventListener('click', () => {
                     const accordionBody = document.querySelector(button.getAttribute('data-accordion-target'));
                     const icon = button.querySelector('svg');
-
                     if (accordionBody.classList.contains('hidden')) {
                         accordionBody.classList.remove('hidden'); // Show accordion content
                         icon.classList.add('rotate-180'); // Rotate icon
