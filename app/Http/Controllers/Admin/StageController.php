@@ -48,7 +48,7 @@ class StageController extends Controller
             'image' => $imagePath,
         ]);
 
-        return redirect()->route('stages.index')->with('success', 'Stage created successfully.');
+        return redirect()->route('stages.index')->with('success', 'Grade created successfully.');
     }
 
     /**
