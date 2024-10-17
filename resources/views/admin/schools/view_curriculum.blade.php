@@ -206,12 +206,12 @@
                                                             @endforeach
                                                         </ul>
                                                     @else
-                                                        <p>No units available for this material.</p>
+                                                        <p>No units available for this theme.</p>
                                                     @endif
                                                 </div>
                                             @endforeach
                                         @else
-                                            <p>No materials available for this stage.</p>
+                                            <p>No themes available for this stage.</p>
                                         @endif
                                     </div>
                                 </div>
