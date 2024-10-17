@@ -29,10 +29,16 @@ class StudentsImport implements ToModel, WithHeadingRow
 
     public function model(array $row)
     {
+        if (empty($row['username'])) {
+            return null; 
+        }
+
+        $username = str_replace(' ', '_', $row['username']);
+
         $password = Str::random(8);
 
         $student = Student::create([
-            'username' => $row['username'],
+            'username' => $username,
             'password' => Hash::make($password),
             'plain_password' => $password,
             'gender' => $row['gender'],
@@ -42,6 +48,7 @@ class StudentsImport implements ToModel, WithHeadingRow
             'image' => null,
             'class_id' => $this->class->id,
         ]);
+
         return $student;
     }
 

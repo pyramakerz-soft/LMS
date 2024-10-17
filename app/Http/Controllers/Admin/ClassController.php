@@ -83,6 +83,7 @@ class ClassController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
     public function update(Request $request, string $id)
     {
         $class = Group::findOrFail($id);
@@ -112,6 +113,7 @@ class ClassController extends Controller
         $class->save();
 
         return redirect()->route('classes.index')->with('success', 'Class updated successfully.');
+
     }
 
     /**
@@ -143,6 +145,8 @@ class ClassController extends Controller
                 return back()->withErrors(['file' => 'A student with the same username already exists.']);
             }
 
+            return back()->withErrors(['file' => 'Error processing file: ' . $e->getMessage()]);
+        } catch (\Exception $e) {
             return back()->withErrors(['file' => 'Error processing file: ' . $e->getMessage()]);
         }
     }

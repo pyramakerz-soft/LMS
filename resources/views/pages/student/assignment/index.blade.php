@@ -29,7 +29,7 @@
                         class="w-30 h-20 rounded-full object-cover">
                 @endif --}}
 
-                <img  class="w-20 h-20 rounded-full object-cover" alt="avatar" src="{{ $userAuth->image ? $userAuth->image  : asset('images/default_user.jpg') }}" />
+                <img  class="w-20 h-20 rounded-full object-cover" alt="avatar" src="{{ $userAuth->image ? asset('storage/' . $userAuth->image)  : asset('images/default_user.jpg') }}" />
 
             </div>
 

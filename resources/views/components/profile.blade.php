@@ -3,13 +3,14 @@
         <div class="flex items-center space-x-4">
             <div>
                 {{-- <img class="w-20 h-20 rounded-full" alt="avatar" src="{{ Auth::guard('teacher')->user()->image }}" /> --}}
-                @if (Auth::guard('teacher')->user()->image)
+                {{-- @if (Auth::guard('teacher')->user()->image)
                     <img src="{{ asset(Auth::guard('teacher')->user()->image) }}" alt="Teacher Image"
                         class="w-20 h-20 rounded-full">
                 @else
                     <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
                         class="w-30 h-20 rounded-full">
-                @endif
+                @endif --}}
+                <img  class="w-20 h-20 rounded-full object-cover" alt="avatar" src="{{ Auth::guard('teacher')->user()->image ? Auth::guard('teacher')->user()->image  : asset('images/default_user.jpg') }}" />
             </div>
             <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
                 <div class="text-xl">

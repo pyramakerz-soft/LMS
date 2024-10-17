@@ -40,6 +40,7 @@
                                         <div class="mb-3">
                                             <label for="number_of_teachers" class="form-label">Number of Teachers to
                                                 Generate</label>
+
                                             <input type="text" name="number_of_teachers" class="form-control"
                                                 id="number_of_teachers" required oninput="filterNumericInput(event)">
                                         </div>

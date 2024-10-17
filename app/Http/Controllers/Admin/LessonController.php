@@ -23,7 +23,7 @@ class LessonController extends Controller
      */
     public function create()
     {
-        $chapters = Chapter::all();
+        $chapters = Chapter::with('material.stage')->get();
         return view('admin.lessons.create', compact('chapters'));
     }
 
@@ -117,7 +117,7 @@ class LessonController extends Controller
     public function edit(string $id)
     {
         $lesson = Lesson::findOrFail($id);
-        $chapters = Chapter::all();
+        $chapters = Chapter::with('material.stage')->get();
         return view('admin.lessons.edit', compact('lesson', 'chapters'));
     }
 
@@ -165,27 +165,27 @@ class LessonController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'chapter_id' => 'required|exists:chapters,id',
+
             'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048', // Image is not required
-            'file_path' => 'nullable|file|mimes:pdf,ppt,pptx,doc,docx,html,txt,zip|max:10240',
+            'file_path' => 'required',
+
             'is_active' => 'nullable|boolean',
         ]);
 
-        // If a new image is uploaded, store it and update the image field.
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('lessons', 'public');
             $lesson->image = $imagePath;
         }
 
-        // If a new file is uploaded, store it and update the file_path field.
         if ($request->hasFile('file_path')) {
             $filePath = $request->file('file_path')->store('ebooks', 'public');
             $lesson->file_path = $filePath;
         }
 
-        // Update the lesson with the rest of the fields.
         $lesson->update([
             'title' => $request->title,
             'chapter_id' => $request->chapter_id,
+            'file_path' => $request->file_path,
             'is_active' => $request->is_active ?? 0,
         ]);
 
@@ -201,6 +201,6 @@ class LessonController extends Controller
         $lesson = Lesson::findOrFail($id);
         $lesson->delete();
 
-        return redirect()->route('admin.lessons.index')->with('success', 'Lesson deleted successfully.');
+        return redirect()->route('lessons.index')->with('success', 'Lesson deleted successfully.');
     }
 }

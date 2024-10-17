@@ -60,7 +60,7 @@
                         </table>
                     </div>
                     <!-- End of scrollable wrapper -->
-
+                    {{ $schools->appends(request()->input())->links('pagination::bootstrap-5') }}
                 </div>
             </main>
         </div>

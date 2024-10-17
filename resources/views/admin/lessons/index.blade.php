@@ -1,5 +1,6 @@
 @extends('admin.layouts.layout')
 
+
 @section('content')
     <div class="wrapper">
         @include('admin.layouts.sidebar')

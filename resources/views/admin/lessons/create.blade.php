@@ -34,7 +34,7 @@
                             <label for="chapter_id" class="form-label">Select Chapter</label>
                             <select name="chapter_id" id="chapter_id" class="form-control" required>
                                 @foreach ($chapters as $chapter)
-                                    <option value="{{ $chapter->id }}">{{ $chapter->title }}</option>
+                                    <option value="{{ $chapter->id }}"> {{ $chapter->material->stage->name }} / {{ $chapter->title }}</option>
                                 @endforeach
                             </select>
                         </div>

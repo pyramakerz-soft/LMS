@@ -27,7 +27,7 @@
                         <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
                             class="w-30 h-20 rounded-full">
                     @endif --}}
-                    <img  class="w-20 h-20 rounded-full " alt="avatar" src="{{ $userAuth->image ? $userAuth->image  : asset('images/default_user.jpg') }}" />
+                    <img  class="w-20 h-20 rounded-full " alt="avatar" src="{{ $userAuth->image ? asset('storage/' . $userAuth->image)  : asset('images/default_user.jpg') }}" />
 
                 </div>
 
