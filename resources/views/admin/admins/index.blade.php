@@ -11,7 +11,6 @@
                 <div class="container-fluid p-0">
 
                     <h1>Schools</h1>
-
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
@@ -60,7 +59,7 @@
                         </table>
                     </div>
                     <!-- End of scrollable wrapper -->
-
+                    {{ $schools->appends(request()->input())->links('pagination::bootstrap-5') }}
                 </div>
             </main>
         </div>
