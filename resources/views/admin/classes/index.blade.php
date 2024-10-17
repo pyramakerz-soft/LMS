@@ -17,43 +17,44 @@
 
                     <!-- Button to create a new student -->
                     <a href="{{ route('classes.create') }}" class="btn btn-primary mb-3">Add class</a>
-
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>School</th>
-                                <th>Grade</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($classes as $class)
+                    <div class="table-responsive" style="overflow-x: auto;">
+                        <table class="table table-bordered">
+                            <thead>
                                 <tr>
-                                    <td>{{ $class->name }}</td>
-                                    <td>{{ $class->school->name }}</td>
-                                    <td>{{ $class->stage->name }}</td>
-                                    <td>
-                                        <a href="{{ route('classes.edit', $class->id) }}" class="btn btn-info">Edit</a>
-
-                                        <!-- Delete button -->
-                                        <form action="{{ route('classes.destroy', $class->id) }}" method="POST"
-                                            style="display:inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger"
-                                                onclick="return confirm('Are you sure you want to delete this class?');">
-                                                Delete
-                                            </button>
-                                        </form>
-
-                                        <!-- Import Students Button -->
-                                        <a href="{{ route('classes.import', $class->id) }}" class="btn btn-secondary">Import Students</a>
-                                    </td>
+                                    <th>Name</th>
+                                    <th>School</th>
+                                    <th>Grade</th>
+                                    <th>Actions</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($classes as $class)
+                                    <tr>
+                                        <td>{{ $class->name }}</td>
+                                        <td>{{ $class->school->name }}</td>
+                                        <td>{{ $class->stage->name }}</td>
+                                        <td class="d-flex align-items-center gap-2">
+                                            <a href="{{ route('classes.edit', $class->id) }}" class="btn btn-info">Edit</a>
+    
+                                            <!-- Delete button -->
+                                            <form action="{{ route('classes.destroy', $class->id) }}" method="POST"
+                                                style="display:inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this class?');">
+                                                    Delete
+                                                </button>
+                                            </form>
+    
+                                            <!-- Import Students Button -->
+                                            <a href="{{ route('classes.import', $class->id) }}" class="btn btn-secondary">Import Students</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
             </main>

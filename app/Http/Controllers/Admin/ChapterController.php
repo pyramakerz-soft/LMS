@@ -32,17 +32,54 @@ class ChapterController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'unit_id' => 'required|exists:units,id',
+    //         'material_id' => 'required|exists:materials,id',
+    //         'image' => 'nullable|mimes:jpeg,png,jpg,gif',
+    //         'is_active' => 'nullable|boolean',
+    //     ]);
+
+
+    //     $imagePath = null;
+    //     if ($request->hasFile('image')) {
+    //         $imagePath = $request->file('image')->store('chapters', 'public');
+    //     } elseif ($request->existing_image) {
+    //         $imagePath = $request->existing_image;
+    //     }
+
+    //     Chapter::create([
+    //         'title' => $request->title,
+    //         'unit_id' => $request->unit_id,
+    //         'material_id' => $request->material_id,
+    //         'image' => $imagePath,
+    //         'is_active' => $request->is_active ?? 0,
+    //     ]);
+
+    //     return redirect()->back()->with('success', 'Chapter created successfully.');
+    // }
+
     public function store(Request $request)
     {
-        $request->validate([
+        // Custom error bag for chapter form
+        $validator = \Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'unit_id' => 'required|exists:units,id',
             'material_id' => 'required|exists:materials,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif',
             'is_active' => 'nullable|boolean',
         ]);
 
+        if ($validator->fails()) {
+            // Redirect back with validation errors for the chapter form specifically
+            return redirect()->back()
+                ->withErrors($validator, 'chapter')
+                ->withInput();
+        }
 
+        $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('chapters', 'public');
         } elseif ($request->existing_image) {
@@ -59,6 +96,7 @@ class ChapterController extends Controller
 
         return redirect()->back()->with('success', 'Chapter created successfully.');
     }
+
 
     /**
      * Display the specified resource.
@@ -90,7 +128,7 @@ class ChapterController extends Controller
             'title' => 'required|string|max:255',
             'unit_id' => 'required|exists:units,id',
             'material_id' => 'required|exists:materials,id', // Validate material
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif',
             'is_active' => 'nullable|boolean',
         ]);
 
@@ -114,6 +152,8 @@ class ChapterController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $chapter = Chapter::findOrFail($id);
+        $chapter->delete();
+        return redirect()->route('chapters.index')->with('success', 'Chapter deleted successfully.');
     }
 }

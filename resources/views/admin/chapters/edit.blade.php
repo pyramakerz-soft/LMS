@@ -59,7 +59,7 @@
                             <label for="image" class="form-label">Chapter Image</label>
                             <input type="file" name="image" class="form-control" id="image" accept="image/*">
                             @if ($chapter->image)
-                                <p>Current Image: <img src="{{ asset( $chapter->image) }}"
+                                <p>Current Image: <img class="my-3" src="{{ asset( $chapter->image) }}"
                                         alt="{{ $chapter->title }}" width="100"></p>
                             @endif
                         </div>

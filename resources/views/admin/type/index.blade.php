@@ -17,45 +17,43 @@
 
                     <a href="{{ route('types.create') }}" class="btn btn-primary mb-3">Add New Type</a>
 
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>type</th>
-
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($types as $type)
+                    <!-- Add scrollable wrapper for horizontal scroll -->
+                    <div class="table-responsive" style="overflow-x: auto;">
+                        <table class="table table-bordered">
+                            <thead>
                                 <tr>
-
-                                    <td>{{ $type->name }}</td>
-
-                                    <td>
-                                        <a href="{{ route('types.edit', $type->id) }}" class="btn btn-info">Edit</a>
-
-                                        <!-- Delete button -->
-                                        <form action="{{ route('types.destroy', $type->id) }}" method="POST"
-                                            style="display:inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger"
-                                                onclick="return confirm('Are you sure you want to delete this type?');">
-                                                Delete
-                                            </button>
-                                        </form>
-                                    </td>
+                                    <th>Type</th>
+                                    <th>Actions</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($types as $type)
+                                    <tr>
+                                        <td>{{ $type->name }}</td>
+                                        <td class="d-flex align-items-center gap-2">
+                                            <a href="{{ route('types.edit', $type->id) }}" class="btn btn-info">Edit</a>
+
+                                            <!-- Delete button -->
+                                            <form action="{{ route('types.destroy', $type->id) }}" method="POST" >
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this type?');">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End of scrollable wrapper -->
 
                 </div>
                 {{ $types->links('pagination::bootstrap-5') }}
-
             </main>
 
-             
         </div>
     </div>
 @endsection

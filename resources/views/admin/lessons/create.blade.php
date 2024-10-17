@@ -44,7 +44,7 @@
                             <input type="file" name="image" class="form-control" id="image" accept="image/*">
                         </div>
                         <div class="mb-3">
-                            <label for="file_path" class="form-label">Upload Ebook </label>
+                            <label for="file_path" class="form-label">Choose Ebook </label>
                              <select name="file_path" class="form-control" id="file_path">
                                                 @foreach(\App\Models\Ebook::all() as $ebook)
                                                 <option value="{{$ebook->file_path}}">

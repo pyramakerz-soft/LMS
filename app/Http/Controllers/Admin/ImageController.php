@@ -32,7 +32,7 @@ class ImageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images.*' => 'required|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         if ($request->hasFile('images')) {
@@ -40,9 +40,10 @@ class ImageController extends Controller
                 $path = $image->store('images', 'public');
                 Image::create(['path' => $path]);
             }
+            return redirect()->route('images.index')->with('success', 'Images uploaded successfully.');
+        } else{
+            return redirect()->route('images.index');
         }
-
-        return redirect()->route('images.index')->with('success', 'Images uploaded successfully.');
     }
 
     /**

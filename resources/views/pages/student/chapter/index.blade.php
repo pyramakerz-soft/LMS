@@ -20,13 +20,14 @@
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
-                    @if ($userAuth->image)
+                    {{-- @if ($userAuth->image)
                         <img src="{{ asset('storage/' . $userAuth->image) }}" alt="Student Image"
                             class="w-20 h-20 rounded-full object-cover">
                     @else
                         <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
                             class="w-30 h-20 rounded-full object-cover">
-                    @endif
+                    @endif --}}
+                    <img  class="w-20 h-20 rounded-full object-cover" alt="avatar" src="{{ $userAuth->image ? asset('storage/' . $userAuth->image)  : asset('images/default_user.jpg') }}" />
                 </div>
 
                 <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
@@ -51,13 +52,14 @@
     <div class="flex flex-wrap">
         @foreach ($unit->chapters as $chapter)
             <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
-                <div class="h-[350px] bg-white shadow-md border border-slate-200 rounded-md">
+                <div class="h-[350px] bg-white border border-slate-200 rounded-md">
                     <a class="cursor-pointer" href="{{ route('student_lessons.index', $chapter->id) }}">
-                        @if ($chapter->image)
+                        {{-- @if ($chapter->image)
                             <img src="{{ asset('storage/' . $chapter->image) }}" class="card-img-top" alt="{{ $chapter->title }}">
                         @else
                             <img src="https://via.placeholder.com/150" class="card-img-top" alt="No Image">
-                        @endif
+                        @endif --}}
+                        <img class="card-img-top" src="{{ $chapter->image ? asset('storage/' . $chapter->image) : asset('images/defaultCard.webp') }}" alt="{{ $chapter->title }}">
                         <p class="py-5 px-2 text-slate-800 text-2xl font-semibold">
                             {{ $chapter->title }}
                         </p>

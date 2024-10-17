@@ -35,7 +35,7 @@ class StageController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'required|mimes:jpeg,png,jpg,gif',
         ]);
 
         $imagePath = null;
@@ -48,7 +48,7 @@ class StageController extends Controller
             'image' => $imagePath,
         ]);
 
-        return redirect()->route('stages.index')->with('success', 'Stage created successfully.');
+        return redirect()->route('stages.index')->with('success', 'Grade created successfully.');
     }
 
     /**
@@ -77,12 +77,12 @@ class StageController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'image|mimes:jpeg,png,jpg,gif',
+            'image' => 'mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($request->hasFile('image')) {
             if ($stage->image) {
-                \Storage::disk('public')->delete($stage->image);
+                Storage::disk('public')->delete($stage->image);
             }
             $imagePath = $request->file('image')->store('stages', 'public');
             $stage->image = $imagePath;
@@ -94,7 +94,7 @@ class StageController extends Controller
 
         $stage->save();
 
-        return redirect()->route('stages.index')->with('success', 'Stage updated successfully.');
+        return redirect()->route('stages.index')->with('success', 'Grade updated successfully.');
     }
 
     /**
@@ -105,7 +105,7 @@ class StageController extends Controller
         $stage = Stage::findOrFail($id);
         $stage->delete();
 
-        return redirect()->route('stages.index')->with('success', 'Stage deleted successfully.');
+        return redirect()->route('stages.index')->with('success', 'Grade deleted successfully.');
     }
 
     public function createMaterial($stageId)

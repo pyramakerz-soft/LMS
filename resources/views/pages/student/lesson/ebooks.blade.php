@@ -20,13 +20,15 @@
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
-                    @if ($userAuth->image)
+                    {{-- @if ($userAuth->image)
                         <img src="{{ asset('storage/' . $userAuth->image) }}" alt="Student Image"
                             class="w-20 h-20 rounded-full">
                     @else
                         <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
                             class="w-30 h-20 rounded-full">
-                    @endif
+                    @endif --}}
+                    <img  class="w-20 h-20 rounded-full " alt="avatar" src="{{ $userAuth->image ? asset('storage/' . $userAuth->image)  : asset('images/default_user.jpg') }}" />
+
                 </div>
 
                 <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
