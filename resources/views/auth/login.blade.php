@@ -36,7 +36,7 @@
                     <input id="email" name="username" type="text" placeholder="Enter your username" 
                     class="h5 w-full bg-white border rounded border-[#D0D5DD] shadow-sm shadow-[#1018280D] h-[22%]  py-[7.5px] px-[10.5px]"   [(ngModel)]="email">
                     @if ($errors->has('username'))
-                        <span class="text-red-500 text-xs">{{ $errors->first('username') }}</span>
+                        <span style="color:red" class="text-red-500 text-xs">{{ $errors->first('username') }}</span>
                     @endif
 
                     <label htmlFor="pass" class="h-4 font-medium text-[#344054] block mb-1 mt-4"  >
@@ -45,7 +45,7 @@
                     <input id="pass" type="password" name="password"
                     class="h5 w-full bg-white border rounded border-[#D0D5DD] shadow-sm shadow-[#1018280D] h-[22%] py-[7.5px] px-[10.5px]" [(ngModel)]="password">
                     @if ($errors->has('password'))
-                        <span class="text-red-500 text-xs">{{ $errors->first('password') }}</span>
+                        <span style="color:red" class="text-red-500 text-xs">{{ $errors->first('password') }}</span>
                     @endif
                 </div>
     

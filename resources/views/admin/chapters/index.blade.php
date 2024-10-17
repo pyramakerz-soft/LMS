@@ -25,7 +25,7 @@
                             <tr>
                                 <th>Title</th>
                                 <th>Unit</th>
-                                <th>Material</th>
+                                <th>Theme</th>
                                 <th>Grade</th> 
                                 <th>Image</th>
                                 <th>Active</th>
