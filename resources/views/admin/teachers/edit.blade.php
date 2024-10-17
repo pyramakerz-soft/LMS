@@ -36,6 +36,7 @@
                         <div class="mb-3">
                             <label for="gender" class="form-label">Gender</label>
                             <select name="gender" id="gender" class="form-control" required>
+                                <option selected hidden disabled></option>
                                 <option value="boy" {{ $teacher->gender == 'boy' ? 'selected' : '' }}>Boy</option>
                                 <option value="girl" {{ $teacher->gender == 'girl' ? 'selected' : '' }}>Girl</option>
                             </select>
