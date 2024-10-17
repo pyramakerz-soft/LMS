@@ -39,10 +39,10 @@
                                                 No Image
                                             @endif
                                         </td>
-                                        <td class="d-flex justify-content-start ">
+                                        <td class="d-flex align-items-center gap-2">
                                             <a href="{{ route('material.unit.chapter.create', $stage->id) }}" class="btn btn-primary" >Add Material</a>
-                                            <a href="{{ route('stages.edit', $stage->id) }}" class="btn btn-info" style="display:inline; margin-left: 10px;">Edit</a>
-                                            <form action="{{ route('stages.destroy', $stage->id) }}" method="POST" style="display:inline-block; margin-left: 10px;">
+                                            <a href="{{ route('stages.edit', $stage->id) }}" class="btn btn-info">Edit</a>
+                                            <form action="{{ route('stages.destroy', $stage->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger">Delete</button>
@@ -53,8 +53,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- End of scrollable wrapper -->
-
                 </div>
             </main>
 

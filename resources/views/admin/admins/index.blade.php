@@ -10,15 +10,18 @@
             <main class="content">
                 <div class="container-fluid p-0">
 
+<<<<<<< HEAD
                     <h1>Schools</h1>
+=======
+                    <h1>School</h1>
+>>>>>>> eb32c03f66ba5b46226868a362ce98877778841e
 
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    <a href="{{ route('admins.create') }}" class="btn btn-primary mb-3">Add School Admin</a>
+                    <a href="{{ route('admins.create') }}" class="btn btn-primary mb-3">Add School</a>
 
-                    <!-- Add scrollable wrapper for horizontal scroll -->
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">
                             <thead>
@@ -39,10 +42,9 @@
                                         <td>{{ $school->city ?? '-' }}</td>
                                         <td>{{ $school->type->name ?? '-' }}</td>
                                         <td>{{ $school->students->count() ?? '-' }}</td>
-                                        <td>
+                                        <td class="d-flex align-items-center gap-2">
                                             <a href="{{ route('admins.edit', $school->id) }}" class="btn btn-info">Edit</a>
-                                            <form action="{{ route('admins.destroy', $school->id) }}" method="POST"
-                                                style="display:inline-block;">
+                                            <form action="{{ route('admins.destroy', $school->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger">Delete</button>

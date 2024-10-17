@@ -48,13 +48,13 @@
                                         @endif
                                     </td>
                                     <td>{{ $chapter->is_active ? 'Active' : 'Inactive' }}</td>
-                                    <td class="d-flex justify-content-start">
+                                    <td class="d-flex align-items-center gap-2">
                                         <a href="{{ route('chapters.edit', $chapter->id) }}" class="btn btn-info">Edit</a>
                                         <form action="{{ route('chapters.destroy', $chapter->id) }}" method="POST"
                                             style="display:inline-block;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger" style="margin-left: 10px;">Delete</button>
+                                            <button type="submit" class="btn btn-danger">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
