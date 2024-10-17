@@ -11,6 +11,7 @@
 @section('content')
     @include('components.profile')
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     <style>
         .breadcrumb {
@@ -159,6 +160,8 @@
                                 @endif
                                 <span class="unit-title">{{ $unit->title }}</span>
 =======
+=======
+>>>>>>> d1079bb (test unit)
     <div class="p-3 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
         <span class="mx-2 text-[#D0D5DD]">/</span>
@@ -258,6 +261,9 @@
 =======
                 @endforeach
             </div>
+<<<<<<< HEAD
+>>>>>>> d1079bb (test unit)
+=======
 >>>>>>> d1079bb (test unit)
         </div>
         <script>
@@ -265,6 +271,7 @@
                 button.addEventListener('click', () => {
                     const accordionBody = document.querySelector(button.getAttribute('data-accordion-target'));
                     const icon = button.querySelector('svg');
+<<<<<<< HEAD
 <<<<<<< HEAD
 
                     accordionBody.classList.toggle('hidden');
@@ -275,6 +282,8 @@
     </div>
 @endsection
 =======
+=======
+>>>>>>> d1079bb (test unit)
                     if (accordionBody.classList.contains('hidden')) {
                         accordionBody.classList.remove('hidden'); // Show accordion content
                         icon.classList.add('rotate-180'); // Rotate icon
@@ -285,5 +294,9 @@
                 });
             });
         </script>
+<<<<<<< HEAD
+    @endsection
+>>>>>>> d1079bb (test unit)
+=======
     @endsection
 >>>>>>> d1079bb (test unit)
