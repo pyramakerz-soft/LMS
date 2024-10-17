@@ -1,10 +1,9 @@
 name: Deploy Laravel to Hostinger
 
-# Trigger when code is merged into the 'main' branch
 on:
   push:
     branches:
-      - main
+      - main  # Triggers automatically when code is pushed or merged to the main branch
 
 jobs:
   deploy:
@@ -22,10 +21,23 @@ jobs:
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
           -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
           cd domains/pyramakerz-artifacts.com/public_html/LMS/lms_pyramakerz/
-          git pull origin main
+
+          # Stash any uncommitted changes to avoid conflicts
+          git stash || true
+
+          # Pull the latest changes from the main branch
+          git pull origin main --rebase || git reset --hard origin/main
+
+          # Install dependencies and optimize Laravel configuration
           php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+
+          # Clear and cache Laravel configs, routes, and views
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
+
+          # Apply database migrations
+          php artisan migrate --force
+
           exit
           EOF
