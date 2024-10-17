@@ -170,19 +170,16 @@ class LessonController extends Controller
             'is_active' => 'nullable|boolean',
         ]);
 
-        // If a new image is uploaded, store it and update the image field.
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('lessons', 'public');
             $lesson->image = $imagePath;
         }
 
-        // If a new file is uploaded, store it and update the file_path field.
         if ($request->hasFile('file_path')) {
             $filePath = $request->file('file_path')->store('ebooks', 'public');
             $lesson->file_path = $filePath;
         }
 
-        // Update the lesson with the rest of the fields.
         $lesson->update([
             'title' => $request->title,
             'chapter_id' => $request->chapter_id,
