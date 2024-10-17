@@ -10,17 +10,14 @@
             <main class="content">
                 <div class="container-fluid p-0">
 
-<<<<<<< HEAD
                     <h1>Schools</h1>
-=======
-                    <h1>School</h1>
->>>>>>> eb32c03f66ba5b46226868a362ce98877778841e
+
 
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    <a href="{{ route('admins.create') }}" class="btn btn-primary mb-3">Add School</a>
+                    <a href="{{ route('admins.create') }}" class="btn btn-primary mb-3">Add Schools</a>
 
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">
