@@ -36,6 +36,7 @@
                         <div class="mb-3">
                             <label for="gender" class="form-label">Gender</label>
                             <select name="gender" id="gender" class="form-control" required>
+                                <option selected hidden disabled></option>
                                 <option value="boy" {{ $teacher->gender == 'boy' ? 'selected' : '' }}>Boy</option>
                                 <option value="girl" {{ $teacher->gender == 'girl' ? 'selected' : '' }}>Girl</option>
                             </select>
@@ -56,45 +57,30 @@
                         </div>
 
                         <!-- Stage Selection -->
-                        <div class="mb-3">
-                            <label for="stage_ids" class="form-label">Stages</label>
-                            <select name="stage_ids[]" id="stage_ids" class="form-control" multiple required>
-                                @foreach ($stages as $stage)
-                                    <option value="{{ $stage->id }}"
-                                        {{ in_array($stage->id, $teacher->stages->pluck('id')->toArray()) ? 'selected' : '' }}>
-                                        {{ $stage->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                       <div class="mb-3">
+    <label for="stage_ids" class="form-label">Stages</label>
+    <select name="stage_ids[]" id="stage_ids" class="form-control" multiple required>
+        @foreach ($stages as $stage)
+            <option value="{{ $stage->id }}"
+                {{ in_array($stage->id, $teacher->stages->pluck('id')->toArray()) ? 'selected' : '' }}>
+                {{ $stage->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
 
-                        <!-- Class Selection -->
-                        {{-- <div class="mb-3">
-                            <label for="class_ids" class="form-label">Classes</label>
-                            <select name="class_id[]" id="class_id" class="form-control" multiple required>
-
-                                @foreach ($classes as $class)
-
-                                <option value="{{ $class->class->id }}" selected>{{ $class->class->name }}</option>
-
-
-                                @endforeach
-                                @foreach ($classess as $cls)
-                                <option value="{{ $cls->id }}">{{ $cls->name }}</option>
-                                @endforeach
-                            </select>
-                        </div> --}}
-                        <div class="mb-3">
-                            <label for="class_ids" class="form-label">Classes</label>
-                            <select name="class_id[]" id="class_id" class="form-control" multiple required>
-                                @foreach ($classes as $class)
-                                    <option value="{{ $class->id }}"
-                                        {{ in_array($class->id, $teacher->classes->pluck('id')->toArray()) ? 'selected' : '' }}>
-                                        {{ $class->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+<!-- Class Selection -->
+<div class="mb-3">
+    <label for="class_ids" class="form-label">Classes</label>
+    <select name="class_id[]" id="class_id" class="form-control" multiple required>
+        @foreach ($classes as $class)
+            <option value="{{ $class->id }}"
+                {{ in_array($class->id, $teacher->classes->pluck('id')->toArray()) ? 'selected' : '' }}>
+                {{ $class->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
 
                         <!-- Image Upload -->
                         <div class="mb-3">
@@ -127,71 +113,133 @@
 @section('page_js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
+    <!--<script>-->
+       
+    <!--        $(document).ready(function() {-->
+    <!--    $('#stage_ids').select2({-->
+    <!--        placeholder: "Select Stages",-->
+    <!--        allowClear: true-->
+    <!--    });-->
+
+    <!--    $('#class_id').select2({-->
+    <!--        placeholder: "Select Classes",-->
+    <!--        allowClear: true-->
+    <!--    });-->
+
+        // Function to load stages based on selected school
+    <!--    function loadStages(schoolId) {-->
+    <!--        fetch(`/LMS/lms_pyramakerz/public/admin/api/schools/${schoolId}/stages`)-->
+    <!--            .then(response => response.json())-->
+    <!--            .then(data => {-->
+    <!--                let stageSelect = $('#stage_ids');-->
+    <!--                stageSelect.empty();-->
+    <!--                $.each(data, function(key, value) {-->
+    <!--                    stageSelect.append(-->
+    <!--                        `<option value="${value.id}">${value.name}</option>`-->
+    <!--                    );-->
+    <!--                });-->
+    <!--                stageSelect.prop('disabled', false);-->
+    <!--            });-->
+    <!--    }-->
+
+        // Function to load classes based on selected school
+    <!--    function loadClasses(schoolId) {-->
+    <!--        fetch(`/LMS/lms_pyramakerz/public/admin/api/schools/${schoolId}/classes`)-->
+    <!--            .then(response => response.json())-->
+    <!--            .then(data => {-->
+    <!--                let classSelect = $('#class_id');-->
+    <!--                classSelect.empty();-->
+    <!--                $.each(data, function(key, value) {-->
+    <!--                    classSelect.append(-->
+    <!--                        `<option value="${value.id}">${value.name}</option>`-->
+    <!--                    );-->
+    <!--                });-->
+    <!--                classSelect.prop('disabled', false);-->
+    <!--            });-->
+    <!--    }-->
+
+        // Load stages and classes when school changes
+    <!--    $('#school_id').on('change', function() {-->
+    <!--        let schoolId = this.value;-->
+    <!--        if (schoolId) {-->
+    <!--            loadStages(schoolId);-->
+    <!--            loadClasses(schoolId);-->
+    <!--        } else {-->
+    <!--            $('#stage_ids').prop('disabled', true).empty();-->
+    <!--            $('#class_id').prop('disabled', true).empty();-->
+    <!--        }-->
+    <!--    });-->
+
+        // Load stages and classes if the school is already selected on page load
+    <!--    const selectedSchoolId = $('#school_id').val();-->
+    <!--    if (selectedSchoolId) {-->
+    <!--        loadStages(selectedSchoolId);-->
+    <!--        loadClasses(selectedSchoolId);-->
+    <!--    }-->
+    <!--});-->
+    <!--</script>-->
     <script>
-        $(document).ready(function() {
-            // let classSelectO = $('#class_id');
-            // let classSelectOptions = $('#class_id option');
-
-
-
-            $('#stage_ids').select2({
-                placeholder: "Select Stages",
-                allowClear: true
-            });
-            $('#class_id').select2({
-                placeholder: "Select Classes",
-                allowClear: true
-            });
-
-            $('#school_id').on('change', function() {
-                let schoolId = this.value;
-                if (schoolId) {
-                    fetch(`/LMS/lms_pyramakerz/public/admin/api/schools/${schoolId}/stages`)
-                        .then(response => response.json())
-                        .then(data => {
-                            let stageSelect = $('#stage_ids');
-                            stageSelect.empty();
-                            $.each(data, function(key, value) {
-                                stageSelect.append(
-                                    `<option value="${value.id}">${value.name}</option>`);
-                            });
-                            stageSelect.prop('disabled', false);
-                        });
-
-                    fetch(`/LMS/lms_pyramakerz/public/admin/api/schools/${schoolId}/classes`)
-                        .then(response => response.json())
-                        .then(data => {
-                            let classSelect = $('#class_id');
-                            classSelect.empty();
-                            $.each(data, function(key, value) {
-                                classSelect.append(
-                                    `<option value="${value.id}">${value.name}</option>`);
-                            });
-                            classSelect.prop('disabled', false);
-                        });
-                } else {
-                    $('#stage_ids').prop('disabled', true);
-                    $('#class_id').prop('disabled', true);
-                }
-            });
-
-            // if ($('#school_id').val() != null) {
-            //     let schoolId = $('#school_id').val();
-            //     $('#school_id').change();
-            //     var selectedItems =[];
-            //     console.log($('#school_id').val());
-            //     var value = $.map(classSelectOptions, function(option) {
-            //     selectedItems.push(option.value);
-            //         console.log(option)
-            //         // console.log(selectedItems)
-            //         // classSelectOptions.append(
-            //         //     `<option value="${value.id}">${value.name}</option>`);
-            //     });
-            //     console.log(selectedItems);
-            //     $('#class_id').select2('val',selectedItems );
-            // }
-
+    $(document).ready(function() {
+        $('#stage_ids').select2({
+            placeholder: "Select Stages",
+            allowClear: true
         });
+
+
+        $('#class_id').select2({
+            placeholder: "Select Classes",
+            allowClear: true
+        });
+
+        function loadStages(schoolId) {
+            fetch(`/LMS/lms_pyramakerz/public/admin/api/schools/${schoolId}/stages`)
+                .then(response => response.json())
+                .then(data => {
+                    let stageSelect = $('#stage_ids');
+                    stageSelect.empty();
+                    $.each(data, function(key, value) {
+                        const isSelected = @json($teacher->stages->pluck('id')).includes(value.id);
+                        stageSelect.append(
+                            `<option value="${value.id}" ${isSelected ? 'selected' : ''}>${value.name}</option>`
+                        );
+                    });
+                    stageSelect.prop('disabled', false);
+                });
+        }
+
+        function loadClasses(schoolId) {
+            fetch(`/LMS/lms_pyramakerz/public/admin/api/schools/${schoolId}/classes`)
+                .then(response => response.json())
+                .then(data => {
+                    let classSelect = $('#class_id');
+                    classSelect.empty();
+                    $.each(data, function(key, value) {
+                        const isSelected = @json($teacher->classes->pluck('id')).includes(value.id);
+                        classSelect.append(
+                            `<option value="${value.id}" ${isSelected ? 'selected' : ''}>${value.name}</option>`
+                        );
+                    });
+                    classSelect.prop('disabled', false);
+                });
+        }
+
+        const selectedSchoolId = $('#school_id').val();
+        if (selectedSchoolId) {
+            loadStages(selectedSchoolId);
+            loadClasses(selectedSchoolId);
+        }
+
+        $('#school_id').on('change', function() {
+            let schoolId = this.value;
+            if (schoolId) {
+                loadStages(schoolId);
+                loadClasses(schoolId);
+            } else {
+                $('#stage_ids').prop('disabled', true).empty();
+                $('#class_id').prop('disabled', true).empty();
+            }
+        });
+    });
 
         function previewNewImage(event) {
             const imageFile = event.target.files[0]; // Get the selected file
@@ -220,4 +268,5 @@
             }
         }
     </script>
+
 @endsection

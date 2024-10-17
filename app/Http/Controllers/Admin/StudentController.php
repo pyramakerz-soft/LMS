@@ -116,7 +116,7 @@ class StudentController extends Controller
     public function update(Request $request, string $id)
     {
         $student = Student::findOrFail($id);
-
+    
         $request->validate([
             'username' => [
                 'required',
@@ -129,14 +129,14 @@ class StudentController extends Controller
             'class_id' => 'required|exists:groups,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
+    
         $username = str_replace(' ', '_', $request->input('username'));
-
+    
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('students', 'public');
             $student->image = $imagePath;
         }
-
+    
         $student->update([
             'username' => $username,
             'gender' => $request->input('gender'),
@@ -145,10 +145,10 @@ class StudentController extends Controller
             'class_id' => $request->input('class_id'),
             'is_active' => $request->input('is_active') ?? 1,
         ]);
-
+    
         return redirect()->route('students.index')->with('success', 'Student updated successfully.');
     }
-
+    
 
     /**
      * Remove the specified resource from storage.

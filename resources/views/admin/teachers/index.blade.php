@@ -40,6 +40,7 @@
                                         <div class="mb-3">
                                             <label for="number_of_teachers" class="form-label">Number of Teachers to
                                                 Generate</label>
+
                                             <input type="text" name="number_of_teachers" class="form-control"
                                                 id="number_of_teachers" required oninput="filterNumericInput(event)">
                                         </div>
@@ -106,11 +107,11 @@
                                         <td>{{ ucfirst($teacher->gender) }}</td>
                                         <td>{{ $teacher->school->name }}</td>
                                         <td>{{ $teacher->plain_password }}</td>
-                                        <td class="d-flex justify-content-start">
+                                        <td class="d-flex align-items-center gap-2">
                                             <a href="{{ route('teachers.edit', $teacher->id) }}" class="btn btn-info">Edit</a>
                                         
                                             <!-- Delete button -->
-                                            <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST" style="margin-left: 10px;">
+                                            <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this teacher?');">
@@ -124,7 +125,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- End of scrollable wrapper -->
 
                 </div>
                 {{-- {{ $teachers->links('pagination::bootstrap-5') }} --}}

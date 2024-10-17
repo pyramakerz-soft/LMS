@@ -23,7 +23,7 @@ class LessonController extends Controller
      */
     public function create()
     {
-        $chapters = Chapter::all();
+        $chapters = Chapter::with('material.stage')->get();
         return view('admin.lessons.create', compact('chapters'));
     }
 
@@ -117,7 +117,7 @@ class LessonController extends Controller
     public function edit(string $id)
     {
         $lesson = Lesson::findOrFail($id);
-        $chapters = Chapter::all();
+         $chapters = Chapter::with('material.stage')->get();
         return view('admin.lessons.edit', compact('lesson', 'chapters'));
     }
 
@@ -165,8 +165,10 @@ class LessonController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'chapter_id' => 'required|exists:chapters,id',
+ 
             'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048', // Image is not required
             'file_path' => 'nullable|file|mimes:pdf,ppt,pptx,doc,docx,html,txt,zip|max:10240',
+ 
             'is_active' => 'nullable|boolean',
         ]);
 
@@ -183,6 +185,7 @@ class LessonController extends Controller
         $lesson->update([
             'title' => $request->title,
             'chapter_id' => $request->chapter_id,
+            'file_path' => $request->file_path,
             'is_active' => $request->is_active ?? 0,
         ]);
 
@@ -198,6 +201,6 @@ class LessonController extends Controller
         $lesson = Lesson::findOrFail($id);
         $lesson->delete();
 
-        return redirect()->route('admin.lessons.index')->with('success', 'Lesson deleted successfully.');
+        return redirect()->route('lessons.index')->with('success', 'Lesson deleted successfully.');
     }
 }

@@ -58,7 +58,7 @@
                                     <td class="py-5 px-6">{{ $student->submitted_at ? 'Submitted' : 'Not Submitted' }}</td>
                                     <td class="py-5 px-6">
                                         @if ($student->submitted_at)
-                                            {{ date('Y-m-d',strtotime($student->submitted_at)) }}
+                                            {{ date('Y-m-d', strtotime($student->submitted_at)) }}
                                     </td>
                                 @else
                                     <div class=" flex items-center justify-center px-5">
@@ -82,8 +82,9 @@
                                         action="{{ route('assignments.students.update', [$assignment->id, $student->student_id]) }}"
                                         method="POST" style="display:inline-block;">
                                         @csrf
+ 
                                         <input type="number" name="marks" value="{{ $student->marks }}"
-                                            class="border border-gray-300 rounded p-1 w-20">
+                                            class="border border-gray-300 rounded p-1 w-20" min="0">
                                         <button type="submit" class="btn btn-primary ml-2">Update</button>
                                     </form>
                                 @else
@@ -105,7 +106,16 @@
             </div>
 
         </div>
-        
+
     </div>
-    
+@endsection
+
+@section('page_js')
+    <script>
+        document.querySelector('input[name="marks"]').addEventListener('input', function(event) {
+            if (event.target.value < 0) {
+                event.target.value = ''; // Clear the input if the value is negative
+            }
+        });
+    </script>
 @endsection
