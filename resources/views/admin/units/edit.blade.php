@@ -32,7 +32,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="material_id" class="form-label">Material</label>
+                            <label for="material_id" class="form-label">Theme</label>
                             <select name="material_id" class="form-control" id="material_id" required>
                                 @foreach ($materials as $material)
                                     <option value="{{ $material->id }}"
