@@ -114,7 +114,7 @@ class ClassController extends Controller
 
         return redirect()->route('classes.index')->with('success', 'Class updated successfully.');
 
-}
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -145,6 +145,8 @@ class ClassController extends Controller
                 return back()->withErrors(['file' => 'A student with the same username already exists.']);
             }
 
+            return back()->withErrors(['file' => 'Error processing file: ' . $e->getMessage()]);
+        } catch (\Exception $e) {
             return back()->withErrors(['file' => 'Error processing file: ' . $e->getMessage()]);
         }
     }
