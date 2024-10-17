@@ -54,7 +54,7 @@
                                 </div>
                                 <div>
                                     <button class="bg-white border border-[#FF7519] p-2 text-black font-semibold rounded-md"
-                                        onclick="event.stopPropagation(); event.preventDefault(); openModal('learn', '{{ $material->learning }}');">
+                                        onclick="event.stopPropagation(); event.preventDefault(); openModal('learn', '{{ $material->learning}}');">
                                         Learning Outcomes
                                         <button>
                                 </div>
@@ -126,6 +126,7 @@
     </div>
 </div>
 
+@section('page_js')
 <script>
     function openModal(id, filePath) {
         let modalContent = `
@@ -140,3 +141,4 @@
         document.getElementById(id).classList.add("hidden");
     }
 </script>
+@endsection

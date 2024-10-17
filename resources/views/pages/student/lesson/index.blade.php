@@ -99,7 +99,7 @@
     </div>
 </div>
 
-
+@section('page_js')
 <script>
      function openModal(lessonId, filePath) {
         const modalContent = `
@@ -115,3 +115,4 @@
         document.getElementById(id).classList.add("hidden");
     }
 </script>
+@endsection

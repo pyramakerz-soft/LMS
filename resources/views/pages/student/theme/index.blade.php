@@ -158,6 +158,7 @@
 </div>
 
 
+@section('page_js')
 <script>
     function openModal(id, filePath) {
         let modalContent = `
@@ -172,3 +173,4 @@
         document.getElementById(id).classList.add("hidden");
     }
 </script>
+@endsection
