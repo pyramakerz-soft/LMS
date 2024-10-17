@@ -10,7 +10,10 @@
             <main class="content">
                 <div class="container-fluid p-0">
 
-                    <h1>Schoolssss</h1>
+
+                    <h1>Schos</h1>
+
+
 
 
                     @if (session('success'))
@@ -61,7 +64,7 @@
                         </table>
                     </div>
                     <!-- End of scrollable wrapper -->
-
+                    {{ $schools->appends(request()->input())->links('pagination::bootstrap-5') }}
                 </div>
             </main>
         </div>

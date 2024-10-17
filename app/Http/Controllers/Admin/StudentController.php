@@ -54,18 +54,17 @@ class StudentController extends Controller
     {
         $request->validate([
             'username' => [
-            'required',
-            'unique:students',
-            'regex:/^[a-zA-Z][a-zA-Z0-9_]*$/',
-        ],
+                'required',
+                'unique:students',
+                'regex:/^[a-zA-Z][a-zA-Z0-9_]*$/', // Ensures username starts with a letter and contains only letters, numbers, and underscores
+            ],
             'gender' => 'required',
             'school_id' => 'required|exists:schools,id',
             'stage_id' => 'required|exists:stages,id',
             'class_id' => 'required|exists:groups,id',
-            'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Replace spaces with underscores in the username
         $username = str_replace(' ', '_', $request->input('username'));
 
         $password = Str::random(8);
@@ -75,7 +74,7 @@ class StudentController extends Controller
             $imagePath = $request->file('image')->store('students', 'public'); // Save the image to 'storage/app/public/students'
         }
 
-        $student = Student::create([
+        Student::create([
             'username' => $username,
             'password' => Hash::make($password),
             'plain_password' => $password,
@@ -89,7 +88,6 @@ class StudentController extends Controller
 
         return redirect()->route('students.index')->with('success', 'Student created successfully.');
     }
-
 
     /**
      * Display the specified resource.
@@ -118,26 +116,27 @@ class StudentController extends Controller
     public function update(Request $request, string $id)
     {
         $student = Student::findOrFail($id);
-
+    
         $request->validate([
             'username' => [
-            'required',
-            'unique:students,username,' . $student->id,
-            'regex:/^[a-zA-Z][a-zA-Z0-9_]*$/', // Ensures username starts with a letter and contains only letters, numbers, and underscores
-        ],
+                'required',
+                'unique:students,username,' . $student->id,
+                'regex:/^[a-zA-Z][a-zA-Z0-9_]*$/', // Ensures username starts with a letter and contains only letters, numbers, and underscores
+            ],
             'gender' => 'required',
             'school_id' => 'required|exists:schools,id',
             'stage_id' => 'required|exists:stages,id',
             'class_id' => 'required|exists:groups,id',
-            'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+    
         $username = str_replace(' ', '_', $request->input('username'));
-
+    
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('students', 'public');
             $student->image = $imagePath;
         }
-
+    
         $student->update([
             'username' => $username,
             'gender' => $request->input('gender'),
@@ -146,9 +145,10 @@ class StudentController extends Controller
             'class_id' => $request->input('class_id'),
             'is_active' => $request->input('is_active') ?? 1,
         ]);
-
+    
         return redirect()->route('students.index')->with('success', 'Student updated successfully.');
     }
+    
 
     /**
      * Remove the specified resource from storage.
