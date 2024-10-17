@@ -1,42 +1,44 @@
-name: Deploy Laravel to Hostinger
+name: Sync Laravel with Hostinger
 
 on:
   push:
     branches:
-      - main  # Triggers automatically when code is pushed or merged to the main branch
+      - main  # Trigger on any push to the main branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Install SSH Client
-        run: sudo apt-get install -y sshpass  # Use sshpass to handle password-based SSH
+        run: sudo apt-get install -y sshpass  # Install sshpass to handle SSH login with password
 
-      - name: Deploy to Hostinger via SSH
+      - name: Sync Files via SSH
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
           -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          
           cd domains/pyramakerz-artifacts.com/public_html/LMS/lms_pyramakerz/
 
-          # Stash any uncommitted changes to avoid conflicts
+          # Stash any local changes to avoid conflicts
           git stash || true
 
           # Pull the latest changes from the main branch
           git pull origin main --rebase || git reset --hard origin/main
 
-          # Install dependencies and optimize Laravel configuration
-          php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+          # Add, commit, and push any new or changed files
+          git add .
+          git commit -m "Sync server changes on $(date)" || echo "No changes to commit"
+          git push origin main || echo "Nothing to push"
 
-          # Clear and cache Laravel configs, routes, and views
+          # Install dependencies and optimize Laravel settings
+          php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
-
-          # Apply database migrations
           php artisan migrate --force
 
           exit
