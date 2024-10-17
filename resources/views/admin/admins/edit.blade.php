@@ -115,7 +115,6 @@
     </div>
 @endsection
 
-
 @section('page_js')
     <script>
         $(document).ready(function() {

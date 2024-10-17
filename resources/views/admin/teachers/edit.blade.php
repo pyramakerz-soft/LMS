@@ -100,11 +100,17 @@
                         <!-- Image Upload -->
                         <div class="mb-3">
                             <label for="image" class="form-label">Profile Image</label>
-                            <input type="file" name="image" class="form-control" id="image" accept="image/*">
                             @if ($teacher->image)
+                            <div class="mb-2">
+                                <img src="{{ asset($teacher->image) }}" alt="{{ $teacher->username }}" id="imagePreview" width="150" class="mb-2 rounded">
+                            </div>
+                        @endif
+                            <input type="file" name="image" class="form-control" id="image" accept="image/*"
+                                onchange="previewNewImage(event)">
+                            {{-- @if ($teacher->image)
                                 <p>Current Image: <img src="{{ asset($teacher->image) }}" alt="Teacher Image"
                                         width="100"></p>
-                            @endif
+                            @endif --}}
                         </div>
 
 
@@ -114,7 +120,7 @@
                 </div>
             </main>
 
-             
+
         </div>
     </div>
 @endsection
@@ -187,5 +193,32 @@
             // }
 
         });
+
+        function previewNewImage(event) {
+            const imageFile = event.target.files[0]; // Get the selected file
+            const reader = new FileReader(); // Create a FileReader to read the file
+
+            reader.onload = function(e) {
+                const imagePreview = document.getElementById('imagePreview'); // Get the current image element
+
+                // If an image preview exists, update its src
+                if (imagePreview) {
+                    imagePreview.src = e.target.result; // Update image source to the new image
+                } else {
+                    // If no image preview exists, create one dynamically
+                    const newImage = document.createElement('img');
+                    newImage.id = 'imagePreview';
+                    newImage.src = e.target.result;
+                    newImage.width = 150;
+                    newImage.classList.add('rounded', 'mb-2');
+                    document.getElementById('image').insertAdjacentElement('beforebegin', newImage);
+                }
+            };
+
+            // Read the file and trigger the preview update
+            if (imageFile) {
+                reader.readAsDataURL(imageFile);
+            }
+        }
     </script>
 @endsection
