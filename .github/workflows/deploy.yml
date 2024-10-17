@@ -1,0 +1,32 @@
+name: Deploy Laravel to Hostinger
+
+# Trigger when code is merged into the 'main' branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install SSH Client
+        run: sudo apt-get install -y sshpass  # Use sshpass to handle password-based SSH
+
+      - name: Deploy to Hostinger via SSH
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
+          -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          cd domains/pyramakerz-artifacts.com/public_html/LMS/lms_pyramakerz/
+          git pull origin main
+          composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+          php artisan migrate --force
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+          exit
+          EOF
