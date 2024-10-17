@@ -22,9 +22,11 @@ jobs:
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
           -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
           cd domains/pyramakerz-artifacts.com/public_html/LMS/lms_pyramakerz/
+          git add .
+          git commit -m "Github Automation"
+          git push
           git pull origin main
-          composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
-          php artisan migrate --force
+          php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
