@@ -74,15 +74,15 @@ class AdminController extends Controller
 
 
         $request->validate([
-            'name' => 'required|string|max:255|unique:schools,name',
+            'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
             'type_id' => 'required|exists:types,id',
             'stage_id' => 'required|array', // Ensure stage_id is an array
             'stage_id.*' => 'exists:stages,id', // Ensure each stage ID exists in stages table
-            'classes' => 'array', // Ensure classes is an array
-            'classes.*.name' => 'nullable|string|max:255', // Validate each class name
-            'classes.*.stage_id' => 'nullable|exists:stages,id', // Validate each class's stage_id
+            'classes' => 'required|array', // Ensure classes is an array
+            'classes.*.name' => 'required|string|max:255', // Validate each class name
+            'classes.*.stage_id' => 'required|exists:stages,id', // Validate each class's stage_id
         ]);
 
         // Create the school
@@ -95,16 +95,13 @@ class AdminController extends Controller
         ]);
 
         // Create classes for this school
-        if($request->input('classes') != null){
-             foreach ($request->input('classes') as $class) {
+        foreach ($request->input('classes') as $class) {
             Group::create([
                 'name' => $class['name'],
                 'school_id' => $school->id,
                 'stage_id' => $class['stage_id'], // Each class has its own stage_id
             ]);
         }
-        }
-       
 
         // Create stages for this school
         $school->stages()->sync($request->input('stage_id'));
@@ -143,7 +140,6 @@ class AdminController extends Controller
     public function edit($id)
     {
         $school = School::findOrFail($id);
-
         $types = Type::all();
         $classes = Group::where('school_id', $id)->get();
         $stages = Stage::all();
@@ -158,7 +154,6 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
- 
     // public function update(Request $request, $id)
     // {
     //     $school = School::findOrFail($id);
@@ -237,10 +232,6 @@ class AdminController extends Controller
         return redirect()->route('admins.index')->with('success', 'School updated successfully.');
     }
     
-
-
-    return redirect()->route('admins.index')->with('success', 'School updated successfully.');
-}
 
 
     /**

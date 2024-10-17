@@ -11,20 +11,13 @@
                 <div class="container-fluid p-0">
 
                     <h1>Schools</h1>
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/Front-Branch
 
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-<<<<<<< HEAD
-                    <a href="{{ route('admins.create') }}" class="btn btn-primary mb-3">Add School </a>
-=======
                     <a href="{{ route('admins.create') }}" class="btn btn-primary mb-3">Add School</a>
->>>>>>> origin/Front-Branch
 
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">
@@ -37,12 +30,6 @@
                                     <th>Students Count</th>
                                     <th>Actions</th>
                                 </tr>
-<<<<<<< HEAD
-                            @endforeach
-                        </tbody>
-                    </table>
- {{ $schools->links('pagination::bootstrap-5') }} 
-=======
                             </thead>
                             <tbody>
                                 @foreach ($schools as $school)
@@ -75,7 +62,6 @@
                     </div>
                     <!-- End of scrollable wrapper -->
 
->>>>>>> origin/Front-Branch
                 </div>
             </main>
         </div>
