@@ -15,25 +15,7 @@
 @endsection
 
 @section('content')
-    <div class="p-3">
-        <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
-            <div class="flex items-center space-x-4">
-                <div>
-                    <img class="w-20 h-20 rounded-full" alt="avatar" src="{{ Auth::guard('teacher')->user()->image }}" />
-                </div>
-
-                <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
-                    <div class="text-xl">
-                        {{ Auth::guard('teacher')->user()->username }}
-                    </div>
-                    <div class="text-sm">
-                        {{ Auth::guard('teacher')->user()->school->name }}
-                    </div>
-                </div>
-            </div>
-        </div>
-        @yield('insideContent')
-    </div>
+    @include('components.profile')
 
     <div class="p-3 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
@@ -54,7 +36,7 @@
 
                         <!-- Material Image -->
                         <div class="p-4">
-                            <img src="{{ $material->image ? asset($material->image) : asset('images/default-material.png') }}"
+                            <img src="{{ $material->image ? asset($material->image) :asset('images/defaultCard.webp')}}"
                                 alt="{{ $material->title }}" class="object-cover w-full h-32 rounded-md">
                         </div>
                     </div>
@@ -63,3 +45,5 @@
         @endforeach
     </div>
 @endsection
+
+

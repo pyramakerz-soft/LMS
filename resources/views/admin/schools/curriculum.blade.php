@@ -10,7 +10,7 @@
             <main class="content">
                 <div class="container-fluid p-0">
 
-                    <h1>Assign Curriculum to {{ $school->name }}</h1>
+                    <h1>Add Curriculum to {{ $school->name }}</h1>
 
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -35,7 +35,7 @@
                                 @endforeach
                             </select>
                         </div>
-
+                       {{-- @dd($stages)  --}}
                         <!-- Material Selection (Multiple) -->
                         <div class="mb-3">
                             <label for="material_id" class="form-label">Select Materials</label>
@@ -50,7 +50,6 @@
                 </div>
             </main>
 
-             
         </div>
     </div>
 @endsection

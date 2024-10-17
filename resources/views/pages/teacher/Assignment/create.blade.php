@@ -11,26 +11,7 @@
 @endsection
 
 @section('content')
-    <div class="p-3">
-        <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
-            <div class="flex items-center space-x-4">
-                <div>
-                    @if ($userAuth->image)
-                        <img src="{{ asset($userAuth->image) }}" alt="Student Image"
-                            class="w-20 h-20 rounded-full object-cover">
-                    @else
-                        <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
-                            class="w-30 h-20 rounded-full object-cover">
-                    @endif
-                </div>
-                <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
-                    <div class="text-xl">
-                        {{ $userAuth->username }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('components.profile')
 
     <div class="p-3">
         <div class="text-[#667085] my-8">
@@ -131,9 +112,12 @@
 
                 <label for="marks"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Marks</label>
-                <input type="number" name="marks" min="1"
+ 
+
+                <input type="text" name="marks"
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
-                    id="marks" value="{{ old('marks') }}">
+                    id="marks" value="{{ old('marks') }}"
+                    oninput="filterNumericInput(event)">
 
                 <label for="path_file"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">File Upload</label>
@@ -170,5 +154,16 @@
                 allowClear: true
             });
         });
+
+        function filterNumericInput(event) {
+            const input = event.target;
+            let previousValue = input.value;
+
+            input.value = input.value.replace(/[^0-9.]/g, '');
+
+            if (input.value.split('.').length > 2) {
+                input.value = previousValue; 
+            }
+        }
     </script>
 @endsection

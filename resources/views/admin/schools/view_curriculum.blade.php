@@ -70,7 +70,7 @@
                     @else
                         <!-- Stages Section -->
                         <div class="curriculum-section">
-                            <h2 class="text-primary mb-3">Stages</h2>
+                            <h2 class="text-primary mb-3">Grades</h2>
 
                             @foreach ($stages as $stage)
                             

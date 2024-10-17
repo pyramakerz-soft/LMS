@@ -39,9 +39,9 @@
                                             <label for="material_image" class="form-label">Upload New Image</label>
                                             <input type="file" name="image" class="form-control image-input"
                                                 id="material_image" accept="image/*">
-                                            @error('image')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
+                                            @if ($errors->material->has('image'))
+                                                <div class="text-danger">{{ $errors->material->first('image') }}</div>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -52,7 +52,7 @@
                                         </button>
                                         <input type="hidden" name="existing_image" id="existing_image_material"
                                             value="">
-                                            @error('existing_image')
+                                        @error('existing_image')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -65,15 +65,15 @@
 
                                     <div class="col-4">
                                         <div class="mb-3">
-                                            <label for="file_path" class="form-label">Upload Info </label>
+                                            <label for="file_path" class="form-label">Choose Info </label>
                                             <!--<input type="file" name="file_path" class="form-control" id="file_path"-->
                                             <!--    required>-->
                                             <select name="file_path" class="form-control" id="file_path">
-                                                @foreach(\App\Models\Ebook::all() as $ebook)
-                                                <option value="{{$ebook->file_path}}">
-                                                    {{ $ebook->title }}
-                                                    
-                                                </option>
+                                                @foreach (\App\Models\Ebook::all() as $ebook)
+                                                    <option value="{{ $ebook->file_path }}">
+                                                        {{ $ebook->title }}
+
+                                                    </option>
                                                 @endforeach
                                             </select>
                                             @error('file_path')
@@ -83,15 +83,15 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="mb-3">
-                                            <label for="how_to_use" class="form-label">Upload how to use </label>
+                                            <label for="how_to_use" class="form-label">Choose how to use </label>
                                             <!--<input type="file" name="how_to_use" class="form-control" id="how_to_use"-->
                                             <!--    required>-->
-                                                 <select name="how_to_use" class="form-control" id="how_to_use">
-                                                @foreach(\App\Models\Ebook::all() as $ebook)
-                                                <option value="{{$ebook->file_path}}">
-                                                    {{ $ebook->title }}
-                                                    
-                                                </option>
+                                            <select name="how_to_use" class="form-control" id="how_to_use">
+                                                @foreach (\App\Models\Ebook::all() as $ebook)
+                                                    <option value="{{ $ebook->file_path }}">
+                                                        {{ $ebook->title }}
+
+                                                    </option>
                                                 @endforeach
                                             </select>
                                             @error('how_to_use')
@@ -101,15 +101,15 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="mb-3">
-                                            <label for="learning" class="form-label">Upload learning outcomes </label>
+                                            <label for="learning" class="form-label">Choose learning outcomes </label>
                                             <!--<input type="file" name="learning" class="form-control" id="learning"-->
                                             <!--    required>-->
-                                                 <select name="learning" class="form-control" id="learning">
-                                                @foreach(\App\Models\Ebook::all() as $ebook)
-                                                <option value="{{$ebook->file_path}}">
-                                                    {{ $ebook->title }}
-                                                    
-                                                </option>
+                                            <select name="learning" class="form-control" id="learning">
+                                                @foreach (\App\Models\Ebook::all() as $ebook)
+                                                    <option value="{{ $ebook->file_path }}">
+                                                        {{ $ebook->title }}
+
+                                                    </option>
                                                 @endforeach
                                             </select>
                                             @error('learning')
@@ -167,9 +167,9 @@
                                             <label for="unit_image" class="form-label">Upload New Image</label>
                                             <input type="file" name="image" class="form-control image-input"
                                                 id="unit_image" accept="image/*">
-                                            @error('image')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
+                                                @if ($errors->unit->has('image'))
+                                                <div class="text-danger">{{ $errors->unit->first('image') }}</div>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -182,17 +182,28 @@
                                             value="">
                                     </div>
 
-                                    <div id="unit_preview-container" style="display: none;">
+                                    <div class="mb-3" id="unit_preview-container" style="display: none;">
                                         <h5>Selected Image Preview:</h5>
                                         <img id="unit_preview" src="" alt="Selected Image"
                                             style="max-width: 200px; border-radius: 8px; box-shadow: 0px 0px 5px #ccc;">
                                     </div>
                                 </div>
 
+                                <div class="mb-3">
+                                    <label for="is_active" class="form-label">Active </label>
+                                    <input type="checkbox" id="is_active" name="is_active" value="1">
+                                    @error('is_active')
+                                        <div class="text-danger">{{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
                                 <button type="submit" class="btn btn-primary">Create Unit</button>
                             </form>
                         </div>
                     </div>
+
+
 
                     <!-- Chapter Form -->
                     <div class="card mb-4">
@@ -240,9 +251,9 @@
                                             <label for="chapter_image" class="form-label">Upload New Image</label>
                                             <input type="file" name="image" class="form-control image-input"
                                                 id="chapter_image" accept="image/*">
-                                            @error('image')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
+                                            @if ($errors->chapter->has('image'))
+                                                <div class="text-danger">{{ $errors->chapter->first('image') }}</div>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -255,7 +266,7 @@
                                             value="">
                                     </div>
 
-                                    <div id="chapter_preview-container" style="display: none;">
+                                    <div class="mb-3" id="chapter_preview-container" style="display: none;">
                                         <h5>Selected Image Preview:</h5>
                                         <img id="chapter_preview" src="" alt="Selected Image"
                                             style="max-width: 200px; border-radius: 8px; box-shadow: 0px 0px 5px #ccc;">
@@ -270,7 +281,7 @@
                 </div>
             </main>
 
-             
+
         </div>
     </div>
 
@@ -288,7 +299,7 @@
                         @foreach ($images as $image)
                             <div class="col-md-3 mb-3">
                                 <div class="card image-option" style="cursor: pointer;" data-path="{{ $image->path }}">
-                                    <img src="{{ asset(  $image->path) }}" alt="Image"
+                                    <img src="{{ asset($image->path) }}" alt="Image"
                                         class="card-img-top img-thumbnail selectable-image"
                                         style="width: 100%; height: 150px; object-fit: cover;">
                                     <div class="card-body text-center">
@@ -314,11 +325,11 @@
                     const targetInputId = this.dataset.target;
                     const previewId = this.dataset.preview;
                     const modal = new bootstrap.Modal(document.getElementById(
-                    'imageLibraryModal'), {
+                        'imageLibraryModal'), {
                         keyboard: false
                     });
                     document.getElementById('imageLibraryModal').dataset.targetInput =
-                    targetInputId;
+                        targetInputId;
                     document.getElementById('imageLibraryModal').dataset.previewId = previewId;
                     modal.show();
                 });

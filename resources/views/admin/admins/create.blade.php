@@ -169,5 +169,9 @@
 });
 
 
+
+        document.getElementById('city').addEventListener('input', function (event) {
+            this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+        });
     </script>
 @endsection

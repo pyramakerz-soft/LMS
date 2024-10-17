@@ -32,14 +32,12 @@ class TypeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-
+            'name' => 'required|unique:types,name',
         ]);
 
 
         $type = Type::create([
             'name' => $request->input('name'),
-
         ]);
 
         return redirect()->route('types.index')->with('success', 'Type created successfully.');
@@ -71,7 +69,9 @@ class TypeController extends Controller
     {
         $types = Type::findOrFail($id);
 
-
+        $request->validate([
+            'name' => 'required|unique:types,name',
+        ]);
 
         $types->update([
             'name' => $request->input('name'),

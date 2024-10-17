@@ -62,7 +62,7 @@ class StudentController extends Controller
             'school_id' => 'required|exists:schools,id',
             'stage_id' => 'required|exists:stages,id',
             'class_id' => 'required|exists:groups,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Replace spaces with underscores in the username
@@ -129,7 +129,7 @@ class StudentController extends Controller
             'school_id' => 'required|exists:schools,id',
             'stage_id' => 'required|exists:stages,id',
             'class_id' => 'required|exists:groups,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
         $username = str_replace(' ', '_', $request->input('username'));
 

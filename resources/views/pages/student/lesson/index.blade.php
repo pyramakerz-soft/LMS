@@ -20,13 +20,7 @@
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
-                    @if ($userAuth->image)
-                        <img src="{{ asset($userAuth->image) }}" alt="Student Image"
-                            class="w-20 h-20 rounded-full object-cover">
-                    @else
-                        <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
-                            class="w-30 h-20 rounded-full object-cover">
-                    @endif
+                    <img  class="w-20 h-20 rounded-full " alt="avatar" src="{{ $userAuth->image ? asset('storage/' . $userAuth->image)  : asset('images/default_user.jpg') }}" />
                 </div>
 
                 <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
@@ -45,38 +39,47 @@
     <div class="p-3 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="{{ route("student.theme") }}" class="mx-2 cursor-pointer">Theme</a>
+        <a href="{{ route('student.theme') }}" class="mx-2 cursor-pointer">Theme</a>
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="{{ route("student_units.index", $chapter->unit_id) }}" class="mx-2 cursor-pointer">Unit</a>
+        <a href="{{ route('student_units.index', $chapter->unit_id) }}" class="mx-2 cursor-pointer">Unit</a>
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="#" class="mx-2 cursor-pointer">lessons</a>
     </div>
 
     <div class="flex flex-wrap p-3">
         @foreach ($chapter->lessons as $lesson)
-            <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white shadow-md rounded-xl">
+            <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white  rounded-xl">
                 <div class="w-full">
-                    <a  onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook');" class="cursor-pointer h-full flex flex-col justify-between">
-                        <h3 class="px-4 py-2 bg-gray-200 text-lg font-bold">{{ $lesson->title }}</h3>
+                    <a onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook', '{{ $lesson->file_path }}');"
+                        class="cursor-pointer h-full flex flex-col justify-between">
+                        <!-- Updated title to handle long text -->
+                        <h3 class="px-4 py-2 bg-gray-200 text-lg font-bold truncate"
+                            style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                            {{ $lesson->title }}
+                        </h3>
                         <div class="p-4">
-                            @if ($lesson->image)
-                                <img src="{{ asset($lesson->image) }}"
-                                    class="object-contain w-full rounded-xl">
+                            {{-- @if ($lesson->image)
+                                <img src="{{ asset($lesson->image) }}" class="object-contain w-full rounded-xl">
                             @else
-                                <img src="https://via.placeholder.com/150" class="object-contain w-full h-[250px] rounded-xl"
-                                    alt="No Image">
-                            @endif
+                                <img src="https://via.placeholder.com/150"
+                                    class="object-contain w-full h-[250px] rounded-xl" alt="No Image">
+                            @endif --}}
+                            <img class="object-contain w-full h-[250px] rounded-xl" src="{{ $lesson->image ? asset('storage/' . asset($lesson->image) ) : asset('images/defaultCard.webp') }}" alt="{{ $lesson->title}}">
+
                         </div>
                     </a>
-                </div>
+                </div>  
             </div>
         @endforeach
+        @if(count($chapter->lessons) == 0)
+            <p class="m-auto text-gray-500">No Lessons yet</p>
+        @endif
     </div>
 @endsection
 
 
 
-{{----------------------------------------------------------------------------------------------------------------------}}
+{{-- ------------------------------------------------------------------------------------------------------------------ --}}
 
 {{-- Learning Modal --}}
 <div id="ebook" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-10 hidden">
@@ -90,22 +93,25 @@
                     class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
             </div>
         </div>
-        {{-- Put the Learning Here --}}
-        <embed src="{{ $lesson->file_path}}" width="100%" height="90%" />
+
+        <div id="ebook-content" class="relative">
+        </div>
     </div>
 </div>
 
 
 <script>
-    function openModal(id) {
-        document.getElementById(id).classList.remove("hidden");
+     function openModal(lessonId, filePath) {
+        const modalContent = `
+            <embed src="${filePath}" width="100%" height="90%" />
+            <img src="{{ asset('assets/img/watermark 2.png') }}" class="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+        `;
+        document.getElementById('ebook-content').innerHTML = modalContent;
+
+        document.getElementById('ebook').classList.remove("hidden");
     }
 
     function closeModal(id) {
         document.getElementById(id).classList.add("hidden");
     }
 </script>
-
-
-
-

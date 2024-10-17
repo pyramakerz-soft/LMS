@@ -1,13 +1,10 @@
 <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
-        <a class="sidebar-brand" href="index.html">
+        <a class="sidebar-brand" href="#">
             <span class="align-middle">LMS Pyramakerz</span>
         </a>
 
         <ul class="sidebar-nav">
-            <li class="sidebar-header">
-                Pages
-            </li>
 
             <li class="sidebar-item {{ request()->is('admin') ? 'active' : '' }}">
 
