@@ -80,7 +80,7 @@ jobs:
 
       - name: Health Check (Login and Admin Page)
         run: |
-          # Step 1: Get CSRF token from the login page
+          # Step 1: Get CSRF token from the admin login page
           CSRF_TOKEN=$(curl -s -c cookies.txt \
             https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/login | \
             grep -oP '(?<=name="_token" value=")[^"]+')
@@ -105,7 +105,7 @@ jobs:
           # Debug: Output the login response to inspect it
           echo "Login Response: $LOGIN_RESPONSE"
 
-          # Check if login was successful
+          # Check if login was successful by looking for a known keyword
           if ! echo "$LOGIN_RESPONSE" | grep -q "dashboard"; then
             echo "Login failed. Health check cannot proceed."
             exit 1
@@ -126,6 +126,7 @@ jobs:
           fi
 
           echo "RESPONSE=$ADMIN_RESPONSE" >> $GITHUB_ENV
+
 
 
 
