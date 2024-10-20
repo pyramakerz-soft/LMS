@@ -94,7 +94,7 @@ jobs:
           echo "CSRF Token: $CSRF_TOKEN"
 
           # Step 2: Log in and capture the session cookie
-          LOGIN_RESPONSE=$(curl -s -b cookies.txt -c cookies.txt -X POST \
+          LOGIN_RESPONSE=$(curl -L -s -b cookies.txt -c cookies.txt -X POST \
             -H "Content-Type: application/x-www-form-urlencoded" \
             -H "User-Agent: Mozilla/5.0" \
             --data-urlencode "username=admin@admin.com" \
@@ -105,7 +105,7 @@ jobs:
           # Debug: Output the login response to inspect it
           echo "Login Response: $LOGIN_RESPONSE"
 
-          # Check if login was successful by looking for a known keyword
+          # Check if login was successful
           if ! echo "$LOGIN_RESPONSE" | grep -q "dashboard"; then
             echo "Login failed. Health check cannot proceed."
             exit 1
@@ -126,6 +126,7 @@ jobs:
           fi
 
           echo "RESPONSE=$ADMIN_RESPONSE" >> $GITHUB_ENV
+
 
 
 
