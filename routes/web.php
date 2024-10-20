@@ -90,7 +90,7 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/api/schools/{school}/stages', function (School $school) {
             return response()->json($school->stages);
-        });
+        })->name('admin.schools.stages');
 
         Route::get('/api/stages/{stage}/students', function (Stage $stage) {
             return response()->json($stage->students);
@@ -101,7 +101,7 @@ Route::prefix('admin')->group(function () {
         });
         Route::get('/api/schools/{school}/classes', function (School $school) {
             return response()->json($school->classes);
-        });
+        })->name('admin.schools.classes');
     });
 });
 
