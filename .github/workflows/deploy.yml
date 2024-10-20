@@ -21,57 +21,63 @@ jobs:
       - name: Install SSH Client
         run: sudo apt-get install -y sshpass
 
-      - name: Sync Files via SSH
+      - name: Sync Files via SSH and Capture Metrics
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         run: |
           set -e  # Ensure the script exits on the first failure
 
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
+          METRICS=$(sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
           -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd domains/pyramakerz-artifacts.com/public_html/LMS/lms_pyramakerz/
 
-          cd domains/pyramakerz-artifacts.com/public_html/LMS/lms_pyramakerz/
+            echo "Starting deployment at $(date)..."
 
-          echo "Starting deployment at $(date)..."
+            # Ensure branch is correct and update
+            git fetch origin main || exit 1
+            git reset --hard origin/main || echo "Reset failed, trying pull..."
+            git pull origin main || exit 1
 
-          # Ensure branch is correct and update
-          git fetch origin main || exit 1
-          git reset --hard origin/main || echo "Reset failed, trying pull..."
-          git pull origin main || exit 1
+            # Install dependencies
+            if [ -f "composer.phar" ]; then
+              php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+            else
+              composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+            fi
 
-          # Install dependencies
-          if [ -f "composer.phar" ]; then
-            php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
-          else
-            composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
-          fi
+            # Laravel optimization commands
+            php artisan config:cache || echo "Config cache failed"
+            php artisan route:cache || echo "Route cache failed"
+            php artisan view:cache || echo "View cache failed"
+            php artisan migrate --force || echo "Migrations failed"
 
-          # Laravel optimization commands
-          php artisan config:cache || echo "Config cache failed"
-          php artisan route:cache || echo "Route cache failed"
-          php artisan view:cache || echo "View cache failed"
-          php artisan migrate --force || echo "Migrations failed"
+            # Restart PHP services
+            sudo systemctl restart php-fpm || echo "Failed to restart PHP"
 
-          # Restart PHP services to apply changes
-          sudo systemctl restart php-fpm || echo "Failed to restart PHP"
+            # Capture server performance metrics
+            CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')
+            MEM=$(free -m | awk 'NR==2{printf "%.2f", $3*100/$2 }')
+            DISK=$(df -h / | awk '$NF=="/"{printf "%d", $5}')
 
-          # Capture server performance metrics
-          CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')
-          MEM=$(free -m | awk 'NR==2{printf "%.2f", $3*100/$2 }')
-          DISK=$(df -h / | awk '$NF=="/"{printf "%d", $5}')
-
-          echo "Deployment completed successfully"
-          exit
+            # Output metrics in a single line for parsing
+            echo "$CPU,$MEM,$DISK"
           EOF
+          )
+
+          # Export metrics to be used in later steps
+          IFS=',' read -r CPU MEM DISK <<< "$METRICS"
+          echo "CPU=$CPU" >> $GITHUB_ENV
+          echo "MEM=$MEM" >> $GITHUB_ENV
+          echo "DISK=$DISK" >> $GITHUB_ENV
 
       - name: Health Check (API or Home Page)
         run: |
           RESPONSE=$(curl -k -s -o /dev/null -w "%{http_code}" https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/)
           if [ $RESPONSE -ne 200 ]; then
             echo "Health check failed with status $RESPONSE"
-          exit 1
+            exit 1
           fi
-
+          echo "RESPONSE=$RESPONSE" >> $GITHUB_ENV
 
       - name: Send Monitoring Data to Slack
         if: success() || failure()
@@ -81,7 +87,13 @@ jobs:
           STATUS=$(if [ $? -eq 0 ]; then echo 'Successful'; else echo 'Failed'; fi)
           COLOR=$(if [ $? -eq 0 ]; then echo 'good'; else echo 'danger'; fi)
           DEPLOYER="@${{ github.actor }}"
-          
+
+          # Load environment variables
+          CPU=${{ env.CPU }}
+          MEM=${{ env.MEM }}
+          DISK=${{ env.DISK }}
+          RESPONSE=${{ env.RESPONSE }}
+
           curl -X POST -H 'Content-type: application/json' --data "{
             \"text\": \"Deployment to Hostinger: *$STATUS*\",
             \"attachments\": [
