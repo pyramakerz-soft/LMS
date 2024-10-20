@@ -108,34 +108,34 @@
                                 <td class="py-5 px-6" rowspan="2">
                                     <a href="{{ route('teacher.assessments.student', $s->id) }}"
                                         class="text-blue-600 hover:underline">
-                                        {{ $s->username }}
+                                        {{ $s->username ?? '' }}
                                     </a>
                                 </td>
                                 <td class="py-5 px-6">
                                     <div
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                        <p class="mr-1">{{ $attendance_avg }}</p>
+                                        <p class="mr-1">{{ $attendance_avg ?? '' }}</p>
                                         <p>/10</p>
                                     </div>
                                 </td>
                                 <td class="py-5 px-6">
                                     <div
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                        <p class="mr-1">{{ $cp_avg }}</p>
+                                        <p class="mr-1">{{ $cp_avg ?? '' }}</p>
                                         <p>/20</p>
                                     </div>
                                 </td>
                                 <td class="py-5 px-6">
                                     <div
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                        <p class="mr-1">{{ $cb_avg }}</p>
+                                        <p class="mr-1">{{ $cb_avg ?? '' }}</p>
                                         <p>/20</p>
                                     </div>
                                 </td>
                                 <td class="py-5 px-6">
                                     <div
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                        <p class="mr-1">{{ $hw_avg }}</p>
+                                        <p class="mr-1">{{ $hw_avg ?? '' }}</p>
                                         <p>/10</p>
                                     </div>
                                 </td>
@@ -144,17 +144,17 @@
                                 @php
                                     $now = Carbon::now();
                                     $isSameWeek = $studentDegree->created_at->isSameWeek($now);
-                                        $last_att_score = $studentDegree->attendance_score;
+                                    $last_att_score = $studentDegree->attendance_score;
 
-                                    if($isSameWeek){
+                                    if ($isSameWeek) {
                                         $last_att_score = $studentDegree->attendance_score;
                                         $last_cp_score = $studentDegree->classroom_participation_score;
                                         $last_cb_score = $studentDegree->classroom_behavior_scoree;
                                         $last_hw_score = $studentDegree->homework_score;
                                         $last_final_score = $studentDegree->final_project_score;
                                         break;
-                                    } else{
-                                        $last_att_score =  $last_cp_score = $last_cb_score = $last_hw_score = $last_final_score = null;
+                                    } else {
+                                        $last_att_score = $last_cp_score = $last_cb_score = $last_hw_score = $last_final_score = null;
                                     }
                                 @endphp
                             @endforeach
@@ -164,41 +164,41 @@
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
                                         <input class="w-[40px] assessment-input" max="10" min="0"
                                             type="number" name="attendance_score" data-student-id="{{ $s->id }}"
-                                            value="{{$last_att_score ?? null}}">
+                                            value="{{ $last_att_score ?? null }}" oninput="filterNumericInput(event)">
                                         <p>/10 </p>
                                     </div>
                                 </td>
                                 <td class="py-5 px-6">
                                     <div
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                        <input class="w-[40px] assessment-input" type="number"
+                                        <input class="w-[40px] assessment-input" type="number" max="20" min="0"
                                             name="classroom_participation_score" data-student-id="{{ $s->id }}"
-                                            value="{{$last_cp_score ?? null}}">
+                                            value="{{ $last_cp_score ?? null }}" oninput="filterNumericInput(event)">
                                         <p>/20 </p>
                                     </div>
                                 </td>
                                 <td class="py-5 px-6">
                                     <div
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                        <input class="w-[40px] assessment-input" type="number"
+                                        <input class="w-[40px] assessment-input" type="number" max="20" min="0"
                                             name="classroom_behavior_score" data-student-id="{{ $s->id }}"
-                                            value="{{$last_cb_score ?? null}}">
+                                            value="{{ $last_cb_score ?? null }}" oninput="filterNumericInput(event)">
                                         <p>/20 </p>
                                     </div>
                                 </td>
                                 <td class="py-5 px-6">
                                     <div
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                        <input class="w-[40px] assessment-input" type="number" name="homework_score"
-                                            data-student-id="{{ $s->id }}" value="{{$last_hw_score ?? null}}">
+                                        <input class="w-[40px] assessment-input" type="number" name="homework_score" max="10" min="0"
+                                            data-student-id="{{ $s->id }}" value="{{ $last_hw_score ?? null }}" oninput="filterNumericInput(event)">
                                         <p>/10 </p>
                                     </div>
                                 </td>
                                 <td class="py-5 px-6">
                                     <div
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                        <input class="w-[40px] assessment-input" type="number" name="final_project_score"
-                                            data-student-id="{{ $s->id }}" value="{{$last_final_score ?? null}}">
+                                        <input class="w-[40px] assessment-input" type="number" name="final_project_score" max="50" min="0"
+                                            data-student-id="{{ $s->id }}" value="{{ $last_final_score ?? null }}" oninput="filterNumericInput(event)">
                                         <p>/50 </p>
                                     </div>
                                 </td>
@@ -296,5 +296,16 @@
         //         });
         //     });
         // });
+
+        function filterNumericInput(event) {
+            const input = event.target;
+            let previousValue = input.value;
+
+            input.value = input.value.replace(/[^0-9.]/g, '');
+
+            if (input.value.split('.').length > 2) {
+                input.value = previousValue; 
+            }
+        }
     </script>
 @endsection

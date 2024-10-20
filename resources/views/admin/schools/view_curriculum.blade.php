@@ -211,7 +211,7 @@
                                                 </div>
                                             @endforeach
                                         @else
-                                            <p>No themes available for this stage.</p>
+                                            <p>No themes available for this grade.</p>
                                         @endif
                                     </div>
                                 </div>
