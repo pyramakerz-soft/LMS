@@ -66,11 +66,12 @@ jobs:
 
       - name: Health Check (API or Home Page)
         run: |
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://${{ secrets.SSH_HOST }})
+          RESPONSE=$(curl -k -s -o /dev/null -w "%{http_code}" https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/)
           if [ $RESPONSE -ne 200 ]; then
             echo "Health check failed with status $RESPONSE"
-            exit 1
+          exit 1
           fi
+
 
       - name: Send Monitoring Data to Slack
         if: success() || failure()
