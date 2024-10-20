@@ -100,7 +100,7 @@ jobs:
             --data-urlencode "_token=$CSRF_TOKEN" \
             https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/loginP)
 
-          # Step 3: Follow redirect and check final destination
+          # Step 3: Follow redirect and verify final destination
           REDIRECT_CHECK=$(curl -L -s -b cookies.txt -o /dev/null -w "%{url_effective}" \
             https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin)
 
@@ -126,6 +126,35 @@ jobs:
 
           echo "RESPONSE=$ADMIN_RESPONSE" >> $GITHUB_ENV
 
+      - name: Send Slack Notification
+        if: always()  # Run this step on both success and failure
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          STATUS=$(if [ "$ADMIN_RESPONSE" -eq 200 ]; then echo '✅ Successful'; else echo '❌ Failed'; fi)
+          COLOR=$(if [ "$ADMIN_RESPONSE" -eq 200 ]; then echo 'good'; else echo 'danger'; fi)
+
+          CPU=${{ env.CPU }}
+          MEM=${{ env.MEM }}
+          DISK=${{ env.DISK }}
+
+          # Send Slack notification
+          curl -X POST -H 'Content-type: application/json' --data '{
+            "text": "Health Check Report: *'"$STATUS"'*",
+            "attachments": [
+              {
+                "color": "'"$COLOR"'",
+                "fields": [
+                  { "title": "Environment", "value": "Production", "short": true },
+                  { "title": "Status", "value": "'"$STATUS"'", "short": true },
+                  { "title": "Admin Response", "value": "'"$ADMIN_RESPONSE"'", "short": true },
+                  { "title": "CPU Usage (%)", "value": "'"$CPU"'", "short": true },
+                  { "title": "Memory Usage (%)", "value": "'"$MEM"'", "short": true },
+                  { "title": "Disk Usage (%)", "value": "'"$DISK"'", "short": true }
+                ]
+              }
+            ]
+          }' $SLACK_WEBHOOK
 
 
 
