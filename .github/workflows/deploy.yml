@@ -82,7 +82,7 @@ jobs:
         run: |
           # Step 1: Get CSRF token from the login page
           CSRF_TOKEN=$(curl -s -c cookies.txt \
-            https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/login | \
+            https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/login | \
             grep -oP '(?<=name="_token" value=")[^"]+')
 
           if [ -z "$CSRF_TOKEN" ]; then
@@ -97,10 +97,10 @@ jobs:
           LOGIN_RESPONSE=$(curl -L -s -b cookies.txt -c cookies.txt -X POST \
             -H "Content-Type: application/x-www-form-urlencoded" \
             -H "User-Agent: Mozilla/5.0" \
-            --data-urlencode "username=admin@admin.com" \
+            --data-urlencode "email=admin@admin.com" \
             --data-urlencode "password=123456789" \
             --data-urlencode "_token=$CSRF_TOKEN" \
-            https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/login)
+            https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/login)
 
           # Debug: Output the login response to inspect it
           echo "Login Response: $LOGIN_RESPONSE"
