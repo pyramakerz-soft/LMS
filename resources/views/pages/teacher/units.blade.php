@@ -1,106 +1,193 @@
 @extends('layouts.app')
+
 @section('title')
     Units for {{ $material->title }}
 @endsection
+
 @php
     $menuItems = [['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')]];
 @endphp
+
 @section('sidebar')
     @include('components.sidebar', ['menuItems' => $menuItems])
 @endsection
+
 @section('content')
     @include('components.profile')
-    <div class="p-3 text-[#667085] my-8">
-        <i class="fa-solid fa-house mx-2"></i>
-        <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="{{ route('teacher.dashboard') }}" class="mx-2 cursor-pointer">Grade</a>
-        <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="{{ route('teacher.info', $material->stage_id) }}" class="mx-2 cursor-pointer">Info</a>
-        <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="{{ route('teacher.showMaterials', $material->stage_id) }}" class="mx-2 cursor-pointer">Theme</a>
-        <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="" class="mx-2 cursor-pointer">Units</a>
+
+    <style>
+        .breadcrumb {
+            padding: 12px;
+            color: #667085;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .breadcrumb span {
+            color: #D0D5DD;
+        }
+
+        .breadcrumb a {
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .accordion-container {
+            width: 100%;
+            padding: 16px;
+        }
+
+        .accordion-item {
+            width: 100%;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #F0F0F0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .accordion-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 16px;
+            font-weight: 500;
+            color: #6b7280;
+            background-color: #F0F0F0;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        .accordion-button:hover {
+            background-color: #2E3646;
+            color: white;
+        }
+
+        .unit-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .unit-image {
+            width: 50px;
+            height: 44px;
+            border-radius: 4px;
+        }
+
+        .unit-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .accordion-body {
+            display: none;
+            width: 100%;
+            background-color: white;
+            padding: 16px;
+        }
+
+        .accordion-body.open {
+            display: block;
+        }
+
+        .chapters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .chapter-card {
+            width: calc(33.33% - 12px);
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .chapter-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: contain;
+        }
+
+        .chapter-title {
+            padding: 8px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1F2937;
+            text-align: center;
+        }
+
+        .accordion-icon {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s;
+        }
+
+        .accordion-icon.rotate-180 {
+            transform: rotate(180deg);
+        }
+    </style>
+
+    <div class="breadcrumb">
+        <i class="fa-solid fa-house"></i>
+        <span>/</span>
+        <a href="{{ route('teacher.dashboard') }}">Grade</a>
+        <span>/</span>
+        <a href="{{ route('teacher.info', $material->stage_id) }}">Info</a>
+        <span>/</span>
+        <a href="{{ route('teacher.showMaterials', $material->stage_id) }}">Theme</a>
+        <span>/</span>
+        <a href="#">Units</a>
     </div>
-    <div class="flex flex-wrap">
-        <div id="accordion-collapse " class="w-full p-3">
-            <div class="mb-5 ">
-                @foreach ($material->units as $unit)
-                    <div class="m-3">
-                        <h2 id="accordion-collapse-heading-{{ $unit->id }}">
-                            <button type="button"
-                                class="accordion-button flex items-center justify-between w-full p-2 font-medium rtl:text-right text-gray-500 dark:text-gray-400 hover:bg-[#2E3646] hover:text-white  rounded-md gap-3"
-                                data-accordion-target="#accordion-collapse-body-{{ $unit->id }}" aria-expanded="false"
-                                aria-controls="accordion-collapse-body-{{ $unit->id }}">
-                                <div class="flex justify-start space-x-2 align-items: center;">
-                                    @if ($loop->iteration == 1)
-                                        <img src="{{ asset('images/unit1.png') }}"
-                                            class="w-[50px] h-[44.21px] rounded-[2.44px]">
-                                    @elseif ($loop->iteration == 2)
-                                        <img src="{{ asset('images/unit2.png') }}"
-                                            class="w-[50px] h-[44.21px] rounded-[2.44px]">
-                                    @else
-                                        <img src="{{ asset('images/unit3.png') }}"
-                                            class="w-[50px] h-[44.21px] rounded-[2.44px]">
-                                    @endif
-                                    <span class="mt-1 text-2xl"> {{ $unit->title }}</span>
-                                </div>
-                                <svg data-accordion-icon class="w-3 h-3 shrink-0" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M9 5 5 1 1 5" />
-                                </svg>
-                            </button>
-                        </h2>
-                        <div id="accordion-collapse-body-{{ $unit->id }}" class="hidden"
-                            aria-labelledby="accordion-collapse-heading-{{ $unit->id }}">
-                            <div class="p-3 flex flex-wrap justify-start">
-                                @foreach ($unit->chapters as $chapter)
-                                    <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white  rounded-xl">
-                                        <div class="full">
-                                            <a class="cursor-pointer h-full flex flex-col justify-between"
-                                                href="{{ route('teacher.lessons.index', $chapter->id) }}">
-                                                <div class="overflow-hidden">
-                                                    {{-- @if ($chapter->image)
-                                                        <img src="{{ asset($chapter->image) }}"
-                                                            class="object-contain w-full rounded-xl"
-                                                            alt="{{ $chapter->name }}">
-                                                    @else
-                                                        <img src="https://via.placeholder.com/150"
-                                                            class="object-contain w-full h-[250px] rounded-xl"
-                                                            alt="No Image">
-                                                    @endif --}}
-                                                    <img src="{{ $chapter->image ? asset($chapter->image) : asset('images/defaultCard.webp') }}"
-                                                        alt="{{ $chapter->title }}"
-                                                        class="object-contain w-full h-[250px] rounded-xl">
-                                                </div>
-                                                <div class="p-2">
-                                                    <p class="text-slate-800 text-2xl font-semibold truncate">
-                                                        {{ $chapter->title }}
-                                                    </p>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
+
+    <div class="accordion-container">
+        @foreach ($material->units as $unit)
+            <div class="accordion-item">
+                <h2>
+                    <button class="accordion-button" data-accordion-target="#accordion-body-{{ $unit->id }}">
+                        <div class="unit-header">
+                            <img src="{{ asset('images/unit' . min($loop->iteration, 3) . '.png') }}" class="unit-image">
+                            <span class="unit-title">{{ $unit->title }}</span>
                         </div>
+                        <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                  d="M9 5L5 1 1 5" />
+                        </svg>
+                    </button>
+                </h2>
+                <div id="accordion-body-{{ $unit->id }}" class="accordion-body">
+                    <div class="chapters">
+                        @foreach ($unit->chapters as $chapter)
+                            <div class="chapter-card">
+                                <a href="{{ route('teacher.lessons.index', $chapter->id) }}">
+                                    <img src="{{ $chapter->image ? asset($chapter->image) : asset('images/defaultCard.webp') }}" 
+                                         alt="{{ $chapter->title }}">
+                                    <p class="chapter-title">{{ $chapter->title }}</p>
+                                </a>
+                            </div>
+                        @endforeach
                     </div>
-                @endforeach
+                </div>
             </div>
-        </div>
-        <script>
-            document.querySelectorAll('.accordion-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const accordionBody = document.querySelector(button.getAttribute('data-accordion-target'));
-                    const icon = button.querySelector('svg');
-                    if (accordionBody.classList.contains('hidden')) {
-                        accordionBody.classList.remove('hidden'); // Show accordion content
-                        icon.classList.add('rotate-180'); // Rotate icon
-                    } else {
-                        accordionBody.classList.add('hidden'); // Hide accordion content
-                        icon.classList.remove('rotate-180'); // Reset icon rotation
-                    }
-                });
+        @endforeach
+    </div>
+
+    <script>
+        document.querySelectorAll('.accordion-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const target = button.getAttribute('data-accordion-target');
+                const body = document.querySelector(target);
+                const icon = button.querySelector('svg');
+
+                body.classList.toggle('open');
+                icon.classList.toggle('rotate-180');
             });
-        </script>
-    @endsection
+        });
+    </script>
+@endsection

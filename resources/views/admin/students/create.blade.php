@@ -27,14 +27,15 @@
 
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
- 
+
                             <input type="text" name="username" id="username" class="form-control" required>
                             <div class="invalid-feedback" style="display: none;">Username cannot contain numbers.</div>
                         </div>
 
                         <div class="mb-3">
                             <label for="gender" class="form-label">Gender</label>
-                            <select name="gender"  id="gender" class="form-control" required>
+                            <select name="gender" id="gender" class="form-control" required>
+                                <option selected disabled hidden></option>
                                 <option value="boy">Boy</option>
                                 <option value="girl">Girl</option>
                             </select>
@@ -43,7 +44,7 @@
                         <div class="mb-3">
                             <label for="school_id" class="form-label">School</label>
                             <select name="school_id" id="school_id" class="form-control" required>
-                                <option value="">Select School</option>
+                                <option selected disabled hidden></option>
                                 @foreach ($schools as $school)
                                     <option value="{{ $school->id }}">{{ $school->name }}</option>
                                 @endforeach
@@ -54,7 +55,7 @@
                         <div class="mb-3">
                             <label for="stage_id" class="form-label">Grade</label>
                             <select name="stage_id" id="stage_id" class="form-control" required>
-                                <option value="">Select Grade</option>
+                                <option selected disabled hidden></option>
                             </select>
                         </div>
 
@@ -62,7 +63,7 @@
                         <div class="mb-3">
                             <label for="class_id" class="form-label">Class</label>
                             <select name="class_id" id="class_id" class="form-control" required>
-                                <option value="">Select Class</option>
+                                <option selected disabled hidden></option>
                             </select>
                         </div>
                         <!-- Image Upload -->
@@ -86,11 +87,11 @@
         document.getElementById('school_id').addEventListener('change', function() {
             let schoolId = this.value;
             if (schoolId) {
-                fetch(`/LMS/lms_pyramakerz/public/admin/api/schools/${schoolId}/stages`)
+                fetch(`{{ route('admin.schools.stages', ':school') }}`.replace(':school', schoolId))
+
                     .then(response => response.json())
                     .then(data => {
                         let stageSelect = document.getElementById('stage_id');
-                        stageSelect.innerHTML = '<option value="">Select Grade</option>';
                         data.forEach(stage => {
                             stageSelect.innerHTML +=
                                 `<option value="${stage.id}">${stage.name}</option>`;
@@ -104,11 +105,10 @@
         document.getElementById('stage_id').addEventListener('change', function() {
             let stageId = this.value;
             if (stageId) {
-                fetch(`/LMS/lms_pyramakerz/public/admin/api/stages/${stageId}/classes`)
+                fetch(`{{ route('admin.stages.classes', ':stage') }}`.replace(':stage', stageId))
                     .then(response => response.json())
                     .then(data => {
                         let classSelect = document.getElementById('class_id');
-                        classSelect.innerHTML = '<option value="">Select Class</option>';
                         data.forEach(cls => {
                             classSelect.innerHTML += `<option value="${cls.id}">${cls.name}</option>`;
                         });

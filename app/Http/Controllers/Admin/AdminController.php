@@ -154,30 +154,7 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Request $request, $id)
-    // {
-    //     $school = School::findOrFail($id);
-
-
-    //     $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'address' => 'nullable|string|max:255',
-    //         'city' => 'nullable|string|max:255',
-    //         'type_id' => 'required|exists:types,id',
-    //         'is_active' => 'required|boolean',
-    //     ]);
-
-    //     // Update school details
-    //     $school->update([
-    //         'name' => $request->name,
-    //         'address' => $request->address,
-    //         'city' => $request->city,
-    //         'type_id' => $request->type_id,
-    //         'is_active' => $request->is_active,
-    //     ]);
-
-    //     return redirect()->route('admins.index')->with('success', 'School updated successfully.');
-    // }
+   
 
     public function update(Request $request, $id)
     {
@@ -278,7 +255,13 @@ class AdminController extends Controller
     public function assignCurriculum($schoolId)
     {
         $school = School::findOrFail($schoolId);
-        $stages = Stage::all();
+    
+        $stages = Stage::whereIn('id', function ($query) use ($schoolId) {
+            $query->select('stage_id')
+                  ->from('school_stage')
+                  ->where('school_id', $schoolId);
+        })->get();    
+
         return view('admin.schools.curriculum', compact('school', 'stages'));
     }
 

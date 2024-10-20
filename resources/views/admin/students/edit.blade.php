@@ -42,7 +42,7 @@
                         <div class="mb-3">
                             <label for="school_id" class="form-label">School</label>
                             <select name="school_id" class="form-control" id="school_id" required>
-                                <option value="">Select School</option>
+                                <option selected disabled hidden></option>
                                 @foreach ($schools as $school)
                                     <option value="{{ $school->id }}"
                                         {{ $student->school_id == $school->id ? 'selected' : '' }}>
@@ -55,7 +55,7 @@
                         <div class="mb-3">
                             <label for="stage_id" class="form-label">Stage</label>
                             <select name="stage_id" class="form-control" id="stage_id" required>
-                                <option value="">Select Stage</option>
+                                <option selected disabled hidden></option>
                                 @foreach ($stages as $stage)
                                     <option value="{{ $stage->id }}"
                                         {{ $student->stage_id == $stage->id ? 'selected' : '' }}>
@@ -68,7 +68,7 @@
                         <div class="mb-3">
                             <label for="class_id" class="form-label">Class</label>
                             <select name="class_id" id="class_id" class="form-control" required>
-                                <option value="">Select Class</option>
+                                <option selected disabled hidden></option>
                                 @foreach ($classes as $class)
                                     <option value="{{ $class->id }}"
                                         {{ $student->class_id == $class->id ? 'selected' : '' }}>
@@ -83,8 +83,8 @@
                             <label for="image" class="form-label">Profile Image</label>
                             <input type="file" name="image" class="form-control" id="image" accept="image/*">
                             @if ($student->image)
-                                <p>Current Image: <img class="my-3" src="{{ asset($student->image) }}" alt="Student Image"
-                                        width="100"></p>
+                                <p>Current Image: <img class="my-3" src="{{ asset($student->image) }}"
+                                        alt="Student Image" width="100"></p>
                             @endif
                         </div>
 
@@ -94,7 +94,7 @@
                 </div>
             </main>
 
-             
+
         </div>
     </div>
 @endsection
@@ -104,11 +104,10 @@
         document.getElementById('school_id').addEventListener('change', function() {
             let schoolId = this.value;
             if (schoolId) {
-                fetch(`/LMS/lms_pyramakerz/public/admin/api/schools/${schoolId}/stages`)
+                fetch(`{{ route('admin.schools.stages', ':school') }}`.replace(':school', schoolId))
                     .then(response => response.json())
                     .then(data => {
                         let stageSelect = document.getElementById('stage_id');
-                        stageSelect.innerHTML = '<option value="">Select Grade</option>';
                         data.forEach(stage => {
                             stageSelect.innerHTML +=
                                 `<option value="${stage.id}">${stage.name}</option>`;
@@ -122,11 +121,10 @@
         document.getElementById('stage_id').addEventListener('change', function() {
             let stageId = this.value;
             if (stageId) {
-                fetch(`/LMS/lms_pyramakerz/public/admin/api/stages/${stageId}/classes`)
+                fetch(`{{ route('admin.stages.classes', ':stage') }}`.replace(':stage', stageId))
                     .then(response => response.json())
                     .then(data => {
                         let classSelect = document.getElementById('class_id');
-                        classSelect.innerHTML = '<option value="">Select Class</option>';
                         data.forEach(cls => {
                             classSelect.innerHTML += `<option value="${cls.id}">${cls.name}</option>`;
                         });

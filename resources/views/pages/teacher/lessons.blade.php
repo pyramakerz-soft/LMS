@@ -20,7 +20,7 @@
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="{{ route('teacher.dashboard') }}" class="mx-2 cursor-pointer">Grade</a>
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="{{ route('teacher.units', $chapter->unit_id) }}" class="mx-2 cursor-pointer">Units</a>
+        <a href="{{ route('teacher.units', $chapter->material_id) }}" class="mx-2 cursor-pointer">Units</a>
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="#" class="mx-2 cursor-pointer">Lessons</a>
     </div>
@@ -69,11 +69,14 @@
     </div>
 </div>
 
+@section('page_js')
 <script>
     function openModal(lessonId, filePath) {
-        const modalContent = `
+        let modalContent = `
             <embed src="${filePath}" width="100%" height="90%" />
-            <img src="{{ asset('assets/img/watermark 2.png') }}" class="absolute inset-0 w-full h-full pointer-events-none opacity-50 z-10">
+            <img src="{{ asset('assets/img/watermark 2.png') }}" 
+                class="absolute inset-0 w-full h-full opacity-50 z-10"
+                style="pointer-events: none;">
         `;
         document.getElementById('ebook-content').innerHTML = modalContent;
 
@@ -84,3 +87,4 @@
         document.getElementById(id).classList.add("hidden");
     }
 </script>
+@endsection

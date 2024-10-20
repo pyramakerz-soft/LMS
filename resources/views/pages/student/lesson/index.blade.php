@@ -20,7 +20,7 @@
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
-                    <img  class="w-20 h-20 rounded-full " alt="avatar" src="{{ $userAuth->image ? asset('storage/' . $userAuth->image)  : asset('images/default_user.jpg') }}" />
+                    <img  class="w-20 h-20 rounded-full object-cover" alt="avatar" src="{{ $userAuth->image ? asset($userAuth->image)  : asset('images/default_user.jpg') }}" />
                 </div>
 
                 <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
@@ -64,7 +64,7 @@
                                 <img src="https://via.placeholder.com/150"
                                     class="object-contain w-full h-[250px] rounded-xl" alt="No Image">
                             @endif --}}
-                            <img class="object-contain w-full h-[250px] rounded-xl" src="{{ $lesson->image ? asset('storage/' . asset($lesson->image) ) : asset('images/defaultCard.webp') }}" alt="{{ $lesson->title}}">
+                            <img class="object-contain w-full h-[250px] rounded-xl" src="{{ $lesson->image ? asset($lesson->image) : asset('images/defaultCard.webp') }}" alt="{{ $lesson->title}}">
 
                         </div>
                     </a>
@@ -99,12 +99,14 @@
     </div>
 </div>
 
-
+@section('page_js')
 <script>
      function openModal(lessonId, filePath) {
-        const modalContent = `
+        let modalContent = `
             <embed src="${filePath}" width="100%" height="90%" />
-            <img src="{{ asset('assets/img/watermark 2.png') }}" class="absolute inset-0 w-full h-full pointer-events-none opacity-50 z-10">
+            <img src="{{ asset('assets/img/watermark 2.png') }}" 
+                class="absolute inset-0 w-full h-full opacity-50 z-10"
+                style="pointer-events: none;">
         `;
         document.getElementById('ebook-content').innerHTML = modalContent;
 
@@ -115,3 +117,4 @@
         document.getElementById(id).classList.add("hidden");
     }
 </script>
+@endsection

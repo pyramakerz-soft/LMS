@@ -31,7 +31,6 @@ class ClassController extends Controller
         $schools = School::all();
         $stages = Stage::all();
         return view('admin.classes.create', compact('schools', 'stages'));
-
     }
 
     /**
@@ -113,7 +112,6 @@ class ClassController extends Controller
         $class->save();
 
         return redirect()->route('classes.index')->with('success', 'Class updated successfully.');
-
     }
 
     /**
@@ -124,7 +122,6 @@ class ClassController extends Controller
         $class = Group::findOrFail($id);
         $class->delete();
         return redirect()->route('classes.index')->with('success', 'Class deleted successfully.');
-
     }
     public function showImportForm($id)
     {
@@ -134,22 +131,21 @@ class ClassController extends Controller
     public function importStudents(Request $request, $id)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv'
+            'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 
         try {
             Excel::import(new StudentsImport($id), $request->file('file'));
+
             return redirect()->route('classes.index')->with('success', 'Students imported successfully.');
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == 23000) {
                 return back()->withErrors(['file' => 'A student with the same username already exists.']);
             }
 
-            return back()->withErrors(['file' => 'Error processing file: ' . $e->getMessage()]);
+            return back()->withErrors(['file' => 'Database error: ' . $e->getMessage()]);
         } catch (\Exception $e) {
-            return back()->withErrors(['file' => 'Error processing file: ' . $e->getMessage()]);
+            return back()->withErrors(['file' => 'Import error: ' . $e->getMessage()]);
         }
     }
-
-
 }

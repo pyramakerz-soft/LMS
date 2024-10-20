@@ -51,7 +51,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="stage_ids" class="form-label">Stages</label>
+                            <label for="stage_ids" class="form-label">Grades</label>
                             <select name="stage_ids[]" id="stage_ids" class="form-control" multiple required disabled>
                             </select>
                         </div>
@@ -99,7 +99,9 @@
         document.getElementById('school_id').addEventListener('change', function() {
             let schoolId = this.value;
             if (schoolId) {
-                fetch(`/LMS/lms_pyramakerz/public/admin/api/schools/${schoolId}/stages`)
+                const stagesUrl = `{{ route('admin.schools.stages', ':school') }}`.replace(':school', schoolId);
+
+                fetch(stagesUrl)
                     .then(response => response.json())
                     .then(data => {
                         let stageSelect = document.getElementById('stage_ids');
@@ -117,7 +119,9 @@
         document.getElementById('school_id').addEventListener('change', function() {
             let schoolId = this.value;
             if (schoolId) {
-                fetch(`/LMS/lms_pyramakerz/public/admin/api/schools/${schoolId}/classes`)
+                const classesUrl = `{{ route('admin.schools.classes', ':school') }}`.replace(':school', schoolId);
+
+                fetch(classesUrl)
                     .then(response => response.json())
                     .then(data => {
                         let classSelect = document.getElementById('class_id');
