@@ -255,7 +255,13 @@ class AdminController extends Controller
     public function assignCurriculum($schoolId)
     {
         $school = School::findOrFail($schoolId);
-        $stages = Stage::all();
+    
+        $stages = Stage::whereIn('id', function ($query) use ($schoolId) {
+            $query->select('stage_id')
+                  ->from('school_stage')
+                  ->where('school_id', $schoolId);
+        })->get();    
+
         return view('admin.schools.curriculum', compact('school', 'stages'));
     }
 
