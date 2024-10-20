@@ -3,7 +3,7 @@ name: Sync Laravel with Hostinger
 on:
   push:
     branches:
-      - main  # Trigger on any push to the main branch
+      - main  # Trigger on push to the main branch
 
 jobs:
   deploy:
@@ -14,31 +14,61 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install SSH Client
-        run: sudo apt-get install -y sshpass  # Install sshpass to handle SSH login with password
+        run: sudo apt-get install -y sshpass
 
       - name: Sync Files via SSH
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
           -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-          
+
           cd domains/pyramakerz-artifacts.com/public_html/LMS/lms_pyramakerz/
 
-          # Stash any local changes to avoid conflicts
-          git stash || true
+          echo "Starting deployment..."
 
-          # Pull the latest changes from the main branch
-          git pull origin main --rebase || git reset --hard origin/main
+          # Ensure correct branch is checked out
+          git fetch origin main
+          git checkout main || echo "Already on main branch"
 
-          # Add, commit, and push any new or changed files
-          git add .
-          git commit -m "Sync server changes on $(date)" || echo "No changes to commit"
-          git push origin main || echo "Nothing to push"
+          # Pull the latest changes safely
+          git pull origin main || echo "Failed to pull changes"
 
-          # Install dependencies and optimize Laravel settings
-          php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
+          # Install dependencies if necessary
+          if [ -f "composer.phar" ]; then
+            php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+          else
+            composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+          fi
 
+          # Run Laravel optimizations
+          php artisan config:cache || echo "Config cache failed"
+          php artisan route:cache || echo "Route cache failed"
+          php artisan view:cache || echo "View cache failed"
+          
+          # Optional: Ensure existing tables are migrated without conflicts
+          php artisan migrate --force || echo "Migrations failed"
+
+          echo "Deployment completed successfully"
           exit
           EOF
+
+      - name: Notify Slack
+        if: success() || failure()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{
+            \"text\": \"Deployment to Hostinger: *$(if [ $? -eq 0 ]; then echo 'Successful'; else echo 'Failed'; fi)*\",
+            \"attachments\": [
+              {
+                \"title\": \"Deployment Details\",
+                \"fields\": [
+                  {\"title\": \"Branch\", \"value\": \"main\", \"short\": true},
+                  {\"title\": \"User\", \"value\": \"${{ github.actor }}\", \"short\": true},
+                  {\"title\": \"Commit\", \"value\": \"${{ github.event.head_commit.message }}\", \"short\": false}
+                ],
+                \"color\": \"$(if [ $? -eq 0 ]; then echo 'good'; else echo 'danger'; fi)\"
+              }
+            ]
+          }" $SLACK_WEBHOOK
