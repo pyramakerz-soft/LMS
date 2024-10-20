@@ -83,7 +83,7 @@ jobs:
           # Step 1: Get CSRF token from the admin login page
           # Step 1: Get CSRF token from the admin login page and store cookies
           CSRF_TOKEN=$(curl -s -c cookies.txt \
-            https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/loginP | \
+            https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/login | \
             grep -oP '(?<=name="_token" value=")[^"]+')
           
           if [ -z "$CSRF_TOKEN" ]; then
