@@ -81,23 +81,32 @@ jobs:
       - name: Health Check (Login and Admin Page)
         run: |
           # Step 1: Get CSRF token from the login page
-          CSRF_TOKEN=$(curl -s -c cookies.txt https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/login | grep -oP '(?<=name="_token" value=")[^"]+')
+          CSRF_TOKEN=$(curl -s -c cookies.txt \
+            https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/login | \
+            grep -oP '(?<=name="_token" value=")[^"]+')
 
           if [ -z "$CSRF_TOKEN" ]; then
             echo "Failed to retrieve CSRF token"
             exit 1
           fi
 
+          # Debug: Output the CSRF token
+          echo "CSRF Token: $CSRF_TOKEN"
+
           # Step 2: Log in and capture the session cookie
           LOGIN_RESPONSE=$(curl -s -b cookies.txt -c cookies.txt -X POST \
-            -d "username=admin@admin.com&password=123456789&_token=$CSRF_TOKEN" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -H "User-Agent: Mozilla/5.0" \
+            --data "username=admin@admin.com&password=123456789&_token=$CSRF_TOKEN" \
             https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/login)
 
-          # Check if login was successful by looking for the admin dashboard keyword
+          # Check if login was successful by looking for a known keyword
           if ! echo "$LOGIN_RESPONSE" | grep -q "dashboard"; then
             echo "Login failed. Health check cannot proceed."
             exit 1
           fi
+
+          echo "Login successful."
 
           # Step 3: Use the session cookie to access the admin page
           ADMIN_RESPONSE=$(curl -s -b cookies.txt -o /dev/null -w "%{http_code}" \
@@ -112,6 +121,7 @@ jobs:
           fi
 
           echo "RESPONSE=$ADMIN_RESPONSE" >> $GITHUB_ENV
+
 
 
 
