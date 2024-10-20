@@ -93,11 +93,12 @@ jobs:
           # Debug: Output the CSRF token
           echo "CSRF Token: $CSRF_TOKEN"
 
-          # Step 2: Log in and capture the session cookie
-          LOGIN_RESPONSE=$(curl -L -s -b cookies.txt -c cookies.txt -X POST \
+          # Step 2: Log in and capture the session cookie with additional headers
+          LOGIN_RESPONSE=$(curl -v -L -s -b cookies.txt -c cookies.txt -X POST \
             -H "Content-Type: application/x-www-form-urlencoded" \
             -H "User-Agent: Mozilla/5.0" \
             -H "Referer: https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/login" \
+            -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8" \
             --data-urlencode "email=admin@admin.com" \
             --data-urlencode "password=123456789" \
             --data-urlencode "_token=$CSRF_TOKEN" \
@@ -127,12 +128,6 @@ jobs:
           fi
 
           echo "RESPONSE=$ADMIN_RESPONSE" >> $GITHUB_ENV
-
-
-
-
-
-
 
 
 
