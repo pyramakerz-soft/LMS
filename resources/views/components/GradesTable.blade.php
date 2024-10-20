@@ -63,6 +63,7 @@
                                     ->count();
                                 $counthomework_score = $s->studentAssessment->whereNotNull('homework_score')->count();
 
+                                // Check if any of the counts are non-zero to prevent division by zero.
                                 if (
                                     $countattendance_score !== 0 ||
                                     $countclassroom_participation_score !== 0 ||
@@ -71,31 +72,29 @@
                                 ) {
                                     $attendance_score = $s->studentAssessment
                                         ->whereNotNull('attendance_score')
-                                        ->pluck('attendance_score')
-                                        ->sum();
-                                    $attendance_avg = intval($attendance_score / $countattendance_score);
+                                        ->sum('attendance_score');
+                                    $attendance_avg = $countattendance_score
+                                        ? intval($attendance_score / $countattendance_score)
+                                        : 0;
 
                                     $cp_score = $s->studentAssessment
                                         ->whereNotNull('classroom_participation_score')
-                                        ->pluck('classroom_participation_score')
-                                        ->sum();
-                                    $cp_avg = intval($cp_score / $countclassroom_participation_score);
+                                        ->sum('classroom_participation_score');
+                                    $cp_avg = $countclassroom_participation_score
+                                        ? intval($cp_score / $countclassroom_participation_score)
+                                        : 0;
 
                                     $cb_score = $s->studentAssessment
                                         ->whereNotNull('classroom_behavior_score')
-                                        ->pluck('classroom_behavior_score')
-                                        ->sum();
-                                    $cb_avg = intval(
-                                        $cb_score / $countclassroom_behavior_score > 10
-                                            ? 10
-                                            : $cb_score / $countclassroom_behavior_score,
-                                    );
+                                        ->sum('classroom_behavior_score');
+                                    $cb_avg = $countclassroom_behavior_score
+                                        ? min(10, intval($cb_score / $countclassroom_behavior_score))
+                                        : 0;
 
                                     $hw_score = $s->studentAssessment
                                         ->whereNotNull('homework_score')
-                                        ->pluck('homework_score')
-                                        ->sum();
-                                    $hw_avg = intval($hw_score / $counthomework_score);
+                                        ->sum('homework_score');
+                                    $hw_avg = $counthomework_score ? intval($hw_score / $counthomework_score) : 0;
                                 } else {
                                     $attendance_avg = 0;
                                     $cp_avg = 0;
@@ -103,6 +102,7 @@
                                     $hw_avg = 0;
                                 }
                             @endphp
+
 
                             <tr class="border-t border-gray-300 text-lg md:text-xl">
                                 <td class="py-5 px-6" rowspan="2">
