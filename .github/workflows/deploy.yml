@@ -93,18 +93,25 @@ jobs:
           # Debug: Output the CSRF token
           echo "CSRF Token: $CSRF_TOKEN"
 
-          # Step 2: Log in and capture the session cookie with JSON payload
-          LOGIN_RESPONSE=$(curl -L -s -b cookies.txt -c cookies.txt -X POST \
-            -H "Content-Type: application/json" \
+          # Step 2: Log in and capture the session cookie with verbose output
+          LOGIN_RESPONSE=$(curl -v -L -s -b cookies.txt -c cookies.txt -X POST \
+            -H "Content-Type: application/x-www-form-urlencoded" \
             -H "User-Agent: Mozilla/5.0" \
             -H "Referer: https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/login" \
-            --data "{\"email\":\"admin@admin.com\", \"password\":\"123456789\", \"_token\":\"$CSRF_TOKEN\"}" \
+            --data-urlencode "email=admin@admin.com" \
+            --data-urlencode "password=123456789" \
+            --data-urlencode "_token=$CSRF_TOKEN" \
             https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/login)
 
           # Debug: Output the login response to inspect it
           echo "Login Response: $LOGIN_RESPONSE"
 
-          # Check if login was successful
+          # Check for redirection in the response
+          if echo "$LOGIN_RESPONSE" | grep -q "The POST method is not supported"; then
+            echo "POST request failed with 405 error. Checking for redirections..."
+            exit 1
+          fi
+
           if ! echo "$LOGIN_RESPONSE" | grep -q "dashboard"; then
             echo "Login failed. Health check cannot proceed."
             exit 1
@@ -118,13 +125,13 @@ jobs:
 
           echo "Health Check Response: $ADMIN_RESPONSE"
 
-          # Validate the response status code
           if [ "$ADMIN_RESPONSE" -ne 200 ]; then
             echo "Health check failed with status $ADMIN_RESPONSE"
             exit 1
           fi
 
           echo "RESPONSE=$ADMIN_RESPONSE" >> $GITHUB_ENV
+
 
 
 
