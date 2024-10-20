@@ -169,7 +169,7 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::get('/api/schools/{school}/stages', function (School $school) {
         return response()->json($school->stages);
     });
-
+    Route::post('changename', [TeacherDashboardController::class, 'changeName'])->name('changename');
 
     // Route::get('/teacher.assignment', [StudentAssignmentController::class, 'index'])->name('teacher.Assignment');
     //     return view('pages.teacher.Assignment.index');
