@@ -96,9 +96,9 @@ jobs:
           # Step 2: Log in and maintain session cookies
           LOGIN_RESPONSE=$(curl -L -s -b cookies.txt -c cookies.txt -X POST \
             -H "Content-Type: application/x-www-form-urlencoded" \
-            -H "Referer: https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/loginP" \
+            -H "Referer: https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/login" \
             --data "email=admin@admin.com&password=123456789&_token=$CSRF_TOKEN" \
-            https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/login)
+            https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/loginP)
           
           # Debug: Output the login response
           echo "Login Response: $LOGIN_RESPONSE"
