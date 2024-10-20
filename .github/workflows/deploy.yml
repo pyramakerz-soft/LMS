@@ -1,3 +1,26 @@
+name: Sync Laravel with Hostinger
+
+on:
+  push:
+    branches:
+      - main
+
+  schedule:
+    - cron: '*/30 * * * *'
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install SSH Client
+        run: sudo apt-get install -y sshpass
+
       - name: Sync Files via SSH and Capture Metrics
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -53,3 +76,82 @@
           echo "CPU=$CPU" >> $GITHUB_ENV
           echo "MEM=$MEM" >> $GITHUB_ENV
           echo "DISK=$DISK" >> $GITHUB_ENV
+
+      - name: Health Check (API or Home Page)
+        run: |
+          RESPONSE=$(curl -k -s -o /dev/null -w "%{http_code}" https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/)
+          echo "Health Check Response: $RESPONSE"
+          if [ "$RESPONSE" -ne 200 ]; then
+            echo "Health check failed with status $RESPONSE"
+            exit 1
+          fi
+          echo "RESPONSE=$RESPONSE" >> $GITHUB_ENV
+
+      - name: Send Monitoring Data to Slack
+        if: success() || failure()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          STATUS=$(if [ $? -eq 0 ]; then echo '✅ Successful'; else echo '❌ Failed'; fi)
+          COLOR=$(if [ $? -eq 0 ]; then echo 'good'; else echo 'danger'; fi)
+          DEPLOYER="@${{ github.actor }}"
+
+          CPU=${{ env.CPU }}
+          MEM=${{ env.MEM }}
+          DISK=${{ env.DISK }}
+          RESPONSE=${{ env.RESPONSE }}
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          COMMIT_HASH="${{ github.event.head_commit.id }}"
+
+          curl -X POST -H "Content-type: application/json" --data '{
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Deployment Status:* '"$STATUS"'"
+                }
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "section",
+                "fields": [
+                  { "type": "mrkdwn", "text": "*Branch:* main" },
+                  { "type": "mrkdwn", "text": "*User:* '"$DEPLOYER"'" },
+                  { "type": "mrkdwn", "text": "*Commit:* '"${COMMIT_HASH:0:7}"'" },
+                  { "type": "mrkdwn", "text": "*Commit Message:* '"$COMMIT_MSG"'" }
+                ]
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "section",
+                "fields": [
+                  { "type": "mrkdwn", "text": "*CPU Usage (%):* '"$CPU"'" },
+                  { "type": "mrkdwn", "text": "*Memory Usage (%):* '"$MEM"'" },
+                  { "type": "mrkdwn", "text": "*Disk Usage (%):* '"$DISK"'" },
+                  { "type": "mrkdwn", "text": "*Health Check Response:* '"$RESPONSE"'" }
+                ]
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "context",
+                "elements": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "Deployment completed on: '"$(date)"'"
+                  }
+                ]
+              }
+            ],
+            "attachments": [
+              {
+                "color": "'"$COLOR"'"
+              }
+            ]
+          }' $SLACK_WEBHOOK
