@@ -28,20 +28,24 @@
     <!-- Display Lessons -->
     <div class="flex flex-wrap">
         @foreach ($chapter->lessons as $lesson)
+           
             <div class="w-full sm:w-1/2 lg:w-1/4 p-3">
                 <div class=" bg-white ">
 
                     <div class="p-4">
 
-                        <button onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook', '{{ $lesson->file_path }}');" class="object-cover w-full">
-                            <img src="{{ $lesson->image ? asset($lesson->image) : asset('images/defaultCard.webp') }}" alt="{{ $lesson->title }}">
+                        <button
+                            onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook', '{{ $lesson->file_path }}');"
+                            class="object-cover w-full">
+                            <img src="{{ $lesson->image ? asset($lesson->image) : asset('images/defaultCard.webp') }}"
+                                alt="{{ $lesson->title }}">
                         </button>
                     </div>
                     <h3 class="px-4 py-2 text-lg font-bold truncate">{{ $lesson->title }}</h3>
                 </div>
             </div>
         @endforeach
-        @if(count($chapter->lessons) == 0)
+        @if (count($chapter->lessons) == 0)
             <p class="m-auto text-gray-500">No Lessons yet</p>
         @endif
     </div>
@@ -70,21 +74,21 @@
 </div>
 
 @section('page_js')
-<script>
-    function openModal(lessonId, filePath) {
-        let modalContent = `
+    <script>
+        function openModal(lessonId, filePath) {
+            let modalContent = `
             <embed src="${filePath}" width="100%" height="90%" />
             <img src="{{ asset('assets/img/watermark 2.png') }}" 
                 class="absolute inset-0 w-full h-full opacity-50 z-10"
                 style="pointer-events: none;">
         `;
-        document.getElementById('ebook-content').innerHTML = modalContent;
+            document.getElementById('ebook-content').innerHTML = modalContent;
 
-        document.getElementById('ebook').classList.remove("hidden");
-    }
+            document.getElementById('ebook').classList.remove("hidden");
+        }
 
-    function closeModal(id) {
-        document.getElementById(id).classList.add("hidden");
-    }
-</script>
+        function closeModal(id) {
+            document.getElementById(id).classList.add("hidden");
+        }
+    </script>
 @endsection

@@ -46,6 +46,7 @@ class TeacherDashboardController extends Controller
     public function showUnits($materialId)
     {
         $material = Material::with('units.chapters')->findOrFail($materialId);
+        dd($material);
 
         return view('pages.teacher.units', compact('material'));
     }
