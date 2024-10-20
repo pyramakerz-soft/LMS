@@ -90,7 +90,7 @@ jobs:
 
           # Step 2: Log in and capture the session cookie
           LOGIN_RESPONSE=$(curl -s -b cookies.txt -c cookies.txt -X POST \
-            -d "email=admin@admin.com&password=123456789&_token=$CSRF_TOKEN" \
+            -d "username=admin@admin.com&password=123456789&_token=$CSRF_TOKEN" \
             https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/login)
 
           # Check if login was successful by looking for the admin dashboard keyword
