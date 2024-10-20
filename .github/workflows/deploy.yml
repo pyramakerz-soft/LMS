@@ -3,7 +3,12 @@ name: Sync Laravel with Hostinger
 on:
   push:
     branches:
-      - main  # Trigger on push to the main branch
+      - main
+
+  schedule:
+    - cron: '*/30 * * * *'
+
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -16,59 +21,135 @@ jobs:
       - name: Install SSH Client
         run: sudo apt-get install -y sshpass
 
-      - name: Sync Files via SSH
+      - name: Sync Files via SSH and Capture Metrics
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
+          set -e
+
+          METRICS=$(sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -T -o StrictHostKeyChecking=no \
           -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd domains/pyramakerz-artifacts.com/public_html/LMS/lms_pyramakerz/
 
-          cd domains/pyramakerz-artifacts.com/public_html/LMS/lms_pyramakerz/
+            echo "Starting deployment at $(date)..."
 
-          echo "Starting deployment..."
+            git fetch origin main || exit 1
+            git reset --hard origin/main || echo "Reset failed, trying pull..."
+            git pull origin main || exit 1
 
-          # Ensure correct branch is checked out
-          git fetch origin main
-          git checkout main || echo "Already on main branch"
+            if [ -f "composer.phar" ]; then
+              php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+            else
+              composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+            fi
 
-          # Pull the latest changes safely
-          git pull origin main || echo "Failed to pull changes"
+            php artisan config:cache || echo "Config cache failed"
+            php artisan route:cache || echo "Route cache failed"
+            php artisan view:cache || echo "View cache failed"
+            php artisan migrate --force || echo "Migrations failed"
 
-          # Install dependencies if necessary
-          if [ -f "composer.phar" ]; then
-            php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
-          else
-            composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+            CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')
+            MEM=$(free -m | awk 'NR==2{printf "%.2f", $3*100/$2 }')
+            DISK=$(df -h / | awk '$NF=="/"{printf "%d", $5}')
+
+            echo "CPU=$CPU"
+            echo "MEM=$MEM"
+            echo "DISK=$DISK"
+          EOF
+          )
+
+          echo "Captured Metrics: $METRICS"
+
+          CPU=$(echo "$METRICS" | grep "CPU=" | cut -d'=' -f2)
+          MEM=$(echo "$METRICS" | grep "MEM=" | cut -d'=' -f2)
+          DISK=$(echo "$METRICS" | grep "DISK=" | cut -d'=' -f2)
+
+          echo "Parsed CPU=$CPU, MEM=$MEM, DISK=$DISK"
+
+          if [ -z "$CPU" ] || [ -z "$MEM" ] || [ -z "$DISK" ]; then
+            echo "Failed to capture valid metrics"
+            exit 1
           fi
 
-          # Run Laravel optimizations
-          php artisan config:cache || echo "Config cache failed"
-          php artisan route:cache || echo "Route cache failed"
-          php artisan view:cache || echo "View cache failed"
-          
-          # Optional: Ensure existing tables are migrated without conflicts
-          php artisan migrate --force || echo "Migrations failed"
+          echo "CPU=$CPU" >> $GITHUB_ENV
+          echo "MEM=$MEM" >> $GITHUB_ENV
+          echo "DISK=$DISK" >> $GITHUB_ENV
 
-          echo "Deployment completed successfully"
-          exit
-          EOF
+      - name: Health Check (API or Home Page)
+        run: |
+          RESPONSE=$(curl -k -s -o /dev/null -w "%{http_code}" https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/)
+          echo "Health Check Response: $RESPONSE"
+          if [ "$RESPONSE" -ne 200 ]; then
+            echo "Health check failed with status $RESPONSE"
+            exit 1
+          fi
+          echo "RESPONSE=$RESPONSE" >> $GITHUB_ENV
 
-      - name: Notify Slack
+      - name: Send Monitoring Data to Slack
         if: success() || failure()
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         run: |
-          curl -X POST -H 'Content-type: application/json' --data "{
-            \"text\": \"Deployment to Hostinger: *$(if [ $? -eq 0 ]; then echo 'Successful'; else echo 'Failed'; fi)*\",
-            \"attachments\": [
+          STATUS=$(if [ $? -eq 0 ]; then echo '✅ Successful'; else echo '❌ Failed'; fi)
+          COLOR=$(if [ $? -eq 0 ]; then echo 'good'; else echo 'danger'; fi)
+          DEPLOYER="@${{ github.actor }}"
+
+          CPU=${{ env.CPU }}
+          MEM=${{ env.MEM }}
+          DISK=${{ env.DISK }}
+          RESPONSE=${{ env.RESPONSE }}
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          COMMIT_HASH="${{ github.event.head_commit.id }}"
+
+          curl -X POST -H "Content-type: application/json" --data '{
+            "blocks": [
               {
-                \"title\": \"Deployment Details\",
-                \"fields\": [
-                  {\"title\": \"Branch\", \"value\": \"main\", \"short\": true},
-                  {\"title\": \"User\", \"value\": \"${{ github.actor }}\", \"short\": true},
-                  {\"title\": \"Commit\", \"value\": \"${{ github.event.head_commit.message }}\", \"short\": false}
-                ],
-                \"color\": \"$(if [ $? -eq 0 ]; then echo 'good'; else echo 'danger'; fi)\"
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Deployment Status:* '"$STATUS"'"
+                }
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "section",
+                "fields": [
+                  { "type": "mrkdwn", "text": "*Branch:* `main`" },
+                  { "type": "mrkdwn", "text": "*User:* '"$DEPLOYER"'" },
+                  { "type": "mrkdwn", "text": "*Commit:* `'"${COMMIT_HASH:0:7}"'`" },
+                  { "type": "mrkdwn", "text": "*Commit Message:* '"$COMMIT_MSG"'" }
+                ]
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "section",
+                "fields": [
+                  { "type": "mrkdwn", "text": "*CPU Usage (%):* '"$CPU"'" },
+                  { "type": "mrkdwn", "text": "*Memory Usage (%):* '"$MEM"'" },
+                  { "type": "mrkdwn", "text": "*Disk Usage (%):* '"$DISK"'" },
+                  { "type": "mrkdwn", "text": "*Health Check Response:* '"$RESPONSE"'" }
+                ]
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "context",
+                "elements": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "Deployment completed on: '"$(date)"'"
+                  }
+                ]
+              }
+            ],
+            "attachments": [
+              {
+                "color": "'"$COLOR"'"
               }
             ]
-          }" $SLACK_WEBHOOK
+          }' $SLACK_WEBHOOK
