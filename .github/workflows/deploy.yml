@@ -97,8 +97,13 @@ jobs:
           LOGIN_RESPONSE=$(curl -s -b cookies.txt -c cookies.txt -X POST \
             -H "Content-Type: application/x-www-form-urlencoded" \
             -H "User-Agent: Mozilla/5.0" \
-            --data "username=admin@admin.com&password=123456789&_token=$CSRF_TOKEN" \
+            --data-urlencode "username=admin@admin.com" \
+            --data-urlencode "password=123456789" \
+            --data-urlencode "_token=$CSRF_TOKEN" \
             https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/login)
+
+          # Debug: Output the login response to inspect it
+          echo "Login Response: $LOGIN_RESPONSE"
 
           # Check if login was successful by looking for a known keyword
           if ! echo "$LOGIN_RESPONSE" | grep -q "dashboard"; then
@@ -121,6 +126,7 @@ jobs:
           fi
 
           echo "RESPONSE=$ADMIN_RESPONSE" >> $GITHUB_ENV
+
 
 
 
