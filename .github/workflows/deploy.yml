@@ -6,9 +6,9 @@ on:
       - main
 
   schedule:
-    - cron: '*/30 * * * *'  # Optional: Every 30 minutes to check status
+    - cron: '*/30 * * * *'
 
-  workflow_dispatch:  # Optional: Manually trigger the deployment
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -27,8 +27,7 @@ jobs:
         run: |
           set -e
 
-          # SSH into the server and capture the output of commands
-          METRICS=$(sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
+          METRICS=$(sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -T -o StrictHostKeyChecking=no \
           -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd domains/pyramakerz-artifacts.com/public_html/LMS/lms_pyramakerz/
 
@@ -52,24 +51,21 @@ jobs:
             php artisan view:cache || echo "View cache failed"
             php artisan migrate --force || echo "Migrations failed"
 
-            # Restart PHP services
-            sudo systemctl restart php-fpm || echo "Failed to restart PHP"
-
             # Capture server performance metrics
-            CPU=\$(top -bn1 | grep "Cpu(s)" | awk '{print \$2 + \$4}')
-            MEM=\$(free -m | awk 'NR==2{printf "%.2f", \$3*100/\$2 }')
-            DISK=\$(df -h / | awk '\$NF=="/"{printf "%d", \$5}')
+            CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')
+            MEM=$(free -m | awk 'NR==2{printf "%.2f", $3*100/$2 }')
+            DISK=$(df -h / | awk '$NF=="/"{printf "%d", $5}')
 
-            echo "CPU=\$CPU"
-            echo "MEM=\$MEM"
-            echo "DISK=\$DISK"
+            echo "CPU=$CPU"
+            echo "MEM=$MEM"
+            echo "DISK=$DISK"
           EOF
           )
 
           # Debug: Output raw metrics
           echo "Captured Metrics: $METRICS"
 
-          # Parse metrics from the captured output
+          # Parse metrics from the output
           CPU=$(echo "$METRICS" | grep "CPU=" | cut -d'=' -f2)
           MEM=$(echo "$METRICS" | grep "MEM=" | cut -d'=' -f2)
           DISK=$(echo "$METRICS" | grep "DISK=" | cut -d'=' -f2)
