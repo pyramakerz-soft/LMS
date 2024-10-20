@@ -30,7 +30,7 @@
                 <p class="h5 text-[#111111] py-3">Hello, please sign into your account</p>
     
                 @if ($errors->has('username') || $errors->has('password'))
-                    <span class="text-red-500 text-xs">Invalid Username Or Password</span>
+                    <span style="color: red" class="text-red-500 text-xs">Invalid Username Or Password</span>
                 @endif
 
                 <div class="w-full text-start">

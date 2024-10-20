@@ -29,7 +29,7 @@
                 <img src="{{ asset('images/Paragraphcontainer.png') }}" alt="Logo" class="w-[63%]">
                 <p class="h5 text-[#111111] py-3">Hello, please sign into your account</p>
                 @if ($errors->has('email') || $errors->has('password'))
-                    <span class="text-red-500 text-xs">Invalid Email Or Password</span>
+                    <span style="color: red" class="text-red-500 text-xs">Invalid Email Or Password</span>
                 @endif
     
                 <div class="w-full text-start">
