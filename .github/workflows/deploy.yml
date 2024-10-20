@@ -97,6 +97,7 @@ jobs:
           LOGIN_RESPONSE=$(curl -L -s -b cookies.txt -c cookies.txt -X POST \
             -H "Content-Type: application/x-www-form-urlencoded" \
             -H "User-Agent: Mozilla/5.0" \
+            -H "Referer: https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/login" \
             --data-urlencode "email=admin@admin.com" \
             --data-urlencode "password=123456789" \
             --data-urlencode "_token=$CSRF_TOKEN" \
@@ -105,7 +106,7 @@ jobs:
           # Debug: Output the login response to inspect it
           echo "Login Response: $LOGIN_RESPONSE"
 
-          # Check if login was successful by looking for a known keyword
+          # Check if login was successful
           if ! echo "$LOGIN_RESPONSE" | grep -q "dashboard"; then
             echo "Login failed. Health check cannot proceed."
             exit 1
@@ -126,6 +127,7 @@ jobs:
           fi
 
           echo "RESPONSE=$ADMIN_RESPONSE" >> $GITHUB_ENV
+
 
 
 
