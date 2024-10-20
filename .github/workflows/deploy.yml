@@ -77,15 +77,33 @@ jobs:
           echo "MEM=$MEM" >> $GITHUB_ENV
           echo "DISK=$DISK" >> $GITHUB_ENV
 
-      - name: Health Check (API or Home Page)
+      - name: Health Check (Login and Admin Page)
         run: |
-          RESPONSE=$(curl -k -s -o /dev/null -w "%{http_code}" https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/)
-          echo "Health Check Response: $RESPONSE"
-          if [ "$RESPONSE" -ne 200 ]; then
-            echo "Health check failed with status $RESPONSE"
+          # Step 1: Log in and capture the session cookie
+          LOGIN_RESPONSE=$(curl -s -c cookies.txt -X POST \
+            -d "email=admin@admin.com&password=123456789" \
+            https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/login)
+
+          # Check if login was successful
+          if ! echo "$LOGIN_RESPONSE" | grep -q "dashboard"; then
+            echo "Login failed. Health check cannot proceed."
             exit 1
           fi
-          echo "RESPONSE=$RESPONSE" >> $GITHUB_ENV
+
+          # Step 2: Use the session cookie to access the admin page
+          ADMIN_RESPONSE=$(curl -s -b cookies.txt -o /dev/null -w "%{http_code}" \
+            https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/admins)
+
+          echo "Health Check Response: $ADMIN_RESPONSE"
+
+          # Validate the response status code
+          if [ "$ADMIN_RESPONSE" -ne 200 ]; then
+            echo "Health check failed with status $ADMIN_RESPONSE"
+            exit 1
+          fi
+
+          echo "RESPONSE=$ADMIN_RESPONSE" >> $GITHUB_ENV
+
 
       - name: Send Monitoring Data to Slack
         if: success() || failure()
