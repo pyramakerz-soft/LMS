@@ -3,12 +3,12 @@ name: Sync Laravel with Hostinger
 on:
   push:
     branches:
-      - main  # Trigger on push to the main branch
+      - main
 
   schedule:
-    - cron: '*/30 * * * *'  # Optional: Run every 30 minutes to verify system status
+    - cron: '*/30 * * * *'  # Optional: Every 30 minutes to check status
 
-  workflow_dispatch:  # Optional: Manually trigger the deployment if needed
+  workflow_dispatch:  # Optional: Manually trigger the deployment
 
 jobs:
   deploy:
@@ -25,11 +25,11 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         run: |
-          set -e  # Ensure the script exits on the first failure
+          set -e
 
-          # SSH into the server and run commands
-          METRICS=$(sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
-          -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          # SSH into the server and run commands, capture output to metrics.log
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
+          -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} | tee metrics.log << 'EOF'
             cd domains/pyramakerz-artifacts.com/public_html/LMS/lms_pyramakerz/
 
             echo "Starting deployment at $(date)..."
@@ -60,19 +60,26 @@ jobs:
             MEM=$(free -m | awk 'NR==2{printf "%.2f", $3*100/$2 }')
             DISK=$(df -h / | awk '$NF=="/"{printf "%d", $5}')
 
-            # Output metrics in a single line
-            echo "$CPU,$MEM,$DISK"
+            echo "CPU=$CPU"
+            echo "MEM=$MEM"
+            echo "DISK=$DISK"
           EOF
-          )
 
-          # Debugging: Ensure metrics are captured correctly
-          echo "Captured Metrics: $METRICS"
+          # Extract metrics from log
+          CPU=$(grep "CPU=" metrics.log | cut -d'=' -f2)
+          MEM=$(grep "MEM=" metrics.log | cut -d'=' -f2)
+          DISK=$(grep "DISK=" metrics.log | cut -d'=' -f2)
 
-          # Parse the metrics
-          IFS=',' read -r CPU MEM DISK <<< "$METRICS"
+          # Debug: Ensure metrics are captured correctly
           echo "Parsed CPU=$CPU, MEM=$MEM, DISK=$DISK"
 
-          # Export metrics to GitHub environment variables
+          # Check if metrics are empty
+          if [ -z "$CPU" ] || [ -z "$MEM" ] || [ -z "$DISK" ]; then
+            echo "Failed to capture metrics"
+            exit 1
+          fi
+
+          # Export metrics to GitHub environment
           echo "CPU=$CPU" >> $GITHUB_ENV
           echo "MEM=$MEM" >> $GITHUB_ENV
           echo "DISK=$DISK" >> $GITHUB_ENV
