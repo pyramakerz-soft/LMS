@@ -20,7 +20,7 @@
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="{{ route('teacher.dashboard') }}" class="mx-2 cursor-pointer">Grade</a>
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="{{ route('teacher.units', $chapter->unit_id) }}" class="mx-2 cursor-pointer">Units</a>
+        <a href="{{ route('teacher.units', $chapter->material_id) }}" class="mx-2 cursor-pointer">Units</a>
         <span class="mx-2 text-[#D0D5DD]">/</span>
         <a href="#" class="mx-2 cursor-pointer">Lessons</a>
     </div>
