@@ -22,7 +22,7 @@
                             <thead>
                                 <tr>
                                     <th>Title</th>
-                                    <th>Material</th>
+                                    <th>Theme</th>
                                     <th>Image</th>
                                     <th>Active</th>
                                     <th>Actions</th>

@@ -43,9 +43,10 @@
                             <label for="type" class="form-label">Type</label>
                             <select name="type_id" id="type" class="form-control">
                                 <option value="" selected disabled>Select type</option>
-                        
+
                                 @foreach ($types as $type)
-                                    <option value="{{ $type->id }}" {{ $school->type_id == $type->id ? 'selected' : '' }}>
+                                    <option value="{{ $type->id }}"
+                                        {{ $school->type_id == $type->id ? 'selected' : '' }}>
                                         {{ $type->name }}
                                     </option>
                                 @endforeach
@@ -56,13 +57,14 @@
                             <label for="stage_ids" class="form-label">Grades</label>
                             <select name="stage_id[]" id="stage_id" class="form-control" multiple required>
                                 @foreach ($stages as $stage)
-                                    <option value="{{ $stage->id }}" {{ in_array($stage->id, $school->stages->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                    <option value="{{ $stage->id }}"
+                                        {{ in_array($stage->id, $school->stages->pluck('id')->toArray()) ? 'selected' : '' }}>
                                         {{ $stage->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
-                        
+
                         <!-- Active -->
                         <div class="mb-3 form-check">
                             <input type="checkbox" name="is_active" class="form-check-input" id="is_active" value="1"
@@ -79,17 +81,24 @@
                                     <div class="card mb-3 class-group" id="class-group-{{ $index }}">
                                         <div class="card-body">
                                             <div class="mb-3">
-                                                <label for="class_name_{{ $loop->index }}" class="form-label">Class Name</label>
-                                                <input type="hidden" name="classes[{{ $loop->index }}][id]" value="{{ $class->id ?? '' }}">
-                                                <input type="text" name="classes[{{ $loop->index }}][name]" class="form-control"
-                                                    value="{{ old('classes.'.$loop->index.'.name', $class->name ?? '') }}" required>
+                                                <label for="class_name_{{ $loop->index }}" class="form-label">Class
+                                                    Name</label>
+                                                <input type="hidden" name="classes[{{ $loop->index }}][id]"
+                                                    value="{{ $class->id }}">
+                                                <input type="text" name="classes[{{ $loop->index }}][name]"
+                                                    class="form-control"
+                                                    value="{{ old('classes.' . $loop->index . '.name', $class->name) }}"
+                                                    required>
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="class_stage_{{ $index }}" class="form-label">Grade</label>
-                                                <select name="classes[{{ $index }}][stage_id]" class="form-control" id="class_stage_{{ $index }}" required>
+                                                <label for="class_stage_{{ $index }}"
+                                                    class="form-label">Grade</label>
+                                                <select name="classes[{{ $index }}][stage_id]" class="form-control"
+                                                    id="class_stage_{{ $index }}" required>
                                                     @foreach ($stages as $stage)
-                                                        <option value="{{ $stage->id }}" {{ $class->stage_id == $stage->id ? 'selected' : '' }}>
+                                                        <option value="{{ $stage->id }}"
+                                                            {{ $class->stage_id == $stage->id ? 'selected' : '' }}>
                                                             {{ $stage->name }}
                                                         </option>
                                                     @endforeach
@@ -101,6 +110,7 @@
                                         </div>
                                     </div>
                                 @endforeach
+
                             </div>
                             <button type="button" class="btn btn-secondary" id="add-class-btn">Add Class</button>
                         </div>
@@ -122,42 +132,41 @@
                 placeholder: "Select Grades",
                 allowClear: true
             });
-        });
 
-        document.addEventListener('DOMContentLoaded', function() {
             const addClassBtn = document.getElementById('add-class-btn');
             const classContainer = document.getElementById('class-container');
-
-            let classCount = {{ $classes->count() }}; // Start with the number of existing classes
+            let classCount = 0;
 
             // Function to add a new class field group
-            function addClassField() {
+            function addClassField(stages) {
                 classCount++;
                 const classGroup = document.createElement('div');
                 classGroup.classList.add('class-group', 'mb-3');
                 classGroup.setAttribute('id', `class-group-${classCount}`);
 
+                // Generate stage options based on the selected stages
+                let stageOptions = '';
+                stages.forEach(stage => {
+                    stageOptions += `<option value="${stage.id}">${stage.text}</option>`;
+                });
+
                 classGroup.innerHTML = `
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label for="class_name_${classCount}" class="form-label">Class Name</label>
-                                <input type="text" name="classes[${classCount}][name]" class="form-control" id="class_name_${classCount}" placeholder="Enter class name" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="class_stage_${classCount}" class="form-label">Grade</label>
-                                <select name="classes[${classCount}][stage_id]" id="class_stage_${classCount}" class="form-control" required>
-                                    @foreach ($stages as $stage)
-                                        <option value="{{ $stage->id }}">{{ $stage->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <button type="button" class="btn btn-danger remove-class-btn" data-class-id="${classCount}">Remove Class</button>
-                        </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="class_name_${classCount}" class="form-label">Class Name</label>
+                        <input type="text" name="classes[${classCount}][name]" class="form-control" id="class_name_${classCount}" placeholder="Enter class name" required>
                     </div>
-                `;
+                    <div class="mb-3">
+                        <label for="class_stage_${classCount}" class="form-label">Grade</label>
+                        <select name="classes[${classCount}][stage_id]" id="class_stage_${classCount}" class="form-control" required>
+                            ${stageOptions}
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-danger remove-class-btn" data-class-id="${classCount}">Remove Class</button>
+                </div>
+            </div>
+        `;
 
                 classContainer.appendChild(classGroup);
 
@@ -168,15 +177,32 @@
                 });
             }
 
-            // Event listener to add a new class group
-            addClassBtn.addEventListener('click', addClassField);
+            // Event listener for Grades selection change
+            $('#stage_id').on('change', function() {
+                const selectedStages = $('#stage_id').select2('data'); // Get selected stages
+                if (selectedStages.length > 0) {
+                    // Enable Add Class button if stages are selected
+                    addClassBtn.disabled = false;
+                } else {
+                    // Disable Add Class button if no stages are selected
+                    addClassBtn.disabled = true;
+                }
 
-            // Add remove functionality to existing classes
-            document.querySelectorAll('.remove-class-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const classId = this.getAttribute('data-class-id');
-                    document.getElementById(`class-group-${classId}`).remove();
-                });
+                // Clear existing classes when stages are changed
+                classContainer.innerHTML = '';
+            });
+
+            // Event listener to add a new class group
+            addClassBtn.addEventListener('click', function() {
+                const selectedStages = $('#stage_id').select2('data');
+                if (selectedStages.length > 0) {
+                    // Extract both text and id for each selected stage
+                    const formattedStages = selectedStages.map(stage => ({
+                        id: stage.id,
+                        text: stage.text
+                    }));
+                    addClassField(formattedStages);
+                }
             });
         });
     </script>

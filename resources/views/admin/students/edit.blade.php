@@ -83,8 +83,8 @@
                             <label for="image" class="form-label">Profile Image</label>
                             <input type="file" name="image" class="form-control" id="image" accept="image/*">
                             @if ($student->image)
-                                <p>Current Image: <img class="my-3" src="{{ asset($student->image) }}" alt="Student Image"
-                                        width="100"></p>
+                                <p>Current Image: <img class="my-3" src="{{ asset($student->image) }}"
+                                        alt="Student Image" width="100"></p>
                             @endif
                         </div>
 
@@ -94,7 +94,7 @@
                 </div>
             </main>
 
-             
+
         </div>
     </div>
 @endsection
@@ -104,7 +104,7 @@
         document.getElementById('school_id').addEventListener('change', function() {
             let schoolId = this.value;
             if (schoolId) {
-                fetch(`/LMS/lms_pyramakerz/public/admin/api/schools/${schoolId}/stages`)
+                fetch(`{{ route('admin.schools.stages', ':school') }}`.replace(':school', schoolId))
                     .then(response => response.json())
                     .then(data => {
                         let stageSelect = document.getElementById('stage_id');
@@ -122,7 +122,7 @@
         document.getElementById('stage_id').addEventListener('change', function() {
             let stageId = this.value;
             if (stageId) {
-                fetch(`/LMS/lms_pyramakerz/public/admin/api/stages/${stageId}/classes`)
+                fetch(`{{ route('admin.stages.classes', ':stage') }}`.replace(':stage', stageId))
                     .then(response => response.json())
                     .then(data => {
                         let classSelect = document.getElementById('class_id');

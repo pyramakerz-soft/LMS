@@ -9,16 +9,20 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 use Str;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Validators\Failure;
 
-class StudentsImport implements ToModel, WithHeadingRow
+class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
 {
+    use SkipsFailures;
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
+     * @param array $row
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
 
     
-    */
+     */
 
     protected $classId;
 
@@ -29,15 +33,19 @@ class StudentsImport implements ToModel, WithHeadingRow
 
     public function model(array $row)
     {
-        if (empty($row['username'])) {
-            return null; 
+        // Check if mandatory fields are empty
+        if (empty($row['username']) || empty($row['gender'])) {
+            throw new \Exception("Username or gender field cannot be empty.");
         }
 
+        // Replace spaces in username with underscores
         $username = str_replace(' ', '_', $row['username']);
 
-        $password = Str::random(8);
+        // Generate a random password
+        $password = str::random(8);
 
-        $student = Student::create([
+        // Create a new student record
+        return new Student([
             'username' => $username,
             'password' => Hash::make($password),
             'plain_password' => $password,
@@ -48,9 +56,5 @@ class StudentsImport implements ToModel, WithHeadingRow
             'image' => null,
             'class_id' => $this->class->id,
         ]);
-
-        return $student;
     }
-
-
 }

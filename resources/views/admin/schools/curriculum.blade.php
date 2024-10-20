@@ -35,7 +35,7 @@
                                 @endforeach
                             </select>
                         </div>
-                       {{-- @dd($stages)  --}}
+                        {{-- @dd($stages)  --}}
                         <!-- Material Selection (Multiple) -->
                         <div class="mb-3">
                             <label for="material_id" class="form-label">Select Materials</label>
@@ -69,7 +69,9 @@
         document.getElementById('stage_id').addEventListener('change', function() {
             let stageId = this.value;
             if (stageId) {
-                fetch(`/LMS/lms_pyramakerz/public/api/stages/${stageId}/materials`)
+                const url = `{{ url('/api/stages/:stageId/materials') }}`.replace(':stageId', stageId);
+
+                fetch(url)
                     .then(response => response.json())
                     .then(data => {
                         let materialSelect = document.getElementById('material_id');
@@ -83,7 +85,7 @@
             } else {
                 document.getElementById('material_id').disabled = true;
                 document.getElementById('material_id').innerHTML =
-                '<option value="">-- Select Material --</option>';
+                    '<option value="">-- Select Material --</option>';
             }
         });
     </script>

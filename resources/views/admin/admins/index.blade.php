@@ -11,7 +11,7 @@
                 <div class="container-fluid p-0">
 
 
-                    <h1>Schos</h1>
+                    <h1>Schools</h1>
 
 
 
