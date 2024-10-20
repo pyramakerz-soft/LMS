@@ -27,6 +27,7 @@ jobs:
         run: |
           set -e  # Ensure the script exits on the first failure
 
+          # SSH into the server and run commands
           METRICS=$(sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
           -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd domains/pyramakerz-artifacts.com/public_html/LMS/lms_pyramakerz/
@@ -59,13 +60,19 @@ jobs:
             MEM=$(free -m | awk 'NR==2{printf "%.2f", $3*100/$2 }')
             DISK=$(df -h / | awk '$NF=="/"{printf "%d", $5}')
 
-            # Output metrics in a single line for parsing
+            # Output metrics in a single line
             echo "$CPU,$MEM,$DISK"
           EOF
           )
 
-          # Export metrics to be used in later steps
+          # Debugging: Ensure metrics are captured correctly
+          echo "Captured Metrics: $METRICS"
+
+          # Parse the metrics
           IFS=',' read -r CPU MEM DISK <<< "$METRICS"
+          echo "Parsed CPU=$CPU, MEM=$MEM, DISK=$DISK"
+
+          # Export metrics to GitHub environment variables
           echo "CPU=$CPU" >> $GITHUB_ENV
           echo "MEM=$MEM" >> $GITHUB_ENV
           echo "DISK=$DISK" >> $GITHUB_ENV
@@ -73,6 +80,7 @@ jobs:
       - name: Health Check (API or Home Page)
         run: |
           RESPONSE=$(curl -k -s -o /dev/null -w "%{http_code}" https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/)
+          echo "Health Check Response: $RESPONSE"
           if [ $RESPONSE -ne 200 ]; then
             echo "Health check failed with status $RESPONSE"
             exit 1
@@ -88,11 +96,13 @@ jobs:
           COLOR=$(if [ $? -eq 0 ]; then echo 'good'; else echo 'danger'; fi)
           DEPLOYER="@${{ github.actor }}"
 
-          # Load environment variables
+          # Load metrics from the environment
           CPU=${{ env.CPU }}
           MEM=${{ env.MEM }}
           DISK=${{ env.DISK }}
           RESPONSE=${{ env.RESPONSE }}
+
+          echo "Sending Slack notification with metrics..."
 
           curl -X POST -H 'Content-type: application/json' --data "{
             \"text\": \"Deployment to Hostinger: *$STATUS*\",
