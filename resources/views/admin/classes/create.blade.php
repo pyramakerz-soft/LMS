@@ -48,6 +48,7 @@
                         <div class="mb-3">
                             <label for="stage_id" class="form-label">Grade</label>
                             <select name="stage_id" id="stage_id" class="form-control" required>
+                                <option selected disabled hidden></option>
                                 @foreach ($stages as $stage)
                                     <option value="{{ $stage->id }}">{{ $stage->name }}</option>
                                 @endforeach

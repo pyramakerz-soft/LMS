@@ -51,7 +51,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="stage_ids" class="form-label">Stages</label>
+                            <label for="stage_ids" class="form-label">Grades</label>
                             <select name="stage_ids[]" id="stage_ids" class="form-control" multiple required disabled>
                             </select>
                         </div>

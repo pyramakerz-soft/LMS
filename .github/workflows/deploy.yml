@@ -5,6 +5,11 @@ on:
     branches:
       - main  # Trigger on push to the main branch
 
+  schedule:
+    - cron: '*/30 * * * *'  # Optional: Run every 30 minutes to verify system status
+
+  workflow_dispatch:  # Optional: Manually trigger the deployment if needed
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -16,59 +21,104 @@ jobs:
       - name: Install SSH Client
         run: sudo apt-get install -y sshpass
 
-      - name: Sync Files via SSH
+      - name: Sync Files via SSH and Capture Metrics
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
+          set -e  # Ensure the script exits on the first failure
+
+          # SSH into the server and run commands
+          METRICS=$(sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
           -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd domains/pyramakerz-artifacts.com/public_html/LMS/lms_pyramakerz/
 
-          cd domains/pyramakerz-artifacts.com/public_html/LMS/lms_pyramakerz/
+            echo "Starting deployment at $(date)..."
 
-          echo "Starting deployment..."
+            # Ensure branch is correct and update
+            git fetch origin main || exit 1
+            git reset --hard origin/main || echo "Reset failed, trying pull..."
+            git pull origin main || exit 1
 
-          # Ensure correct branch is checked out
-          git fetch origin main
-          git checkout main || echo "Already on main branch"
+            # Install dependencies
+            if [ -f "composer.phar" ]; then
+              php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+            else
+              composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+            fi
 
-          # Pull the latest changes safely
-          git pull origin main || echo "Failed to pull changes"
+            # Laravel optimization commands
+            php artisan config:cache || echo "Config cache failed"
+            php artisan route:cache || echo "Route cache failed"
+            php artisan view:cache || echo "View cache failed"
+            php artisan migrate --force || echo "Migrations failed"
 
-          # Install dependencies if necessary
-          if [ -f "composer.phar" ]; then
-            php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
-          else
-            composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
-          fi
+            # Restart PHP services
+            sudo systemctl restart php-fpm || echo "Failed to restart PHP"
 
-          # Run Laravel optimizations
-          php artisan config:cache || echo "Config cache failed"
-          php artisan route:cache || echo "Route cache failed"
-          php artisan view:cache || echo "View cache failed"
-          
-          # Optional: Ensure existing tables are migrated without conflicts
-          php artisan migrate --force || echo "Migrations failed"
+            # Capture server performance metrics
+            CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')
+            MEM=$(free -m | awk 'NR==2{printf "%.2f", $3*100/$2 }')
+            DISK=$(df -h / | awk '$NF=="/"{printf "%d", $5}')
 
-          echo "Deployment completed successfully"
-          exit
+            # Output metrics in a single line
+            echo "$CPU,$MEM,$DISK"
           EOF
+          )
 
-      - name: Notify Slack
+          # Debugging: Ensure metrics are captured correctly
+          echo "Captured Metrics: $METRICS"
+
+          # Parse the metrics
+          IFS=',' read -r CPU MEM DISK <<< "$METRICS"
+          echo "Parsed CPU=$CPU, MEM=$MEM, DISK=$DISK"
+
+          # Export metrics to GitHub environment variables
+          echo "CPU=$CPU" >> $GITHUB_ENV
+          echo "MEM=$MEM" >> $GITHUB_ENV
+          echo "DISK=$DISK" >> $GITHUB_ENV
+
+      - name: Health Check (API or Home Page)
+        run: |
+          RESPONSE=$(curl -k -s -o /dev/null -w "%{http_code}" https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/)
+          echo "Health Check Response: $RESPONSE"
+          if [ $RESPONSE -ne 200 ]; then
+            echo "Health check failed with status $RESPONSE"
+            exit 1
+          fi
+          echo "RESPONSE=$RESPONSE" >> $GITHUB_ENV
+
+      - name: Send Monitoring Data to Slack
         if: success() || failure()
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         run: |
+          STATUS=$(if [ $? -eq 0 ]; then echo 'Successful'; else echo 'Failed'; fi)
+          COLOR=$(if [ $? -eq 0 ]; then echo 'good'; else echo 'danger'; fi)
+          DEPLOYER="@${{ github.actor }}"
+
+          # Load metrics from the environment
+          CPU=${{ env.CPU }}
+          MEM=${{ env.MEM }}
+          DISK=${{ env.DISK }}
+          RESPONSE=${{ env.RESPONSE }}
+
+          echo "Sending Slack notification with metrics..."
+
           curl -X POST -H 'Content-type: application/json' --data "{
-            \"text\": \"Deployment to Hostinger: *$(if [ $? -eq 0 ]; then echo 'Successful'; else echo 'Failed'; fi)*\",
+            \"text\": \"Deployment to Hostinger: *$STATUS*\",
             \"attachments\": [
               {
                 \"title\": \"Deployment Details\",
                 \"fields\": [
                   {\"title\": \"Branch\", \"value\": \"main\", \"short\": true},
-                  {\"title\": \"User\", \"value\": \"${{ github.actor }}\", \"short\": true},
-                  {\"title\": \"Commit\", \"value\": \"${{ github.event.head_commit.message }}\", \"short\": false}
+                  {\"title\": \"User\", \"value\": \"$DEPLOYER\", \"short\": true},
+                  {\"title\": \"Commit\", \"value\": \"${{ github.event.head_commit.message }}\", \"short\": false},
+                  {\"title\": \"CPU Usage (%)\", \"value\": \"$CPU\", \"short\": true},
+                  {\"title\": \"Memory Usage (%)\", \"value\": \"$MEM\", \"short\": true},
+                  {\"title\": \"Disk Usage (%)\", \"value\": \"$DISK\", \"short\": true},
+                  {\"title\": \"Health Check\", \"value\": \"$RESPONSE\", \"short\": true}
                 ],
-                \"color\": \"$(if [ $? -eq 0 ]; then echo 'good'; else echo 'danger'; fi)\"
+                \"color\": \"$COLOR\"
               }
             ]
           }" $SLACK_WEBHOOK
