@@ -27,9 +27,9 @@ jobs:
         run: |
           set -e
 
-          # SSH into the server and run commands, capture output to metrics.log
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
-          -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} | tee metrics.log << 'EOF'
+          # SSH into the server and capture the output of commands
+          METRICS=$(sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
+          -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd domains/pyramakerz-artifacts.com/public_html/LMS/lms_pyramakerz/
 
             echo "Starting deployment at $(date)..."
@@ -56,26 +56,30 @@ jobs:
             sudo systemctl restart php-fpm || echo "Failed to restart PHP"
 
             # Capture server performance metrics
-            CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')
-            MEM=$(free -m | awk 'NR==2{printf "%.2f", $3*100/$2 }')
-            DISK=$(df -h / | awk '$NF=="/"{printf "%d", $5}')
+            CPU=\$(top -bn1 | grep "Cpu(s)" | awk '{print \$2 + \$4}')
+            MEM=\$(free -m | awk 'NR==2{printf "%.2f", \$3*100/\$2 }')
+            DISK=\$(df -h / | awk '\$NF=="/"{printf "%d", \$5}')
 
-            echo "CPU=$CPU"
-            echo "MEM=$MEM"
-            echo "DISK=$DISK"
+            echo "CPU=\$CPU"
+            echo "MEM=\$MEM"
+            echo "DISK=\$DISK"
           EOF
+          )
 
-          # Extract metrics from log
-          CPU=$(grep "CPU=" metrics.log | cut -d'=' -f2)
-          MEM=$(grep "MEM=" metrics.log | cut -d'=' -f2)
-          DISK=$(grep "DISK=" metrics.log | cut -d'=' -f2)
+          # Debug: Output raw metrics
+          echo "Captured Metrics: $METRICS"
 
-          # Debug: Ensure metrics are captured correctly
+          # Parse metrics from the captured output
+          CPU=$(echo "$METRICS" | grep "CPU=" | cut -d'=' -f2)
+          MEM=$(echo "$METRICS" | grep "MEM=" | cut -d'=' -f2)
+          DISK=$(echo "$METRICS" | grep "DISK=" | cut -d'=' -f2)
+
+          # Debug: Ensure metrics are correctly parsed
           echo "Parsed CPU=$CPU, MEM=$MEM, DISK=$DISK"
 
-          # Check if metrics are empty
+          # Validate metrics
           if [ -z "$CPU" ] || [ -z "$MEM" ] || [ -z "$DISK" ]; then
-            echo "Failed to capture metrics"
+            echo "Failed to capture valid metrics"
             exit 1
           fi
 
@@ -88,7 +92,7 @@ jobs:
         run: |
           RESPONSE=$(curl -k -s -o /dev/null -w "%{http_code}" https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/)
           echo "Health Check Response: $RESPONSE"
-          if [ $RESPONSE -ne 200 ]; then
+          if [ "$RESPONSE" -ne 200 ]; then
             echo "Health check failed with status $RESPONSE"
             exit 1
           fi
