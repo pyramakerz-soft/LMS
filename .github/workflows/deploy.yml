@@ -77,8 +77,9 @@ jobs:
           echo "MEM=$MEM" >> $GITHUB_ENV
           echo "DISK=$DISK" >> $GITHUB_ENV
 
-          - name: Health Check (Login and Admin Page)
-          run: |
+
+      - name: Health Check (Login and Admin Page)
+        run: |
           # Step 1: Get CSRF token from the login page
           CSRF_TOKEN=$(curl -s -c cookies.txt https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/login | grep -oP '(?<=name="_token" value=")[^"]+')
 
