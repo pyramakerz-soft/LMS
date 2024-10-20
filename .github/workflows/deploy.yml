@@ -46,6 +46,8 @@ jobs:
             php artisan config:cache || echo "Config cache failed"
             php artisan route:cache || echo "Route cache failed"
             php artisan view:cache || echo "View cache failed"
+
+            # Check for existing column before migration
             php artisan migrate --force || echo "Migrations failed"
 
             CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')
@@ -75,15 +77,62 @@ jobs:
           echo "MEM=$MEM" >> $GITHUB_ENV
           echo "DISK=$DISK" >> $GITHUB_ENV
 
-      - name: Health Check (API or Home Page)
+
+      - name: Health Check (Login and Admin Page)
         run: |
-          RESPONSE=$(curl -k -s -o /dev/null -w "%{http_code}" https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/)
-          echo "Health Check Response: $RESPONSE"
-          if [ "$RESPONSE" -ne 200 ]; then
-            echo "Health check failed with status $RESPONSE"
+          # Step 1: Get CSRF token from the admin login page
+          CSRF_TOKEN=$(curl -s -c cookies.txt \
+            https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/login | \
+            grep -oP '(?<=name="_token" value=")[^"]+')
+
+          if [ -z "$CSRF_TOKEN" ]; then
+            echo "Failed to retrieve CSRF token"
             exit 1
           fi
-          echo "RESPONSE=$RESPONSE" >> $GITHUB_ENV
+
+          # Debug: Output the CSRF token
+          echo "CSRF Token: $CSRF_TOKEN"
+
+          # Step 2: Log in and capture the session cookie
+          LOGIN_RESPONSE=$(curl -L -s -b cookies.txt -c cookies.txt -X POST \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -H "User-Agent: Mozilla/5.0" \
+            --data-urlencode "email=admin@admin.com" \
+            --data-urlencode "password=123456789" \
+            --data-urlencode "_token=$CSRF_TOKEN" \
+            https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/login)
+
+          # Debug: Output the login response to inspect it
+          echo "Login Response: $LOGIN_RESPONSE"
+
+          # Check if login was successful by looking for a known keyword
+          if ! echo "$LOGIN_RESPONSE" | grep -q "dashboard"; then
+            echo "Login failed. Health check cannot proceed."
+            exit 1
+          fi
+
+          echo "Login successful."
+
+          # Step 3: Use the session cookie to access the admin page
+          ADMIN_RESPONSE=$(curl -s -b cookies.txt -o /dev/null -w "%{http_code}" \
+            https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/admins)
+
+          echo "Health Check Response: $ADMIN_RESPONSE"
+
+          # Validate the response status code
+          if [ "$ADMIN_RESPONSE" -ne 200 ]; then
+            echo "Health check failed with status $ADMIN_RESPONSE"
+            exit 1
+          fi
+
+          echo "RESPONSE=$ADMIN_RESPONSE" >> $GITHUB_ENV
+
+
+
+
+
+
+
 
       - name: Send Monitoring Data to Slack
         if: success() || failure()
@@ -116,9 +165,9 @@ jobs:
               {
                 "type": "section",
                 "fields": [
-                  { "type": "mrkdwn", "text": "*Branch:* `main`" },
+                  { "type": "mrkdwn", "text": "*Branch:* main" },
                   { "type": "mrkdwn", "text": "*User:* '"$DEPLOYER"'" },
-                  { "type": "mrkdwn", "text": "*Commit:* `'"${COMMIT_HASH:0:7}"'`" },
+                  { "type": "mrkdwn", "text": "*Commit:* '"${COMMIT_HASH:0:7}"'" },
                   { "type": "mrkdwn", "text": "*Commit Message:* '"$COMMIT_MSG"'" }
                 ]
               },
