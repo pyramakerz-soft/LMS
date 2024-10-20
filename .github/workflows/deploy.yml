@@ -33,25 +33,21 @@ jobs:
 
             echo "Starting deployment at $(date)..."
 
-            # Ensure branch is correct and update
             git fetch origin main || exit 1
             git reset --hard origin/main || echo "Reset failed, trying pull..."
             git pull origin main || exit 1
 
-            # Install dependencies
             if [ -f "composer.phar" ]; then
               php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
             else
               composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
             fi
 
-            # Laravel optimization commands
             php artisan config:cache || echo "Config cache failed"
             php artisan route:cache || echo "Route cache failed"
             php artisan view:cache || echo "View cache failed"
             php artisan migrate --force || echo "Migrations failed"
 
-            # Capture server performance metrics
             CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')
             MEM=$(free -m | awk 'NR==2{printf "%.2f", $3*100/$2 }')
             DISK=$(df -h / | awk '$NF=="/"{printf "%d", $5}')
@@ -62,24 +58,19 @@ jobs:
           EOF
           )
 
-          # Debug: Output raw metrics
           echo "Captured Metrics: $METRICS"
 
-          # Parse metrics from the output
           CPU=$(echo "$METRICS" | grep "CPU=" | cut -d'=' -f2)
           MEM=$(echo "$METRICS" | grep "MEM=" | cut -d'=' -f2)
           DISK=$(echo "$METRICS" | grep "DISK=" | cut -d'=' -f2)
 
-          # Debug: Ensure metrics are correctly parsed
           echo "Parsed CPU=$CPU, MEM=$MEM, DISK=$DISK"
 
-          # Validate metrics
           if [ -z "$CPU" ] || [ -z "$MEM" ] || [ -z "$DISK" ]; then
             echo "Failed to capture valid metrics"
             exit 1
           fi
 
-          # Export metrics to GitHub environment
           echo "CPU=$CPU" >> $GITHUB_ENV
           echo "MEM=$MEM" >> $GITHUB_ENV
           echo "DISK=$DISK" >> $GITHUB_ENV
@@ -94,7 +85,7 @@ jobs:
           fi
           echo "RESPONSE=$RESPONSE" >> $GITHUB_ENV
 
-            - name: Send Monitoring Data to Slack
+      - name: Send Monitoring Data to Slack
         if: success() || failure()
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -110,14 +101,13 @@ jobs:
           COMMIT_MSG="${{ github.event.head_commit.message }}"
           COMMIT_HASH="${{ github.event.head_commit.id }}"
 
-          # Format the message using Slack's Block Kit
           curl -X POST -H "Content-type: application/json" --data '{
             "blocks": [
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "*Deployment Status*: '"$STATUS"'"
+                  "text": "*Deployment Status:* '"$STATUS"'"
                 }
               },
               {
@@ -163,4 +153,3 @@ jobs:
               }
             ]
           }' $SLACK_WEBHOOK
-
