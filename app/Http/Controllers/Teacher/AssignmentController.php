@@ -89,30 +89,26 @@ class AssignmentController extends Controller
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
 
-        // Validate the incoming request
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'lesson_id' => 'required|exists:lessons,id',
             'stage_id' => 'required|exists:stages,id',
             'class_ids' => 'required|array',
-            'week' => 'required',
             'class_ids.*' => 'exists:groups,id',
+            'week' => 'required',
             'path_file' => 'nullable|file',
             'link' => 'nullable|url',
-            'start_date' => 'nullable|date',
-            'due_date' => 'nullable|date',
-            'marks' => 'nullable|integer',
+            'start_date' => 'required|date|after_or_equal:today',
+            'due_date' => 'required|date|after_or_equal:start_date',
+            'marks' => 'required|integer|min:1|max:50',
             'is_active' => 'nullable|boolean',
         ]);
 
-        // Handle file upload if it exists
-        $filePath = null;
-        if ($request->hasFile('path_file')) {
-            $filePath = $request->file('path_file')->store('assignments', 'public');
-        }
+        $filePath = $request->hasFile('path_file')
+            ? $request->file('path_file')->store('assignments', 'public')
+            : null;
 
-        // Create the assignment
         $assignment = Assignment::create([
             'title' => $request->title,
             'description' => $request->description,
@@ -121,14 +117,13 @@ class AssignmentController extends Controller
             'start_date' => $request->start_date,
             'due_date' => $request->due_date,
             'lesson_id' => $request->lesson_id,
-            'school_id' => $userAuth->school_id, // Automatically set the school from the authenticated teacher
+            'school_id' => $userAuth->school_id,
             'marks' => $request->marks,
             'is_active' => $request->is_active ?? 0,
             'teacher_id' => $userAuth->id,
             'week' => $request->week,
         ]);
 
-        // Insert stage into the assignment_stage table
         DB::table('assignment_stage')->insert([
             'assignment_id' => $assignment->id,
             'stage_id' => $request->stage_id,
@@ -137,7 +132,6 @@ class AssignmentController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Attach assignment to selected classes and students in those classes
         foreach ($request->class_ids as $classId) {
             DB::table('assignment_class')->insert([
                 'assignment_id' => $assignment->id,
@@ -146,7 +140,6 @@ class AssignmentController extends Controller
                 'updated_at' => now(),
             ]);
 
-            // Attach assignment to all students in the class
             $students = DB::table('students')->where('class_id', $classId)->get();
             foreach ($students as $student) {
                 DB::table('assignment_student')->insert([

@@ -10,7 +10,8 @@
                     <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
                         class="w-30 h-20 rounded-full">
                 @endif --}}
-                <img  class="w-20 h-20 rounded-full object-cover" alt="avatar" src="{{ Auth::guard('teacher')->user()->image ? Auth::guard('teacher')->user()->image  : asset('images/default_user.jpg') }}" />
+                <img class="w-20 h-20 rounded-full object-cover" alt="avatar"
+                    src="{{ Auth::guard('teacher')->user()->image ? Auth::guard('teacher')->user()->image : asset('images/default_user.jpg') }}" />
             </div>
             <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
                 <div class="text-xl">
@@ -32,7 +33,9 @@
 
 
 
-<div id="editName" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-10 hidden">
+<form action="{{ route('changename') }}" method="POST" id="editName"
+    class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-10 hidden">
+    @csrf
     <div class="bg-white rounded-lg shadow-lg  w-[50%]">
         <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <h3 class="text-lg font-semibold text-gray-900">
@@ -47,14 +50,16 @@
         <div class="px-3 mb-3">
             <div class="rounded-2xl bg-[#F6F6F6] text-start px-4 md:px-6 py-3 md:py-4 my-4 md:my-5">
                 <p class="font-semibold text-base md:text-lg text-[#1C1C1E]">UserName</p>
-                <input placeholder="Change Your Name" class="w-full rounded-2xl p-2 md:p-4 mt-5 text-sm md:text-base">
+                <input placeholder="Change Your Name" name="username"
+                    class="w-full rounded-2xl p-2 md:p-4 mt-5 text-sm md:text-base">
             </div>
-    
-            <button class="bg-[#17253E] font-bold text-base md:text-lg text-white rounded-2xl py-3 px-4 md:px-7">Save</button>
+
+            <button class="bg-[#17253E] font-bold text-base md:text-lg text-white rounded-2xl py-3 px-4 md:px-7"
+                type="submit">Save</button>
         </div>
 
     </div>
-</div>
+</form>
 
 <script>
     function openModal(id) {

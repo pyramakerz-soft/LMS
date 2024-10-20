@@ -53,15 +53,13 @@
 
                 <label for="start_date"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Start Date</label>
-                <input type="date" name="start_date"
+                <input type="date" name="start_date" id="start_date"
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
-                    id="start_date" value="{{ old('start_date') }}">
+                    value="{{ old('start_date') }}" min="{{ date('Y-m-d') }}" required>
 
-                <label for="due_date" class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Due
-                    Date</label>
-                <input type="date" name="due_date"
+                <input type="date" name="due_date" id="due_date"
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
-                    id="due_date" value="{{ old('due_date') }}">
+                    value="{{ old('due_date') }}" min="{{ date('Y-m-d', strtotime('+1 year')) }}" required>
 
                 <label for="week"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select Week</label>
@@ -112,12 +110,11 @@
 
                 <label for="marks"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Marks</label>
- 
 
-                <input type="text" name="marks"
+
+                <input type="number" name="marks" id="marks"
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
-                    id="marks" value="{{ old('marks') }}"
-                    oninput="filterNumericInput(event)">
+                    value="{{ old('marks') }}" min="1" maxlength="2" max="50" required>
 
                 <label for="path_file"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">File Upload</label>
@@ -162,8 +159,17 @@
             input.value = input.value.replace(/[^0-9.]/g, '');
 
             if (input.value.split('.').length > 2) {
-                input.value = previousValue; 
+                input.value = previousValue;
             }
         }
+        document.getElementById('start_date').addEventListener('change', function() {
+            const startDate = this.value;
+            document.getElementById('due_date').min = startDate;
+        });
+
+        document.getElementById('due_date').addEventListener('change', function() {
+            const dueDate = this.value;
+            document.getElementById('start_date').max = dueDate;
+        });
     </script>
 @endsection

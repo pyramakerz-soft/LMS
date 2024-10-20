@@ -49,7 +49,7 @@ Route::get('/', function () {
 
 Route::prefix('admin')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
-    Route::post('/login', [AuthController::class, 'login'])->name('admin.login.post');
+    Route::post('/loginP', [AuthController::class, 'login'])->name('admin.login.post');
 
     Route::middleware('auth:admin')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
@@ -169,7 +169,7 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::get('/api/schools/{school}/stages', function (School $school) {
         return response()->json($school->stages);
     });
-
+    Route::post('changename', [TeacherDashboardController::class, 'changeName'])->name('changename');
 
     // Route::get('/teacher.assignment', [StudentAssignmentController::class, 'index'])->name('teacher.Assignment');
     //     return view('pages.teacher.Assignment.index');

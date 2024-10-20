@@ -61,8 +61,15 @@ class TeacherDashboardController extends Controller
     {
         // Fetch chapter with related lessons
         $chapter = Chapter::with('lessons')->findOrFail($chapterId);
-        
+
 
         return view('pages.teacher.lessons', compact('chapter'));
+    }
+    public function changeName()
+    {
+        $teacher = Auth::guard('teacher')->user();
+        $teacher->username = request()->username;
+        $teacher->save();
+        return redirect()->back();
     }
 }
