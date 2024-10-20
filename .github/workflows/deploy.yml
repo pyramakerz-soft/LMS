@@ -81,7 +81,7 @@ jobs:
         run: |
           # Step 1: Log in and capture the session cookie
           LOGIN_RESPONSE=$(curl -s -c cookies.txt -X POST \
-            -d "email=admin@admin.com&password=123456789" \
+            -d "username=admin@admin.com&password=123456789" \
             https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/login)
 
           # Check if login was successful
