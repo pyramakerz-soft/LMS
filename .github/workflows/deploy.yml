@@ -91,8 +91,8 @@ jobs:
 
           echo "CSRF Token: $CSRF_TOKEN"
 
-          # Step 2: Log in and maintain session cookies
-          LOGIN_RESPONSE=$(curl -L -s -b cookies.txt -c cookies.txt -X POST \
+          # Step 2: Log in and maintain session cookies (Avoid Redirection)
+          LOGIN_RESPONSE=$(curl -s -b cookies.txt -c cookies.txt -X POST \
             -H "Content-Type: application/x-www-form-urlencoded" \
             -H "Referer: https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/login" \
             --data-urlencode "email=admin@admin.com" \
