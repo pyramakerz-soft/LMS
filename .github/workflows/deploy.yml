@@ -77,53 +77,52 @@ jobs:
           echo "MEM=$MEM" >> $GITHUB_ENV
           echo "DISK=$DISK" >> $GITHUB_ENV
 
-
       - name: Health Check (Login and Admin Page)
         run: |
-          # Step 1: Get CSRF token from the admin login page
           # Step 1: Get CSRF token from the admin login page and store cookies
           CSRF_TOKEN=$(curl -s -c cookies.txt \
             https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/login | \
             grep -oP '(?<=name="_token" value=")[^"]+')
-          
+
           if [ -z "$CSRF_TOKEN" ]; then
             echo "Failed to retrieve CSRF token"
             exit 1
           fi
-          
+
           echo "CSRF Token: $CSRF_TOKEN"
-          
+
           # Step 2: Log in and maintain session cookies
           LOGIN_RESPONSE=$(curl -L -s -b cookies.txt -c cookies.txt -X POST \
             -H "Content-Type: application/x-www-form-urlencoded" \
             -H "Referer: https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/login" \
-            --data "email=admin@admin.com&password=123456789&_token=$CSRF_TOKEN" \
+            --data-urlencode "email=admin@admin.com" \
+            --data-urlencode "password=123456789" \
+            --data-urlencode "_token=$CSRF_TOKEN" \
             https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/loginP)
-          
-          # Debug: Output the login response
+
+          # Debug: Output the login response to inspect it
           echo "Login Response: $LOGIN_RESPONSE"
-          
+
           # Step 3: Check if login was successful
           if ! echo "$LOGIN_RESPONSE" | grep -q "dashboard"; then
             echo "Login failed. Health check cannot proceed."
             exit 1
           fi
-          
+
           echo "Login successful."
-          
+
           # Step 4: Access the admin page with session cookie
           ADMIN_RESPONSE=$(curl -s -b cookies.txt -o /dev/null -w "%{http_code}" \
             https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/admin/admins)
-          
+
           echo "Health Check Response: $ADMIN_RESPONSE"
-          
+
           if [ "$ADMIN_RESPONSE" -ne 200 ]; then
             echo "Health check failed with status $ADMIN_RESPONSE"
             exit 1
           fi
-          
-          echo "RESPONSE=$ADMIN_RESPONSE" >> $GITHUB_ENV
 
+          echo "RESPONSE=$ADMIN_RESPONSE" >> $GITHUB_ENV
 
 
 
