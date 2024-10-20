@@ -32,7 +32,10 @@ class ImageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'images' => 'required',
             'images.*' => 'required|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'images.required' => 'You must select at least one image.',
         ]);
 
         if ($request->hasFile('images')) {
@@ -42,7 +45,7 @@ class ImageController extends Controller
             }
             return redirect()->route('images.index')->with('success', 'Images uploaded successfully.');
         } else{
-            return redirect()->route('images.index');
+            return redirect()->route('images.index')->withErrors(['images' => 'No images were uploaded.']);
         }
     }
 

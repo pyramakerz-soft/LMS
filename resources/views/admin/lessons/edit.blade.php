@@ -58,7 +58,7 @@
                             <select name="file_path" class="form-control" id="file_path">
                                 @foreach (\App\Models\Ebook::all() as $ebook)
                                     <option value="{{ $ebook->file_path }}"
-                                        {{ $lesson->file_path == $ebook->file_path ? 'selected' : '' }}>
+                                        {{ Str::contains($lesson->file_path, $ebook->file_path) ? 'selected' : '' }}>
                                         {{ $ebook->title }}
                                     </option>
                                 @endforeach
