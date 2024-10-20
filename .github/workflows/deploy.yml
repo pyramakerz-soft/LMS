@@ -206,18 +206,6 @@ jobs:
                 "type": "divider"
               },
               {
-                "type": "section",
-                "fields": [
-                  { "type": "mrkdwn", "text": "*CPU Usage (%):* '"$CPU"'" },
-                  { "type": "mrkdwn", "text": "*Memory Usage (%):* '"$MEM"'" },
-                  { "type": "mrkdwn", "text": "*Disk Usage (%):* '"$DISK"'" },
-                  { "type": "mrkdwn", "text": "*Health Check Response:* '"$RESPONSE"'" }
-                ]
-              },
-              {
-                "type": "divider"
-              },
-              {
                 "type": "context",
                 "elements": [
                   {
