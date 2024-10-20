@@ -35,7 +35,7 @@
                         <!-- City -->
                         <div class="mb-3">
                             <label for="city" class="form-label">City</label>
-                            <input type="text" name="city" class="form-control" value="{{ $school->city }}">
+                            <input id="city" type="text" name="city" class="form-control" value="{{ $school->city }}">
                         </div>
 
                         <!-- Type -->
@@ -204,6 +204,10 @@
                     addClassField(formattedStages);
                 }
             });
+        });
+
+        document.getElementById('city').addEventListener('input', function (event) {
+            this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
         });
     </script>
 @endsection
