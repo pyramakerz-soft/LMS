@@ -35,7 +35,7 @@
                                         <td>{{ $class->stage->name }}</td>
                                         <td class="d-flex align-items-center gap-2">
                                             <a href="{{ route('classes.edit', $class->id) }}" class="btn btn-info">Edit</a>
-    
+
                                             <!-- Delete button -->
                                             <form action="{{ route('classes.destroy', $class->id) }}" method="POST"
                                                 style="display:inline-block;">
@@ -46,9 +46,10 @@
                                                     Delete
                                                 </button>
                                             </form>
-    
+
                                             <!-- Import Students Button -->
-                                            <a href="{{ route('classes.import', $class->id) }}" class="btn btn-secondary">Import Students</a>
+                                            <a href="{{ route('classes.import', $class->id) }}"
+                                                class="btn btn-secondary">Import Students</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -57,9 +58,10 @@
                     </div>
 
                 </div>
+                {{ $classes->appends(request()->input())->links('pagination::bootstrap-5') }}
             </main>
 
-             
+
         </div>
     </div>
 @endsection

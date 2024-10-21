@@ -19,7 +19,7 @@ class ClassController extends Controller
      */
     public function index()
     {
-        $classes = Group::all();
+        $classes = Group::paginate(10);
         return view('admin.classes.index', compact('classes'));
     }
 
