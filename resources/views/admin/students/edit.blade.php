@@ -67,8 +67,9 @@
 
                         <div class="mb-3">
                             <label for="class_id" class="form-label">Class</label>
-                            <select name="class_id" id="class_id" class="form-control" required>
-                                <option selected disabled hidden></option>
+                            <select name="class_id" id="class_id" class="form-control"
+                                data-selected-class="{{ $student->class_id }}" required>
+                                <option selected disabled hidden>Select Class</option>
                                 @foreach ($classes as $class)
                                     <option value="{{ $class->id }}"
                                         {{ $student->class_id == $class->id ? 'selected' : '' }}>
@@ -101,24 +102,31 @@
 
 @section('page_js')
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let schoolId = document.getElementById('school_id').value;
+            let stageId = document.getElementById('stage_id').value;
+            let classId = document.getElementById('class_id').dataset.selectedClass;
+
+            if (schoolId) {
+                fetchStages(schoolId, stageId); // Load stages based on selected school
+            }
+
+            if (stageId) {
+                fetchClasses(schoolId, stageId, classId); // Load classes based on selected stage and school
+            }
+        });
+
         document.getElementById('school_id').addEventListener('change', function() {
             let schoolId = this.value;
             let stageSelect = document.getElementById('stage_id');
             let classSelect = document.getElementById('class_id');
 
-            // Reset both the stage and class dropdowns
+            // Clear the stage and class dropdowns
             stageSelect.innerHTML = '<option value="" selected disabled hidden>Select Stage</option>';
             classSelect.innerHTML = '<option value="" selected disabled hidden>Select Class</option>';
 
             if (schoolId) {
-                fetch(`{{ route('admin.schools.stages', ':school') }}`.replace(':school', schoolId))
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(stage => {
-                            stageSelect.innerHTML +=
-                                `<option value="${stage.id}">${stage.name}</option>`;
-                        });
-                    });
+                fetchStages(schoolId);
             }
         });
 
@@ -130,16 +138,52 @@
             classSelect.innerHTML = '<option value="" selected disabled hidden>Select Class</option>';
 
             if (schoolId && stageId) {
-                fetch(`{{ route('admin.schools.stages.classes', [':school', ':stage']) }}`
-                        .replace(':school', schoolId)
-                        .replace(':stage', stageId))
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(cls => {
-                            classSelect.innerHTML += `<option value="${cls.id}">${cls.name}</option>`;
-                        });
-                    });
+                fetchClasses(schoolId, stageId);
             }
         });
+
+        function fetchStages(schoolId, selectedStageId = null) {
+            let stageSelect = document.getElementById('stage_id');
+
+            fetch(`{{ route('admin.schools.stages', ':school') }}`.replace(':school', schoolId))
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(stage => {
+                        let option = document.createElement('option');
+                        option.value = stage.id;
+                        option.textContent = stage.name;
+
+                        // Pre-select the stage if it matches the existing value
+                        if (selectedStageId && stage.id == selectedStageId) {
+                            option.selected = true;
+                        }
+
+                        stageSelect.appendChild(option);
+                    });
+                });
+        }
+
+        function fetchClasses(schoolId, stageId, selectedClassId = null) {
+            let classSelect = document.getElementById('class_id');
+
+            fetch(`{{ route('admin.schools.stages.classes', [':school', ':stage']) }}`
+                    .replace(':school', schoolId)
+                    .replace(':stage', stageId))
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(cls => {
+                        let option = document.createElement('option');
+                        option.value = cls.id;
+                        option.textContent = cls.name;
+
+                        // Pre-select the class if it matches the existing value
+                        if (selectedClassId && cls.id == selectedClassId) {
+                            option.selected = true;
+                        }
+
+                        classSelect.appendChild(option);
+                    });
+                });
+        }
     </script>
 @endsection
