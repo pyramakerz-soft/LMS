@@ -119,22 +119,29 @@
                 fetchClasses(schoolSelect.value, selectedStageId, selectedClassId);
             }
 
-            function clearSelect(selectElement) {
-                selectElement.innerHTML = '<option value="" selected disabled hidden>Select</option>';
-            }
-
             function fetchStages(schoolId) {
                 fetch(`{{ route('admin.schools.stages', ':school') }}`.replace(':school', schoolId))
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Error fetching stages: ${response.statusText}`);
+                        }
+                        return response.json();
+                    })
                     .then(data => {
+                        let stageSelect = document.getElementById('stage_id');
+                        clearSelect(stageSelect);
                         data.forEach(stage => {
                             let option = document.createElement('option');
                             option.value = stage.id;
                             option.textContent = stage.name;
-                            document.getElementById('stage_id').appendChild(option);
+                            stageSelect.appendChild(option);
                         });
                     })
-                    .catch(error => console.error('Error fetching stages:', error));
+                    .catch(error => console.error('Fetch error:', error));
+            }
+
+            function clearSelect(selectElement) {
+                selectElement.innerHTML = '<option value="" selected disabled hidden>Select</option>';
             }
 
             // Event listener when school changes

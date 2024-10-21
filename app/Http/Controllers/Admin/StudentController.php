@@ -162,10 +162,16 @@ class StudentController extends Controller
 
     public function getStages($schoolId)
     {
-        // Assuming 'stages' relationship exists in the School model
-        $stages = School::findOrFail($schoolId)->stages()->get(['id', 'name']);
+        try {
+            $school = School::findOrFail($schoolId);
 
-        return response()->json($stages);
+            $stages = $school->stages()->get(['id', 'name']);
+
+            return response()->json($stages);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching stages: ' . $e->getMessage());
+            return response()->json(['error' => 'Unable to fetch stages.'], 500);
+        }
     }
 
     public function getClasses($schoolId, $stageId)
