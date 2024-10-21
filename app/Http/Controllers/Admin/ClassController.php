@@ -17,12 +17,19 @@ class ClassController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $classes = Group::paginate(10);
-        return view('admin.classes.index', compact('classes'));
-    }
+        $query = Group::query();
 
+        if ($request->filled('school_id')) {
+            $query->where('school_id', $request->school_id);
+        }
+
+        $classes = $query->paginate(20);
+        $schools = School::all();
+
+        return view('admin.classes.index', compact('classes', 'schools'));
+    }
     /**
      * Show the form for creating a new resource.
      */

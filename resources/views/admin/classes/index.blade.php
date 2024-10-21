@@ -15,6 +15,20 @@
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
+                    <!-- School Filter Form -->
+                    <form action="{{ route('classes.index') }}" method="GET" class="d-flex mb-3">
+                        <select name="school_id" class="form-select" style="width: 200px; margin-right: 10px;">
+                            <option value="">All Schools</option>
+                            @foreach ($schools as $school)
+                                <option value="{{ $school->id }}"
+                                    {{ request('school_id') == $school->id ? 'selected' : '' }}>
+                                    {{ $school->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </form>
+
                     <!-- Button to create a new student -->
                     <a href="{{ route('classes.create') }}" class="btn btn-primary mb-3">Add class</a>
                     <div class="table-responsive" style="overflow-x: auto;">
