@@ -87,9 +87,11 @@
         document.getElementById('school_id').addEventListener('change', function() {
             let schoolId = this.value;
             let stageSelect = document.getElementById('stage_id');
+            let classSelect = document.getElementById('class_id');
 
-            // Clear the previous options
+            // Reset both the stage and class dropdowns
             stageSelect.innerHTML = '<option value="" selected disabled hidden>Select Stage</option>';
+            classSelect.innerHTML = '<option value="" selected disabled hidden>Select Class</option>';
 
             if (schoolId) {
                 fetch(`{{ route('admin.schools.stages', ':school') }}`.replace(':school', schoolId))
@@ -104,14 +106,16 @@
         });
 
         document.getElementById('stage_id').addEventListener('change', function() {
+            let schoolId = document.getElementById('school_id').value;
             let stageId = this.value;
             let classSelect = document.getElementById('class_id');
 
-            // Clear the previous options
             classSelect.innerHTML = '<option value="" selected disabled hidden>Select Class</option>';
 
-            if (stageId) {
-                fetch(`{{ route('admin.stages.classes', ':stage') }}`.replace(':stage', stageId))
+            if (schoolId && stageId) {
+                fetch(`{{ route('admin.schools.stages.classes', [':school', ':stage']) }}`
+                        .replace(':school', schoolId)
+                        .replace(':stage', stageId))
                     .then(response => response.json())
                     .then(data => {
                         data.forEach(cls => {
@@ -120,6 +124,7 @@
                     });
             }
         });
+
 
         document.getElementById('username').addEventListener('input', function(event) {
             const inputField = event.target;

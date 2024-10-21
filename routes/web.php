@@ -99,6 +99,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/api/stages/{stage}/classes', function (Stage $stage) {
             return response()->json($stage->classes);
         })->name('admin.stages.classes');
+        // Route to fetch classes based on the school and stage
+        Route::get('/admin/schools/{school}/stages/{stage}/classes', [StudentController::class, 'getClasses'])->name('admin.schools.stages.classes');
+
         Route::get('/api/schools/{school}/classes', function (School $school) {
             return response()->json($school->classes);
         })->name('admin.schools.classes');
