@@ -1,30 +1,18 @@
 <?php
-
-namespace App\Imports;
-
-use App\Models\Group;
-use App\Models\Student;
-use Hash;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-
-use Str;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
-use Maatwebsite\Excel\Validators\Failure;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use App\Models\Student;
+use App\Models\Group;
 
 class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
 {
     use SkipsFailures;
-    /**
-     * @param array $row
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
 
-    
-     */
-
-    protected $classId;
+    protected $class;
 
     public function __construct($classId)
     {
@@ -33,18 +21,18 @@ class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
 
     public function model(array $row)
     {
-        // Check if mandatory fields are empty
+        // Skip the row if 'username' or 'gender' is missing
         if (empty($row['username']) || empty($row['gender'])) {
-            throw new \Exception("Username or gender field cannot be empty.");
+            return null;
         }
 
-        // Replace spaces in username with underscores
+        // Replace spaces with underscores in the username
         $username = str_replace(' ', '_', $row['username']);
 
         // Generate a random password
-        $password = str::random(8);
+        $password = Str::random(8);
 
-        // Create a new student record
+        // Create and return the new Student model
         return new Student([
             'username' => $username,
             'password' => Hash::make($password),
