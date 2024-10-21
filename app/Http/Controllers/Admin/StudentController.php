@@ -160,13 +160,17 @@ class StudentController extends Controller
         return redirect()->route('students.index')->with('success', 'Student deleted successfully.');
     }
 
+    public function getStages($schoolId)
+    {
+        $stages = Stage::where('school_id', $schoolId)->get(['id', 'name']);
+        return response()->json($stages);
+    }
+
     public function getClasses($schoolId, $stageId)
     {
-        // Fetch classes where both the school and stage match
         $classes = Group::where('school_id', $schoolId)
             ->where('stage_id', $stageId)
             ->get(['id', 'name']);
-
         return response()->json($classes);
     }
 }

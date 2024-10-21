@@ -51,17 +51,11 @@
                                 @endforeach
                             </select>
                         </div>
-
                         <div class="mb-3">
                             <label for="stage_id" class="form-label">Stage</label>
-                            <select name="stage_id" class="form-control" id="stage_id" required>
-                                <option selected disabled hidden></option>
-                                @foreach ($stages as $stage)
-                                    <option value="{{ $stage->id }}"
-                                        {{ $student->stage_id == $stage->id ? 'selected' : '' }}>
-                                        {{ $stage->name }}
-                                    </option>
-                                @endforeach
+                            <select name="stage_id" id="stage_id" class="form-control"
+                                data-selected-stage="{{ $student->stage_id }}" required>
+                                <option value="" selected disabled hidden>Select Stage</option>
                             </select>
                         </div>
 
@@ -69,13 +63,7 @@
                             <label for="class_id" class="form-label">Class</label>
                             <select name="class_id" id="class_id" class="form-control"
                                 data-selected-class="{{ $student->class_id }}" required>
-                                <option selected disabled hidden>Select Class</option>
-                                @foreach ($classes as $class)
-                                    <option value="{{ $class->id }}"
-                                        {{ $student->class_id == $class->id ? 'selected' : '' }}>
-                                        {{ $class->name }}
-                                    </option>
-                                @endforeach
+                                <option value="" selected disabled hidden>Select Class</option>
                             </select>
                         </div>
 
@@ -103,87 +91,78 @@
 @section('page_js')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            let schoolId = document.getElementById('school_id').value;
-            let stageId = document.getElementById('stage_id').value;
-            let classId = document.getElementById('class_id').dataset.selectedClass;
-
-            if (schoolId) {
-                fetchStages(schoolId, stageId); // Load stages based on selected school
-            }
-
-            if (stageId) {
-                fetchClasses(schoolId, stageId, classId); // Load classes based on selected stage and school
-            }
-        });
-
-        document.getElementById('school_id').addEventListener('change', function() {
-            let schoolId = this.value;
+            let schoolSelect = document.getElementById('school_id');
             let stageSelect = document.getElementById('stage_id');
             let classSelect = document.getElementById('class_id');
+            let selectedStageId = stageSelect.dataset.selectedStage;
+            let selectedClassId = classSelect.dataset.selectedClass;
 
-            // Clear the stage and class dropdowns
-            stageSelect.innerHTML = '<option value="" selected disabled hidden>Select Stage</option>';
-            classSelect.innerHTML = '<option value="" selected disabled hidden>Select Class</option>';
+            // Load stages if a school is already selected
+            if (schoolSelect.value) {
+                fetchStages(schoolSelect.value, selectedStageId);
+            }
 
-            if (schoolId) {
-                fetchStages(schoolId);
+            // Load classes if both school and stage are already selected
+            if (schoolSelect.value && selectedStageId) {
+                fetchClasses(schoolSelect.value, selectedStageId, selectedClassId);
+            }
+
+            // Event listener when school changes
+            schoolSelect.addEventListener('change', function() {
+                fetchStages(this.value);
+                clearSelect(stageSelect);
+                clearSelect(classSelect);
+            });
+
+            // Event listener when stage changes
+            stageSelect.addEventListener('change', function() {
+                let schoolId = schoolSelect.value;
+                fetchClasses(schoolId, this.value);
+                clearSelect(classSelect);
+            });
+
+            // Helper to clear select options
+            function clearSelect(selectElement) {
+                selectElement.innerHTML = '<option value="" selected disabled hidden>Select</option>';
+            }
+
+            // Fetch and populate stages
+            function fetchStages(schoolId, selectedStage = null) {
+                fetch(`{{ route('admin.schools.stages', ':school') }}`.replace(':school', schoolId))
+                    .then(response => response.json())
+                    .then(data => {
+                        clearSelect(stageSelect);
+                        data.forEach(stage => {
+                            let option = document.createElement('option');
+                            option.value = stage.id;
+                            option.textContent = stage.name;
+                            if (selectedStage && stage.id == selectedStage) {
+                                option.selected = true;
+                            }
+                            stageSelect.appendChild(option);
+                        });
+                    });
+            }
+
+            // Fetch and populate classes
+            function fetchClasses(schoolId, stageId, selectedClass = null) {
+                fetch(`{{ route('admin.schools.stages.classes', [':school', ':stage']) }}`
+                        .replace(':school', schoolId)
+                        .replace(':stage', stageId))
+                    .then(response => response.json())
+                    .then(data => {
+                        clearSelect(classSelect);
+                        data.forEach(cls => {
+                            let option = document.createElement('option');
+                            option.value = cls.id;
+                            option.textContent = cls.name;
+                            if (selectedClass && cls.id == selectedClass) {
+                                option.selected = true;
+                            }
+                            classSelect.appendChild(option);
+                        });
+                    });
             }
         });
-
-        document.getElementById('stage_id').addEventListener('change', function() {
-            let schoolId = document.getElementById('school_id').value;
-            let stageId = this.value;
-            let classSelect = document.getElementById('class_id');
-
-            classSelect.innerHTML = '<option value="" selected disabled hidden>Select Class</option>';
-
-            if (schoolId && stageId) {
-                fetchClasses(schoolId, stageId);
-            }
-        });
-
-        function fetchStages(schoolId, selectedStageId = null) {
-            let stageSelect = document.getElementById('stage_id');
-
-            fetch(`{{ route('admin.schools.stages', ':school') }}`.replace(':school', schoolId))
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(stage => {
-                        let option = document.createElement('option');
-                        option.value = stage.id;
-                        option.textContent = stage.name;
-
-                        // Pre-select the stage if it matches the existing value
-                        if (selectedStageId && stage.id == selectedStageId) {
-                            option.selected = true;
-                        }
-
-                        stageSelect.appendChild(option);
-                    });
-                });
-        }
-
-        function fetchClasses(schoolId, stageId, selectedClassId = null) {
-            let classSelect = document.getElementById('class_id');
-
-            fetch(`{{ route('admin.schools.stages.classes', [':school', ':stage']) }}`
-                    .replace(':school', schoolId)
-                    .replace(':stage', stageId))
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(cls => {
-                        let option = document.createElement('option');
-                        option.value = cls.id;
-                        option.textContent = cls.name;
-
-                        // Pre-select the class if it matches the existing value
-                        if (selectedClassId && cls.id == selectedClassId) {
-                            option.selected = true;
-                        }
-
-                        classSelect.appendChild(option);
-                    });
-                });
-        }
     </script>
 @endsection
