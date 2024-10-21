@@ -56,7 +56,7 @@ class StudentController extends Controller
             'username' => [
                 'required',
                 'unique:students',
-                'regex:/^[a-zA-Z][a-zA-Z0-9_]*$/', // Ensures username starts with a letter and contains only letters, numbers, and underscores
+                'regex:/^[a-zA-Z][a-zA-Z0-9_]*$/', 
             ],
             'gender' => 'required',
             'school_id' => 'required|exists:schools,id',
