@@ -1,16 +1,28 @@
 <?php
+
+namespace App\Imports;
+
+use App\Models\Group;
+use App\Models\Student;
+use Hash;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+
+use Str;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use App\Models\Student;
-use App\Models\Group;
+use Maatwebsite\Excel\Validators\Failure;
 
 class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
 {
     use SkipsFailures;
+    /**
+     * @param array $row
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+
+    
+     */
 
     protected $class;
 
@@ -22,7 +34,7 @@ class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
     public function model(array $row)
     {
         // Skip the row if 'username' or 'gender' is missing
-        if (empty($row['username']) ) {
+        if (empty($row['username']) || empty($row['gender'])) {
             return null;
         }
 
