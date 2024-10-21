@@ -56,7 +56,8 @@
                 <input type="date" name="start_date" id="start_date"
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
                     value="{{ old('start_date') }}" min="{{ date('Y-m-d') }}" required>
-
+                    <label for="due_date"
+                    class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Due Date</label>
                 <input type="date" name="due_date" id="due_date"
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
                     value="{{ old('due_date') }}" min="{{ date('Y-m-d', strtotime('+1 year')) }}" required>

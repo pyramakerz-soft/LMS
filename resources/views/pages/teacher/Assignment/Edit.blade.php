@@ -127,7 +127,7 @@
                 <!-- Marks -->
                 <label for="marks"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Marks</label>
-                <input type="number" name="marks" min="1"
+                <input type="number" name="marks" min="1" max="30"
                     class="border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" id="marks"
                     value="{{ $assignment->marks }}">
 

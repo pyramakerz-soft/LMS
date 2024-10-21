@@ -35,7 +35,8 @@
                         <!-- City -->
                         <div class="mb-3">
                             <label for="city" class="form-label">City</label>
-                            <input id="city" type="text" name="city" class="form-control" value="{{ $school->city }}">
+                            <input id="city" type="text" name="city" class="form-control"
+                                value="{{ $school->city }}">
                         </div>
 
                         <!-- Type -->
@@ -137,8 +138,14 @@
             const classContainer = document.getElementById('class-container');
             let classCount = 0;
 
+            // Store original stage options for filtering
+            const allStages = @json($stages).map(stage => ({
+                id: stage.id,
+                text: stage.name
+            }));
+
             // Function to add a new class field group
-            function addClassField(stages) {
+            function addClassField(stages, classData = {}) {
                 classCount++;
                 const classGroup = document.createElement('div');
                 classGroup.classList.add('class-group', 'mb-3');
@@ -147,7 +154,8 @@
                 // Generate stage options based on the selected stages
                 let stageOptions = '';
                 stages.forEach(stage => {
-                    stageOptions += `<option value="${stage.id}">${stage.text}</option>`;
+                    stageOptions +=
+                        `<option value="${stage.id}" ${classData.stage_id == stage.id ? 'selected' : ''}>${stage.text}</option>`;
                 });
 
                 classGroup.innerHTML = `
@@ -155,7 +163,7 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <label for="class_name_${classCount}" class="form-label">Class Name</label>
-                        <input type="text" name="classes[${classCount}][name]" class="form-control" id="class_name_${classCount}" placeholder="Enter class name" required>
+                        <input type="text" name="classes[${classCount}][name]" class="form-control" id="class_name_${classCount}" placeholder="Enter class name" value="${classData.name || ''}" required>
                     </div>
                     <div class="mb-3">
                         <label for="class_stage_${classCount}" class="form-label">Grade</label>
@@ -177,37 +185,39 @@
                 });
             }
 
+            // Filter available stages based on the selected ones
+            function getFilteredStages(selectedStages) {
+                return allStages.filter(stage => selectedStages.includes(stage.id));
+            }
+
             // Event listener for Grades selection change
             $('#stage_id').on('change', function() {
-                const selectedStages = $('#stage_id').select2('data'); // Get selected stages
-                if (selectedStages.length > 0) {
-                    // Enable Add Class button if stages are selected
-                    addClassBtn.disabled = false;
-                } else {
-                    // Disable Add Class button if no stages are selected
-                    addClassBtn.disabled = true;
-                }
+                const selectedStages = $(this).val().map(id => parseInt(id)); // Get selected stage IDs
+                const filteredStages = getFilteredStages(selectedStages);
 
-                // Clear existing classes when stages are changed
-                classContainer.innerHTML = '';
+                // Enable Add Class button if stages are selected
+                addClassBtn.disabled = filteredStages.length === 0;
             });
 
             // Event listener to add a new class group
             addClassBtn.addEventListener('click', function() {
-                const selectedStages = $('#stage_id').select2('data');
+                const selectedStages = $('#stage_id').val().map(id => parseInt(id));
                 if (selectedStages.length > 0) {
-                    // Extract both text and id for each selected stage
-                    const formattedStages = selectedStages.map(stage => ({
-                        id: stage.id,
-                        text: stage.text
-                    }));
-                    addClassField(formattedStages);
+                    const filteredStages = getFilteredStages(selectedStages);
+                    addClassField(filteredStages);
                 }
             });
-        });
 
-        document.getElementById('city').addEventListener('input', function (event) {
-            this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+            document.getElementById('city').addEventListener('input', function(event) {
+                this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+            });
+
+            // Load existing classes into the view
+            const existingClasses = @json($classes);
+            existingClasses.forEach((classData, index) => {
+                const filteredStages = getFilteredStages([classData.stage_id]);
+                addClassField(filteredStages, classData);
+            });
         });
     </script>
 @endsection
