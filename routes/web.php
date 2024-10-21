@@ -104,6 +104,8 @@ Route::prefix('admin')->group(function () {
             ->name('admin.schools.stages');
         Route::get('/admin/schools/{school}/stages/{stage}/classes', [StudentController::class, 'getClasses'])->name('admin.schools.stages.classes');
 
+
+
         Route::get('/api/schools/{school}/classes', function (School $school) {
             return response()->json($school->classes);
         })->name('admin.schools.classes');

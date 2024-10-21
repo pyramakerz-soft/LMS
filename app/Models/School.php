@@ -26,7 +26,7 @@ class School extends Model
 
     public function stages()
     {
-        return $this->belongsToMany(Stage::class, 'school_stage');
+        return $this->belongsToMany(Stage::class, 'school_stage', 'school_id', 'stage_id');
     }
 
     public function lessons()
@@ -57,14 +57,14 @@ class School extends Model
     {
         return $this->hasMany(Group::class);
     }
-    
+
     public function type()
     {
         return $this->belongsTo(Type::class, 'type_id');
     }
-     public function getImageAttribute($val)
+    public function getImageAttribute($val)
     {
-        return ($val !== null) ? asset( $val) : "";
+        return ($val !== null) ? asset($val) : "";
     }
 
 

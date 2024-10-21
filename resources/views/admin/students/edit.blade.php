@@ -67,6 +67,7 @@
                             </select>
                         </div>
 
+
                         <!-- Image Upload -->
                         <div class="mb-3">
                             <label for="image" class="form-label">Profile Image</label>
@@ -91,17 +92,23 @@
 @section('page_js')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            let schoolSelect = document.getElementById('school_id');
-            let stageSelect = document.getElementById('stage_id');
-            let classSelect = document.getElementById('class_id');
-            let selectedStageId = stageSelect.dataset.selectedStage;
-            let selectedClassId = classSelect.dataset.selectedClass;
-            document.getElementById('school_id').addEventListener('change', function() {
-                let schoolId = this.value;
-                let stageSelect = document.getElementById('stage_id');
-                let classSelect = document.getElementById('class_id');
+            const schoolSelect = document.getElementById('school_id');
+            const stageSelect = document.getElementById('stage_id');
+            const classSelect = document.getElementById('class_id');
+            const selectedStageId = stageSelect.dataset.selectedStage;
+            const selectedClassId = classSelect.dataset.selectedClass;
 
-                // Clear the stage and class dropdowns
+            // Load stages and classes if school and stage are pre-selected
+            if (schoolSelect.value) {
+                fetchStages(schoolSelect.value, selectedStageId);
+            }
+            if (schoolSelect.value && selectedStageId) {
+                fetchClasses(schoolSelect.value, selectedStageId, selectedClassId);
+            }
+
+            // Event listener for school change
+            schoolSelect.addEventListener('change', function() {
+                const schoolId = this.value;
                 clearSelect(stageSelect);
                 clearSelect(classSelect);
 
@@ -109,96 +116,57 @@
                     fetchStages(schoolId);
                 }
             });
-            // Load stages if a school is already selected
-            if (schoolSelect.value) {
-                fetchStages(schoolSelect.value, selectedStageId);
-            }
 
-            // Load classes if both school and stage are already selected
-            if (schoolSelect.value && selectedStageId) {
-                fetchClasses(schoolSelect.value, selectedStageId, selectedClassId);
-            }
+            // Event listener for stage change
+            stageSelect.addEventListener('change', function() {
+                const schoolId = schoolSelect.value;
+                const stageId = this.value;
+                clearSelect(classSelect);
 
-            function fetchStages(schoolId) {
+                if (schoolId && stageId) {
+                    fetchClasses(schoolId, stageId);
+                }
+            });
+
+            // Fetch stages for the selected school
+            function fetchStages(schoolId, selectedStage = null) {
                 fetch(`{{ route('admin.schools.stages', ':school') }}`.replace(':school', schoolId))
                     .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`Error fetching stages: ${response.statusText}`);
-                        }
+                        if (!response.ok) throw new Error(`Error fetching stages: ${response.statusText}`);
                         return response.json();
                     })
                     .then(data => {
-                        let stageSelect = document.getElementById('stage_id');
-                        clearSelect(stageSelect);
                         data.forEach(stage => {
-                            let option = document.createElement('option');
-                            option.value = stage.id;
-                            option.textContent = stage.name;
-                            stageSelect.appendChild(option);
+                            const option = new Option(stage.name, stage.id);
+                            if (selectedStage && stage.id == selectedStage) option.selected = true;
+                            stageSelect.add(option);
                         });
                     })
                     .catch(error => console.error('Fetch error:', error));
             }
 
-            function clearSelect(selectElement) {
-                selectElement.innerHTML = '<option value="" selected disabled hidden>Select</option>';
-            }
-
-            // Event listener when school changes
-            schoolSelect.addEventListener('change', function() {
-                fetchStages(this.value);
-                clearSelect(stageSelect);
-                clearSelect(classSelect);
-            });
-
-            // Event listener when stage changes
-            stageSelect.addEventListener('change', function() {
-                let schoolId = schoolSelect.value;
-                fetchClasses(schoolId, this.value);
-                clearSelect(classSelect);
-            });
-
-            // Helper to clear select options
-            function clearSelect(selectElement) {
-                selectElement.innerHTML = '<option value="" selected disabled hidden>Select</option>';
-            }
-
-            // Fetch and populate stages
-            function fetchStages(schoolId, selectedStage = null) {
-                fetch(`{{ route('admin.schools.stages', ':school') }}`.replace(':school', schoolId))
-                    .then(response => response.json())
-                    .then(data => {
-                        clearSelect(stageSelect);
-                        data.forEach(stage => {
-                            let option = document.createElement('option');
-                            option.value = stage.id;
-                            option.textContent = stage.name;
-                            if (selectedStage && stage.id == selectedStage) {
-                                option.selected = true;
-                            }
-                            stageSelect.appendChild(option);
-                        });
-                    });
-            }
-
-            // Fetch and populate classes
+            // Fetch classes for the selected school and stage
             function fetchClasses(schoolId, stageId, selectedClass = null) {
                 fetch(`{{ route('admin.schools.stages.classes', [':school', ':stage']) }}`
                         .replace(':school', schoolId)
                         .replace(':stage', stageId))
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) throw new Error(`Error fetching classes: ${response.statusText}`);
+                        return response.json();
+                    })
                     .then(data => {
-                        clearSelect(classSelect);
                         data.forEach(cls => {
-                            let option = document.createElement('option');
-                            option.value = cls.id;
-                            option.textContent = cls.name;
-                            if (selectedClass && cls.id == selectedClass) {
-                                option.selected = true;
-                            }
-                            classSelect.appendChild(option);
+                            const option = new Option(cls.name, cls.id);
+                            if (selectedClass && cls.id == selectedClass) option.selected = true;
+                            classSelect.add(option);
                         });
-                    });
+                    })
+                    .catch(error => console.error('Fetch error:', error));
+            }
+
+            // Helper function to clear dropdowns
+            function clearSelect(selectElement) {
+                selectElement.innerHTML = '<option value="" selected disabled hidden>Select</option>';
             }
         });
     </script>

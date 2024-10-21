@@ -164,9 +164,7 @@ class StudentController extends Controller
     {
         try {
             $school = School::findOrFail($schoolId);
-
             $stages = $school->stages()->get(['id', 'name']);
-
             return response()->json($stages);
         } catch (\Exception $e) {
             \Log::error('Error fetching stages: ' . $e->getMessage());
