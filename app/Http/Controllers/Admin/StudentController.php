@@ -52,6 +52,10 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
+        $request->merge([
+            'username' => str_replace(' ', '_', $request->input('username'))
+        ]);
+
         $request->validate([
             'username' => [
                 'required',
@@ -65,17 +69,15 @@ class StudentController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $username = str_replace(' ', '_', $request->input('username'));
-
         $password = Str::random(8);
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('students', 'public'); // Save the image to 'storage/app/public/students'
+            $imagePath = $request->file('image')->store('students', 'public');
         }
 
         Student::create([
-            'username' => $username,
+            'username' => $request->input('username'),
             'password' => Hash::make($password),
             'plain_password' => $password,
             'gender' => $request->input('gender'),
@@ -88,6 +90,7 @@ class StudentController extends Controller
 
         return redirect()->route('students.index')->with('success', 'Student created successfully.');
     }
+
 
     /**
      * Display the specified resource.
