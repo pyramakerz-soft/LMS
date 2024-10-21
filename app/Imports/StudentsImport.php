@@ -34,7 +34,7 @@ class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
     public function model(array $row)
     {
         // Skip the row if 'username' or 'gender' is missing
-        if (empty($row['username']) || empty($row['gender'])) {
+        if (empty($row['username']) ) {
             return null;
         }
 
