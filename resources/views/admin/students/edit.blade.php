@@ -103,34 +103,42 @@
     <script>
         document.getElementById('school_id').addEventListener('change', function() {
             let schoolId = this.value;
+            let stageSelect = document.getElementById('stage_id');
+            let classSelect = document.getElementById('class_id');
+
+            // Reset both the stage and class dropdowns
+            stageSelect.innerHTML = '<option value="" selected disabled hidden>Select Stage</option>';
+            classSelect.innerHTML = '<option value="" selected disabled hidden>Select Class</option>';
+
             if (schoolId) {
                 fetch(`{{ route('admin.schools.stages', ':school') }}`.replace(':school', schoolId))
                     .then(response => response.json())
                     .then(data => {
-                        let stageSelect = document.getElementById('stage_id');
                         data.forEach(stage => {
                             stageSelect.innerHTML +=
                                 `<option value="${stage.id}">${stage.name}</option>`;
                         });
                     });
-            } else {
-                document.getElementById('stage_id').innerHTML = '<option value="">Select Stage</option>';
             }
         });
 
         document.getElementById('stage_id').addEventListener('change', function() {
+            let schoolId = document.getElementById('school_id').value;
             let stageId = this.value;
-            if (stageId) {
-                fetch(`{{ route('admin.stages.classes', ':stage') }}`.replace(':stage', stageId))
+            let classSelect = document.getElementById('class_id');
+
+            classSelect.innerHTML = '<option value="" selected disabled hidden>Select Class</option>';
+
+            if (schoolId && stageId) {
+                fetch(`{{ route('admin.schools.stages.classes', [':school', ':stage']) }}`
+                        .replace(':school', schoolId)
+                        .replace(':stage', stageId))
                     .then(response => response.json())
                     .then(data => {
-                        let classSelect = document.getElementById('class_id');
                         data.forEach(cls => {
                             classSelect.innerHTML += `<option value="${cls.id}">${cls.name}</option>`;
                         });
                     });
-            } else {
-                document.getElementById('class_id').innerHTML = '<option value="">Select Class</option>';
             }
         });
     </script>

@@ -139,7 +139,7 @@
             // Check if the current input matches the allowed pattern
             if (!regex.test(inputField.value)) {
                 inputField.classList.add('is-invalid');
-                invalidFeedback.style.display = 'block'; // Show error message
+                invalidFeedback.style.display = 'block'; 
             } else {
                 inputField.classList.remove('is-invalid');
                 invalidFeedback.style.display = 'none'; // Hide error message
