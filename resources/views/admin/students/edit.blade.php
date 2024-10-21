@@ -96,7 +96,19 @@
             let classSelect = document.getElementById('class_id');
             let selectedStageId = stageSelect.dataset.selectedStage;
             let selectedClassId = classSelect.dataset.selectedClass;
+            document.getElementById('school_id').addEventListener('change', function() {
+                let schoolId = this.value;
+                let stageSelect = document.getElementById('stage_id');
+                let classSelect = document.getElementById('class_id');
 
+                // Clear the stage and class dropdowns
+                clearSelect(stageSelect);
+                clearSelect(classSelect);
+
+                if (schoolId) {
+                    fetchStages(schoolId);
+                }
+            });
             // Load stages if a school is already selected
             if (schoolSelect.value) {
                 fetchStages(schoolSelect.value, selectedStageId);
@@ -105,6 +117,24 @@
             // Load classes if both school and stage are already selected
             if (schoolSelect.value && selectedStageId) {
                 fetchClasses(schoolSelect.value, selectedStageId, selectedClassId);
+            }
+
+            function clearSelect(selectElement) {
+                selectElement.innerHTML = '<option value="" selected disabled hidden>Select</option>';
+            }
+
+            function fetchStages(schoolId) {
+                fetch(`{{ route('admin.schools.stages', ':school') }}`.replace(':school', schoolId))
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(stage => {
+                            let option = document.createElement('option');
+                            option.value = stage.id;
+                            option.textContent = stage.name;
+                            document.getElementById('stage_id').appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching stages:', error));
             }
 
             // Event listener when school changes

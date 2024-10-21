@@ -162,7 +162,9 @@ class StudentController extends Controller
 
     public function getStages($schoolId)
     {
-        $stages = Stage::where('school_id', $schoolId)->get(['id', 'name']);
+        // Assuming 'stages' relationship exists in the School model
+        $stages = School::findOrFail($schoolId)->stages()->get(['id', 'name']);
+
         return response()->json($stages);
     }
 
