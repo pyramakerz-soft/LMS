@@ -66,6 +66,10 @@ class TeacherDashboardController extends Controller
     }
     public function changeName()
     {
+        $validatedData = request()->validate([
+            'username' => 'required|string|min:1', 
+        ]);
+        
         $teacher = Auth::guard('teacher')->user();
         $teacher->username = request()->username;
         $teacher->save();

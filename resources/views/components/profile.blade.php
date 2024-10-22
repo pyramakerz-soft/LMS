@@ -42,7 +42,7 @@
                 Edit Name
             </h3>
             <div class="flex justify-end">
-                <button onclick="closeModal('editName')"
+                <button onclick="closeModal('editName')" type="button"
                     class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
             </div>
         </div>
@@ -50,8 +50,9 @@
         <div class="px-3 mb-3">
             <div class="rounded-2xl bg-[#F6F6F6] text-start px-4 md:px-6 py-3 md:py-4 my-4 md:my-5">
                 <p class="font-semibold text-base md:text-lg text-[#1C1C1E]">UserName</p>
-                <input placeholder="Change Your Name" name="username"
-                    class="w-full rounded-2xl p-2 md:p-4 mt-5 text-sm md:text-base">
+                <input placeholder="Change Your Name" name="username" required
+                    class="w-full rounded-2xl p-2 md:p-4 mt-5 text-sm md:text-base"
+                    value="{{ Auth()->user()->username }}">
             </div>
 
             <button class="bg-[#17253E] font-bold text-base md:text-lg text-white rounded-2xl py-3 px-4 md:px-7"
