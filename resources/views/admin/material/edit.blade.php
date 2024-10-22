@@ -9,7 +9,7 @@
 
             <main class="content">
                 <div class="container-fluid p-0">
-                    <h1>Edit Material</h1>
+                    <h1>Edit theme</h1>
 
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -46,7 +46,8 @@
                             <label for="image" class="form-label">Image</label>
                             <input type="file" name="image" class="form-control" id="image" accept="image/*">
                             @if ($material->image)
-                                <p>Current Image: <img class="my-3" src="{{ asset( $material->image) }}" width="100"></p>
+                                <p>Current Image: <img class="my-3" src="{{ asset($material->image) }}" width="100">
+                                </p>
                             @endif
                         </div>
 
@@ -56,12 +57,12 @@
                             <label class="form-check-label" for="is_active">Active</label>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Update Material</button>
+                        <button type="submit" class="btn btn-primary">Update theme</button>
                     </form>
                 </div>
             </main>
 
-             
+
         </div>
     </div>
 @endsection

@@ -17,7 +17,7 @@
 
 @section('content')
     @include('components.profile')
-    
+
     <div class="p-3">
         <div class="flex justify-between items-center px-5 my-8">
             <div class="text-[#667085]">
@@ -39,8 +39,8 @@
                         <tr>
                             <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Title</th>
                             <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Description</th>
-                            <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Due Date</th>
                             <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Start Date</th>
+                            <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Due Date</th>
                             <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Marks</th>
                             <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Lesson</th>
                             <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">School</th>
@@ -59,8 +59,8 @@
                                     class="border-t border-gray-300 {{ $loop->index % 2 === 0 ? 'bg-[#F4F4F4]' : 'bg-white' }}">
                                     <td class="py-5 px-6">{{ $row['title'] }}</td>
                                     <td class="py-5 px-6">{{ $row['description'] }}</td>
-                                    <td class="py-5 px-6">{{ $row['due_date'] }}</td>
                                     <td class="py-5 px-6">{{ $row['start_date'] }}</td>
+                                    <td class="py-5 px-6">{{ $row['due_date'] }}</td>
                                     <td class="py-5 px-6">{{ $row['marks'] }}</td>
                                     <td class="py-5 px-6">{{ $row['lesson']['title'] ?? 'N/A' }}</td>
                                     <td class="py-5 px-6">{{ $row['school']['name'] ?? 'N/A' }}</td>

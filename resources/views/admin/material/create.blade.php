@@ -9,7 +9,7 @@
 
             <main class="content">
                 <div class="container-fluid p-0">
-                    <h1>Create Material</h1>
+                    <h1>Create theme</h1>
 
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -49,13 +49,13 @@
                             <label class="form-check-label" for="is_active">Active</label>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Create Material</button>
+                        <button type="submit" class="btn btn-primary">Create theme</button>
                     </form>
 
                 </div>
             </main>
 
-             
+
         </div>
     </div>
 @endsection

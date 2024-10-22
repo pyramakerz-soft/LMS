@@ -20,8 +20,8 @@
     <div class="p-3 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
         <span class="mx-2 text-[#D0D5DD]">/</span>
-        <a href="{{ route('teacher_classes') }}" class="mx-2 cursor-pointer">Classes</a>
-        <span class="mx-2 text-[#D0D5DD]">/</span>
+        {{-- <a href="{{ route('teacher_classes', $id) }}" class="mx-2 cursor-pointer">Classes</a> --}}
+        {{-- <span class="mx-2 text-[#D0D5DD]">/</span> --}}
         <a href="#" class="mx-2 cursor-pointer">Class Assessments</a>
     </div>
 
@@ -87,6 +87,7 @@
                                     $cb_score = $s->studentAssessment
                                         ->whereNotNull('classroom_behavior_score')
                                         ->sum('classroom_behavior_score');
+
                                     $cb_avg = $countclassroom_behavior_score
                                         ? min(10, intval($cb_score / $countclassroom_behavior_score))
                                         : 0;
@@ -149,7 +150,7 @@
                                     if ($isSameWeek) {
                                         $last_att_score = $studentDegree->attendance_score;
                                         $last_cp_score = $studentDegree->classroom_participation_score;
-                                        $last_cb_score = $studentDegree->classroom_behavior_scoree;
+                                        $last_cb_score = $studentDegree->classroom_behavior_score;
                                         $last_hw_score = $studentDegree->homework_score;
                                         $last_final_score = $studentDegree->final_project_score;
                                         break;
@@ -171,34 +172,38 @@
                                 <td class="py-5 px-6">
                                     <div
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                        <input class="w-[40px] assessment-input" type="number" max="20" min="0"
-                                            name="classroom_participation_score" data-student-id="{{ $s->id }}"
-                                            value="{{ $last_cp_score ?? null }}" oninput="filterNumericInput(event)">
+                                        <input class="w-[40px] assessment-input" type="number" max="20"
+                                            min="0" name="classroom_participation_score"
+                                            data-student-id="{{ $s->id }}" value="{{ $last_cp_score ?? null }}"
+                                            oninput="filterNumericInput(event)">
                                         <p>/20 </p>
                                     </div>
                                 </td>
                                 <td class="py-5 px-6">
                                     <div
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                        <input class="w-[40px] assessment-input" type="number" max="20" min="0"
-                                            name="classroom_behavior_score" data-student-id="{{ $s->id }}"
-                                            value="{{ $last_cb_score ?? null }}" oninput="filterNumericInput(event)">
+                                        <input class="w-[40px] assessment-input" type="number" max="20"
+                                            min="0" name="classroom_behavior_score"
+                                            data-student-id="{{ $s->id }}" value="{{ $last_cb_score ?? null }}"
+                                            oninput="filterNumericInput(event)">
                                         <p>/20 </p>
                                     </div>
                                 </td>
                                 <td class="py-5 px-6">
                                     <div
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                        <input class="w-[40px] assessment-input" type="number" name="homework_score" max="10" min="0"
-                                            data-student-id="{{ $s->id }}" value="{{ $last_hw_score ?? null }}" oninput="filterNumericInput(event)">
+                                        <input class="w-[40px] assessment-input" type="number" name="homework_score"
+                                            max="10" min="0" data-student-id="{{ $s->id }}"
+                                            value="{{ $last_hw_score ?? null }}" oninput="filterNumericInput(event)">
                                         <p>/10 </p>
                                     </div>
                                 </td>
                                 <td class="py-5 px-6">
                                     <div
                                         class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
-                                        <input class="w-[40px] assessment-input" type="number" name="final_project_score" max="50" min="0"
-                                            data-student-id="{{ $s->id }}" value="{{ $last_final_score ?? null }}" oninput="filterNumericInput(event)">
+                                        <input class="w-[40px] assessment-input" type="number" name="final_project_score"
+                                            max="50" min="0" data-student-id="{{ $s->id }}"
+                                            value="{{ $last_final_score ?? null }}" oninput="filterNumericInput(event)">
                                         <p>/50 </p>
                                     </div>
                                 </td>
@@ -304,7 +309,7 @@
             input.value = input.value.replace(/[^0-9.]/g, '');
 
             if (input.value.split('.').length > 2) {
-                input.value = previousValue; 
+                input.value = previousValue;
             }
         }
     </script>

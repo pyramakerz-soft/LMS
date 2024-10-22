@@ -22,7 +22,7 @@
 
                         <!-- School Name -->
                         <div class="mb-3">
-                            <label for="name" class="form-label">Schools Name</label>
+                            <label for="name" class="form-label">School Name</label>
                             <input type="text" name="name" class="form-control" value="{{ $school->name }}" required>
                         </div>
 

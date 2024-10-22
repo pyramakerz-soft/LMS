@@ -14,17 +14,34 @@ class TeacherClasses extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($stage_id)
     {
+        // $userAuth = auth()->guard('teacher')->user();
+        // if ($userAuth) {
+        //     $classesTeachers = TeacherClass::where('teacher_id', $userAuth->id)->get();
+
+
+        //     return view('pages.teacher.Class.index', compact('classesTeachers', "userAuth"));
+        // } else {
+        //     return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+        // }
+
+
         $userAuth = auth()->guard('teacher')->user();
-        if ($userAuth) {
-            $classesTeachers = TeacherClass::where('teacher_id', $userAuth->id)->get();
 
-
-            return view('pages.teacher.Class.index', compact('classesTeachers', "userAuth"));
-        } else {
+        if (!$userAuth) {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
+
+        $classesTeachers = TeacherClass::where('teacher_id', $userAuth->id)
+            ->whereHas('class', function ($query) use ($stage_id) {
+                $query->where('stage_id', $stage_id);
+            })
+            ->with('class')
+            ->get();
+
+        return view('pages.teacher.Class.index', compact('classesTeachers', 'userAuth'));
+
     }
     public function students(string $class_id)
     {
@@ -33,8 +50,6 @@ class TeacherClasses extends Controller
         if (!$userAuth) {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
-        // dd( TeacherClass::with('students')->where('class_id', $class_id)->with('student_assessments')->get());
-        // Find the class assigned to this teacher
         $class = TeacherClass::with(['students.studentAssessment'])
             ->where('class_id', $class_id)
             ->where('teacher_id', $userAuth->id)
@@ -43,17 +58,11 @@ class TeacherClasses extends Controller
             return redirect()->route('teacher_classes')->withErrors(['error' => 'Class not found or unauthorized access.']);
         }
 
-        //  dd($class->pluck('students')->toArray());
-        // dd($class->toArray() ,$class->pluck('students')->toArray());  
 
-        // Get all students in the class
         $students = $class->pluck('students');
         $numberOfWeeks = 8;
         $weeks = range(1, $numberOfWeeks);
 
-        // dd($students);
-        // Pass the students, weeks, and class to the view
-        // return view('pages.teacher.Class.students', compact('students', 'class', 'weeks'));
 
         return view('components.GradesTable', compact('students', 'class', 'weeks'));
     }
@@ -77,11 +86,11 @@ class TeacherClasses extends Controller
 
     //     // Fetch or create the assessment for the student for the given week
     //     // dd(Carbon::parse(date('Y-m-d')));
-        // $assessment = Student_assessment::where([
-        //     'student_id' => $request->student_id,
-        //     'teacher_id' => auth()->guard('teacher')->id(),
-        //     // 'week' => $request->week,
-        // ])->whereBetween('created_at', [Carbon::parse(date('Y-m-d'))->startOfDay(), Carbon::parse(date('Y-m-d'))->end])->first();
+    // $assessment = Student_assessment::where([
+    //     'student_id' => $request->student_id,
+    //     'teacher_id' => auth()->guard('teacher')->id(),
+    //     // 'week' => $request->week,
+    // ])->whereBetween('created_at', [Carbon::parse(date('Y-m-d'))->startOfDay(), Carbon::parse(date('Y-m-d'))->end])->first();
     //     if (!$assessment) {
     //         $assessment = Student_assessment::where([
     //             'student_id' => $request->student_id,
@@ -143,7 +152,7 @@ class TeacherClasses extends Controller
         $assessment = Student_assessment::where([
             'student_id' => $request->student_id,
             'teacher_id' => $teacherId
-        ])->whereBetween('created_at',values: [Carbon::parse(now())->startOfWeek(),Carbon::parse(now())->endOfWeek()])->first();
+        ])->whereBetween('created_at', values: [Carbon::parse(now())->startOfWeek(), Carbon::parse(now())->endOfWeek()])->first();
 
         if (!$assessment) {
             // Create a new assessment for the week if none exists
@@ -164,8 +173,8 @@ class TeacherClasses extends Controller
         // }
 // dd($request->all());
 // Save the assessment record (create or update)
-$assessment->save();
-// dd($assessment);
+        $assessment->save();
+        // dd($assessment);
 // dd($assessment);
         return response()->json(['success' => true, 'message' => 'Assessment saved successfully.']);
     }

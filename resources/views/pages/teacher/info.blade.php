@@ -5,9 +5,7 @@
 @endsection
 
 @php
-    $menuItems = [
-        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
-    ];
+    $menuItems = [['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')]];
 @endphp
 
 @section('sidebar')
@@ -27,39 +25,39 @@
 
     <!-- Display Stages -->
     <div class="flex flex-wrap p-3">
-            <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
-                <div class=" bg-white  ">
-                    <!-- Make the stage card a link -->
-                    <a href="{{ route('teacher.showMaterials' ,$id) }}" class="block h-full">
-                        
-                        <!-- Stage Image -->
-                        <div class="p-4">
-                            <img src="{{ asset('assets/img/teacherInfo1.png') }}"
-                            alt="" class="object-cover w-full h-45 rounded-md">
-                        </div>
+        <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
+            <div class=" bg-white  ">
+                <!-- Make the stage card a link -->
+                <a href="{{ route('teacher.showMaterials', $id) }}" class="block h-full">
 
-                        <h3 class="px-4 py-2 text-lg font-bold">Materials</h3>
-                    </a>
-                </div>
+                    <!-- Stage Image -->
+                    <div class="p-4">
+                        <img src="{{ asset('assets/img/teacherInfo1.png') }}" alt=""
+                            class="object-cover w-full h-45 rounded-md">
+                    </div>
+
+                    <h3 class="px-4 py-2 text-lg font-bold">Materials</h3>
+                </a>
             </div>
-            <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
-                <div class=" bg-white  ">
-                    <!-- Make the stage card a link -->
-                    <a href="{{route('assignments.index')}}" class="block h-full">
-                        
-                        <!-- Stage Image -->
-                        <div class="p-4">
-                            <img src="{{ asset('assets/img/teacherInfo2.png') }}"
-                            alt="" class="object-cover w-full h-45 rounded-md">
-                        </div>
-                        <h3 class="px-4 py-2 text-lg font-bold">Assignments</h3>
-                    </a>
-                </div>
+        </div>
+        <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
+            <div class=" bg-white  ">
+                <!-- Make the stage card a link -->
+                <a href="{{ route('assignments.index') }}" class="block h-full">
+
+                    <!-- Stage Image -->
+                    <div class="p-4">
+                        <img src="{{ asset('assets/img/teacherInfo2.png') }}" alt=""
+                            class="object-cover w-full h-45 rounded-md">
+                    </div>
+                    <h3 class="px-4 py-2 text-lg font-bold">Assignments</h3>
+                </a>
             </div>
-            <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
-                <div class=" bg-white  ">
-                    <!-- Make the stage card a link -->
-                    <a href="{{route('teacher_classes')}}" class="block h-full">
+        </div>
+        <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
+            <div class=" bg-white  ">
+                <!-- Make the stage card a link -->
+                {{-- <a href="{{route('teacher_classes')}}" class="block h-full">
                         
                         <!-- Stage Image -->
                         <div class="p-4">
@@ -67,8 +65,15 @@
                             alt="" class="object-cover w-full h-45 rounded-md">
                         </div>
                         <h3 class="px-4 py-2 text-lg font-bold">Assessments</h3>
-                    </a>
-                </div>
+                    </a> --}}
+                <a href="{{ route('teacher_classes', $id) }}" class="block h-full">
+                    <div class="p-4">
+                        <img src="{{ asset('assets/img/teacherInfo3.png') }}" alt=""
+                            class="object-cover w-full h-45 rounded-md">
+                    </div>
+                    <h3 class="px-4 py-2 text-lg font-bold">Assessments</h3>
+                </a>
             </div>
+        </div>
     </div>
 @endsection

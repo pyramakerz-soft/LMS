@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\StudentsExport;
 use App\Http\Controllers\Controller;
 use App\Imports\StudentsImport;
 use App\Models\Group;
@@ -154,5 +155,12 @@ class ClassController extends Controller
         } catch (\Exception $e) {
             return back()->withErrors(['file' => 'Import error: ' . $e->getMessage()]);
         }
+    }
+    public function exportStudents($id)
+    {
+        $class = Group::findOrFail($id);
+        $fileName = 'students_' . $class->name . '.xlsx';
+
+        return Excel::download(new StudentsExport($id), $fileName);
     }
 }

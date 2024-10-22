@@ -85,6 +85,8 @@ Route::prefix('admin')->group(function () {
         // Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
         Route::get('classes/{id}/import', [ClassController::class, 'showImportForm'])->name('classes.import');
         Route::post('classes/{id}/import', [ClassController::class, 'importStudents'])->name('classes.importStudents');
+        Route::get('classes/{id}/export', [ClassController::class, 'exportStudents'])->name('classes.export');
+
 
         Route::post('teachers/generate', [TeacherController::class, 'generate'])->name('teachers.generate');
 
@@ -163,7 +165,10 @@ Route::get('/create_lesson', function () {
 
 Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::resource('assessments', StudentAssessmentController::class);
-    Route::get('teacher_classes', [TeacherClasses::class, 'index'])->name('teacher_classes');
+    // Route::get('teacher_classes', [TeacherClasses::class, 'index'])->name('teacher_classes');
+
+    Route::get('/teacher/classes/{stage_id}', [TeacherClasses::class, 'index'])->name('teacher_classes');
+
     Route::get('students_classess/{class_id}', [TeacherClasses::class, 'students'])->name('students_classess');
     Route::post('store-assessment', [TeacherClasses::class, 'storeAssessment'])->name('teacher.storeAssessment');
     Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
@@ -206,7 +211,6 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
         return view('pages.teacher.teacherTheme');
     })->name('teacher.TTheme');
 
-    // Example route to show units for a material (adapt as needed)
 });
 
 Route::get('/create_assignment', function () {
