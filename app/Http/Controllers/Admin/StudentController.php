@@ -9,6 +9,7 @@ use App\Models\Student;
 use App\Models\Group;
 use App\Models\StudentClass;
 use Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Str;
 
@@ -50,6 +51,7 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(Request $request)
     {
         $request->merge([
@@ -59,8 +61,11 @@ class StudentController extends Controller
         $request->validate([
             'username' => [
                 'required',
-                'unique:students',
                 'regex:/^[a-zA-Z][a-zA-Z0-9_]*$/',
+                Rule::unique('students')->where(function ($query) use ($request) {
+                    return $query->where('school_id', $request->input('school_id'))
+                        ->where('stage_id', $request->input('stage_id'));
+                }),
             ],
             'gender' => 'required',
             'school_id' => 'required|exists:schools,id',
@@ -71,10 +76,9 @@ class StudentController extends Controller
 
         $password = Str::random(8);
 
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('students', 'public');
-        }
+        $imagePath = $request->hasFile('image')
+            ? $request->file('image')->store('students', 'public')
+            : null;
 
         Student::create([
             'username' => $request->input('username'),
@@ -90,6 +94,7 @@ class StudentController extends Controller
 
         return redirect()->route('students.index')->with('success', 'Student created successfully.');
     }
+
 
 
     /**
@@ -120,11 +125,18 @@ class StudentController extends Controller
     {
         $student = Student::findOrFail($id);
 
+        $request->merge([
+            'username' => str_replace(' ', '_', $request->input('username'))
+        ]);
+
         $request->validate([
             'username' => [
                 'required',
-                'unique:students,username,' . $student->id,
-                'regex:/^[a-zA-Z][a-zA-Z0-9_]*$/', // Ensures username starts with a letter and contains only letters, numbers, and underscores
+                'regex:/^[a-zA-Z][a-zA-Z0-9_]*$/',
+                Rule::unique('students')->where(function ($query) use ($request) {
+                    return $query->where('school_id', $request->input('school_id'))
+                        ->where('stage_id', $request->input('stage_id'));
+                })->ignore($student->id), // Ignore the current student for updates
             ],
             'gender' => 'required',
             'school_id' => 'required|exists:schools,id',
@@ -133,15 +145,12 @@ class StudentController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $username = str_replace(' ', '_', $request->input('username'));
-
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('students', 'public');
-            $student->image = $imagePath;
+            $student->image = $request->file('image')->store('students', 'public');
         }
 
         $student->update([
-            'username' => $username,
+            'username' => $request->input('username'),
             'gender' => $request->input('gender'),
             'school_id' => $request->input('school_id'),
             'stage_id' => $request->input('stage_id'),

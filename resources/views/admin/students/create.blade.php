@@ -128,21 +128,16 @@
 
         document.getElementById('username').addEventListener('input', function(event) {
             const inputField = event.target;
-            const invalidFeedback = inputField.nextElementSibling; // Target the invalid-feedback div
+            const invalidFeedback = inputField.nextElementSibling;
 
-            // Regular expression to allow only letters and spaces
-            const regex = /^[a-zA-Z\s]*$/;
+            const regex = /^[a-zA-Z][a-zA-Z0-9\s]*$/;
 
-            // Remove invalid characters immediately
-            inputField.value = inputField.value.replace(/[^a-zA-Z\s]/g, '');
-
-            // Check if the current input matches the allowed pattern
             if (!regex.test(inputField.value)) {
                 inputField.classList.add('is-invalid');
-                invalidFeedback.style.display = 'block'; 
+                invalidFeedback.style.display = 'block';
             } else {
                 inputField.classList.remove('is-invalid');
-                invalidFeedback.style.display = 'none'; // Hide error message
+                invalidFeedback.style.display = 'none';
             }
         });
     </script>
