@@ -145,7 +145,8 @@
     <div class="p-3">
         <div class="header-container">
             <div class="header-profile">
-                <img class="avatar" src="{{ $userAuth->image ? asset($userAuth->image) : asset('images/default_user.jpg') }}" alt="avatar">
+                <img class="avatar" src="{{ $userAuth->image ? asset($userAuth->image) : asset('images/default_user.jpg') }}"
+                    alt="avatar">
                 <div class="user-info">
                     <div class="text-xl">{{ $userAuth->username }}</div>
                     <div class="text-sm">{{ $userAuth->stage->name }}</div>
@@ -174,7 +175,8 @@
                             <span class="unit-title">{{ $unit->title }}</span>
                         </div>
                         <svg class="w-3 h-3 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6" fill="none">
-                            <path d="M9 5L5 1 1 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 5L5 1 1 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
                         </svg>
                     </button>
                 </h2>
@@ -182,8 +184,10 @@
                     <div class="chapters">
                         @foreach ($unit->chapters as $chapter)
                             <div class="chapter">
-                                <a href="{{ route('student_lessons.index', $chapter->id) }}">
-                                    <img src="{{ $chapter->image ? asset($chapter->image) : 'https://via.placeholder.com/150' }}" alt="{{ $chapter->name }}">
+                                <a
+                                    href="{{ route('student.chapters.index', ['themeId' => $material->id, 'unitId' => $unit->id]) }}">
+                                    <img src="{{ $chapter->image ? asset($chapter->image) : 'https://via.placeholder.com/150' }}"
+                                        alt="{{ $chapter->name }}">
                                     <p class="chapter-title">{{ $chapter->title }}</p>
                                 </a>
                             </div>

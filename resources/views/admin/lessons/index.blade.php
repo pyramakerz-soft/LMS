@@ -25,6 +25,7 @@
                                 <tr>
                                     <th>Title</th>
                                     <th>File</th>
+                                    <th>Theme</th>
                                     <th>Chapter</th>
                                     <th>Image</th>
                                     <th>Active</th>
@@ -36,13 +37,14 @@
                                     <tr>
                                         <td>{{ $lesson->title }}</td>
                                         <td>
-                                            <button class="btn btn-success" data-bs-toggle="modal" 
-                                                    data-bs-target="#ebookModal" 
-                                                    data-file="{{ asset($lesson->file_path) }}">
+                                            <button class="btn btn-success" data-bs-toggle="modal"
+                                                data-bs-target="#ebookModal" data-file="{{ asset($lesson->file_path) }}">
                                                 View Ebook
                                             </button>
                                         </td>
+                                        <td>{{ $lesson->chapter->material->title ?? '-' }}</td>
                                         <td>{{ $lesson->chapter->title }}</td>
+
                                         <td>
                                             @if ($lesson->image)
                                                 <img src="{{ asset($lesson->image) }}" alt="{{ $lesson->title }}"
@@ -69,7 +71,7 @@
                 </div>
             </main>
 
-             
+
         </div>
     </div>
 
@@ -83,7 +85,8 @@
                 </div>
                 <div class="position-relative modal-body" style="height: calc(100% - 60px);">
                     <embed src="" id="ebookEmbed" width="100%" height="100%" style="border: none;"></embed>
-                    <img src="{{ asset('assets/img/watermark 2.png') }}" class="position-absolute top-0 start-0 w-100 h-100" style="pointer-events: none; opacity: 0.5;">
+                    <img src="{{ asset('assets/img/watermark 2.png') }}"
+                        class="position-absolute top-0 start-0 w-100 h-100" style="pointer-events: none; opacity: 0.5;">
                 </div>
             </div>
         </div>
@@ -103,7 +106,7 @@
                 var embed = modal.find('#ebookEmbed');
 
                 console.log(file);
-                
+
                 // Set the src attribute of the embed to the eBook file path
                 embed.attr('src', file);
             });

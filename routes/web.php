@@ -126,7 +126,11 @@ Route::get('/student/dashboard', [DashboardController::class, 'index'])->middlew
 Route::get('/theme', [DashboardController::class, 'index'])->name('student.theme');
 Route::get('/materials/{materialId}/units', [ControllersUnitController::class, 'index'])->name('student_units.index');
 Route::get('/units/{unitId}/chapters', [ControllersChapterController::class, 'index'])->name('student_chapters.index');
+
 Route::get('/chapters/{chapterId}/lessons', [ControllersChapterController::class, 'showLessons'])->name('student_lessons.index');
+Route::get('/student/themes/{themeId}/units/{unitId}/chapters', [ControllersChapterController::class, 'index'])
+    ->name('student.chapters.index');
+
 Route::get('/lessons/{lessonId}/ebooks', [ControllersChapterController::class, 'viewEbooks'])->name('student_lessons.ebooks');
 
 // End student  dashboard routes
@@ -210,7 +214,6 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::get('/teacher/theme', function () {
         return view('pages.teacher.teacherTheme');
     })->name('teacher.TTheme');
-
 });
 
 Route::get('/create_assignment', function () {

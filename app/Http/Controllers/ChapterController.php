@@ -10,21 +10,25 @@ use Illuminate\Http\Request;
 
 class ChapterController extends Controller
 {
-    public function index($unitId)
+    public function index($themeId, $unitId)
     {
-
-
         $userAuth = auth()->guard('student')->user();
+
         if ($userAuth) {
-            $unit = Unit::with('chapters')->findOrFail($unitId);
+            // Fetch the unit with chapters filtered by both theme_id and unit_id
+            $unit = Unit::with(['chapters' => function ($query) use ($themeId) {
+                $query->where('material_id', $themeId);
+            }])->findOrFail($unitId);
+
             return view('pages.student.chapter.index', compact('unit', 'userAuth'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
     }
+
     public function showLessons($chapterId)
     {
-       
+
         $userAuth = auth()->guard('student')->user();
         if ($userAuth) {
             $chapter = Chapter::findOrFail($chapterId);
