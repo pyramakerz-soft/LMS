@@ -343,8 +343,11 @@ class AdminController extends Controller
                     $school->units()->attach($unit->id);
                 }
 
-                // Fetch and assign chapters related to the unit.
-                $chapters = Chapter::where('unit_id', $unit->id)->get();
+                // Fetch and assign only chapters related to the unit and material.
+                $chapters = Chapter::where('unit_id', $unit->id)
+                    ->where('material_id', $materialId) // Ensure material match
+                    ->get();
+
                 foreach ($chapters as $chapter) {
                     if (!$school->chapters()->where('chapter_id', $chapter->id)->exists()) {
                         $school->chapters()->attach($chapter->id);
@@ -363,6 +366,7 @@ class AdminController extends Controller
 
         return redirect()->route('admins.index')->with('success', 'Curriculum assigned successfully.');
     }
+
 
 
 
