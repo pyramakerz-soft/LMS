@@ -154,12 +154,12 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-   
+
 
     public function update(Request $request, $id)
     {
         $school = School::findOrFail($id);
-    
+
         $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
@@ -171,7 +171,7 @@ class AdminController extends Controller
             'classes.*.name' => 'required|string|max:255',
             'classes.*.stage_id' => 'required|exists:stages,id',
         ]);
-    
+
         $school->update([
             'name' => $request->name,
             'address' => $request->address,
@@ -179,11 +179,11 @@ class AdminController extends Controller
             'type_id' => $request->type_id,
             'is_active' => $request->is_active ?? 0,
         ]);
-    
+
         $school->stages()->sync($request->stage_id);
-    
+
         $classIds = [];
-    
+
         foreach ($request->classes as $classData) {
             if (isset($classData['id'])) {
                 $class = Group::find($classData['id']);
@@ -203,12 +203,12 @@ class AdminController extends Controller
                 $classIds[] = $newClass->id;
             }
         }
-    
+
         $school->classes()->whereNotIn('id', $classIds)->delete();
-    
+
         return redirect()->route('admins.index')->with('success', 'School updated successfully.');
     }
-    
+
 
 
     /**
@@ -255,56 +255,105 @@ class AdminController extends Controller
     public function assignCurriculum($schoolId)
     {
         $school = School::findOrFail($schoolId);
-    
+
         $stages = Stage::whereIn('id', function ($query) use ($schoolId) {
             $query->select('stage_id')
-                  ->from('school_stage')
-                  ->where('school_id', $schoolId);
-        })->get();    
+                ->from('school_stage')
+                ->where('school_id', $schoolId);
+        })->get();
 
         return view('admin.schools.curriculum', compact('school', 'stages'));
     }
 
+    // public function storeCurriculum(Request $request, $schoolId)
+    // {
+    //     $school = School::findOrFail($schoolId);
+    //     $request->validate([
+    //         'stage_id' => 'required|exists:stages,id',
+    //         'material_id' => 'required|array',
+    //         'material_id.*' => 'exists:materials,id',
+    //     ]);
+    //     $stageId = $request->stage_id;
+    //     $materialIds = $request->material_id;
+    //     $isStageAssigned = $school->stages()->wherePivot('stage_id', $stageId)->exists();
+    //     if (!$isStageAssigned) {
+    //         $school->stages()->attach($stageId);
+    //     }
+    //     foreach ($materialIds as $materialId) {
+    //         $isMaterialAssigned = $school->materials()->wherePivot('material_id', $materialId)->exists();
+
+    //         if (!$isMaterialAssigned) {
+    //             $school->materials()->attach($materialId);
+    //         }
+    //         $units = Unit::where('material_id', $materialId)->get();
+    //         foreach ($units as $unit) {
+    //             $isUnitAssigned = $school->units()->wherePivot('unit_id', $unit->id)->exists();
+    //             if (!$isUnitAssigned) {
+    //                 $school->units()->attach($unit->id);
+    //             }
+    //             $chapters = Chapter::where('unit_id', $unit->id)->get();
+    //             foreach ($chapters as $chapter) {
+    //                 $isChapterAssigned = $school->chapters()->wherePivot('chapter_id', $chapter->id)->exists();
+    //                 if (!$isChapterAssigned) {
+    //                     $school->chapters()->attach($chapter->id);
+    //                 }
+    //                 $lessons = Lesson::where('chapter_id', $chapter->id)->get();
+
+    //                 foreach ($lessons as $lesson) {
+    //                     $isLessonAssigned = $school->lessons()->wherePivot('lesson_id', $lesson->id)->exists();
+
+    //                     if (!$isLessonAssigned) {
+    //                         $school->lessons()->attach($lesson->id);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     return redirect()->route('admins.index')->with('success', 'Curriculum assigned successfully.');
+    // }
+
+
     public function storeCurriculum(Request $request, $schoolId)
     {
+        // Validate and fetch the school.
         $school = School::findOrFail($schoolId);
+
         $request->validate([
             'stage_id' => 'required|exists:stages,id',
             'material_id' => 'required|array',
             'material_id.*' => 'exists:materials,id',
         ]);
+
         $stageId = $request->stage_id;
         $materialIds = $request->material_id;
-        $isStageAssigned = $school->stages()->wherePivot('stage_id', $stageId)->exists();
-        if (!$isStageAssigned) {
+
+        // Attach the stage if not already assigned.
+        if (!$school->stages()->where('stage_id', $stageId)->exists()) {
             $school->stages()->attach($stageId);
         }
-        foreach ($materialIds as $materialId) {
-            $isMaterialAssigned = $school->materials()->wherePivot('material_id', $materialId)->exists();
 
-            if (!$isMaterialAssigned) {
-                $school->materials()->attach($materialId);
-            }
-            $units = Unit::where('material_id', $materialId)->get();
-            foreach ($units as $unit) {
-                $isUnitAssigned = $school->units()->wherePivot('unit_id', $unit->id)->exists();
-                if (!$isUnitAssigned) {
-                    $school->units()->attach($unit->id);
-                }
-                $chapters = Chapter::where('unit_id', $unit->id)->get();
-                foreach ($chapters as $chapter) {
-                    $isChapterAssigned = $school->chapters()->wherePivot('chapter_id', $chapter->id)->exists();
-                    if (!$isChapterAssigned) {
-                        $school->chapters()->attach($chapter->id);
-                    }
-                    $lessons = Lesson::where('chapter_id', $chapter->id)->get();
+        // Retrieve units and relationships for the given materials.
+        $materials = Material::with('units.chapters.lessons')
+            ->whereIn('id', $materialIds)
+            ->get();
 
-                    foreach ($lessons as $lesson) {
-                        $isLessonAssigned = $school->lessons()->wherePivot('lesson_id', $lesson->id)->exists();
+        // Loop through the materials and assign units, chapters, and lessons.
+        foreach ($materials as $material) {
+            // Attach the material if not already assigned.
+            $school->materials()->syncWithoutDetaching([$material->id]);
 
-                        if (!$isLessonAssigned) {
-                            $school->lessons()->attach($lesson->id);
-                        }
+            foreach ($material->units as $unit) {
+                // Attach the unit if not already assigned.
+                $school->units()->syncWithoutDetaching([$unit->id]);
+
+                foreach ($unit->chapters as $chapter) {
+                    // Attach the chapter if not already assigned.
+                    $school->chapters()->syncWithoutDetaching([$chapter->id]);
+
+                    foreach ($chapter->lessons as $lesson) {
+                        // Attach the lesson if not already assigned.
+                        $school->lessons()->syncWithoutDetaching([$lesson->id]);
                     }
                 }
             }
@@ -312,8 +361,6 @@ class AdminController extends Controller
 
         return redirect()->route('admins.index')->with('success', 'Curriculum assigned successfully.');
     }
-
-
 
 
 
