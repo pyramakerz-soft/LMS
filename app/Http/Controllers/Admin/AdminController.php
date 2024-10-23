@@ -316,44 +316,46 @@ class AdminController extends Controller
 
     public function storeCurriculum(Request $request, $schoolId)
     {
-        // Validate and fetch the school.
         $school = School::findOrFail($schoolId);
 
+        // Validate that stage and material IDs are provided.
         $request->validate([
             'stage_id' => 'required|exists:stages,id',
             'material_id' => 'required|array',
             'material_id.*' => 'exists:materials,id',
         ]);
 
-        $stageId = $request->stage_id;
-        $materialIds = $request->material_id;
-
-        // Attach the stage if not already assigned.
-        if (!$school->stages()->where('stage_id', $stageId)->exists()) {
-            $school->stages()->attach($stageId);
+        // Check if the stage is already assigned, if not, assign it.
+        if (!$school->stages()->where('stage_id', $request->stage_id)->exists()) {
+            $school->stages()->attach($request->stage_id);
         }
 
-        // Retrieve units and relationships for the given materials.
-        $materials = Material::with('units.chapters.lessons')
-            ->whereIn('id', $materialIds)
-            ->get();
+        foreach ($request->material_id as $materialId) {
+            // Attach material if not already assigned.
+            if (!$school->materials()->where('material_id', $materialId)->exists()) {
+                $school->materials()->attach($materialId);
+            }
 
-        // Loop through the materials and assign units, chapters, and lessons.
-        foreach ($materials as $material) {
-            // Attach the material if not already assigned.
-            $school->materials()->syncWithoutDetaching([$material->id]);
+            // Fetch and assign all units related to the material.
+            $units = Unit::where('material_id', $materialId)->get();
+            foreach ($units as $unit) {
+                if (!$school->units()->where('unit_id', $unit->id)->exists()) {
+                    $school->units()->attach($unit->id);
+                }
 
-            foreach ($material->units as $unit) {
-                // Attach the unit if not already assigned.
-                $school->units()->syncWithoutDetaching([$unit->id]);
+                // Fetch and assign chapters related to the unit.
+                $chapters = Chapter::where('unit_id', $unit->id)->get();
+                foreach ($chapters as $chapter) {
+                    if (!$school->chapters()->where('chapter_id', $chapter->id)->exists()) {
+                        $school->chapters()->attach($chapter->id);
+                    }
 
-                foreach ($unit->chapters as $chapter) {
-                    // Attach the chapter if not already assigned.
-                    $school->chapters()->syncWithoutDetaching([$chapter->id]);
-
-                    foreach ($chapter->lessons as $lesson) {
-                        // Attach the lesson if not already assigned.
-                        $school->lessons()->syncWithoutDetaching([$lesson->id]);
+                    // Fetch and assign lessons related to the chapter.
+                    $lessons = Lesson::where('chapter_id', $chapter->id)->get();
+                    foreach ($lessons as $lesson) {
+                        if (!$school->lessons()->where('lesson_id', $lesson->id)->exists()) {
+                            $school->lessons()->attach($lesson->id);
+                        }
                     }
                 }
             }
@@ -361,6 +363,7 @@ class AdminController extends Controller
 
         return redirect()->route('admins.index')->with('success', 'Curriculum assigned successfully.');
     }
+
 
 
 
