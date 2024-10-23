@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class CurriculumController extends Controller
 {
-    
+
     public function getMaterialsByStage($stageIds)
     {
         $stageIdsArray = explode(',', $stageIds);
@@ -22,14 +22,21 @@ class CurriculumController extends Controller
     public function getUnitsByMaterial($materialIds)
     {
         $materialIdsArray = explode(',', $materialIds);
-        $units = Unit::whereIn('material_id', $materialIdsArray)->get();
+        $units = Unit::with('chapters.lessons')
+            ->whereIn('material_id', $materialIdsArray)->get();
         return response()->json($units);
     }
 
-    public function getChaptersByUnit($unitIds)
+    public function getChaptersByUnit($unitIds, $materialId = null)
     {
         $unitIdsArray = explode(',', $unitIds);
-        $chapters = Chapter::whereIn('unit_id', $unitIdsArray)->get();
+
+        $chapters = Chapter::with('lessons')
+            ->whereIn('unit_id', $unitIdsArray)
+            ->when($materialId, function ($query) use ($materialId) {
+                return $query->where('material_id', $materialId);
+            })
+            ->get();
         return response()->json($chapters);
     }
 
