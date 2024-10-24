@@ -24,7 +24,7 @@
             </div>
         </div>
         <div>
-            <button onclick="openModal('editName')">
+            <button onclick="openEditModal('editName')">
                 <i class="fas fa-edit text-white text-xl"></i>
             </button>
         </div>
@@ -63,7 +63,7 @@
 </form>
 
 <script>
-    function openModal(id) {
+    function openEditModal(id) {
         document.getElementById(id).classList.remove("hidden");
     }
 
