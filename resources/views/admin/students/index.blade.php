@@ -59,18 +59,20 @@
                                                     height="50" class="rounded-circle">
                                             @else
                                                 <img src="https://w7.pngwing.com/pngs/184/113/png-transparent-user-profile-computer-icons-profile-heroes-black-silhouette-thumbnail.png"
-                                                    alt="Teacher Image" width="50" height="50" class="rounded-circle">
+                                                    alt="Teacher Image" width="50" height="50"
+                                                    class="rounded-circle">
                                             @endif
-                                            
+
                                         </td>
-                                        <td>{{ $student->username }}</td>
+                                        <td>{{ $student->username ?? '' }}</td>
                                         <td>{{ $student->plain_password }}</td>
                                         <td>{{ ucfirst($student->gender) }}</td>
-                                        <td>{{ $student->school->name }}</td>
-                                        <td>{{ $student->stage->name }}</td>
-                                        <td>{{ $student->classes->name }}</td>
+                                        <td>{{ $student->school->name ?? '' }}</td>
+                                        <td>{{ $student->stage->name ?? '' }}</td>
+                                        <td>{{ $student->classes->name ?? '' }}</td>
                                         <td class="d-flex align-items-center gap-2">
-                                            <a href="{{ route('students.edit', $student->id) }}" class="btn btn-info">Edit</a>
+                                            <a href="{{ route('students.edit', $student->id) }}"
+                                                class="btn btn-info">Edit</a>
 
                                             <!-- Delete button -->
                                             <form action="{{ route('students.destroy', $student->id) }}" method="POST"
@@ -94,7 +96,7 @@
                 {{ $students->appends(request()->input())->links('pagination::bootstrap-5') }}
 
             </main>
-             
+
         </div>
     </div>
 @endsection
