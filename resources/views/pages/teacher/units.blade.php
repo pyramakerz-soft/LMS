@@ -157,22 +157,25 @@
                         </div>
                         <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6">
                             <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                  d="M9 5L5 1 1 5" />
+                                d="M9 5L5 1 1 5" />
                         </svg>
                     </button>
                 </h2>
                 <div id="accordion-body-{{ $unit->id }}" class="accordion-body">
                     <div class="chapters">
-                        @foreach ($unit->chapters as $chapter)
+                        @forelse ($unit->chapters as $chapter)
                             <div class="chapter-card">
                                 <a href="{{ route('teacher.lessons.index', $chapter->id) }}">
-                                    <img src="{{ $chapter->image ? asset($chapter->image) : asset('images/defaultCard.webp') }}" 
-                                         alt="{{ $chapter->title }}">
+                                    <img src="{{ $chapter->image ? asset($chapter->image) : asset('images/defaultCard.webp') }}"
+                                        alt="{{ $chapter->title }}">
                                     <p class="chapter-title">{{ $chapter->title }}</p>
                                 </a>
                             </div>
-                        @endforeach
+                        @empty
+                            <p>No chapters available </p>
+                        @endforelse
                     </div>
+
                 </div>
             </div>
         @endforeach

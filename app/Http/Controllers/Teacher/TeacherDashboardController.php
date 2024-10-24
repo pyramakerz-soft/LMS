@@ -45,17 +45,26 @@ class TeacherDashboardController extends Controller
     // Fetch and display units related to the material
     public function showUnits($materialId)
     {
-        $material = Material::with('units.chapters')->findOrFail($materialId);
+        // Fetch the material and filter units and chapters correctly
+        $material = Material::with([
+            'units' => function ($unitQuery) use ($materialId) {
+                $unitQuery->with([
+                    'chapters' => function ($chapterQuery) use ($materialId) {
+                        $chapterQuery->where('material_id', $materialId);  // Filter by material_id
+                    }
+                ]);
+            }
+        ])->findOrFail($materialId);
 
         return view('pages.teacher.units', compact('material'));
     }
-    public function showChapters($unitId)
-    {
-        // Fetch unit with related chapters
-        $unit = Unit::with('chapters')->findOrFail($unitId);
+    // public function showChapters($unitId)
+    // {
+    //     // Fetch unit with related chapters
+    //     $unit = Unit::with('chapters')->findOrFail($unitId);
 
-        return view('pages.teacher.chapters', compact('unit'));
-    }
+    //     return view('pages.teacher.chapters', compact('unit'));
+    // }
     public function showLessons($chapterId)
     {
         // Fetch chapter with related lessons
@@ -67,9 +76,9 @@ class TeacherDashboardController extends Controller
     public function changeName()
     {
         $validatedData = request()->validate([
-            'username' => 'required|string|min:1', 
+            'username' => 'required|string|min:1',
         ]);
-        
+
         $teacher = Auth::guard('teacher')->user();
         $teacher->username = request()->username;
         $teacher->save();

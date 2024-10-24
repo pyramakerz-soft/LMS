@@ -55,7 +55,6 @@
             <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
                 <div class="h-[350px] bg-white border border-slate-200 rounded-md">
                     <a class="cursor-pointer" href="{{ route('student_lessons.index', $chapter->id) }}">
-
                         <img class="card-img-top"
                             src="{{ $chapter->image ? asset('storage/' . $chapter->image) : asset('images/defaultCard.webp') }}"
                             alt="{{ $chapter->title }}">

@@ -142,20 +142,29 @@ class ClassController extends Controller
             'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 
+        $import = new StudentsImport($id);
+
         try {
-            Excel::import(new StudentsImport($id), $request->file('file'));
+            // Import the file
+            \Excel::import($import, $request->file('file'));
+
+            // Check if there are any duplicate usernames
+            if (!empty($import->duplicateUsernames)) {
+                $duplicates = implode(', ', $import->duplicateUsernames);
+                return back()->withErrors(['file' => "Duplicate usernames found: $duplicates"]);
+            }
 
             return redirect()->route('classes.index')->with('success', 'Students imported successfully.');
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == 23000) {
                 return back()->withErrors(['file' => 'A student with the same username already exists.']);
             }
-
             return back()->withErrors(['file' => 'Database error: ' . $e->getMessage()]);
         } catch (\Exception $e) {
             return back()->withErrors(['file' => 'Import error: ' . $e->getMessage()]);
         }
     }
+
     public function exportStudents($id)
     {
         $class = Group::findOrFail($id);

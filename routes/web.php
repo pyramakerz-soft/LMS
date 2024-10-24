@@ -128,8 +128,8 @@ Route::get('/materials/{materialId}/units', [ControllersUnitController::class, '
 Route::get('/units/{unitId}/chapters', [ControllersChapterController::class, 'index'])->name('student_chapters.index');
 
 Route::get('/chapters/{chapterId}/lessons', [ControllersChapterController::class, 'showLessons'])->name('student_lessons.index');
-Route::get('/student/themes/{themeId}/units/{unitId}/chapters', [ControllersChapterController::class, 'index'])
-    ->name('student.chapters.index');
+// Route::get('/student/themes/{themeId}/units/{unitId}/chapters', [ControllersChapterController::class, 'index'])
+//     ->name('student.chapters.index');
 
 Route::get('/lessons/{lessonId}/ebooks', [ControllersChapterController::class, 'viewEbooks'])->name('student_lessons.ebooks');
 

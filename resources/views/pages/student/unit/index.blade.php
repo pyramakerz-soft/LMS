@@ -181,11 +181,12 @@
                     </button>
                 </h2>
                 <div id="accordion-{{ $unit->id }}" class="accordion-body">
+
+
                     <div class="chapters">
-                        @foreach ($unit->chapters as $chapter)
+                        @foreach ($chapters as $chapter)
                             <div class="chapter">
-                                <a
-                                    href="{{ route('student.chapters.index', ['themeId' => $material->id, 'unitId' => $unit->id]) }}">
+                                <a href="{{ route('student_lessons.index', $chapter->id) }}">
                                     <img src="{{ $chapter->image ? asset($chapter->image) : 'https://via.placeholder.com/150' }}"
                                         alt="{{ $chapter->name }}">
                                     <p class="chapter-title">{{ $chapter->title }}</p>

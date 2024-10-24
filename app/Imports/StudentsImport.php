@@ -33,18 +33,21 @@ class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
 
     public function model(array $row)
     {
-        // Skip the row if 'username' or 'gender' is missing
-        if (empty($row['username']) ) {
+        if (empty($row['username'])) {
             return null;
         }
 
-        // Replace spaces with underscores in the username
         $username = str_replace(' ', '_', $row['username']);
 
-        // Generate a random password
+        // Check if the username already exists
+        if (Student::where('username', $username)->exists()) {
+            // Store the duplicate username
+            $this->duplicateUsernames[] = $username;
+            return null;
+        }
+
         $password = Str::random(8);
 
-        // Create and return the new Student model
         return new Student([
             'username' => $username,
             'password' => Hash::make($password),
