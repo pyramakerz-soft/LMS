@@ -14,7 +14,7 @@ class LessonController extends Controller
      */
     public function index()
     {
-        $lessons = Lesson::with('chapter')->get();
+        $lessons = Lesson::with('chapter.material')->get();
         return view('admin.lessons.index', compact('lessons'));
     }
 

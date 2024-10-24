@@ -50,6 +50,57 @@
                                 </p>
                             @endif
                         </div>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="file_path" class="form-label">Choose Info</label>
+                                <select name="file_path" class="form-control" id="file_path">
+                                    @foreach (\App\Models\Ebook::all() as $ebook)
+                                        <option value="{{ $ebook->file_path }}"
+                                            {{ str_replace(url('ebooks') . '/', '', $material->file_path) == $ebook->file_path ? 'selected' : '' }}>
+                                            {{ $ebook->title }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('file_path')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="how_to_use" class="form-label">Choose how to use</label>
+                                <select name="how_to_use" class="form-control" id="how_to_use">
+                                    @foreach (\App\Models\Ebook::all() as $ebook)
+                                        <option value="{{ $ebook->file_path }}"
+                                            {{ str_replace(url('ebooks') . '/', '', $material->how_to_use) == $ebook->file_path ? 'selected' : '' }}>
+                                            {{ $ebook->title }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('how_to_use')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="learning" class="form-label">Choose learning outcomes</label>
+                                <select name="learning" class="form-control" id="learning">
+                                    @foreach (\App\Models\Ebook::all() as $ebook)
+                                        <option value="{{ $ebook->file_path }}"
+                                            {{ str_replace(url('ebooks') . '/', '', $material->learning) == $ebook->file_path ? 'selected' : '' }}>
+                                            {{ $ebook->title }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('learning')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
 
                         <div class="mb-3 form-check">
                             <input type="checkbox" name="is_active" class="form-check-input" id="is_active" value="1"

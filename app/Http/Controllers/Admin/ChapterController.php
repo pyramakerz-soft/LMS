@@ -15,7 +15,7 @@ class ChapterController extends Controller
      */
     public function index()
     {
-        $chapters = Chapter::with(['unit', 'material.stage'])->get();
+        $chapters = Chapter::with(['unit', 'material.stage'])->paginate(20);
         return view('admin.chapters.index', compact('chapters'));
     }
 
