@@ -144,9 +144,12 @@
                 text: stage.name
             }));
 
+            // Track removed class IDs to ensure backend handles them correctly
+            let removedClassIds = [];
+
             // Function to add a new class field group
             function addClassField(stages, classData = {}) {
-                const groupId = ++classCount; // Increment classCount correctly for unique IDs
+                const groupId = ++classCount;
 
                 const classGroup = document.createElement('div');
                 classGroup.classList.add('class-group', 'mb-3');
@@ -155,79 +158,80 @@
                 let stageOptions = '';
                 stages.forEach(stage => {
                     stageOptions += `
-                <option value="${stage.id}" ${classData.stage_id == stage.id ? 'selected' : ''}>
-                    ${stage.text}
-                </option>`;
+                    <option value="${stage.id}" ${classData.stage_id == stage.id ? 'selected' : ''}>
+                        ${stage.text}
+                    </option>`;
                 });
 
                 classGroup.innerHTML = `
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="class_name_${groupId}" class="form-label">Class Name</label>
-                        <input type="text" name="classes[${groupId}][name]" class="form-control"
-                            id="class_name_${groupId}" placeholder="Enter class name"
-                            value="${classData.name || ''}" required>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="class_name_${groupId}" class="form-label">Class Name</label>
+                            <input type="text" name="classes[${groupId}][name]" class="form-control"
+                                id="class_name_${groupId}" placeholder="Enter class name"
+                                value="${classData.name || ''}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="class_stage_${groupId}" class="form-label">Grade</label>
+                            <select name="classes[${groupId}][stage_id]" id="class_stage_${groupId}"
+                                class="form-control" required>
+                                ${stageOptions}
+                            </select>
+                        </div>
+                        <input type="hidden" name="classes[${groupId}][id]" value="${classData.id || ''}">
+                        <button type="button" class="btn btn-danger remove-class-btn"
+                            data-class-id="${groupId}" data-id="${classData.id || ''}">Remove Class</button>
                     </div>
-                    <div class="mb-3">
-                        <label for="class_stage_${groupId}" class="form-label">Grade</label>
-                        <select name="classes[${groupId}][stage_id]" id="class_stage_${groupId}"
-                            class="form-control" required>
-                            ${stageOptions}
-                        </select>
-                    </div>
-                    <button type="button" class="btn btn-danger remove-class-btn"
-                        data-class-id="${groupId}">Remove Class</button>
-                </div>
-            </div>
-        `;
+                </div>`;
 
                 classContainer.appendChild(classGroup);
 
-                // Attach remove event to the newly added button
-                attachRemoveButton(classGroup, groupId);
+                attachRemoveButton(classGroup, groupId, classData.id);
             }
 
-            // Function to attach the remove event to a class group
-            function attachRemoveButton(classGroup, groupId) {
+            function attachRemoveButton(classGroup, groupId, classId) {
                 classGroup.querySelector('.remove-class-btn').addEventListener('click', function() {
+                    if (classId) {
+                        removedClassIds.push(classId); // Track removed class ID
+                    }
                     document.getElementById(`class-group-${groupId}`).remove();
                 });
             }
 
-            // Filter available stages based on the selected ones
-            function getFilteredStages(selectedStages) {
-                return allStages.filter(stage => selectedStages.includes(stage.id));
-            }
-
-            // Event listener for Grades selection change
             $('#stage_id').on('change', function() {
                 const selectedStages = $(this).val().map(id => parseInt(id));
-                const filteredStages = getFilteredStages(selectedStages);
-
-                // Enable or disable Add Class button based on selection
+                const filteredStages = allStages.filter(stage => selectedStages.includes(stage.id));
                 addClassBtn.disabled = filteredStages.length === 0;
             });
 
-            // Add a new class group on button click
             addClassBtn.addEventListener('click', function() {
                 const selectedStages = $('#stage_id').val().map(id => parseInt(id));
                 if (selectedStages.length > 0) {
-                    const filteredStages = getFilteredStages(selectedStages);
+                    const filteredStages = allStages.filter(stage => selectedStages.includes(stage.id));
                     addClassField(filteredStages);
                 }
             });
 
-            // Ensure only alphabetic input for the City field
             document.getElementById('city').addEventListener('input', function(event) {
                 this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
             });
 
-            // Load existing classes into the view on page load
             const existingClasses = @json($classes);
-            existingClasses.forEach((classData, index) => {
-                const filteredStages = getFilteredStages([classData.stage_id]);
+            existingClasses.forEach(classData => {
+                const filteredStages = allStages.filter(stage => [classData.stage_id].includes(stage.id));
                 addClassField(filteredStages, classData);
+            });
+
+            // Append removed classes as hidden inputs before form submission
+            $('form').on('submit', function() {
+                removedClassIds.forEach(id => {
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'removed_classes[]',
+                        value: id
+                    }).appendTo('form');
+                });
             });
         });
     </script>

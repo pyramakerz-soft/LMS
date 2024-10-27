@@ -204,10 +204,18 @@ class AdminController extends Controller
             }
         }
 
-        $school->classes()->whereNotIn('id', $classIds)->delete();
+        if ($request->has('removed_classes')) {
+            foreach ($request->removed_classes as $classId) {
+                Student::where('class_id', $classId)->update(['class_id' => null]);
+                Group::find($classId)?->delete();
+            }
+        }
 
         return redirect()->route('admins.index')->with('success', 'School updated successfully.');
     }
+
+
+
 
 
 
