@@ -241,7 +241,7 @@
                                             <select class="form-control" id="unit_id" name="unit_id" required>
                                                 <option value="">-- Select Unit --</option>
                                                 @foreach ($units as $unit)
-                                                    <option value="{{ $unit->id }}">{{ $unit->title }}</option>
+                                                    <option value="{{ $unit->id }}">{{$unit->material->title}} / {{$unit->title}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
