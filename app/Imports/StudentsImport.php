@@ -33,7 +33,7 @@ class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
 
     public function model(array $row)
     {
-        if (empty($row['username']) || empty($row['gender'])) {
+        if (empty($row['username'])) {
             return null;
         }
 
@@ -44,17 +44,14 @@ class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
             throw new \Exception("The username '{$username}' cannot start with a number.");
         }
 
-        // Validate gender value (assuming valid values are 'male' and 'female')
-        $validGenders = ['boy', 'girl'];
-        if (!in_array(strtolower($row['gender']), $validGenders)) {
-            throw new \Exception("Invalid gender '{$row['gender']}' for username '{$username}'.");
-        }
-
-        // Check if the username already exists
+        // Check for duplicate usernames
         if (Student::where('username', $username)->exists()) {
             $this->duplicateUsernames[] = $username;
             return null;
         }
+
+        // Use the gender value if provided, otherwise set it to null
+        $gender = !empty($row['gender']) ? strtolower($row['gender']) : null;
 
         $password = Str::random(8);
 
@@ -62,7 +59,7 @@ class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
             'username' => $username,
             'password' => Hash::make($password),
             'plain_password' => $password,
-            'gender' => strtolower($row['gender']),
+            'gender' => $gender, 
             'school_id' => $this->class->school_id,
             'stage_id' => $this->class->stage_id,
             'is_active' => 1,
