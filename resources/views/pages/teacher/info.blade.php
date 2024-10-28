@@ -56,22 +56,25 @@
         </div>
         <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
             <div class=" bg-white  ">
-                <!-- Make the stage card a link -->
-                {{-- <a href="{{route('teacher_classes')}}" class="block h-full">
-                        
-                        <!-- Stage Image -->
-                        <div class="p-4">
-                            <img src="{{ asset('assets/img/teacherInfo3.png') }}"
-                            alt="" class="object-cover w-full h-45 rounded-md">
-                        </div>
-                        <h3 class="px-4 py-2 text-lg font-bold">Assessments</h3>
-                    </a> --}}
+
                 <a href="{{ route('teacher_classes', $id) }}" class="block h-full">
                     <div class="p-4">
                         <img src="{{ asset('assets/img/teacherInfo3.png') }}" alt=""
                             class="object-cover w-full h-45 rounded-md">
                     </div>
                     <h3 class="px-4 py-2 text-lg font-bold">Assessments</h3>
+                </a>
+            </div>
+        </div>
+        <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
+            <div class=" bg-white  ">
+
+                <a href="{{ route('teacher.resources.index', $id) }}" class="block h-full">
+                    <div class="p-4">
+                        <img src="{{ asset('assets/img/teacherInfo3.png') }}" alt=""
+                            class="object-cover w-full h-45 rounded-md">
+                    </div>
+                    <h3 class="px-4 py-2 text-lg font-bold">Resources</h3>
                 </a>
             </div>
         </div>

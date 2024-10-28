@@ -18,6 +18,12 @@
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Images</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ request()->is('admin/images') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('teacher_resources.index') }}">
+                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Teacher
+                        resources</span>
+                </a>
+            </li>
 
             <li class="sidebar-item {{ request()->is('admin/types') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('types.index') }}">

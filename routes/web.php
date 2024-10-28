@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\MaterialController;
 use App\Http\Controllers\Admin\StageController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TeacherController;
+use App\Http\Controllers\Admin\TeacherResourceController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\ChapterController as ControllersChapterController;
 use App\Http\Controllers\DashboardController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\SchoolTypeController;
 use App\Http\Controllers\StudentAssessmentController;
 use App\Http\Controllers\Teacher\TeacherClasses;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
+use App\Http\Controllers\Teacher\TeacherResources;
 use App\Http\Controllers\Teacher\TeacherUnitController;
 use App\Http\Controllers\Student\StudentAssignmentController;
 use App\Http\Controllers\TypeController;
@@ -73,6 +75,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('admins', AdminController::class);
         Route::resource('images', ImageController::class);
         Route::resource('types', TypeController::class);
+        Route::resource('teacher_resources', TeacherResourceController::class);
 
         Route::get('school/{schoolId}/curriculum', [AdminController::class, 'assignCurriculum'])->name('school.curriculum.assign');
         Route::post('school/{schoolId}/curriculum', [AdminController::class, 'storeCurriculum'])->name('school.curriculum.store');
@@ -171,6 +174,8 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::resource('assessments', StudentAssessmentController::class);
     // Route::get('teacher_classes', [TeacherClasses::class, 'index'])->name('teacher_classes');
 
+    Route::get('/teacher/resources/{stage_id}', [TeacherResources::class, 'resourcesForTeacher'])
+        ->name('teacher.resources.index');
     Route::get('/teacher/classes/{stage_id}', [TeacherClasses::class, 'index'])->name('teacher_classes');
 
     Route::get('students_classess/{class_id}', [TeacherClasses::class, 'students'])->name('students_classess');
