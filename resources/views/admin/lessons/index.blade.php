@@ -1,6 +1,5 @@
 @extends('admin.layouts.layout')
 
-
 @section('content')
     <div class="wrapper">
         @include('admin.layouts.sidebar')
@@ -12,12 +11,45 @@
                 <div class="container-fluid p-0">
 
                     <h1>Lessons</h1>
+                    <a href="{{ route('lessons.create') }}" class="btn btn-primary mb-3">Add Lesson</a>
 
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    <a href="{{ route('lessons.create') }}" class="btn btn-primary mb-3">Add Lesson</a>
+                    {{-- Filter Form --}}
+                    <form method="GET" action="{{ route('lessons.index') }}" class="row mb-4">
+                        <div class="col-md-4">
+                            <label for="theme_id" class="form-label">Filter by Theme</label>
+                            <select name="theme_id" id="theme_id" class="form-control">
+                                <option value="">All Themes</option>
+                                @foreach ($themes as $theme)
+                                    <option value="{{ $theme->id }}"
+                                        {{ request('theme_id') == $theme->id ? 'selected' : '' }}>
+                                        {{ $theme->title }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="unit_id" class="form-label">Filter by Unit</label>
+                            <select name="unit_id" id="unit_id" class="form-control">
+                                <option value="">All Units</option>
+                                @foreach ($units as $unit)
+                                    <option value="{{ $unit->id }}"
+                                        {{ request('unit_id') == $unit->id ? 'selected' : '' }}>
+                                        {{ $unit->title }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                        </div>
+                    </form>
+
 
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">
@@ -26,6 +58,7 @@
                                     <th>Title</th>
                                     <th>File</th>
                                     <th>Theme</th>
+                                    <th>Unit</th>
                                     <th>Chapter</th>
                                     <th>Image</th>
                                     <th>Active</th>
@@ -43,8 +76,8 @@
                                             </button>
                                         </td>
                                         <td>{{ $lesson->chapter->material->title ?? '-' }}</td>
+                                        <td>{{ $lesson->chapter->unit->title ?? '-' }}</td>
                                         <td>{{ $lesson->chapter->title }}</td>
-
                                         <td>
                                             @if ($lesson->image)
                                                 <img src="{{ asset($lesson->image) }}" alt="{{ $lesson->title }}"
@@ -55,7 +88,8 @@
                                         </td>
                                         <td>{{ $lesson->is_active ? 'Active' : 'Inactive' }}</td>
                                         <td class="d-flex align-items-center gap-2">
-                                            <a href="{{ route('lessons.edit', $lesson->id) }}" class="btn btn-info">Edit</a>
+                                            <a href="{{ route('lessons.edit', $lesson->id) }}"
+                                                class="btn btn-info">Edit</a>
                                             <form action="{{ route('lessons.destroy', $lesson->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
@@ -70,8 +104,6 @@
 
                 </div>
             </main>
-
-
         </div>
     </div>
 
@@ -96,22 +128,14 @@
 @section('page_js')
     <script>
         $(document).ready(function() {
-            // Handle the event when the modal is about to be shown
             $('#ebookModal').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget); // Button that triggered the modal
-                var file = button.data('file'); // Extract the file path from data-file attribute
-                // file='https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/ebooks/G1%20-%20Urban%20city%20Un1.%20Ch1.L1/'
-
+                var button = $(event.relatedTarget);
+                var file = button.data('file');
                 var modal = $(this);
                 var embed = modal.find('#ebookEmbed');
-
-                console.log(file);
-
-                // Set the src attribute of the embed to the eBook file path
                 embed.attr('src', file);
             });
 
-            // Clear the embed src when the modal is hidden to stop the loading
             $('#ebookModal').on('hide.bs.modal', function() {
                 var embed = $(this).find('#ebookEmbed');
                 embed.attr('src', '');

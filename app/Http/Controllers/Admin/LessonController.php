@@ -12,10 +12,32 @@ class LessonController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $lessons = Lesson::with('chapter.material')->get();
-        return view('admin.lessons.index', compact('lessons'));
+        // Fetch all themes (materials) and units for filters.
+        $themes = \App\Models\Material::all();
+        $units = \App\Models\Unit::all();
+
+        // Apply filters based on request.
+        $query = Lesson::query()->with('chapter.unit.material');
+
+        if ($request->filled('theme_id')) {
+            $query->whereHas('chapter.unit.material', function ($q) use ($request) {
+                $q->where('id', $request->theme_id);
+            });
+        }
+
+        if ($request->filled('unit_id')) {
+            $query->whereHas('chapter.unit', function ($q) use ($request) {
+                $q->where('id', $request->unit_id);
+            });
+        }
+
+        $lessons = $query->get();
+
+        return view('admin.lessons.index', compact('lessons', 'themes', 'units'));
+        // $lessons = Lesson::with('chapter.material')->get();
+        // return view('admin.lessons.index', compact('lessons'));
     }
 
     /**
