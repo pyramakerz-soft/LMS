@@ -185,7 +185,7 @@
 
                     <div class="chapters">
                         @forelse ($unit->chapters as $chapter)
-                            <div class="chapter-card">
+                            <div class="chapter">
                                 <a href="{{ route('teacher.lessons.index', $chapter->id) }}">
                                     <img src="{{ $chapter->image ? asset($chapter->image) : asset('images/defaultCard.webp') }}"
                                         alt="{{ $chapter->title }}">
