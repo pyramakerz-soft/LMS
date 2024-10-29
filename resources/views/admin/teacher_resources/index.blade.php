@@ -23,6 +23,8 @@
                                 <th>Name</th>
                                 <th>Image</th>
                                 <th>File</th>
+                                <th>Type</th>
+
                                 <th>Stage</th>
                                 <th>School</th>
                                 <th>Actions</th>
@@ -43,6 +45,8 @@
                                         <a href="{{ asset( $resource->file_path) }}" target="_blank">View
                                             File</a>
                                     </td>
+                                    <td>{{ ucfirst($resource->type) }}</td>
+
                                     <td>{{ $resource->stage->name }}</td>
                                     <td>{{ $resource->school->name }}</td>
                                     <td>

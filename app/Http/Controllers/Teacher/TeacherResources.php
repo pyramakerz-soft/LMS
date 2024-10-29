@@ -23,13 +23,9 @@ class TeacherResources extends Controller
             ->where('stage_id', $stageId)
             ->get();
 
-        $pdfResources = $resources->filter(function ($resource) {
-            return Str::endsWith($resource->file_path, ['.pdf']);
-        });
+        $pdfResources = $resources->where('type', 'pdf');
+        $ebookResources = $resources->where('type', 'ebook');
 
-        $ebookResources = $resources->filter(function ($resource) {
-            return Str::endsWith($resource->file_path, ['.epub', '.mobi', '.html']);
-        });
 
         return view('pages.teacher.resources.index', compact('pdfResources', 'ebookResources'));
     }

@@ -29,9 +29,11 @@ class TeacherResourceController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
-            'file_path' => 'nullable|file|max:10240',
+            'file_path' => 'nullable|mimes:pdf',
             'stage_id' => 'required|exists:stages,id',
             'school_id' => 'required|exists:schools,id',
+            'type' => 'required|in:pdf,ebook',
+            
         ]);
 
         $imagePath = $request->file('image') ? $request->file('image')->store('teacher_resources', 'public') : null;
@@ -43,6 +45,7 @@ class TeacherResourceController extends Controller
             'file_path' => $filePath,
             'stage_id' => $request->stage_id,
             'school_id' => $request->school_id,
+            'type' => $request->type,
         ]);
 
         return redirect()->route('teacher_resources.index')->with('success', 'Resource added successfully.');

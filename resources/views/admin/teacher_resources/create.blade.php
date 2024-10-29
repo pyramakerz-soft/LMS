@@ -35,6 +35,13 @@
                                     <input type="file" name="file_path" class="form-control" required>
                                 </div>
                             </div>
+                            <div class="mb-3">
+                                <label for="type" class="form-label">Type</label>
+                                <select name="type" id="type" class="form-control" required>
+                                    <option value="pdf">PDF</option>
+                                    <option value="ebook">eBook</option>
+                                </select>
+                            </div>
                             <div class="col-sm-12 col-md-12 col-lg-6">
                                 <div class="mb-3">
                                     <label for="stage_id" class="form-label">Stage</label>

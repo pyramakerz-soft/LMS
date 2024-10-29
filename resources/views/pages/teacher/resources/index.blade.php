@@ -42,13 +42,15 @@
                             @else
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                     @foreach ($pdfResources as $resource)
-                                        <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                                            <div class="p-4">
-                                                <h3 class="text-lg font-bold">{{ $resource->name }}</h3>
-                                                <a href="{{ asset($resource->file_path) }}" target="_blank"
-                                                    class="text-blue-500">
-                                                    View PDF
-                                                </a>
+                                        <div class="col-md-4">
+                                            <div class="card mb-3">
+                                                <img src="{{ asset($resource->image) }}" class="card-img-top"
+                                                    alt="{{ $resource->name }}">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ $resource->name }}</h5>
+                                                    <a href="{{ asset($resource->file_path) }}"
+                                                        class="btn btn-primary" target="_blank">View PDF</a>
+                                                </div>
                                             </div>
                                         </div>
                                     @endforeach
@@ -64,13 +66,15 @@
                             @else
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                     @foreach ($ebookResources as $resource)
-                                        <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                                            <div class="p-4">
-                                                <h3 class="text-lg font-bold">{{ $resource->name }}</h3>
-                                                <a href="{{ asset($resource->file_path) }}" target="_blank"
-                                                    class="text-blue-500">
-                                                    View Ebook
-                                                </a>
+                                        <div class="col-md-4">
+                                            <div class="card mb-3">
+                                                <img src="{{ asset($resource->image) }}" class="card-img-top"
+                                                    alt="{{ $resource->name }}">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ $resource->name }}</h5>
+                                                    <a href="{{ asset($resource->file_path) }}"
+                                                        class="btn btn-primary" target="_blank">View eBook</a>
+                                                </div>
                                             </div>
                                         </div>
                                     @endforeach
