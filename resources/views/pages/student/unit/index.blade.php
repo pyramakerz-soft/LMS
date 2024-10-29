@@ -184,15 +184,17 @@
 
 
                     <div class="chapters">
-                        @foreach ($unit->$chapters as $chapter)
-                            <div class="chapter">
-                                <a href="{{ route('student_lessons.index', $chapter->id) }}">
-                                    <img src="{{ $chapter->image ? asset($chapter->image) : 'https://via.placeholder.com/150' }}"
-                                        alt="{{ $chapter->name }}">
+                        @forelse ($unit->chapters as $chapter)
+                            <div class="chapter-card">
+                                <a href="{{ route('teacher.lessons.index', $chapter->id) }}">
+                                    <img src="{{ $chapter->image ? asset($chapter->image) : asset('images/defaultCard.webp') }}"
+                                        alt="{{ $chapter->title }}">
                                     <p class="chapter-title">{{ $chapter->title }}</p>
                                 </a>
                             </div>
-                        @endforeach
+                        @empty
+                            <p>No chapters available </p>
+                        @endforelse
                     </div>
                 </div>
             </div>
