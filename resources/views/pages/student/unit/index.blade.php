@@ -184,7 +184,7 @@
 
 
                     <div class="chapters">
-                        @foreach ($chapters as $chapter)
+                        @foreach ($unit->$chapters as $chapter)
                             <div class="chapter">
                                 <a href="{{ route('student_lessons.index', $chapter->id) }}">
                                     <img src="{{ $chapter->image ? asset($chapter->image) : 'https://via.placeholder.com/150' }}"
