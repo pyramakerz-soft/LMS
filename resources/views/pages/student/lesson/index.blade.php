@@ -48,33 +48,28 @@
     </div>
 
     <div class="flex flex-wrap p-3">
-        @foreach ($chapter->lessons as $lesson)
-            <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white  rounded-xl">
-                <div class="w-full">
-                    <a onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook', '{{ $lesson->file_path }}');"
-                        class="cursor-pointer h-full flex flex-col justify-between">
-                        <!-- Updated title to handle long text -->
-                        <h3 class="px-4 py-2 bg-gray-200 text-lg font-bold truncate"
-                            style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                            {{ $lesson->title }}
-                        </h3>
-                        <div class="p-4">
-                            {{-- @if ($lesson->image)
-                                <img src="{{ asset($lesson->image) }}" class="object-contain w-full rounded-xl">
-                            @else
-                                <img src="https://via.placeholder.com/150"
-                                    class="object-contain w-full h-[250px] rounded-xl" alt="No Image">
-                            @endif --}}
-                            <img class="object-contain w-full h-[250px] rounded-xl"
-                                src="{{ $lesson->image ? asset($lesson->image) : asset('images/defaultCard.webp') }}"
-                                alt="{{ $lesson->title }}">
+        @if (!count($chapter->lessons) == 0)
+            @foreach ($chapter->lessons as $lesson)
+                <div class="mb-7 w-full md:w-[45%] lg:w-[30%] p-2 mx-2 bg-white  rounded-xl">
+                    <div class="w-full">
+                        <a onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook', '{{ $lesson->file_path }}');"
+                            class="cursor-pointer h-full flex flex-col justify-between">
+                            <!-- Updated title to handle long text -->
+                            <h3 class="px-4 py-2 bg-gray-200 text-lg font-bold truncate"
+                                style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                                {{ $lesson->title }}
+                            </h3>
+                            <div class="p-4">
+                                <img class="object-contain w-full h-[250px] rounded-xl"
+                                    src="{{ $lesson->image ? asset($lesson->image) : asset('images/defaultCard.webp') }}"
+                                    alt="{{ $lesson->title }}">
 
-                        </div>
-                    </a>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-            </div>
-        @endforeach
-        @if (count($chapter->lessons) == 0)
+            @endforeach
+        @else
             <p class="m-auto text-gray-500">No Lessons yet</p>
         @endif
     </div>
