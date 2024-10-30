@@ -32,7 +32,7 @@ class ChapterController extends Controller
         $userAuth = auth()->guard('student')->user();
         if ($userAuth) {
             $chapter = Chapter::findOrFail($chapterId);
-
+dd($chapter->lessons);
             return view('pages.student.lesson.index', compact('chapter', 'userAuth'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
