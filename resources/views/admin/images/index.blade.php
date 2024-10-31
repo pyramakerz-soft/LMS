@@ -36,7 +36,7 @@
                                             class="mt-2">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger w-100">Delete</button>
+                                            <button type="submit" class="btn btn-danger w-100"  onclick="return confirm('Are you sure you want to delete this image?');">Delete</button>
                                         </form>
                                     </div>
                                 </div>

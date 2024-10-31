@@ -47,7 +47,7 @@
                                             <form action="{{ route('units.destroy', $unit->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                                <button type="submit" class="btn btn-danger"  onclick="return confirm('Are you sure you want to delete this unit?');">Delete</button>
                                             </form>
                                         </td>
                                     </tr>

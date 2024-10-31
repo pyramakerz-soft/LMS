@@ -100,7 +100,8 @@
                                                     height="50" class="rounded-circle">
                                             @else
                                                 <img src="https://w7.pngwing.com/pngs/184/113/png-transparent-user-profile-computer-icons-profile-heroes-black-silhouette-thumbnail.png"
-                                                    alt="Teacher Image" width="50" height="50" class="rounded-circle">
+                                                    alt="Teacher Image" width="50" height="50"
+                                                    class="rounded-circle">
                                             @endif
                                         </td>
                                         <td>{{ $teacher->username }}</td>
@@ -108,18 +109,20 @@
                                         <td>{{ $teacher->school->name }}</td>
                                         <td>{{ $teacher->plain_password }}</td>
                                         <td class="d-flex align-items-center gap-2">
-                                            <a href="{{ route('teachers.edit', $teacher->id) }}" class="btn btn-info">Edit</a>
-                                        
+                                            <a href="{{ route('teachers.edit', $teacher->id) }}"
+                                                class="btn btn-info">Edit</a>
+
                                             <!-- Delete button -->
                                             <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this teacher?');">
+                                                <button type="submit" class="btn btn-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this teacher?');">
                                                     Delete
                                                 </button>
                                             </form>
                                         </td>
-                                        
+
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -152,7 +155,7 @@
             input.value = input.value.replace(/[^0-9.]/g, '');
 
             if (input.value.split('.').length > 2) {
-                input.value = previousValue; 
+                input.value = previousValue;
             }
         }
     </script>

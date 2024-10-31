@@ -34,18 +34,21 @@
                                         <td>{{ $stage->name }}</td>
                                         <td>
                                             @if ($stage->image)
-                                                <img src="{{ asset( $stage->image) }}" alt="{{ $stage->name }}" width="100">
+                                                <img src="{{ asset($stage->image) }}" alt="{{ $stage->name }}"
+                                                    width="100">
                                             @else
                                                 No Image
                                             @endif
                                         </td>
                                         <td class="d-flex align-items-center gap-2">
-                                            <a href="{{ route('material.unit.chapter.create', $stage->id) }}" class="btn btn-primary" >Add Material</a>
+                                            <a href="{{ route('material.unit.chapter.create', $stage->id) }}"
+                                                class="btn btn-primary">Add Material</a>
                                             <a href="{{ route('stages.edit', $stage->id) }}" class="btn btn-info">Edit</a>
                                             <form action="{{ route('stages.destroy', $stage->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                                <button type="submit" class="btn btn-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this stage?');">Delete</button>
                                             </form>
                                         </td>
                                     </tr>

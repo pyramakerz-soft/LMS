@@ -38,49 +38,51 @@
                                         <td>{{ $material->stage->name }}</td>
                                         <td>
                                             @if ($material->image)
-                                                <img src="{{ asset($material->image) }}" alt="{{ $material->title }}" width="100">
+                                                <img src="{{ asset($material->image) }}" alt="{{ $material->title }}"
+                                                    width="100">
                                             @else
                                                 No Image
                                             @endif
                                         </td>
-                            
+
                                         <!-- Set fixed width and prevent wrapping -->
                                         <td style="white-space: nowrap; width: 150px;">
-                                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ebookModal"
-                                                data-file="{{ asset($material->file_path) }}">
+                                            <button class="btn btn-success" data-bs-toggle="modal"
+                                                data-bs-target="#ebookModal" data-file="{{ asset($material->file_path) }}">
                                                 File info
                                             </button>
                                         </td>
-                                        
+
                                         <td style="white-space: nowrap; width: 150px;">
-                                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ebookModal"
-                                                data-file="{{ asset($material->learning) }}">
+                                            <button class="btn btn-success" data-bs-toggle="modal"
+                                                data-bs-target="#ebookModal" data-file="{{ asset($material->learning) }}">
                                                 Learning
                                             </button>
                                         </td>
-                                        
+
                                         <td style="white-space: nowrap; width: 150px;">
-                                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ebookModal"
-                                                data-file="{{ asset($material->how_to_use) }}">
+                                            <button class="btn btn-success" data-bs-toggle="modal"
+                                                data-bs-target="#ebookModal" data-file="{{ asset($material->how_to_use) }}">
                                                 How to use
                                             </button>
                                         </td>
-                                        
+
                                         <td>{{ $material->is_active ? 'Active' : 'Inactive' }}</td>
-                                        <td class="d-flex align-items-center gap-2" >
-                                            <a href="{{ route('material.edit', $material->id) }}" class="btn btn-info">Edit</a>
+                                        <td class="d-flex align-items-center gap-2">
+                                            <a href="{{ route('material.edit', $material->id) }}"
+                                                class="btn btn-info">Edit</a>
                                             <form action="{{ route('material.destroy', $material->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                                <button type="submit" class="btn btn-danger"  onclick="return confirm('Are you sure you want to delete this theme?');">Delete</button>
                                             </form>
                                         </td>
-                                        
+
                                     </tr>
                                 @endforeach
                             </tbody>
-                            
-                            
+
+
                         </table>
                     </div>
                     <!-- End of scrollable table container -->
@@ -101,7 +103,8 @@
                 </div>
                 <div class="position-relative modal-body" style="height: calc(100% - 60px);">
                     <embed src="" id="ebookEmbed" width="100%" height="100%" style="border: none;"></embed>
-                    <img src="{{ asset('assets/img/watermark 2.png') }}" class="position-absolute top-0 start-0 w-100 h-100" style="pointer-events: none; opacity: 0.5;">
+                    <img src="{{ asset('assets/img/watermark 2.png') }}"
+                        class="position-absolute top-0 start-0 w-100 h-100" style="pointer-events: none; opacity: 0.5;">
                 </div>
             </div>
         </div>
