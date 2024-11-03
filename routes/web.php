@@ -174,8 +174,15 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::resource('assessments', StudentAssessmentController::class);
     // Route::get('teacher_classes', [TeacherClasses::class, 'index'])->name('teacher_classes');
 
-    Route::get('/teacher/resources/{stage_id}', [TeacherResources::class, 'resourcesForTeacher'])
-        ->name('teacher.resources.index');
+
+    Route::get('/teacher/resources', [TeacherResources::class, 'index'])->name('teacher.resources.index');
+    Route::get('/teacher/resources/create', [TeacherResources::class, 'create'])->name('teacher.resources.create');
+    Route::get('/teacher/resources/{id}/edit', [TeacherResources::class, 'edit'])->name('teacher.resources.edit');
+    Route::post('/teacher/resources', [TeacherResources::class, 'store'])->name('teacher.resources.store');
+    Route::put('/teacher/resources/{id}', [TeacherResources::class, 'update'])->name('teacher.resources.update');
+    Route::delete('/teacher/resources/{id}', [TeacherResources::class, 'destroy'])->name('teacher.resources.destroy');
+
+
     Route::get('/teacher/classes/{stage_id}', [TeacherClasses::class, 'index'])->name('teacher_classes');
 
     Route::get('students_classess/{class_id}', [TeacherClasses::class, 'students'])->name('students_classess');

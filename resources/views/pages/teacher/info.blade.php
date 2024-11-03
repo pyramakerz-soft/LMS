@@ -5,7 +5,10 @@
 @endsection
 
 @php
-    $menuItems = [['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')]];
+    $menuItems = [
+        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
+        ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
+    ];
 @endphp
 
 @section('sidebar')
@@ -66,7 +69,7 @@
                 </a>
             </div>
         </div>
-        <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
+        {{-- <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
             <div class=" bg-white  ">
 
                 <a href="{{ route('teacher.resources.index', $id) }}" class="block h-full">
@@ -77,6 +80,6 @@
                     <h3 class="px-4 py-2 text-lg font-bold">Resources</h3>
                 </a>
             </div>
-        </div>
+        </div> --}}
     </div>
 @endsection
