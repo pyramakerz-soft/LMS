@@ -8,6 +8,7 @@ use App\Models\Group;
 use App\Models\Lesson;
 use App\Models\School;
 use App\Models\Student_assessment;
+use App\Models\TeacherClass;
 use DB;
 
 use Illuminate\Http\Request;
@@ -73,7 +74,9 @@ class AssignmentController extends Controller
             $stages = $userAuth->stages;
 
             // Fetch all classes for the authenticated teacher's school
-            $classes = Group::where('school_id', $userAuth->school_id)->get();
+            $classes = TeacherClass::where('teacher_id', $userAuth->id)
+                ->with('class') // Ensure you load the related Group model for each entry
+                ->get();
 
             return view('pages.teacher.Assignment.create', compact('lessons', 'stages', 'classes', 'userAuth'));
         } else {
@@ -84,11 +87,11 @@ class AssignmentController extends Controller
     public function store(Request $request)
     {
         $userAuth = auth()->guard('teacher')->user();
-    
+
         if (!$userAuth) {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
-    
+
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -104,11 +107,11 @@ class AssignmentController extends Controller
             'marks' => 'required|integer|min:1|max:50',
             'is_active' => 'nullable|boolean',
         ]);
-    
+
         $filePath = $request->hasFile('path_file')
             ? $request->file('path_file')->store('assignments', 'public')
             : null;
-    
+
         $assignment = Assignment::create([
             'title' => $request->title,
             'description' => $request->description,
@@ -123,7 +126,7 @@ class AssignmentController extends Controller
             'teacher_id' => $userAuth->id,
             'week' => $request->week,
         ]);
-    
+
         DB::table('assignment_stage')->insert([
             'assignment_id' => $assignment->id,
             'stage_id' => $request->stage_id,
@@ -131,7 +134,7 @@ class AssignmentController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-    
+
         foreach ($request->class_ids as $classId) {
             DB::table('assignment_class')->insert([
                 'assignment_id' => $assignment->id,
@@ -139,7 +142,7 @@ class AssignmentController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-    
+
             $students = DB::table('students')->where('class_id', $classId)->get();
             foreach ($students as $student) {
                 DB::table('assignment_student')->insert([
@@ -150,10 +153,10 @@ class AssignmentController extends Controller
                 ]);
             }
         }
-    
+
         return redirect()->route('assignments.index')->with('success', 'Assignment created successfully.');
     }
-    
+
 
 
 
