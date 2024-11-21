@@ -17,20 +17,14 @@
 
 
 @section('content')
-{{-- @dd(Auth::guard('student')->user()) --}}
+    {{-- @dd(Auth::guard('student')->user()) --}}
     <div class="p-3">
         <div class="rounded-lg flex items-center justify-between py-3 px-6 bg-[#2E3646]">
             <div class="flex items-center space-x-4">
                 <div>
-                    {{-- <img class="w-20 h-20 rounded-full" alt="avatar1" src="{{ Auth::guard('student')->user()->image }}" /> --}}
-                    {{-- @if ($userAuth->image)
-                        <img src="{{ asset($userAuth->image) }}" alt="Student Image"
-                            class="w-20 h-20 rounded-full object-cover">
-                    @else
-                        <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
-                            class="w-30 h-20 rounded-full object-cover">
-                    @endif --}}
-                    <img  class="w-20 h-20 rounded-full object-cover" alt="avatar" src="{{ $userAuth->image ? asset($userAuth->image)  : asset('images/default_user.jpg') }}" />
+
+                    <img class="w-20 h-20 rounded-full object-cover" alt="avatar"
+                        src="{{ $userAuth->image ? asset($userAuth->image) : asset('images/default_user.jpg') }}" />
 
                 </div>
 
@@ -43,6 +37,12 @@
 
                     </div>
                 </div>
+
+            </div>
+            <div>
+                <button onclick="openEditModal('editPassword')">
+                    <i class="fas fa-edit text-white text-xl"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -94,7 +94,7 @@
                 </div>
             </div>
         @endforeach
-        @if(count($materials) == 0)
+        @if (count($materials) == 0)
             <p class="m-auto text-gray-500">No Themes yet</p>
         @endif
     </div>
@@ -159,15 +159,55 @@
 
 
 @section('page_js')
-<script>
-    function openModal(id, filePath) {
-        let modalContent = `
+    <script>
+        function openModal(id, filePath) {
+            let modalContent = `
             <embed src="${filePath}" width="100%" height="90%" />
             <img src="{{ asset('assets/img/watermark 2.png') }}" 
                 class="absolute inset-0 w-full h-full opacity-50 z-10"
                 style="pointer-events: none;">
         `;
-        document.getElementById(id + '-content').innerHTML = modalContent;
+            document.getElementById(id + '-content').innerHTML = modalContent;
+            document.getElementById(id).classList.remove("hidden");
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add("hidden");
+        }
+    </script>
+@endsection
+
+<form action="{{ route('changeStudentPassword') }}" method="POST" id="editPassword"
+    class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-10 hidden">
+    @csrf
+    <div class="bg-white rounded-lg shadow-lg  w-[50%]">
+        <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-gray-900">
+                Edit password
+            </h3>
+            <div class="flex justify-end">
+                <button onclick="closeModal('editPassword')" type="button"
+                    class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Close</button>
+            </div>
+        </div>
+
+        <div class="px-3 mb-3">
+            <div class="rounded-2xl bg-[#F6F6F6] text-start px-4 md:px-6 py-3 md:py-4 my-4 md:my-5">
+                <p class="font-semibold text-base md:text-lg text-[#1C1C1E]">Password</p>
+                <input placeholder="Change Your Password" name="password" required
+                    class="w-full rounded-2xl p-2 md:p-4 mt-5 text-sm md:text-base" type="password"
+                    value="">
+            </div>
+
+            <button class="bg-[#17253E] font-bold text-base md:text-lg text-white rounded-2xl py-3 px-4 md:px-7"
+                type="submit">Save</button>
+        </div>
+
+    </div>
+</form>
+
+<script>
+    function openEditModal(id) {
         document.getElementById(id).classList.remove("hidden");
     }
 
@@ -175,4 +215,3 @@
         document.getElementById(id).classList.add("hidden");
     }
 </script>
-@endsection

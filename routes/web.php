@@ -19,6 +19,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchoolTypeController;
+use App\Http\Controllers\Student\PasswordStudentController;
 use App\Http\Controllers\StudentAssessmentController;
 use App\Http\Controllers\Teacher\TeacherClasses;
 use App\Http\Controllers\Teacher\TeacherDashboardController;
@@ -135,6 +136,8 @@ Route::get('/chapters/{chapterId}/lessons', [ControllersChapterController::class
 //     ->name('student.chapters.index');
 
 Route::get('/lessons/{lessonId}/ebooks', [ControllersChapterController::class, 'viewEbooks'])->name('student_lessons.ebooks');
+
+Route::post('changeStudentPassword', [PasswordStudentController::class, 'changePassword'])->name('changeStudentPassword');
 
 // End student  dashboard routes
 
