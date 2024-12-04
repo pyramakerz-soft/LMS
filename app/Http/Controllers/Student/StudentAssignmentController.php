@@ -31,14 +31,14 @@ class StudentAssignmentController extends Controller
     public function show($assignmentId)
     {
         $userAuth = auth()->guard('student')->user();
-        
+
         if ($userAuth) {
             $assignment = Assignment::find($assignmentId);
-            
-            $studentAssignment = DB::table('assignment_student')    
-            ->where('assignment_id', $assignmentId)
-            ->where('student_id', $userAuth->id)
-            ->first();
+
+            $studentAssignment = DB::table('assignment_student')
+                ->where('assignment_id', $assignmentId)
+                ->where('student_id', $userAuth->id)
+                ->first();
 
             if (file_exists($assignment->path_file)) {
                 $assignment->file_size = filesize($assignment->path_file);
@@ -57,7 +57,7 @@ class StudentAssignmentController extends Controller
 
         if ($userAuth) {
             $request->validate([
-                'file_upload' => 'required|file|mimes:xlsx,xls',
+                'file_upload' => 'required|file|mimes:xlsx,xls,pdf',
                 'assignment_id' => 'required|exists:assignments,id',
             ]);
 

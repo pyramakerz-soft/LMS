@@ -140,25 +140,26 @@
                 document.getElementById('class_id').disabled = true;
             }
         });
+        /*
+                document.getElementById('username').addEventListener('input', function(event) {
+                    const inputField = event.target;
+                    const invalidFeedback = inputField.nextElementSibling; // Target the invalid-feedback div
 
-        document.getElementById('username').addEventListener('input', function(event) {
-            const inputField = event.target;
-            const invalidFeedback = inputField.nextElementSibling; // Target the invalid-feedback div
+                    // Regular expression to allow only letters and spaces
+                    const regex = /^[a-zA-Z\s]*$/;
 
-            // Regular expression to allow only letters and spaces
-            const regex = /^[a-zA-Z\s]*$/;
+                    // Remove invalid characters immediately
+                    inputField.value = inputField.value.replace(/[^a-zA-Z\s]/g, '');
 
-            // Remove invalid characters immediately
-            inputField.value = inputField.value.replace(/[^a-zA-Z\s]/g, '');
-
-            // Check if the current input matches the allowed pattern
-            if (!regex.test(inputField.value)) {
-                inputField.classList.add('is-invalid');
-                invalidFeedback.style.display = 'block'; // Show error message
-            } else {
-                inputField.classList.remove('is-invalid');
-                invalidFeedback.style.display = 'none'; // Hide error message
-            }
-        });
+                    // Check if the current input matches the allowed pattern
+                    if (!regex.test(inputField.value)) {
+                        inputField.classList.add('is-invalid');
+                        invalidFeedback.style.display = 'block'; // Show error message
+                    } else {
+                        inputField.classList.remove('is-invalid');
+                        invalidFeedback.style.display = 'none'; // Hide error message
+                    }
+                });
+                */
     </script>
 @endsection

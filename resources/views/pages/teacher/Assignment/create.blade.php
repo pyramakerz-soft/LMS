@@ -121,7 +121,7 @@
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">File Upload</label>
                 <input type="file" name="path_file"
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
-                    id="path_file" accept=".xlsx, .xls">
+                    id="path_file" accept=".xlsx, .xls , pdf">
 
                 <label for="link"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Link</label>

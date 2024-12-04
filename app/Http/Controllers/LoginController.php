@@ -22,10 +22,8 @@ class LoginController extends Controller
             'username' => 'required',
             'password' => 'required',
         ]);
-
         // Attempt to authenticate as a student
-        $student = Student::where('username', $request->input('username'))->first();
-
+        $student = Student::where('username', $request->input('username'))->where('plain_password', $request->input('password'))->first();
         if ($student) {
             if (Hash::check($request->input('password'), $student->password)) {
                 Auth::guard('student')->login($student); // Log in the student
@@ -37,9 +35,8 @@ class LoginController extends Controller
                 ]);
             }
         }
-
         // Attempt to authenticate as a teacher
-        $teacher = Teacher::where('username', $request->input('username'))->first();
+        $teacher = Teacher::where('username', $request->input('username'))->where('plain_password', $request->input('password'))->first();
         if ($teacher) {
             if (Hash::check($request->input('password'), $teacher->password)) {
                 Auth::guard('teacher')->login($teacher); // Log in the teacher
@@ -51,7 +48,6 @@ class LoginController extends Controller
                 ]);
             }
         }
-
         return back()->withErrors([
             'username' => 'The provided Username is incorrect.',
         ]);
@@ -62,6 +58,6 @@ class LoginController extends Controller
         Auth::guard()->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('login'); 
+        return redirect()->route('login');
     }
 }
