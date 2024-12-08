@@ -100,7 +100,7 @@ class AssignmentController extends Controller
             'class_ids' => 'required|array',
             'class_ids.*' => 'exists:groups,id',
             'week' => 'required',
-            'path_file' => 'nullable|file|required_without:link',
+            'path_file' => 'nullable|file|required_without:link|mimes:pdf,xlsx,xls,doc,docx',
             'link' => 'nullable|url|required_without:path_file',
             'start_date' => 'required|date|after_or_equal:today',
             'due_date' => 'required|date|after_or_equal:start_date',
