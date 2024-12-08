@@ -101,11 +101,25 @@
 
                 <label for="lesson_id"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select Lesson</label>
-                <select name="lesson_id" id="lesson_id"
+                {{-- <select name="lesson_id" id="lesson_id"
                     class="form-control w-full p-2 md:p-4 border border-[#E5E5EA] rounded-xl" required>
                     <option value="">--Select Lesson--</option>
                     @foreach ($lessons as $lesson)
                         <option value="{{ $lesson->id }}">{{ $lesson->title }}</option>
+                    @endforeach
+                </select> --}}
+                <select name="lesson_id" id="lesson_id"
+                    class="form-control w-full p-2 md:p-4 border border-[#E5E5EA] rounded-xl" required>
+                    <option value="">--Select Lesson--</option>
+                    @foreach ($lessons as $lesson)
+                        @php
+                            $theme = $lesson->chapter->unit->material->title ?? 'No Theme';
+                            $unit = $lesson->chapter->unit->title ?? 'No Unit';
+                            $chapter = $lesson->chapter->title ?? 'No Chapter';
+                        @endphp
+                        <option value="{{ $lesson->id }}">
+                            {{ $theme }} > {{ $unit }} > {{ $chapter }} > {{ $lesson->title }}
+                        </option>
                     @endforeach
                 </select>
 

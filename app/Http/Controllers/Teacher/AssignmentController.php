@@ -68,7 +68,7 @@ class AssignmentController extends Controller
 
         if ($userAuth) {
             // Fetch all lessons
-            $lessons = Lesson::all();
+            $lessons = Lesson::with('chapter.unit.material')->get();
 
             // Get all stages assigned to this teacher
             $stages = $userAuth->stages;
