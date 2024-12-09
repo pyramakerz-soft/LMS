@@ -73,11 +73,11 @@
                                             <i class="fas fa-eye text-[#101828] w-5 md:w-6 mx-2"></i>
                                         </a>
                                         <form action="{{ route('assignments.destroy', $row->id) }}" method="POST"
-                                            style="display:inline-block;">
+                                            style="display:inline-block;" id="delete-form-{{ $row->id }}">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger"
-                                                onclick="return confirm('Are you sure you want to delete this assignment?');">
+                                            <button type="button" class="btn btn-danger"
+                                                onclick="confirmDelete({{ $row->id }})">
                                                 <i class="fa fa-trash text-[#CC161D] ml-2 w-5 md:w-6"></i>
                                             </button>
                                         </form>
@@ -90,4 +90,27 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('page_js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function confirmDelete(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#88C273',
+            cancelButtonColor: '#d33',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        });
+    }
+    </script>
+    
 @endsection
