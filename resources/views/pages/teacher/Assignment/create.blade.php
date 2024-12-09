@@ -3,10 +3,12 @@
     Teacher
 @endsection
 @php
-    $menuItems = [['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
-    ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')]];
+    $menuItems = [
+        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
+        ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
+    ];
 
-    $fileExErr = false
+    $fileExErr = false;
 @endphp
 
 @section('sidebar')
@@ -39,7 +41,8 @@
                 </ul>
             </div>
         @endif
-        <form action="{{ route('assignments.store') }}" method="POST" enctype="multipart/form-data" class="mt-5" id="form">
+        <form action="{{ route('assignments.store') }}" method="POST" enctype="multipart/form-data" class="mt-5"
+            id="form">
             @csrf
             <div class="mb-3 border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F]">
                 <label for="title"
@@ -91,9 +94,13 @@
                     @endforeach
                 </select>
 
-                <label for="class_ids" class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select Classes</label>
+                <label for="class_ids"
+                    class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select
+                    Classes</label>
 
-                <select name="class_ids[]" id="class_ids" class="flex justify-between items-center w-full p-2 md:p-4 border border-[#E5E5EA] rounded-xl cursor-pointer" multiple required>
+                <select name="class_ids[]" id="class_ids"
+                    class="flex justify-between items-center w-full p-2 md:p-4 border border-[#E5E5EA] rounded-xl cursor-pointer"
+                    multiple required>
                     @foreach ($classes as $class)
                         <option value="">--Select Classes--</option>
                         <option value="{{ $class->class->id }}">{{ $class->class->name }}</option>
@@ -137,7 +144,8 @@
                 <input type="file" name="path_file"
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
                     id="path_file" accept=".xlsx, .xls, .pdf, .doc, .docx">
-                    <span id="fileErr" class="text-red-500 ml-3 font-normal hidden">*Invalid File, Allow only .xlsx, .xls, .pdf, .doc, .docx</span>
+                <span id="fileErr" class="text-red-500 ml-3 font-normal hidden">*Invalid File, Allow only .xlsx, .xls,
+                    .pdf, .doc, .docx</span>
                 <label for="link"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Link</label>
                 <input type="url" name="link"
@@ -160,6 +168,12 @@
 @endsection
 
 @section('page_js')
+    <script>
+        $('#class_ids').select2({
+            placeholder: "Select Classes",
+            allowClear: true
+        });
+    </script>
     <script>
         function filterNumericInput(event) {
             const input = event.target;

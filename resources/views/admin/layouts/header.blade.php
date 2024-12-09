@@ -12,9 +12,8 @@
      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
  <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-<style >
-.buttonBar.left {
-    display: none;
-}
-
-</style>
+ <style>
+     .buttonBar.left {
+         display: none;
+     }
+ </style>
