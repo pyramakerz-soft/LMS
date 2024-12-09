@@ -2,8 +2,10 @@
 @section('title', 'Edit Assignment')
 
 @php
-    $menuItems = [['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
-    ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')]];
+    $menuItems = [
+        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
+        ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
+    ];
 @endphp
 
 @section('sidebar')
@@ -104,7 +106,8 @@
 
                 <!-- Select Classes (multiple) -->
                 <label for="class_ids"
-                    class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select Classes</label>
+                    class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select
+                    Classes</label>
                 <select name="class_ids[]" id="class_ids"
                     class="form-control w-full p-2 md:p-4 border border-[#E5E5EA] rounded-xl" multiple required>
                     @foreach ($classes as $class)
@@ -135,11 +138,13 @@
                 <label for="path_file"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm mt-5 text-[#3A3A3C]">File Upload</label>
                 <input type="file" name="path_file"
-                    class="border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" id="path_file" accept=".xlsx, .xls, .pdf, .doc, .docx">
+                    class="border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base" id="path_file"
+                    accept=".xlsx, .xls, .pdf, .doc, .docx">
                 @if ($assignment->path_file)
                     <p>Current File: <a href="{{ asset($assignment->path_file) }}">Download</a></p>
                 @endif
-                <span id="fileErr" class="text-red-500 ml-3 font-normal hidden">*Invalid File, Allow only .xlsx, .xls, .pdf, .doc, .docx</span>
+                <span id="fileErr" class="text-red-500 ml-3 font-normal hidden">*Invalid File, Allow only .xlsx, .xls,
+                    .pdf, .doc, .docx</span>
 
                 <!-- Link -->
                 <label for="link"
@@ -166,6 +171,12 @@
 @endsection
 
 @section('page_js')
+    <script>
+        $('#class_ids').select2({
+            placeholder: "Select Classes",
+            allowClear: true
+        });
+    </script>
     <script>
         $(document).ready(function() {
             // Initialize Summernote
