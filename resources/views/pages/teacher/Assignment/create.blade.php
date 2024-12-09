@@ -3,7 +3,10 @@
     Teacher
 @endsection
 @php
-    $menuItems = [['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')]];
+    $menuItems = [['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
+    ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')]];
+
+    $fileExErr = false
 @endphp
 
 @section('sidebar')
@@ -36,7 +39,7 @@
                 </ul>
             </div>
         @endif
-        <form action="{{ route('assignments.store') }}" method="POST" enctype="multipart/form-data" class="mt-5">
+        <form action="{{ route('assignments.store') }}" method="POST" enctype="multipart/form-data" class="mt-5" id="form">
             @csrf
             <div class="mb-3 border border-[#ECECEC] rounded-lg p-4 md:p-8 shadow-md shadow-[#0000001F]">
                 <label for="title"
@@ -88,13 +91,11 @@
                     @endforeach
                 </select>
 
-                <label for="class_ids"
-                    class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select
-                    Classes</label>
-                <select name="class_ids[]" id="class_ids"
-                    class="form-control w-full p-2 md:p-4 border border-[#E5E5EA] rounded-xl" multiple required>
-                    <option value="">--Select Classes--</option>
+                <label for="class_ids" class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select Classes</label>
+
+                <select name="class_ids[]" id="class_ids" class="flex justify-between items-center w-full p-2 md:p-4 border border-[#E5E5EA] rounded-xl cursor-pointer" multiple required>
                     @foreach ($classes as $class)
+                        <option value="">--Select Classes--</option>
                         <option value="{{ $class->class->id }}">{{ $class->class->name }}</option>
                     @endforeach
                 </select>
@@ -136,7 +137,7 @@
                 <input type="file" name="path_file"
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
                     id="path_file" accept=".xlsx, .xls, .pdf, .doc, .docx">
-
+                    <span id="fileErr" class="text-red-500 ml-3 font-normal hidden">*Invalid File, Allow only .xlsx, .xls, .pdf, .doc, .docx</span>
                 <label for="link"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Link</label>
                 <input type="url" name="link"
@@ -160,13 +161,6 @@
 
 @section('page_js')
     <script>
-        $(document).ready(function() {
-            $('#class_ids').select2({
-                placeholder: "Select Classes",
-                allowClear: true
-            });
-        });
-
         function filterNumericInput(event) {
             const input = event.target;
             let previousValue = input.value;
@@ -185,6 +179,25 @@
         document.getElementById('due_date').addEventListener('change', function() {
             const dueDate = this.value;
             document.getElementById('start_date').max = dueDate;
+        });
+
+        const form = document.getElementById('form');
+        const fileInput = document.getElementById('path_file');
+        const allowedExtensions = ['.xlsx', '.xls', '.pdf', '.doc', '.docx'];
+
+        form.addEventListener('submit', function(event) {
+            const file = fileInput.files[0];
+
+            if (file) {
+                const fileName = file.name;
+                const fileExtension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
+
+                if (!allowedExtensions.includes(fileExtension)) {
+                    document.getElementById("fileErr")?.classList.remove("hidden");
+                    document.getElementById("fileErr")?.classList.add("flex");
+                    event.preventDefault();
+                }
+            }
         });
     </script>
 @endsection
