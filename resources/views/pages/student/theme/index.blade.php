@@ -95,7 +95,7 @@
             </div>
         @endforeach
         @if (count($materials) == 0)
-            <p class="m-auto text-gray-500">No Themes yet</p>
+            <p class="mx-auto text-gray-500">No Themes yet</p>
         @endif
     </div>
 @endsection
