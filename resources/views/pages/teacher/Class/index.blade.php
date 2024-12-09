@@ -7,7 +7,6 @@
 @php
     $menuItems = [['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
     ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')]];
-    $classesTeachers = []
 @endphp
 
 @section('sidebar')
@@ -26,7 +25,7 @@
     <!-- Display Chapters -->
     <div class="flex flex-wrap ">
         @if (count($classesTeachers) == 0)
-            <div class="m-auto text-gray-500">
+            <div class="mx-auto text-gray-500">
                 No Classes Assigned to this user
             </div>
         @endif
