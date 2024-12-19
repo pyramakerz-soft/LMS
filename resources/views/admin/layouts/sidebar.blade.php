@@ -19,10 +19,10 @@
                 </a>
             </li>
             {{-- <li class="sidebar-item {{ request()->is('admin/teacher_resources') ? 'active' : '' }}">
-                <a class="sidebar-link" href="{{ route('teacher_resources.index') }}">
-                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Teacher
-                        resources</span>
-                </a>
+            <a class="sidebar-link" href="{{ route('teacher_resources.index') }}">
+                <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Teacher
+                    resources</span>
+            </a>
             </li> --}}
 
             <li class="sidebar-item {{ request()->is('admin/types') ? 'active' : '' }}">
@@ -75,8 +75,8 @@
 
             {{-- <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('ebooks.index') }}">
-                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Ebook</span>
-                </a>
+            <i class="align-middle" data-feather="square"></i> <span class="align-middle">Ebook</span>
+            </a>
             </li> --}}
             <li class="sidebar-item {{ request()->is('admin/students') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('students.index') }}">
@@ -88,8 +88,16 @@
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Teacher</span>
                 </a>
             </li>
-
-
+            <li class="sidebar-item {{ request()->is('admin/observer') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('observers.index') }}">
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Observer</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ request()->is('admin/reports/homework_report') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('admin.homework_report') }}">
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Homework Report</span>
+                </a>
+            </li>
         </ul>
 
     </div>
