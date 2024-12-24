@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\EbookController;
 use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\MaterialController;
+use App\Http\Controllers\Admin\ObserverController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\StageController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TeacherController;
@@ -26,6 +28,7 @@ use App\Http\Controllers\Teacher\TeacherDashboardController;
 use App\Http\Controllers\Teacher\TeacherResources;
 use App\Http\Controllers\Teacher\TeacherUnitController;
 use App\Http\Controllers\Student\StudentAssignmentController;
+use App\Http\Controllers\Observer\ObserverDashboardController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UnitController as ControllersUnitController;
 use App\Models\Group;
@@ -51,9 +54,9 @@ Route::get('/', function () {
 
 
 Route::prefix('admin')->group(function () {
+    Route::get('/get-students-school/{school}', [ReportController::class, 'getSchoolStudents'])->name('getSchoolStudents');
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/loginP', [AuthController::class, 'login'])->name('admin.login.post');
-
     Route::middleware('auth:admin')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
 
@@ -73,10 +76,15 @@ Route::prefix('admin')->group(function () {
 
         Route::resource('students', StudentController::class);
         Route::resource('teachers', TeacherController::class);
+        Route::resource('observers', ObserverController::class);
         Route::resource('admins', AdminController::class);
         Route::resource('images', ImageController::class);
         Route::resource('types', TypeController::class);
         Route::resource('teacher_resources', TeacherResourceController::class);
+        Route::get('reports/assignment_avg_report', [ReportController::class, 'assignmentAvgReport'])->name('admin.assignmentAvgReport');
+        Route::get('reports/compare_report', [ReportController::class, 'compareReport'])->name('admin.compareReport');
+        Route::get('/get-teachers-school/{schoolId}', [ReportController::class, 'getSchoolTeachers'])->name('getSchoolTeachers');
+
 
         Route::get('school/{schoolId}/curriculum', [AdminController::class, 'assignCurriculum'])->name('school.curriculum.assign');
         Route::post('school/{schoolId}/curriculum', [AdminController::class, 'storeCurriculum'])->name('school.curriculum.store');
@@ -147,6 +155,11 @@ Route::post('changeStudentPassword', [PasswordStudentController::class, 'changeP
 Route::get('/teacher/dashboard', function () {
     return 'Teacher Dashboard';
 })->middleware('auth:teacher')->name('teacher.dashboard');
+
+
+// Route::get('/observer/dashboard', function () {
+//     return 'Observer Dashboard';
+// })->middleware('auth:observer')->name('observer.dashboard');
 
 
 Route::get('/assignment', [StudentAssignmentController::class, 'index'])->name('student.assignment');
@@ -243,6 +256,17 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::get('/teacher/theme', function () {
         return view('pages.teacher.teacherTheme');
     })->name('teacher.TTheme');
+});
+Route::prefix('observer')->middleware('auth:observer')->group(function () {
+    Route::get('/dashboard', [ObserverDashboardController::class, 'index'])->name('observer.dashboard');
+    Route::get('/report', [ObserverDashboardController::class, 'report'])->name('observer.report');
+
+    Route::get('/observation/create', [ObserverDashboardController::class, 'createObservation'])->name('observer.observation.create');
+    Route::get('/observation/get_school/{teacher_id}', [ObserverDashboardController::class, 'getSchool'])->name('observer.observation.getSchool');
+    Route::get('/observation/get_stages/{teacher_id}', [ObserverDashboardController::class, 'getStages'])->name('observer.observation.getStages');
+    Route::get('/observation/store/', [ObserverDashboardController::class, 'store'])->name('observation.store');
+    Route::delete('/observation/delete/{id}', [ObserverDashboardController::class, 'destroy'])->name('observation.destroy');
+    Route::get('/observation/view/{id}', [ObserverDashboardController::class, 'view'])->name('observation.view');
 });
 
 Route::get('/create_assignment', function () {

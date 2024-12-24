@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Observer;
 use App\Models\Student;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
@@ -41,6 +42,19 @@ class LoginController extends Controller
             if (Hash::check($request->input('password'), $teacher->password)) {
                 Auth::guard('teacher')->login($teacher); // Log in the teacher
                 return redirect()->route('teacher.dashboard');
+            } else {
+                // Password is incorrect
+                return back()->withErrors([
+                    'password' => 'The provided Password is incorrect.',
+                ]);
+            }
+        }
+
+        $observer = Observer::where('username', $request->input('username'))->first();
+        if ($observer) {
+            if (Hash::check($request->input('password'), $observer->password)) {
+                Auth::guard('observer')->login($observer);
+                return redirect()->route('observer.dashboard');
             } else {
                 // Password is incorrect
                 return back()->withErrors([
