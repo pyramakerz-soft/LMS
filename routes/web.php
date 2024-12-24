@@ -204,11 +204,15 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::get('students_classess/{class_id}', [TeacherClasses::class, 'students'])->name('students_classess');
     Route::post('store-assessment', [TeacherClasses::class, 'storeAssessment'])->name('teacher.storeAssessment');
 
-   
+
 
     Route::get('show-assignments/{id}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'showAssignments'])->name('assignments.showAssignments');
 
     Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
+
+    Route::get('teacher/api/stages/{stageId}/classes', [\App\Http\Controllers\Teacher\AssignmentController::class, 'getClassesByStage'])
+    ->name('teacher.get-classes');
+
 
 
 
