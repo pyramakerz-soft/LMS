@@ -191,10 +191,11 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::get('students_classess/{class_id}', [TeacherClasses::class, 'students'])->name('students_classess');
     Route::post('store-assessment', [TeacherClasses::class, 'storeAssessment'])->name('teacher.storeAssessment');
 
-    Route::get('assignments/{id}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'showAssignments'])->name('assignments.showAssignments');
+   
 
+    Route::get('show-assignments/{id}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'showAssignments'])->name('assignments.showAssignments');
 
-    Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class)->except('index');
+    Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
 
 
 
