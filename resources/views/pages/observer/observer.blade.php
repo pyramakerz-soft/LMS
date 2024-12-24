@@ -54,6 +54,8 @@ $menuItems = [
         <table class="w-full border border-gray-300 text-sm text-left">
             <thead class="bg-gray-100">
                 <tr>
+
+                    <th class="border px-4 py-2">Observation Name</th>
                     <th class="border px-4 py-2">Observer Name</th>
                     <th class="border px-4 py-2">Teacher Name</th>
                     <th class="border px-4 py-2">Co-Teacher Name</th>
@@ -66,6 +68,7 @@ $menuItems = [
             <tbody>
                 @forelse ($observations as $observation)
                 <tr>
+                    <td class="border px-4 py-2">{{ $observation->name }}</td>
                     <td class="border px-4 py-2">{{ App\Models\Observer::find($observation->observer_id)->name }}</td>
                     <td class="border px-4 py-2">{{ $observation->teacher_name }}</td>
                     <td class="border px-4 py-2">{{ $observation->coteacher_name }}</td>

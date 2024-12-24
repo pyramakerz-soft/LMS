@@ -94,6 +94,10 @@ $menuItems = [
             <div class="w-1/3 p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-lg">
                 <div class="info mb-3">
                     <div class="mb-3">
+                        <label for="observation_name" class="block text-sm font-medium text-gray-700">Observation Name</label>
+                        <input class="w-full p-2 border border-gray-300 rounded" type="text" name="observation_name" value="{{$observation->name}}" disabled required>
+                    </div>
+                    <div class="mb-3">
                         <label for="observer" class="block text-sm font-medium text-gray-700">Observer Username</label>
                         <select name="observer_id" id="observer_id" class="w-full p-2 border border-gray-300 rounded" required>
                             <option value="{{$observer->id}}">{{$observer->username}}</option>

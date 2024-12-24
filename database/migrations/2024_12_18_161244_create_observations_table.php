@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('observer_id')->constrained()->on('observers')->onDelete('cascade');
             $table->foreignId('teacher_id')->constrained()->on('teachers')->onDelete('cascade');
             $table->foreignId('stage_id')->constrained()->on('stages')->onDelete('cascade');
-            $table->foreignId('material_id')->constrained()->on('materials')->onDelete('cascade');
+            $table->foreignId('material_id')->nullable()->constrained()->on('materials')->onDelete('cascade');
             $table->foreignId('school_id')->constrained()->on('schools')->onDelete('cascade');
             $table->date('activity')->nullable();
             $table->time('start_time')->nullable();

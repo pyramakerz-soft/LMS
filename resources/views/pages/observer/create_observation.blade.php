@@ -43,9 +43,24 @@ $menuItems = [
 
 @section('content')
 <div class="p-3 text-[#667085] my-8">
+
+    <div id="timer" style="
+    margin-bottom: 20px;
+    color: #fff;
+    background-color: #17253e;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+">Please wait 25:00 before submitting.
+    </div>
+
     <div class="overflow-x-auto">
-        <form action="{{ route('observation.store') }}" method="GET" enctype="multipart/form-data" class="mb-4 flex" style="gap:10px; padding:10px">
+        <form action="{{ route('observation.store') }}" method="GET" enctype="multipart/form-data" class="mb-4 flex" style="gap:10px; padding:10px" id="observation_form">
             @csrf
+
 
             <div class="questions mb-3" style="max-width: 65%;">
                 @foreach ($headers as $header)
@@ -79,13 +94,17 @@ $menuItems = [
                 <textarea
                     name="note"
                     placeholder="Enter your comments here..."
-                    class="w-full mb-3 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    class="w-full mb-3 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
                     rows="4"></textarea>
 
-                <button type="submit" class="mt-2 text-white hover:bg-blue-700 px-4 py-2 rounded-lg" style="background-color: #17253e;">Create Observation</button>
+                <button type="submit" id="submit-button" class="mt-2 text-white hover:bg-blue-700 px-4 py-2 rounded-lg" style="background-color: #17253e;">Create Observation</button>
             </div>
             <div class="w-1/3 p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-lg">
                 <div class="info mb-3">
+                    <div class="mb-3">
+                        <label for="observation_name" class="block text-sm font-medium text-gray-700">Observation Name</label>
+                        <input class="w-full p-2 border border-gray-300 rounded" type="text" name="observation_name" required>
+                    </div>
                     <div class="mb-3">
                         <label for="observer" class="block text-sm font-medium text-gray-700">Observer Username</label>
                         <select name="observer_id" id="observer_id" class="w-full p-2 border border-gray-300 rounded" required>
@@ -156,6 +175,58 @@ $menuItems = [
     }
 </style>
 @section('page_js')
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        localStorage.setItem('lastSubmissionTime', new Date().getTime());
+        const submitButton = document.getElementById('submit-button');
+        const timerElement = document.getElementById('timer');
+        const form = document.getElementById('my-form');
+        const restrictionTime = 25 * 60 * 1000 - 1000; // 25 minutes in milliseconds
+
+        // Check localStorage for last submission time
+        const lastSubmissionTime = localStorage.getItem('lastSubmissionTime');
+        const now = new Date().getTime();
+
+        // If last submission time exists and 25 minutes haven't passed
+        if (lastSubmissionTime && now - lastSubmissionTime < restrictionTime) {
+            const remainingTime = Math.ceil((restrictionTime - (now - lastSubmissionTime)) / 1000);
+
+            // Start the countdown
+            startCountdown(remainingTime);
+
+            // Disable the submit button
+            submitButton.disabled = true;
+        } else {
+            // Allow submission if restriction time has passed
+            timerElement.textContent = 'You can now submit the form.';
+        }
+
+        // Form submission handler
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent form submission for demo purposes
+            localStorage.setItem('lastSubmissionTime', new Date().getTime());
+            submitButton.disabled = true;
+            startCountdown(25 * 60);
+        });
+
+        function startCountdown(seconds) {
+            let remainingTime = seconds;
+            const interval = setInterval(() => {
+                if (remainingTime <= 0) {
+                    clearInterval(interval);
+                    timerElement.textContent = 'You can now submit the form.';
+                    submitButton.disabled = false;
+                } else {
+                    const minutes = Math.floor(remainingTime / 60);
+                    const seconds = remainingTime % 60;
+                    timerElement.textContent = `Please wait ${minutes}:${seconds.toString().padStart(2, '0')} before submitting.`;
+                    remainingTime--;
+                }
+            }, 1000);
+        }
+    });
+</script>
 <script>
     $(document).ready(function() {
 
@@ -192,6 +263,7 @@ $menuItems = [
     function getSchool(teacherId) {
         $.ajax({
             url: '/LMS/lms_pyramakerz/public/observer/observation/get_school/' + teacherId,
+            // url: '/observer/observation/get_school/' + teacherId,
             type: "GET",
             dataType: "json",
             success: function(data) {
@@ -221,6 +293,7 @@ $menuItems = [
     function getStages(teacherId) {
         $.ajax({
             url: '/LMS/lms_pyramakerz/public/observer/observation/get_stages/' + teacherId,
+            // url: '/observer/observation/get_stages/' + teacherId,
             type: "GET",
             dataType: "json",
             success: function(data) {

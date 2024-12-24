@@ -70,6 +70,7 @@ class ObserverDashboardController extends Controller
     {
         // dd($request->all());
         $validated = $request->validate([
+            'observation_name' => 'required|string',
             'observer_id' => 'required|integer',
             'teacher_id' => 'required|integer',
             'coteacher_id' => 'nullable|integer',
@@ -82,6 +83,7 @@ class ObserverDashboardController extends Controller
         $coteacher = Teacher::find($request->coteacher_id);
 
         $observation = Observation::create([
+            'name' => $request->observation_name,
             'teacher_name' => $teacher->username,
             'observer_id' => $request->observer_id,
             'teacher_id' => $request->teacher_id,
