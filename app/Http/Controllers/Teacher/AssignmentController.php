@@ -39,7 +39,7 @@ class AssignmentController extends Controller
             $assignments = Assignment::where('teacher_id', $userAuth->id)
                 ->with(['school', 'lesson'])
                 ->whereHas('stages', function ($q) use ($id) {
-                    $q->where('stage_id', $id); 
+                    $q->where('stage_id', $id);
                 })
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -88,15 +88,12 @@ class AssignmentController extends Controller
         $userAuth = auth()->guard('teacher')->user();
 
         if ($userAuth) {
-            // Fetch all lessons
             $lessons = Lesson::with('chapter.unit.material')->get();
 
-            // Get all stages assigned to this teacher
             $stages = $userAuth->stages;
 
-            // Fetch all classes for the authenticated teacher's school
             $classes = TeacherClass::where('teacher_id', $userAuth->id)
-                ->with('class') // Ensure you load the related Group model for each entry
+                ->with('class')
                 ->get();
 
             return view('pages.teacher.Assignment.create', compact('lessons', 'stages', 'classes', 'userAuth'));
@@ -104,6 +101,38 @@ class AssignmentController extends Controller
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
     }
+    public function getClassesByStage($stageId)
+    {
+        // Get the authenticated teacher
+        $userAuth = auth()->guard('teacher')->user();
+
+        if (!$userAuth) {
+            return response()->json(['error' => 'Unauthorized access'], 403);
+        }
+
+        // Ensure the teacher has the selected stage
+        $hasStage = $userAuth->stages()->where('stage_id', $stageId)->exists();
+        if (!$hasStage) {
+            return response()->json(['error' => 'Teacher does not have access to this stage'], 403);
+        }
+
+        // Fetch classes associated with the teacher and the selected stage
+        $classes = $userAuth->classes()
+            ->whereHas('stage', function ($query) use ($stageId) {
+                $query->where('id', $stageId);
+            })
+            ->get()
+            ->map(function ($class) {
+                return [
+                    'id' => $class->id,
+                    'name' => $class->name,
+                ];
+            });
+
+        return response()->json($classes);
+    }
+
+
 
     public function store(Request $request)
     {
@@ -174,8 +203,13 @@ class AssignmentController extends Controller
                 ]);
             }
         }
+        $assignments = Assignment::where('teacher_id', $userAuth->id)
+            ->with(['school', 'lesson'])
 
-        return redirect()->route('assignments.index')->with('success', 'Assignment created successfully.');
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('pages.teacher.Assignment.index', compact('assignments'))->with('success', 'Assignment created successfully.');
     }
 
 

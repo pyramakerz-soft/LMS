@@ -84,7 +84,7 @@
                     <option value="8">week 8</option>
 
                 </select>
-                <label for="stage_id"
+                {{-- <label for="stage_id"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select Stage</label>
                 <select name="stage_id" id="stage_id"
                     class="form-control w-full p-2 md:p-4 border border-[#E5E5EA] rounded-xl" required>
@@ -105,6 +105,25 @@
                         <option value="">--Select Classes--</option>
                         <option value="{{ $class->class->id }}">{{ $class->class->name }}</option>
                     @endforeach
+                </select> --}}
+
+                <label for="stage_id"
+                    class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select Stage</label>
+                <select name="stage_id" id="stage_id"
+                    class="form-control w-full p-2 md:p-4 border border-[#E5E5EA] rounded-xl" required>
+                    <option value="">--Select Stage--</option>
+                    @foreach ($stages as $stage)
+                        <option value="{{ $stage->id }}">{{ $stage->name }}</option>
+                    @endforeach
+                </select>
+
+                <!-- Class Dropdown -->
+                <label for="class_ids"
+                    class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select
+                    Classes</label>
+                <select name="class_ids[]" id="class_ids"
+                    class="form-control w-full p-2 md:p-4 border border-[#E5E5EA] rounded-xl" multiple disabled>
+                    <option value="">--Select Classes--</option>
                 </select>
 
                 <label for="lesson_id"
@@ -174,6 +193,43 @@
             allowClear: true
         });
     </script>
+    <script>
+        document.getElementById('stage_id').addEventListener('change', function() {
+            const stageId = this.value;
+            const classDropdown = document.getElementById('class_ids');
+
+            // Clear and disable the class dropdown initially
+            classDropdown.innerHTML = '<option value="">--Select Classes--</option>';
+            classDropdown.disabled = true;
+
+            if (stageId) {
+                fetch(`/teacher/teacher/api/stages/${stageId}/classes`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error fetching classes');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Populate the class dropdown
+                        data.forEach(classItem => {
+                            const option = document.createElement('option');
+                            option.value = classItem.id;
+                            option.textContent = classItem.name;
+                            classDropdown.appendChild(option);
+                        });
+
+                        // Enable the class dropdown
+                        classDropdown.disabled = false;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching classes:', error);
+                        alert('Unable to fetch classes. Please try again later.');
+                    });
+            }
+        });
+    </script>
+
     <script>
         function filterNumericInput(event) {
             const input = event.target;
