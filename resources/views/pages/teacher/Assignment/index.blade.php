@@ -49,13 +49,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($Assignment->isEmpty())
+                        @if ($assignments->isEmpty())
                             <tr>
                                 <td colspan="8" class="px-4 py-4 h-[72px] text-center border-t border-gray-300">No Data
                                     Found</td>
                             </tr>
                         @else
-                            @foreach ($Assignment as $row)
+                            @foreach ($assignments as $row)
                                 <tr
                                     class="border-t border-gray-300 {{ $loop->index % 2 === 0 ? 'bg-[#F4F4F4]' : 'bg-white' }}">
                                     <td class="py-5 px-6">{{ $row['title'] }}</td>

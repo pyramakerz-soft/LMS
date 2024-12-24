@@ -20,16 +20,37 @@ class AssignmentController extends Controller
      */
     public function index()
     {
+        // $userAuth = auth()->guard('teacher')->user();
+
+        // if ($userAuth) {
+        //     $Assignment = Assignment::where("teacher_id", auth()->user()->id)->with(relations: 'school')->with('lesson')->orderBy("created_at", "desc")->get();
+
+        //     return view("pages.teacher.Assignment.index", compact("Assignment", "userAuth"));
+        // } else {
+        //     return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+        // }
+    }
+    public function showAssignments($id)
+    {
         $userAuth = auth()->guard('teacher')->user();
 
         if ($userAuth) {
-            $Assignment = Assignment::where("teacher_id", auth()->user()->id)->with(relations: 'school')->with('lesson')->orderBy("created_at", "desc")->get();
+            // Fetch assignments filtered by stage ID
+            $assignments = Assignment::where('teacher_id', $userAuth->id)
+                ->with(['school', 'lesson'])
+                ->whereHas('stages', function ($q) use ($id) {
+                    $q->where('stage_id', $id); 
+                })
+                ->orderBy('created_at', 'desc')
+                ->get();
 
-            return view("pages.teacher.Assignment.index", compact("Assignment", "userAuth"));
+            return view('pages.teacher.Assignment.index', compact('assignments', 'userAuth'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
     }
+
+
     /**
      * Show the form for creating a new resource.
      */

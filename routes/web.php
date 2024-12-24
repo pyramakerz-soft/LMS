@@ -190,7 +190,15 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
 
     Route::get('students_classess/{class_id}', [TeacherClasses::class, 'students'])->name('students_classess');
     Route::post('store-assessment', [TeacherClasses::class, 'storeAssessment'])->name('teacher.storeAssessment');
-    Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
+
+    Route::get('assignments/{id}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'showAssignments'])->name('assignments.showAssignments');
+
+
+    Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class)->except('index');
+
+
+
+
     Route::get('assessments/student/{student_id}', [StudentAssessmentController::class, 'showStudentAssessments'])->name('teacher.assessments.student');
 
     Route::get('assignments/{id}/students', [\App\Http\Controllers\Teacher\AssignmentController::class, 'viewAssignedStudents'])->name('assignments.students');
@@ -212,7 +220,8 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     // Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
 
     Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
-    Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
+
+    // Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
 
 
 

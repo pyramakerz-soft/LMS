@@ -27,7 +27,7 @@ class Stage extends Model
 
     public function assignments()
     {
-        return $this->belongsToMany(Assignment::class, 'assignment_stage');
+        return $this->belongsToMany(Assignment::class, 'assignment_stage', 'stage_id', 'assignment_id');
     }
     public function materials()
     {
@@ -39,11 +39,11 @@ class Stage extends Model
         return $this->hasMany(Group::class);
     }
 
-    
-     public function getImageAttribute($val)
+
+    public function getImageAttribute($val)
     {
-        return ($val !== null) ? asset( $val) : "";
+        return ($val !== null) ? asset($val) : "";
     }
-    
+
 
 }
