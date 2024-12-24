@@ -21,8 +21,8 @@
     <div class="p-3">
         <div class="text-[#667085] my-8">
             <i class="fa-solid fa-house mx-2"></i>
-            <span class="mx-2 text-[#D0D5DD]">/</span>
-            <a href="{{ route('assignments.index') }}" class="mx-2 cursor-pointer">Assignment</a>
+            {{-- <span class="mx-2 text-[#D0D5DD]">/</span>
+            <a href="{{ route('assignments.showAssignments') }}" class="mx-2 cursor-pointer">Assignment</a> --}}
             <span class="mx-2 text-[#D0D5DD]">/</span>
             <a href="#" class="mx-2 cursor-pointer">Create Assignment</a>
         </div>

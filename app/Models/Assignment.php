@@ -23,7 +23,7 @@ class Assignment extends Model
 
     public function stages()
     {
-        return $this->belongsToMany(Stage::class, 'assignment_stage');
+        return $this->belongsToMany(Stage::class, 'assignment_stage', 'assignment_id', 'stage_id');
     }
 
     public function students()
