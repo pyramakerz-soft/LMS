@@ -25,7 +25,7 @@
                     <div class="mb-3">
                         <label for="compare_by">Compare By</label>
                         <select id="compare_by" name="compare_by" class="form-control" required>
-                            <option value="" disabled>Select Option</option>
+                            <option value="" disabled selected>Select Option</option>
                             <option value="teachers" {{ request('compare_by') == 'teachers' ? 'selected' : '' }}>Teachers</option>
                             <option value="schools" {{ request('compare_by') == 'schools' ? 'selected' : '' }}>Schools</option>
                             <option value="classes" {{ request('compare_by') == 'classes' ? 'selected' : '' }}>Classes</option>
@@ -106,7 +106,7 @@
 
                     <!-- Submit Button -->
                     <div>
-                        <button type="submit" class="btn btn-primary">Compare</button>
+                        <button type="submit" class="btn btn-primary" style="background-color:#222e3c; border-color: #222e3c;">Compare</button>
                     </div>
                 </form>
 

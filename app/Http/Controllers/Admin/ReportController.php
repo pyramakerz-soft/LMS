@@ -158,6 +158,7 @@ class ReportController extends Controller
 
     public function compareReport(Request $request)
     {
+
         $schools = School::all();
         $stages = Stage::all();
         $classes = Group::all();
@@ -183,6 +184,7 @@ class ReportController extends Controller
                 }
             }
             if ($request->compare_by == 'schools') {
+
                 $query1 = Assignment::query();
                 $query1->where('school_id', $request->school_id);
                 $query2 = Assignment::query();
@@ -286,8 +288,9 @@ class ReportController extends Controller
                 ->whereIn('assignment_id', $filteredAssignments2)
                 ->whereNotNull('submitted_at')
                 ->get();
-
+            // dd($studentAssignments1, $studentAssignments2);
             if (!$studentAssignments1->isEmpty() && !$studentAssignments2->isEmpty()) {
+                dd($request->all());
                 $data1 = [];
                 foreach ($assignments1 as $assignment) {
                     $stageId = $assignment->stage_id;
@@ -428,14 +431,14 @@ class ReportController extends Controller
                     $chartData[] = $grade;
                 }
                 // dd($chartData);
-                // dd($data1, $data2);
+                dd($data1, $data2);
                 // dd($chartData);
                 return view('admin.reports.compare_report', compact('chartData', 'labels', 'schools', 'stages', 'classes', 'teachers', 'students'));
             } else {
-                if (!$studentAssignments1->isEmpty()) {
+                if ($studentAssignments1->isEmpty()) {
                     return redirect()->back()->with('error', "No assignments found for {$msg1} students");
                 }
-                if (!$studentAssignments2->isEmpty()) {
+                if ($studentAssignments2->isEmpty()) {
                     return redirect()->back()->with('error', "No assignments found for {$msg2} students");
                 }
             }
