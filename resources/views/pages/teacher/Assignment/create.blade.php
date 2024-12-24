@@ -203,7 +203,7 @@
             classDropdown.disabled = true;
 
             if (stageId) {
-                fetch(`/https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public//teacher/teacher/api/stages/${stageId}/classes`)
+                fetch(`https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/teacher/teacher/api/stages/${stageId}/classes`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Error fetching classes');
