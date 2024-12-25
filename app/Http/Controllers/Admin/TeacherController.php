@@ -19,16 +19,16 @@ class TeacherController extends Controller
      */
     public function index(Request $request)
     {
-        $teacherQuery = Teacher::with('school');
-    
+        $teacherQuery = Teacher::with('school')->whereNull('alias_id');
+
         $schools = School::all();
-    
+
         if ($request->has('school') && $request->school != null) {
             $teacherQuery->where('school_id', $request->school);
         }
-    
+
         $teachers = $teacherQuery->paginate(10)->appends($request->query());
-    
+
         return view('admin.teachers.index', compact('teachers', 'schools'));
     }
     /**
@@ -40,10 +40,50 @@ class TeacherController extends Controller
         $stages = Stage::all();
         return view('admin.teachers.create', compact('schools', 'stages'));
     }
-
+    public function addSchool(string $id)
+    {
+        $mainteacher = Teacher::findOrFail($id);
+        $schools = School::all();
+        $stages = Stage::all();
+        $teacherAlias = Teacher::where('alias_id', $mainteacher->id)->get();
+        return view('admin.teachers.add_school', compact('mainteacher', 'teacherAlias', 'schools', 'stages'));
+    }
     /**
      * Store a newly created resource in storage.
      */
+    public function storeSchool(Request $request)
+    {
+        $request->validate([
+            'school_id' => 'required|exists:schools,id',
+            'stage_ids' => 'required|array',
+            'stage_ids.*' => 'exists:stages,id',
+            'class_id' => 'required|array',
+            'class_id.*' => 'exists:groups,id'
+        ]);
+        $existingTeacher = Teacher::find($request->mainteacher);
+        $school = School::find($request->school_id);
+        $username = $existingTeacher->username . '_' . $school->name;
+        $existingTeacherSchool  = Teacher::where('username', $username)->get();
+        if ($existingTeacherSchool->count() > 0) {
+            return redirect()->back()->with('error', 'Teacher already added to this school.');
+        }
+        $teacher = Teacher::create([
+            'username' => $username,
+            'password' => Hash::make($existingTeacher->plain_password),
+            'plain_password' => $existingTeacher->plain_password,
+            'gender' => $existingTeacher->gender,
+            'school_id' => $request->input('school_id'),
+            'is_active' => 1,
+            'alias_id' => $existingTeacher->id
+        ]);
+
+        $teacher->classes()->attach($request->input('class_id'));
+
+        $teacher->stages()->attach($request->input('stage_ids'));
+        return redirect()->route('teachers.addSchool', ['teacherId' => $request->mainteacher])
+        ->with('success', 'School added to teacher successfully.');
+    
+    }
     public function store(Request $request)
     {
         $request->validate([
@@ -130,21 +170,22 @@ class TeacherController extends Controller
 
     //     return view('admin.teachers.edit', compact('teacher', 'schools', 'classes', 'stages'));
     // }
-    
+
     public function edit(string $id)
-{
-    $teacher = Teacher::findOrFail($id);
-    $schools = School::all();
+    {
+        $teacher = Teacher::findOrFail($id);
+        $schools = School::all();
 
-    $stages = Stage::whereHas('schools', function($query) use ($teacher) {
-        $query->where('school_id', $teacher->school_id);
-    })->get();
+        $stages = Stage::whereHas('schools', function ($query) use ($teacher) {
+            $query->where('school_id', $teacher->school_id);
+        })->get();
 
-    // Fetch classes related to the teacher's school.
-    $classes = Group::where('school_id', $teacher->schools)->get();
+        // Fetch classes related to the teacher's school.
+        $classes = Group::where('school_id', $teacher->schools)->get();
 
-    return view('admin.teachers.edit', compact('teacher', 'schools', 'classes', 'stages'));
-}
+        return view('admin.teachers.edit', compact('teacher', 'schools', 'classes', 'stages'));
+    }
+
 
     /**
      * Update the specified resource in storage.
@@ -154,8 +195,6 @@ class TeacherController extends Controller
         $teacher = Teacher::findOrFail($id);
 
         $request->validate([
-            'username' => 'required|unique:teachers,username,' . $teacher->id,
-            'gender' => 'required',
             'school_id' => 'required|exists:schools,id',
             'stage_ids' => 'required|array',
             'stage_ids.*' => 'exists:stages,id',
@@ -172,8 +211,6 @@ class TeacherController extends Controller
         }
 
         $teacher->update([
-            'username' => $username,
-            'gender' => $request->input('gender'),
             'school_id' => $request->input('school_id'),
             'is_active' => $request->input('is_active') ?? 1,
         ]);
@@ -188,10 +225,33 @@ class TeacherController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, Request $request)
     {
-        $teacher = Teacher::findOrFail($id);
-        $teacher->delete();
-        return redirect()->route('teachers.index')->with('success', 'Teacher deleted successfully.');
+        if($id != $request->mainteacher){
+            $teacher = Teacher::findOrFail($id);
+            // $teacher->delete();
+        }else{
+            if(!empty(json_decode($request->teacher_aliases))){
+                dd($request->all());
+                foreach(json_decode($request->teacher_aliases) as $teacherAlias){
+                    // dd($teacherAlias);
+                    $teacher = Teacher::find($teacherAlias->id);
+                    $teacher->update([
+                        'alias_id' => null,
+                    ]);
+                    dd('done');
+                }
+            }else{
+                dd("Empty");
+            }
+        }
+
+        if($request->school_list_flag == 1){
+            return redirect()->route('teachers.addSchool', ['teacherId' => $request->mainteacher])
+            ->with('success', 'School removed from this teacher successfully.');
+        }
+        
+      
+      
     }
 }

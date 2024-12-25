@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('username')->nullable();
             $table->string('password')->nullable();
             $table->foreignId('school_id')->constrained()->onDelete('cascade');
-            $table->enum('gender' , ['boy' , 'girl'])->nullable();
+            $table->enum('gender', ['boy', 'girl'])->nullable();
             $table->boolean('is_active')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();

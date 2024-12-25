@@ -21,7 +21,6 @@ $menuItems = [
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-bold">Observations Report</h1>
             <div class="flex">
-
                 <button id="export-pdf" class="px-4 py-2 text-white rounded-md hover:bg-blue-700 ml-3" style="background-color:#667085;">Export as PDF</button>
                 <button id="filter-modal-btn" class="px-4 py-2 text-white rounded-md hover:bg-blue-700 ml-3" style="background-color:#667085;">
                     Filters

@@ -191,8 +191,8 @@ $menuItems = [
         const submitButton = document.getElementById('submit-button');
         const timerElement = document.getElementById('timer');
         const form = document.getElementById('my-form');
-        const restrictionTime = 25 * 60 * 1000 - 1000; // 25 minutes in milliseconds
-        // const restrictionTime = 0; // 25 minutes in milliseconds
+        // const restrictionTime = 25 * 60 * 1000 - 1000; // 25 minutes in milliseconds
+        const restrictionTime = 0; // 25 minutes in milliseconds
 
         // Check localStorage for last submission time
         const lastSubmissionTime = localStorage.getItem('lastSubmissionTime');
@@ -272,7 +272,8 @@ $menuItems = [
 
     function getSchool(teacherId) {
         $.ajax({
-            url: '/LMS/lms_pyramakerz/public/observer/observation/get_school/' + teacherId,
+            // url: '/LMS/lms_pyramakerz/public/observer/observation/get_school/' + teacherId,
+            url: '/observer/observation/get_school/' + teacherId,
             type: "GET",
             dataType: "json",
             success: function(data) {
@@ -301,7 +302,8 @@ $menuItems = [
 
     function getStages(teacherId) {
         $.ajax({
-            url: '/LMS/lms_pyramakerz/public/observer/observation/get_stages/' + teacherId,
+            // url: '/LMS/lms_pyramakerz/public/observer/observation/get_stages/' + teacherId,
+            url: '/observer/observation/get_stages/' + teacherId,
             type: "GET",
             dataType: "json",
             success: function(data) {

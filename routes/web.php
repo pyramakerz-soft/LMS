@@ -84,6 +84,8 @@ Route::prefix('admin')->group(function () {
         Route::get('reports/assignment_avg_report', [ReportController::class, 'assignmentAvgReport'])->name('admin.assignmentAvgReport');
         Route::get('reports/compare_report', [ReportController::class, 'compareReport'])->name('admin.compareReport');
         Route::get('/get-teachers-school/{schoolId}', [ReportController::class, 'getSchoolTeachers'])->name('getSchoolTeachers');
+        Route::get('/teacher-schools/{teacherId}', [TeacherController::class, 'addSchool'])->name('teachers.addSchool');
+        Route::post('/teacher-schools/store', [TeacherController::class, 'storeSchool'])->name('teachers.storeSchool');
 
 
         Route::get('school/{schoolId}/curriculum', [AdminController::class, 'assignCurriculum'])->name('school.curriculum.assign');
@@ -211,7 +213,7 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
 
     Route::get('teacher/api/stages/{stageId}/classes', [\App\Http\Controllers\Teacher\AssignmentController::class, 'getClassesByStage'])
-    ->name('teacher.get-classes');
+        ->name('teacher.get-classes');
 
 
 
