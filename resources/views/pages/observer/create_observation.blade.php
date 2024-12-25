@@ -54,7 +54,7 @@ $menuItems = [
     font-size: 1.2rem;
     font-weight: bold;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-">Please wait 25:00 before submitting.
+">Timer: 25:00
     </div>
 
     <div class="overflow-x-auto">
@@ -148,6 +148,15 @@ $menuItems = [
                         </select>
                     </div>
                     <div class="mb-3">
+                        <label for="lesson_segment" class="block text-sm font-medium text-gray-700">Subject Area(Multiselect)</label>
+                        <select class="w-full p-2 border border-gray-300 rounded" name="lesson_segment[]" id="lesson_segment" multiple required style="overflow: hidden;">
+                            <option value="Beginning">Beginning</option>
+                            <option value="Middle">Middle</option>
+                            <option value="End">End</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="date" class="block text-sm font-medium text-gray-700">Date of Observation</label>
                         <input type="date" name="date" required class="w-full p-2 border border-gray-300 rounded">
                     </div>
@@ -183,6 +192,7 @@ $menuItems = [
         const timerElement = document.getElementById('timer');
         const form = document.getElementById('my-form');
         const restrictionTime = 25 * 60 * 1000 - 1000; // 25 minutes in milliseconds
+        // const restrictionTime = 0; // 25 minutes in milliseconds
 
         // Check localStorage for last submission time
         const lastSubmissionTime = localStorage.getItem('lastSubmissionTime');
@@ -220,7 +230,7 @@ $menuItems = [
                 } else {
                     const minutes = Math.floor(remainingTime / 60);
                     const seconds = remainingTime % 60;
-                    timerElement.textContent = `Please wait ${minutes}:${seconds.toString().padStart(2, '0')} before submitting.`;
+                    timerElement.textContent = `Timer:  ${minutes}:${seconds.toString().padStart(2, '0')}`;
                     remainingTime--;
                 }
             }, 1000);
@@ -263,7 +273,6 @@ $menuItems = [
     function getSchool(teacherId) {
         $.ajax({
             url: '/LMS/lms_pyramakerz/public/observer/observation/get_school/' + teacherId,
-            // url: '/observer/observation/get_school/' + teacherId,
             type: "GET",
             dataType: "json",
             success: function(data) {
@@ -293,7 +302,6 @@ $menuItems = [
     function getStages(teacherId) {
         $.ajax({
             url: '/LMS/lms_pyramakerz/public/observer/observation/get_stages/' + teacherId,
-            // url: '/observer/observation/get_stages/' + teacherId,
             type: "GET",
             dataType: "json",
             success: function(data) {

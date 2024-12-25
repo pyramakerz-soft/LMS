@@ -9,6 +9,7 @@ use App\Models\Observation;
 use App\Models\ObservationHeader;
 use App\Models\ObservationHistory;
 use App\Models\ObservationQuestion;
+use App\Models\Observer;
 use App\Models\School;
 use App\Models\Stage;
 use App\Models\Teacher;
@@ -21,15 +22,42 @@ class ObserverDashboardController extends Controller
 {
     public function index(Request $request)
     {
+        // dd($request->all());
         $observer = Auth::guard('observer')->user();
         $teachers = Teacher::all();
+        $schools = School::all();
+        $observers = Observer::all();
+        $stages = Stage::all();
+        $query = Observation::query();
         if ($request->filled('teacher_id')) {
-            $observations = Observation::where('teacher_id', $request->teacher_id)->get();
-        } else {
-            $observations = Observation::all();
+            $query->where('teacher_id', $request->teacher_id);
+        }
+        if ($request->filled('school_id')) {
+            $query->where('school_id', $request->school_id);
+        }
+        if ($request->filled('observer_id')) {
+            $query->where('observer_id', $request->observer_id);
+        }
+        if ($request->filled('stage_id')) {
+            $query->where('stage_id', $request->stage_id);
+        }
+        if ($request->filled('lesson_segment_filter')) {
+            $query->whereJsonContains('lesson_segment', $request->lesson_segment_filter);
+        }
+        if ($request->filled('from_date')) {
+            $query->whereDate('activity', '>=', $request->from_date);
+        }
+        if ($request->filled('to_date')) {
+            $query->whereDate('activity', '<=', $request->to_date);
         }
 
-        return view('pages.observer.observer', compact('teachers', 'observer', 'observations'));
+        if ($request->has('include_comments')) {
+            $query->whereNotNull('note');
+        }
+
+        $observations = $query->get();
+
+        return view('pages.observer.observer', compact('teachers', 'stages', 'observers', 'schools', 'observer', 'observations'));
     }
     public function createObservation()
     {
@@ -37,7 +65,7 @@ class ObserverDashboardController extends Controller
         $observations = Observation::all();
         $teachers = Teacher::all();
         $headers = ObservationHeader::all();
-        return view('pages.observer.create_observation', compact('observer', 'observations', 'teachers', 'headers'));
+        return view('pages.observer.create_observation', compact('observer',  'observations', 'teachers', 'headers'));
     }
     public function getSchool($teacherId)
     {
@@ -76,6 +104,7 @@ class ObserverDashboardController extends Controller
             'coteacher_id' => 'nullable|integer',
             'grade_id' => 'required|integer',
             'date' => 'required|date',
+            'lesson_segment' => 'required',
             '_token' => 'required',
         ]);
 
@@ -94,6 +123,8 @@ class ObserverDashboardController extends Controller
             'coteacher_name' => $coteacher->username ?? null, // Fix for coteacher name
             'material_id' => null,
             'note' => $request->note,
+            'subject_area' => $request->subject_area,
+            'lesson_segment' => json_encode($request->lesson_segment),
         ]);
 
         foreach ($request->all() as $key => $value) {
@@ -125,10 +156,13 @@ class ObserverDashboardController extends Controller
     }
     public function report(Request $request)
     {
-        $teachers = Teacher::all();
         $observer = Auth::guard('observer')->user();
-        $headers = ObservationHeader::all();
+        $teachers = Teacher::all();
+        $schools = School::all();
+        $observers = Observer::all();
         $stages = Stage::all();
+        $headers = ObservationHeader::all();
+
         foreach ($headers as $header) {
             if (!isset($data[$header->id])) {
                 $data[$header->id] = [
@@ -158,15 +192,30 @@ class ObserverDashboardController extends Controller
         if ($request->filled('teacher_id')) {
             $query->where('teacher_id', $request->teacher_id);
         }
-        if ($query->get()->count() == 0) {
-            return redirect()->back()->with('error', 'No observations found for teacher: ' . Teacher::find($request->teacher_id)->username);
+        if ($request->filled('school_id')) {
+            $query->where('school_id', $request->school_id);
         }
-
+        if ($request->filled('observer_id')) {
+            $query->where('observer_id', $request->observer_id);
+        }
         if ($request->filled('stage_id')) {
             $query->where('stage_id', $request->stage_id);
         }
+        if ($request->filled('lesson_segment_filter')) {
+            $query->whereJsonContains('lesson_segment', $request->lesson_segment_filter);
+        }
+        if ($request->filled('from_date')) {
+            $query->whereDate('activity', '>=', $request->from_date);
+        }
+        if ($request->filled('to_date')) {
+            $query->whereDate('activity', '<=', $request->to_date);
+        }
+
+        if ($request->has('include_comments')) {
+            $query->whereNotNull('note');
+        }
         if ($query->get()->count() == 0) {
-            return redirect()->back()->with('error', 'No observations found for ' . Stage::find($request->stage_id)->name);
+            return redirect()->back()->with('error', 'No observations found for set filters');
         }
 
         $observations = $query->pluck('id');
@@ -188,6 +237,6 @@ class ObserverDashboardController extends Controller
             }
         }
 
-        return view('pages.observer.observation_report', compact('stages', 'teachers', 'observer', 'headers', 'data'));
+        return view('pages.observer.observation_report', compact('stages', 'teachers', 'observer', 'observers', 'schools', 'headers', 'data'));
     }
 }

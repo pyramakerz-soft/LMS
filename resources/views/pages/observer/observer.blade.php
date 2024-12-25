@@ -20,20 +20,13 @@ $menuItems = [
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold">Observations</h1>
         <div class="flex" style="justify-content:center; align-items:center;gap:15px">
-            <form id="filter-form" action="{{ route('observer.dashboard') }}" method="GET" enctype="multipart/form-data" class="flex" style="gap:10px;">
-                <div>
-                    <select name="teacher_id" id="teacher_id" class="w-full p-2 border border-gray-300 rounded">
-                        <option value="">All Teachers</option>
-                        @foreach ($teachers as $teacher)
-                        <option value="{{ $teacher->id }}"
-                            {{ request('teacher_id') == $teacher->id ? 'selected' : '' }}>
-                            {{ $teacher->username }}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
-            </form>
-            <a href="{{ route('observer.observation.create') }}" class="px-4 py-2 text-white rounded-md hover:bg-blue-700" style="background-color:#667085; display:block">Add New Observation</a>
+            <!-- Trigger for Filter Modal -->
+            <button id="filter-modal-btn" class="px-4 py-2 text-white rounded-md hover:bg-blue-700" style="background-color:#667085;">
+                Filters
+            </button>
+            <a href="{{ route('observer.observation.create') }}" class="px-4 py-2 text-white rounded-md hover:bg-blue-700" style="background-color:#667085; display:block">
+                Add New Observation
+            </a>
         </div>
     </div>
 
@@ -49,12 +42,10 @@ $menuItems = [
     </div>
     @endif
 
-
     <div class="overflow-x-auto w-full">
         <table class="w-full border border-gray-300 text-sm text-left">
             <thead class="bg-gray-100">
                 <tr>
-
                     <th class="border px-4 py-2">Observation Name</th>
                     <th class="border px-4 py-2">Observer Name</th>
                     <th class="border px-4 py-2">Teacher Name</th>
@@ -75,11 +66,11 @@ $menuItems = [
                     <td class="border px-4 py-2">{{ App\Models\School::find($observation->school_id)->name }}</td>
                     <td class="border px-4 py-2">{{ $observation->activity }}</td>
                     <td class="border px-4 py-2">{{ $observation->note }}</td>
-                    <td class="border px-4 py-2" style="text-align:center; gap:10px">
-
+                    <td class="border px-4 py-2" style="text-align:center; ">
                         <a href="{{ route('observation.view', $observation->id) }}"
-                            class="text-white font-medium py-2 px-4 rounded shadow focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50" style="background-color:#667085">
-                            <i class="fa-solid fa-eye"></i></a>
+                            class="text-white font-medium py-2 px-4 rounded shadow focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50" style="background-color:#667085; margin-right:5px;">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
                         <form action="{{ route('observation.destroy', $observation->id) }}" method="POST" style="display:inline-block;">
                             @csrf
                             @method('DELETE')
@@ -90,7 +81,6 @@ $menuItems = [
                             </button>
                         </form>
                     </td>
-
                 </tr>
                 @empty
                 <tr>
@@ -102,12 +92,93 @@ $menuItems = [
     </div>
 
 </div>
+
+<!-- Filter Modal -->
+<div id="filter-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
+        <h2 class="text-xl font-bold mb-4">Filters</h2>
+        <form id="filter-form-modal" action="{{ route('observer.dashboard') }}" method="GET">
+
+            <div class="mb-4">
+                <label for="observer_id" class="block text-sm font-medium text-gray-700">Observer</label>
+                <select name="observer_id" id="observer_id" class="w-full p-2 border border-gray-300 rounded">
+                    <option value="">All Observers</option>
+                    @foreach ($observers as $observer)
+                    <option value="{{ $observer->id }}" {{ request('observer_id') == $observer->id ? 'selected' : '' }}>
+                        {{ $observer->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="teacher_id_modal" class="block text-sm font-medium text-gray-700">Teacher</label>
+                <select name="teacher_id" id="teacher_id_modal" class="w-full p-2 border border-gray-300 rounded">
+                    <option value="">All Teachers</option>
+                    @foreach ($teachers as $teacher)
+                    <option value="{{ $teacher->id }}" {{ request('teacher_id') == $teacher->id ? 'selected' : '' }}>
+                        {{ $teacher->username }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="school_id" class="block text-sm font-medium text-gray-700">School</label>
+                <select name="school_id" id="school_id" class="w-full p-2 border border-gray-300 rounded">
+                    <option value="">All Schools</option>
+                    @foreach ($schools as $school)
+                    <option value="{{ $school->id }}" {{ request('school_id') == $school->id ? 'selected' : '' }}>
+                        {{ $school->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="school_id" class="block text-sm font-medium text-gray-700">Stage</label>
+                <select name="stage_id" id="stage_id" class="w-full p-2 border border-gray-300 rounded">
+                    <option value="">All Stages</option>
+                    @foreach ($stages as $stage)
+                    <option value="{{ $stage->id }}" {{ request('stage_id') == $stage->id ? 'selected' : '' }}>
+                        {{ $stage->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="lesson_segment_filter" class="block text-sm font-medium text-gray-700">Lesson Segment</label>
+                <select class="w-full p-2 border border-gray-300 rounded" name="lesson_segment_filter" id="lesson_segment_filter">
+                    <option value="">All</option>
+                    <option value="Beginning" {{ request('lesson_segment_filter') == 'Beginning' ? 'selected' : '' }}>Beginning</option>
+                    <option value="Middle" {{ request('lesson_segment_filter') == 'Middle' ? 'selected' : '' }}>Middle</option>
+                    <option value="End" {{ request('lesson_segment_filter') == 'End' ? 'selected' : '' }}>End</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="from_date" class="block text-sm font-medium text-gray-700">Date From</label>
+                <input type="date" name="from_date" id="from_date" class="w-full p-2 border border-gray-300 rounded" value="{{ request('from_date') }}">
+            </div>
+            <div class="mb-4">
+                <label for="to_date" class="block text-sm font-medium text-gray-700">Date To</label>
+                <input type="date" name="to_date" id="to_date" class="w-full p-2 border border-gray-300 rounded" value="{{ request('to_date') }}">
+            </div>
+            <input type="checkbox" name="include_comments" value="1" {{ request('include_comments') ? 'checked' : '' }}> Includes Comments
+            <div class="flex justify-end">
+                <button type="button" id="close-modal-btn" class="px-4 py-2 bg-gray-500 text-white rounded mr-2">Close</button>
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Apply Filters</button>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection
 
 @section('page_js')
 <script>
-    document.getElementById('teacher_id').addEventListener('change', function() {
-        document.getElementById('filter-form').submit();
+    // Modal toggle
+    document.getElementById('filter-modal-btn').addEventListener('click', function() {
+        document.getElementById('filter-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('close-modal-btn').addEventListener('click', function() {
+        document.getElementById('filter-modal').classList.add('hidden');
     });
 </script>
 @endsection

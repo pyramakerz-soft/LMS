@@ -134,6 +134,17 @@ $menuItems = [
                         </select>
                     </div>
                     <div class="mb-3">
+                        <label for="lesson_segment" class="block text-sm font-medium text-gray-700">Subject Area</label>
+                        <select class="w-full p-2 border border-gray-300 rounded" name="lesson_segment[]" id="lesson_segment" multiple required disabled style="overflow: hidden;">
+                            @if ($observation->lesson_segment)
+                            @foreach (json_decode($observation->lesson_segment, true) as $segment)
+                            <option value="{{ $segment }}" selected>{{ $segment }}</option>
+                            @endforeach
+                            @endif
+                        </select>
+                    </div>
+
+                    <div class=" mb-3">
                         <label for="date" class="block text-sm font-medium text-gray-700">Date of Observation</label>
                         <input type="date" name="date" required class="w-full p-2 border border-gray-300 rounded" value="{{$observation->activity}}">
                     </div>
