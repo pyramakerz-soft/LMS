@@ -9,13 +9,18 @@
 
         <main class="content">
             <div class="container-fluid p-0 mb-5">
-                <h1>Teacher Schools</h1>
+
+                <h1>Teacher: {{$mainteacher->name}}'s Schools</h1>
 
                 @if (session('error'))
                 <div class="alert alert-danger d-flex justify-content-between align-items-center" role="alert">
                     <span class="block sm:inline">{{ session('error') }}</span>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
+                @endif
+
+                @if (session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
                 <div class="table-responsive" style="overflow-x: auto;">
                     <table class="table table-bordered">
@@ -28,7 +33,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                            <tr>
                                 <td>{{ $mainteacher->username }}</td>
                                 <td>{{ $mainteacher->school->name}}</td>
                                 <td>{{ $mainteacher->plain_password }}</td>
@@ -39,9 +44,9 @@
                                     <form action="{{ route('teachers.destroy', $mainteacher->id) }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         @method('DELETE')
-                                        <input type="hidden" value = "1" name = "school_list_flag">
-                                        <input type="hidden" value = "{{$teacherAlias}}" name = "teacher_aliases">
-                                        <input type="hidden" value = "{{$mainteacher->id}}" name = "mainteacher">
+                                        <input type="hidden" value="1" name="school_list_flag">
+                                        <input type="hidden" value="{{$teacherAlias}}" name="teacher_aliases">
+                                        <input type="hidden" value="{{$mainteacher->id}}" name="mainteacher">
                                         <button type="submit" class="btn btn-danger"
                                             onclick="return confirm('Are you sure you want to remove this teacher from this school?');">
                                             Delete
@@ -61,9 +66,9 @@
                                     <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         @method('DELETE')
-                                        <input type="hidden" value = "1" name = "school_list_flag">
-                                        <input type="hidden" value = "{{$teacherAlias}}" name = "teacher_aliases">
-                                        <input type="hidden" value = "{{$mainteacher->id}}" name = "mainteacher">
+                                        <input type="hidden" value="1" name="school_list_flag">
+                                        <input type="hidden" value="{{$teacherAlias}}" name="teacher_aliases">
+                                        <input type="hidden" value="{{$mainteacher->id}}" name="mainteacher">
                                         <button type="submit" class="btn btn-danger"
                                             onclick="return confirm('Are you sure you want to remove this teacher from this school?');">
                                             Delete

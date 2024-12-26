@@ -69,7 +69,6 @@ $menuItems = [
                     <br>
                     @endforeach
                 </div>
-
             </div>
         </div>
     </div>

@@ -88,12 +88,17 @@
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Teacher</span>
                 </a>
             </li>
-            <li class="sidebar-item {{ request()->is('admin/observer') ? 'active' : '' }}">
+            <li class="sidebar-item {{ request()->is('admin/observers') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('observers.index') }}">
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Observer</span>
                 </a>
             </li>
-            <li class="sidebar-item {{ request()->is('admin/reports/assignmentAvgReport') ? 'active' : '' }}">
+            <li class="sidebar-item {{ request()->is('admin/observers/observation_questions') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('observers.addQuestions') }}">
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Observation Questions</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ request()->is('admin/reports/assignment_avg_report') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('admin.assignmentAvgReport') }}">
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Assignment Avg Report</span>
                 </a>

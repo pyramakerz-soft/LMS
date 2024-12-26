@@ -9,7 +9,7 @@
 
         <main class="content">
             <div class="container-fluid p-0">
-                <h1>Edit Teacher</h1>
+                <h1>Edit School Teacher</h1>
 
                 @if ($errors->any())
                 <div class="alert alert-danger">
@@ -25,7 +25,7 @@
                     @csrf
                     @method('PUT')
                     <!-- School -->
-                    <div class="mb-3">
+                    <div class="mb-3" style="display: none;">
                         <label for="school_id" class="form-label">School</label>
                         <select name="school_id" id="school_id" class="form-control" required>
                             <option value="">-- Select School --</option>
@@ -62,6 +62,17 @@
                             </option>
                             @endforeach
                         </select>
+                    </div>
+                     <!-- Password Update -->
+                     <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" name="password" id="password" class="form-control" >
+                        <div class="invalid-feedback" style="display: none;">Username cannot contain numbers.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label">Confirm Password</label>
+                        <input type="password" name="password_confirmation" id="confirm_password" class="form-control">
+                        <div class="invalid-feedback" style="display: none;">Invalid Password</div>
                     </div>
 
                     <!-- Image Upload -->

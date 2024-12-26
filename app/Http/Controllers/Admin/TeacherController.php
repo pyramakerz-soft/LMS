@@ -19,6 +19,8 @@ class TeacherController extends Controller
      */
     public function index(Request $request)
     {
+        // $this->updateTeacherNames();
+
         $teacherQuery = Teacher::with('school')->whereNull('alias_id');
 
         $schools = School::all();
@@ -34,6 +36,24 @@ class TeacherController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+
+    function updateTeacherNames()
+    {
+        // Fetch all teachers
+        $teachers = Teacher::all();
+
+        foreach ($teachers as $teacher) {
+            // Format the username into a name
+            if ($teacher->username) {
+                $formattedName = collect(explode('_', $teacher->username))
+                    ->map(fn($part) => ucfirst($part)) // Capitalize each part
+                    ->join(' '); // Join the parts with a space
+
+                // Update the name column
+                $teacher->update(['name' => $formattedName]);
+            }
+        }
+    }
     public function create()
     {
         $schools = School::all();
@@ -62,12 +82,17 @@ class TeacherController extends Controller
         ]);
         $existingTeacher = Teacher::find($request->mainteacher);
         $school = School::find($request->school_id);
-        $username = $existingTeacher->username . '_' . $school->name;
+
+        $username = strtolower(str_replace(' ', '_', $existingTeacher->name)) . '_' . strtolower(str_replace(' ', '_', School::find($request->school_id)->name . $existingTeacher->id));
+
+        // dd($username);
+        // $username = $existingTeacher->username . '_' . $school->name;
         $existingTeacherSchool  = Teacher::where('username', $username)->get();
         if ($existingTeacherSchool->count() > 0) {
             return redirect()->back()->with('error', 'Teacher already added to this school.');
         }
         $teacher = Teacher::create([
+            'name' => $existingTeacher->name,
             'username' => $username,
             'password' => Hash::make($existingTeacher->plain_password),
             'plain_password' => $existingTeacher->plain_password,
@@ -81,13 +106,12 @@ class TeacherController extends Controller
 
         $teacher->stages()->attach($request->input('stage_ids'));
         return redirect()->route('teachers.addSchool', ['teacherId' => $request->mainteacher])
-        ->with('success', 'School added to teacher successfully.');
-    
+            ->with('success', 'School added to teacher successfully.');
     }
     public function store(Request $request)
     {
         $request->validate([
-            'username' => 'required|unique:teachers',
+            'name' => 'required|string',
             'gender' => 'required',
             'school_id' => 'required|exists:schools,id',
             'stage_ids' => 'required|array',
@@ -96,7 +120,6 @@ class TeacherController extends Controller
             'class_id.*' => 'exists:groups,id',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        $username = str_replace(' ', '_', $request->input('username'));
 
         $password = Str::random(8);
 
@@ -104,15 +127,19 @@ class TeacherController extends Controller
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('teachers', 'public');
         }
-
         $teacher = Teacher::create([
-            'username' => $username,
+            'name' => $request->name,
+            'school_id' => $request->input('school_id'),
             'password' => Hash::make($password),
             'plain_password' => $password,
             'gender' => $request->input('gender'),
-            'school_id' => $request->input('school_id'),
             'is_active' => 1,
             'image' => $imagePath,
+        ]);
+
+        $username = strtolower(str_replace(' ', '_', $request->input('name'))) . '_' . School::find($request->school_id)->name . $teacher->id;
+        $teacher->update([
+            'username' => $username,
         ]);
 
         $teacher->classes()->attach($request->input('class_id'));
@@ -174,6 +201,8 @@ class TeacherController extends Controller
     public function edit(string $id)
     {
         $teacher = Teacher::findOrFail($id);
+
+
         $schools = School::all();
 
         $stages = Stage::whereHas('schools', function ($query) use ($teacher) {
@@ -182,7 +211,6 @@ class TeacherController extends Controller
 
         // Fetch classes related to the teacher's school.
         $classes = Group::where('school_id', $teacher->schools)->get();
-
         return view('admin.teachers.edit', compact('teacher', 'schools', 'classes', 'stages'));
     }
 
@@ -200,6 +228,7 @@ class TeacherController extends Controller
             'stage_ids.*' => 'exists:stages,id',
             'class_id' => 'required|array',
             'class_id.*' => 'exists:groups,id',
+            'password' => 'nullable|string|confirmed|min:6',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -212,13 +241,24 @@ class TeacherController extends Controller
 
         $teacher->update([
             'school_id' => $request->input('school_id'),
+            'password' => Hash::make($request->password),
+            'plain_password' => $request->password,
             'is_active' => $request->input('is_active') ?? 1,
         ]);
 
         $teacher->classes()->sync($request->input('class_id'));
         $teacher->stages()->sync($request->input('stage_ids'));
 
-        return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully.');
+
+        if ($teacher->alias_id != null) {
+            $returnId = $teacher->alias_id;
+        } else {
+            $returnId = $teacher->id;
+        }
+        return redirect()->route('teachers.addSchool', ['teacherId' => $returnId])
+            ->with('success', 'School Teacher Updated Successfully.');
+
+        // return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully.');
     }
 
 
@@ -227,31 +267,44 @@ class TeacherController extends Controller
      */
     public function destroy(string $id, Request $request)
     {
-        if($id != $request->mainteacher){
+        if ($id != $request->mainteacher) {
             $teacher = Teacher::findOrFail($id);
-            // $teacher->delete();
-        }else{
-            if(!empty(json_decode($request->teacher_aliases))){
-                dd($request->all());
-                foreach(json_decode($request->teacher_aliases) as $teacherAlias){
+            $teacher->delete();
+            return redirect()->route('teachers.addSchool', ['teacherId' => $request->mainteacher])
+                ->with('success', 'School removed from this teacher successfully.');
+        } else {
+            // $teacherAliases = json_decode($request->teacher_aliases);
+            $teacherAliases = Teacher::where('alias_id', $id)->get();
+            if ($teacherAliases->isNotEmpty()) {
+
+                // dd($teacherAliases);
+                $newMainTeacherId = $teacherAliases[0]->id;
+                // dd($newMainTeacherId);
+                foreach (json_decode($request->teacher_aliases) as $teacherAlias) {
                     // dd($teacherAlias);
                     $teacher = Teacher::find($teacherAlias->id);
                     $teacher->update([
-                        'alias_id' => null,
+                        'alias_id' => $newMainTeacherId,
                     ]);
-                    dd('done');
                 }
-            }else{
-                dd("Empty");
+                $newMainTeacher = Teacher::find($teacherAliases[0]->id);
+                $newMainTeacher->update([
+                    'alias_id' => null,
+                ]);
+                $teacher = Teacher::findOrFail($id);
+                $teacher->delete();
+                return redirect()->route('teachers.addSchool', ['teacherId' => $newMainTeacherId])
+                    ->with('success', 'School removed from this teacher successfully.');
+            } else {
+                $teacher = Teacher::findOrFail($id);
+                $teacher->delete();
+                return redirect()->route('teachers.index')->with('success', 'Teacher removed successfully.');
             }
         }
 
-        if($request->school_list_flag == 1){
-            return redirect()->route('teachers.addSchool', ['teacherId' => $request->mainteacher])
-            ->with('success', 'School removed from this teacher successfully.');
-        }
-        
-      
-      
+        // if ($request->school_list_flag == 1) {
+        //     return redirect()->route('teachers.addSchool', ['teacherId' => $request->mainteacher])
+        //         ->with('success', 'School removed from this teacher successfully.');
+        // }
     }
 }

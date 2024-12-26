@@ -84,10 +84,9 @@
                         <thead>
                             <tr>
                                 <th>Profile image</th>
-                                <th>Username</th>
+                                <th>Name</th>
                                 <th>Gender</th>
-                                <th>School</th>
-                                <th>Plain Password</th>
+                                <th>Schools</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -113,25 +112,24 @@
                                         class="rounded-circle">
                                     @endif
                                 </td>
-                                <td>{{ $teacher->username }}</td>
+                                <td>{{ $teacher->name }}</td>
                                 <td>{{ ucfirst($teacher->gender) }}</td>
                                 <td>{{ $string}}</td>
-                                <td>{{ $teacher->plain_password }}</td>
                                 <td class="d-flex align-items-center gap-2">
-                                    <a href="{{ route('teachers.edit', $teacher->id) }}"
-                                        class="btn btn-info">Edit</a>
+                                    <!-- <a href="{{ route('teachers.edit', $teacher->id) }}"
+                                        class="btn btn-info">Edit</a> -->
                                     <a href="{{ route('teachers.addSchool', $teacher->id) }}"
-                                        class="btn btn-info">Schools</a>
+                                        class="btn btn-info">Edit Schools</a>
 
                                     <!-- Delete button -->
-                                    <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST">
+                                    <!-- <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger"
                                             onclick="return confirm('Are you sure you want to delete this teacher?');">
                                             Delete
                                         </button>
-                                    </form>
+                                    </form> -->
                                 </td>
 
                             </tr>

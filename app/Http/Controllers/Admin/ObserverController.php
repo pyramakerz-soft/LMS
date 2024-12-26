@@ -6,6 +6,8 @@ use App\Exports\StudentsExport;
 use App\Http\Controllers\Controller;
 use App\Imports\StudentsImport;
 use App\Models\Group;
+use App\Models\ObservationHeader;
+use App\Models\ObservationQuestion;
 use App\Models\School;
 use App\Models\Stage;
 use App\Models\Student;
@@ -98,5 +100,76 @@ class ObserverController extends Controller
         $observer = Observer::findOrFail($id);
         $observer->delete();
         return redirect()->route('observers.index')->with('success', 'Observer deleted successfully.');
+    }
+
+    public function show(string $id)
+    {
+        $observer = Observer::findOrFail($id);
+        return view('admin.observers.show', compact('observer'));
+    }
+    public function addQuestions(Request $request)
+    {
+        $headers = ObservationHeader::all();
+        $observers = Observer::query()
+            ->paginate(30)
+            ->appends($request->query());
+
+
+        foreach ($headers as $header) {
+            if (!isset($data[$header->id])) {
+                $data[$header->id] = [
+                    'header_id' => $header->id,
+                    'name' => $header->header,
+                    'questions' => [],
+                ];
+            }
+            $questions = ObservationQuestion::where('observation_header_id', $header->id)->get();
+            $headerQuestions = [];
+            foreach ($questions as $question) {
+                if (!isset($headerQuestions[$question->id])) {
+                    $headerQuestions[$question->id] = [
+                        'question_id' => $question->id,
+                        'name' => $question->question,
+                        'avg_rating' => 0,
+                        'max_rating' => $question->max_rate,
+                    ];
+                }
+            }
+            $data[$header->id]['questions'] = $headerQuestions;
+        }
+        // dd($data);
+        return view('admin.observers.observation_questions', compact('observers', 'data'));
+    }
+    public function deleteQuestion($id)
+    {
+        $question = ObservationQuestion::findOrFail($id);
+        $question->delete();
+
+        return redirect()->back()->with('success', 'Question deleted successfully.');
+    }
+
+    public function storeQuestion(Request $request)
+    {
+        $request->validate([
+            'header_id' => 'required|exists:observation_headers,id',
+            'name' => 'required|string|max:255',
+            'max_rating' => 'required|integer|min:1',
+        ]);
+
+        ObservationQuestion::create([
+            'observation_header_id' => $request->header_id,
+            'name' => $request->name,
+            'max_rate' => $request->max_rating,
+        ]);
+
+        return redirect()->back()->with('success', 'Question added successfully.');
+    }
+
+    public function deleteHeader($id)
+    {
+        $header = ObservationHeader::findOrFail($id);
+        $header->delete();
+
+        return redirect()->back()->with('success', 'Header deleted successfully.');
     }
 }

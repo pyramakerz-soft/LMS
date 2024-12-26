@@ -5,17 +5,17 @@
                 {{-- <img class="w-20 h-20 rounded-full" alt="avatar" src="{{ Auth::guard('teacher')->user()->image }}" /> --}}
                 {{-- @if (Auth::guard('teacher')->user()->image)
                     <img src="{{ asset(Auth::guard('teacher')->user()->image) }}" alt="Teacher Image"
-                        class="w-20 h-20 rounded-full">
+                class="w-20 h-20 rounded-full">
                 @else
-                    <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
-                        class="w-30 h-20 rounded-full">
+                <img src="{{ asset('storage/students/profile-png.webp') }}" alt="Student Image"
+                    class="w-30 h-20 rounded-full">
                 @endif --}}
                 <img class="w-20 h-20 rounded-full object-cover" alt="avatar"
                     src="{{ Auth::guard('teacher')->user()->image ? Auth::guard('teacher')->user()->image : asset('images/default_user.jpg') }}" />
             </div>
             <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
                 <div class="text-xl">
-                    {{ Auth::guard('teacher')->user()->username }}
+                    {{ Auth::guard('teacher')->user()->name }}
                 </div>
                 <div class="text-sm">
                     <!-- Optionally show the teacher's school -->
@@ -23,11 +23,11 @@
                 </div>
             </div>
         </div>
-        <div>
+        <!-- <div>
             <button onclick="openEditModal('editName')">
                 <i class="fas fa-edit text-white text-xl"></i>
             </button>
-        </div>
+        </div> -->
     </div>
 </div>
 

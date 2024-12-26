@@ -24,12 +24,17 @@
 
                     <form action="{{ route('teachers.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-
                         <div class="mb-3">
+                            <label for="Name" class="form-label">Teacher Name</label>
+
+                            <input type="text" name="name" id="name" class="form-control" required>
+                            <div class="invalid-feedback" style="display: none;">Name cannot contain numbers.</div>
+                        </div>
+                        <!-- <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
                             <input type="text" name="username" id="username" class="form-control" required>
                             <div class="invalid-feedback" style="display: none;">Username cannot contain numbers.</div>
-                        </div>
+                        </div> -->
 
                         <div class="mb-3">
                             <label for="gender" class="form-label">Gender</label>
