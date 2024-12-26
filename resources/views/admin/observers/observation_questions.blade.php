@@ -9,7 +9,11 @@
 
         <main class="content">
             <div class="container-fluid p-0">
-                <h1>Observers</h1>
+                <div class="flex" style="justify-content: space-between; align-items: center;">
+                    <h1>Observation Questions and Headers</h1>
+                    <a href="#" class="btn btn-primary mb-3" style="">Add Header</a>
+                </div>
+
 
                 @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
@@ -76,38 +80,6 @@
 
                     </div>
                 </div>
-
-                <!-- Add Question Modal -->
-                <div id="add-question-modal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-                    <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
-                        <h2 class="text-lg font-semibold mb-4">Add Question</h2>
-                        <form id="add-question-form" method="POST" action="{{ route('questions.storeQuestion') }}">
-                            @csrf
-                            <input type="hidden" name="header_id" id="modal-header-id">
-
-                            <!-- Question Name -->
-                            <div class="mb-4">
-                                <label for="question-name" class="block text-sm font-medium text-gray-700">Question Name</label>
-                                <input type="text" id="question-name" name="name" class="w-full p-2 border border-gray-300 rounded" required>
-                            </div>
-
-                            <!-- Max Rating -->
-                            <div class="mb-4">
-                                <label for="max-rating" class="block text-sm font-medium text-gray-700">Max Rating</label>
-                                <input type="number" id="max-rating" name="max_rating" class="w-full p-2 border border-gray-300 rounded" required>
-                            </div>
-
-                            <!-- Submit Button -->
-                            <div class="flex justify-end">
-                                <button type="button" class="btn btn-secondary mr-2" onclick="closeAddQuestionModal()">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Add</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-
-
             </div>
 
         </main>
