@@ -11,9 +11,9 @@
             <div class="container-fluid p-0">
                 <div class="flex" style="justify-content: space-between; align-items: center;">
                     <h1>Observation Questions and Headers</h1>
-                    <a href="#" class="btn btn-primary mb-3" style="">Add Header</a>
+                    <!-- Add Header Button -->
+                    <button class="btn btn-primary mb-3" onclick="openAddHeaderModal()">Add Header</button>
                 </div>
-
 
                 @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
@@ -45,12 +45,12 @@
 
                             <!-- Table for questions -->
                             @if (!empty($header['questions']))
-                            <table class="w-full border border-gray-300 text-left mb-4">
+                            <table class="w-full border border-gray-300 text-left mb-4" style="width: 100%;">
                                 <thead class="bg-gray-100">
                                     <tr>
-                                        <th class="border px-4 py-2">Question</th>
-                                        <th class="border px-4 py-2">Max Rating</th>
-                                        <th class="border px-4 py-2">Action</th>
+                                        <th class="col-10 border px-4 py-2">Question</th>
+                                        <th class="col-1 border px-4 py-2">Max Rating</th>
+                                        <th class="col-1 border px-4 py-2">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -77,7 +77,6 @@
                             @endif
                             @endforeach
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -86,33 +85,112 @@
 
     </div>
 </div>
+
+<!-- Add Header Modal -->
+<div id="addHeaderModal" class="modal" style="display: none;">
+    <div class="modal-content" style="text-align: left;">
+        <span class="close" onclick="closeAddHeaderModal()">&times;</span>
+        <h2>Add Header</h2>
+        <form action="{{ route('headers.storeHeader') }}" method="POST">
+            @csrf
+            <div class="form-group mb-3">
+                <label for="headerName">Header Name</label>
+                <input type="text" name="name" id="headerName" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Header</button>
+        </form>
+    </div>
+</div>
+
+<!-- Add Question Modal -->
+<div id="addQuestionModal" class="modal" style="display: none;">
+    <div class="modal-content" style="text-align: left;">
+        <span class="close" onclick="closeAddQuestionModal()">&times;</span>
+        <h2>Add Question</h2>
+        <form action="{{ route('questions.storeQuestion') }}" method="POST">
+            @csrf
+            <input type="hidden" name="header_id" id="headerId">
+            <div class="form-group mb-3">
+                <label for="questionName">Question Name</label>
+                <input type="text" name="name" id="questionName" class="form-control" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="maxRating">Max Rating</label>
+                <input type="number" name="max_rating" id="maxRating" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Question</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Modal Background */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Shadow effect */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+    }
+
+    .modal-content .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+</style>
 @endsection
 
 @section('page_js')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('#school, #class').change(function() {
-            $('#filterForm').submit();
-        });
-    });
+    function openAddHeaderModal() {
+        document.getElementById('addHeaderModal').style.display = 'flex';
+    }
 
-    $('#clearFilters').click(function(e) {
-        e.preventDefault();
-        $('#school').val('').prop('selected', true);
-        $('#class').val('').prop('selected', true);
-        $('#filterForm').submit();
-    });
-</script>
-<script>
+    function closeAddHeaderModal() {
+        document.getElementById('addHeaderModal').style.display = 'none';
+    }
+
     function openAddQuestionModal(headerId) {
-        document.getElementById('modal-header-id').value = headerId;
-        document.getElementById('add-question-modal').classList.remove('hidden');
+        document.getElementById('headerId').value = headerId;
+        document.getElementById('addQuestionModal').style.display = 'flex';
     }
 
     function closeAddQuestionModal() {
-        document.getElementById('add-question-modal').classList.add('hidden');
+        document.getElementById('addQuestionModal').style.display = 'none';
     }
-</script>
 
+    // Close modals when clicking outside of them
+    window.onclick = function(event) {
+        const modals = ['addHeaderModal', 'addQuestionModal'];
+        modals.forEach(modalId => {
+            const modal = document.getElementById(modalId);
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    };
+</script>
 @endsection

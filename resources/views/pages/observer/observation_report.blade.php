@@ -26,7 +26,6 @@ $menuItems = [
                     Filters
                 </button>
             </div>
-
         </div>
 
         @if (session('success'))
@@ -51,13 +50,13 @@ $menuItems = [
             </button>
         </div>
         @endif
-        <div class="overflow-x-auto">
-            <div class="mb-4 flex" style="gap:10px; padding:10px">
-                <div class="questions mb-3" style="max-width: 65%;">
+        <div class="flex mb-4" style="gap:10px; padding:10px; justify-content:space-between">
+            <div class="mb-4" style="gap:10px; padding:10px; max-width:75%">
+                <div class="questions mb-3" style="max-width: 100%;">
                     @foreach ($data as $header)
-                    <h1 class="text-lg font-semibold text-[#667085] mb-4" style="font-size:24px">{{$header['name']}}</h1>
+                    <h1 class="text-lg font-semibold text-[#667085] mb-4" style="font-size:20px">{{$header['name']}}</h1>
                     @foreach ($header['questions'] as $question)
-                    <h3 class="text-base font-medium text-gray-700 mb-2" style="font-size:18px">- {{$question['name']}}</h3>
+                    <h3 class="text-base font-medium text-gray-700 mb-2" style="font-size:16px">- {{$question['name']}}</h3>
 
                     <div class="rating-bar" style="margin-bottom: 10px;">
                         <div style="position: relative; background-color: #e5e7eb; border-radius: 8px; height: 20px; width: 100%;">
@@ -70,11 +69,39 @@ $menuItems = [
                     @endforeach
                 </div>
             </div>
+            <div class="rounded-lg">
+                <div class="mb-3">
+                    <label for="observation_name" class="block text-sm font-medium text-gray-700">Observer Name</label>
+                    <input class="w-full p-2 border border-gray-300 rounded" type="text" style="font-size:14px" name="observation_name" value="{{ Auth::guard('observer')->user()->name}}" disabled required>
+                </div>
+                <div class="mb-3">
+                    <label for="teacher" class="block text-sm font-medium text-gray-700">Teacher</label>
+                    <input class="w-full p-2 border border-gray-300 rounded" type="text" name="observation_name" style="font-size:14px"
+                        value="{{ request('teacher_id') ? App\Models\Teacher::find(request('teacher_id'))->name: 'All Teachers'}}" disabled required>
+                </div>
+                <div class="mb-3">
+                    <label for="school" class="block text-sm font-medium text-gray-700">School</label>
+                    <div class="w-full p-2 border border-gray-300 rounded" style="font-size:14px">
+                        @if(request('school_id'))
+                        @php
+                        $filteredSchools = App\Models\School::whereIn('id', request('school_id'))->pluck('name');
+                        @endphp
+                        @foreach($filteredSchools as $schoolName)
+                        <div>{{ $schoolName }}</div>
+                        @endforeach
+                        @else
+                        <div>All Schools</div>
+                        @endif
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
 <div id="filter-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
-    <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
+    <div
+        class="bg-white rounded-lg shadow-lg p-6 w-full sm:w-3/4 md:w-1/2 lg:w-1/3 max-h-[90vh] overflow-y-auto">
         <h2 class="text-xl font-bold mb-4">Filters</h2>
         <form id="filter-form-modal" action="{{ route('observer.report') }}" method="GET">
 
@@ -95,22 +122,36 @@ $menuItems = [
                     <option value="">All Teachers</option>
                     @foreach ($teachers as $teacher)
                     <option value="{{ $teacher->id }}" {{ request('teacher_id') == $teacher->id ? 'selected' : '' }}>
-                        {{ $teacher->username }}
+                        {{ $teacher->name }}
                     </option>
                     @endforeach
                 </select>
             </div>
             <div class="mb-4">
                 <label for="school_id" class="block text-sm font-medium text-gray-700">School</label>
-                <select name="school_id" id="school_id" class="w-full p-2 border border-gray-300 rounded">
-                    <option value="">All Schools</option>
+                <select name="school_id[]" id="school_id" class="w-full p-2 border border-gray-300 rounded" multiple>
+                    <!-- <option value="" disabled selected>Select Schools</option> -->
                     @foreach ($schools as $school)
-                    <option value="{{ $school->id }}" {{ request('school_id') == $school->id ? 'selected' : '' }}>
+                    <option value="{{ $school->id }}"
+                        {{ is_array(request('school_id')) && in_array($school->id, request('school_id')) ? 'selected' : '' }}>
                         {{ $school->name }}
                     </option>
                     @endforeach
                 </select>
             </div>
+            <div class="mb-4">
+                <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                <select name="city[]" id="city" class="w-full p-2 border border-gray-300 rounded" multiple>
+                    <!-- <option value="" disabled selected>Select Schools</option> -->
+                    @foreach ($cities as $city)
+                    <option value="{{ $city }}"
+                        {{ is_array(request('city')) && in_array($city, request('city')) ? 'selected' : '' }}>
+                        {{ $city }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
             <div class="mb-4">
                 <label for="school_id" class="block text-sm font-medium text-gray-700">Stage</label>
                 <select name="stage_id" id="stage_id" class="w-full p-2 border border-gray-300 rounded">
@@ -173,7 +214,7 @@ $menuItems = [
         // Clone the original content
         const clonedContent = originalContent.cloneNode(true);
 
-        // Remove the filter button from the cloned content
+        // Remove the filter button and export button from the cloned content
         const filterButton = clonedContent.querySelector('#filter-modal-btn');
         const exportButton = clonedContent.querySelector('#export-pdf');
         if (filterButton) {
@@ -189,16 +230,16 @@ $menuItems = [
         tempContainer.appendChild(clonedContent);
         document.body.appendChild(tempContainer);
 
-        // Define options for the PDF
+        // Define options for html2pdf
         const options = {
-            margin: 1,
+            margin: [0.5, 0.5, 0.5, 0.5], // Decrease margins to match the website
             filename: 'Observations_Report.pdf',
-            image: {
-                type: 'jpeg',
-                quality: 0.98
+            pagebreak: {
+                mode: ['avoid-all', 'css', 'legacy'] // Avoid breaking inside elements
             },
             html2canvas: {
-                scale: 2
+                scale: 2, // Increase scale for better text quality
+                useCORS: true // Handle cross-origin images and fonts
             },
             jsPDF: {
                 unit: 'in',
@@ -207,11 +248,12 @@ $menuItems = [
             }
         };
 
-        // Generate and download the PDF using the cloned content
+        // Generate the PDF using html2pdf
         html2pdf()
             .set(options)
             .from(clonedContent)
-            .save()
+            .toPdf() // Convert to PDF directly
+            .save() // Save the file
             .then(() => {
                 // Clean up the temporary container after PDF generation
                 document.body.removeChild(tempContainer);
@@ -223,6 +265,7 @@ $menuItems = [
             });
     });
 </script>
+
 
 <script>
     document.getElementById('export-excel').addEventListener('click', function() {
@@ -260,8 +303,4 @@ $menuItems = [
         XLSX.writeFile(workbook, 'Observations_Report.xlsx');
     });
 </script>
-
-
-
-
 @endsection

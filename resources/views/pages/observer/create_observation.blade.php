@@ -116,7 +116,7 @@ $menuItems = [
                         <select name="teacher_id" id="teacher_id" class="w-full p-2 border border-gray-300 rounded" required>
                             <option value="">Select Teacher</option>
                             @foreach ($teachers as $teacher)
-                            <option value="{{ $teacher->id }}">{{ $teacher->username }}</option>
+                            <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -138,13 +138,16 @@ $menuItems = [
                     <div class="mb-3">
                         <label for="city" class="block text-sm font-medium text-gray-700">City</label>
                         <select name="city_id" id="city_id" class="w-full p-2 border border-gray-300 rounded" required>
-                            <option value="" selected disabled>No Available City</option>
+                            <option value="" disabled selected>Select City</option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="grade" class="block text-sm font-medium text-gray-700">Grade</label>
                         <select name="grade_id" id="grade_id" class="w-full p-2 border border-gray-300 rounded" required>
-                            <option value="" selected disabled>No Available Grade</option>
+                            <option value="" disabled selected>Select Grade</option>
+                            @foreach ($grades as $grade)
+                            <option value="{{$grade->id}}">{{$grade->name}}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
@@ -162,8 +165,6 @@ $menuItems = [
                     </div>
                 </div>
             </div>
-
-
         </form>
     </div>
 </div>
@@ -239,64 +240,83 @@ $menuItems = [
 </script>
 <script>
     $(document).ready(function() {
-
         function updateOptions(selectedValue, selectToUpdate) {
             // Enable all options first
-            $(`#${selectToUpdate} option`).prop('disabled', false);
+            $(`#${selectToUpdate} option`).prop("disabled", false);
 
             // Disable the matching option in the other select
             if (selectedValue) {
-                $(`#${selectToUpdate} option[value="${selectedValue}"]`).prop('disabled', true);
-                $(`#${selectToUpdate} option[value="${selectedValue}"]`).addClass('dim-option');
+                $(`#${selectToUpdate} option[value="${selectedValue}"]`)
+                    .prop("disabled", true)
+                    .addClass("dim-option");
             }
         }
 
         // Trigger getProgramsByGroup on group change
-        $('#teacher_id').change(function() {
-            var teacherId = $('#teacher_id').val();
-            updateOptions(teacherId, 'coteacher_id'); // Update coteacher dropdown
+        $("#teacher_id").change(function() {
+            var teacherId = $("#teacher_id").val();
+            updateOptions(teacherId, "coteacher_id"); // Update coteacher dropdown
             getSchool(teacherId);
-            getStages(teacherId);
         });
 
-        $('#coteacher_id').change(function() {
-            var coteacherId = $('#coteacher_id').val();
-            updateOptions(coteacherId, 'teacher_id'); // Update teacher dropdown
+        $("#coteacher_id").change(function() {
+            var coteacherId = $("#coteacher_id").val();
+            updateOptions(coteacherId, "teacher_id"); // Update teacher dropdown
         });
 
         // Trigger change on page load to fetch programs for the selected group
-        $('#teacher_id').trigger('change');
+        $("#teacher_id").trigger("change");
+
+        // Update city select when school is selected
+        $("select[name='school_id']").change(function() {
+            var selectedSchool = $(this).find(":selected");
+            var schoolCity = selectedSchool.data("city"); // Retrieve the city from the data attribute
+            var citySelect = $("select[name='city_id']");
+
+            citySelect.empty(); // Clear existing city options
+            if (schoolCity) {
+                citySelect.append(
+                    '<option value="' + schoolCity + '" selected>' + schoolCity + '</option>'
+                );
+            }
+        });
     });
-
-
 
     function getSchool(teacherId) {
         $.ajax({
             // url: '/LMS/lms_pyramakerz/public/observer/observation/get_school/' + teacherId,
-            url: '/observer/observation/get_school/' + teacherId,
+            url: "/observer/observation/get_school/" + teacherId,
             type: "GET",
             dataType: "json",
             success: function(data) {
                 // Clear the existing options
-                $('select[name="school_id"]').empty();
-                $('select[name="city_id"]').empty();
+                $("select[name='school_id']").empty();
 
                 if (data.error) {
-                    $('select[name="school_id"]').append(
-                        '<option value="" selected disabled>' + data.error + '</option>'
+                    $("select[name='school_id']").append(
+                        '<option value="" selected disabled>' + data.error + "</option>"
                     );
                 } else {
-                    $('select[name="school_id"]').append(
-                        '<option value="' + data.id + '" selected disabled>' + data.name + '</option>'
+                    // Loop through each school and append them to the school_id dropdown
+                    $("select[name='school_id']").append(
+                        '<option value="" selected disabled>Select School</option>'
                     );
-                    $('select[name="city_id"]').append(
-                        '<option value="' + data.city + '" selected disabled>' + data.city + '</option>'
-                    );
+                    data.forEach(function(school) {
+                        $("select[name='school_id']").append(
+                            '<option value="' +
+                            school.id +
+                            '" data-city="' +
+                            school.city +
+                            '">' +
+                            school.name +
+                            "</option>"
+                        );
+                    });
                 }
             },
             error: function(xhr, status, error) {
-                console.error('AJAX Error:', error);
-            }
+                console.error("AJAX Error:", error);
+            },
         });
     }
 

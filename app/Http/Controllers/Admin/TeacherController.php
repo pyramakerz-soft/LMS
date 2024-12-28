@@ -19,7 +19,7 @@ class TeacherController extends Controller
      */
     public function index(Request $request)
     {
-        // $this->updateTeacherNames();
+        $this->updateTeacherNames();
 
         $teacherQuery = Teacher::with('school')->whereNull('alias_id');
 

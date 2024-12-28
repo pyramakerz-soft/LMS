@@ -6,7 +6,9 @@ use App\Exports\StudentsExport;
 use App\Http\Controllers\Controller;
 use App\Imports\StudentsImport;
 use App\Models\Group;
+use App\Models\Observation;
 use App\Models\ObservationHeader;
+use App\Models\ObservationHistory;
 use App\Models\ObservationQuestion;
 use App\Models\School;
 use App\Models\Stage;
@@ -158,11 +160,21 @@ class ObserverController extends Controller
 
         ObservationQuestion::create([
             'observation_header_id' => $request->header_id,
-            'name' => $request->name,
+            'question' => $request->name,
             'max_rate' => $request->max_rating,
         ]);
 
         return redirect()->back()->with('success', 'Question added successfully.');
+    }
+    public function storeHeader(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+        ]);
+        $obs =  ObservationHeader::create([
+            'header' => $request->name,
+        ]);
+        return redirect()->route('observers.addQuestions')->with('success', 'Header added successfully.');
     }
 
     public function deleteHeader($id)
@@ -171,5 +183,105 @@ class ObserverController extends Controller
         $header->delete();
 
         return redirect()->back()->with('success', 'Header deleted successfully.');
+    }
+
+    public function observationReport(Request $request)
+    {
+        // $observer = Auth::guard('observer')->user();
+        $teachers = Teacher::with('school')->whereNull('alias_id')->get();
+        $schools = School::all();
+        $observers = Observer::all();
+        $stages = Stage::all();
+        $headers = ObservationHeader::all();
+
+        foreach ($headers as $header) {
+            if (!isset($data[$header->id])) {
+                $data[$header->id] = [
+                    'header_id' => $header->id,
+                    'name' => $header->header,
+                    'questions' => [],
+                ];
+            }
+            $questions = ObservationQuestion::where('observation_header_id', $header->id)->get();
+            $headerQuestions = [];
+            foreach ($questions as $question) {
+                if (!isset($headerQuestions[$question->id])) {
+                    $headerQuestions[$question->id] = [
+                        'question_id' => $question->id,
+                        'name' => $question->question,
+                        'avg_rating' => 0,
+                        'max_rating' => $question->max_rate,
+                    ];
+                }
+            }
+            $data[$header->id]['questions'] = $headerQuestions;
+        }
+        // dd($data);
+
+        $query = Observation::query();
+        if ($query->get()->count() == 0) {
+            return redirect()->back()->with('error', 'No observations found for this observer');
+        }
+        if ($request->filled('teacher_id')) {
+            $teacherIds = Teacher::where('id', $request->teacher_id)
+                ->orWhere('alias_id', $request->teacher_id)->pluck('id');
+            $query->whereIn('teacher_id', $teacherIds);
+        }
+
+        if ($request->filled('school_id')) {
+            $schoolIds = $request->school_id;
+            if (in_array('all', $schoolIds)) {
+            } else {
+                $query->whereIn('school_id', $schoolIds);
+            }
+        }
+        if ($request->filled('observer_id')) {
+            $query->where('observer_id', $request->observer_id);
+        }
+        if ($request->filled('city')) {
+            $query->whereHas('school', function ($query) use ($request) {
+                $query->whereIn('city', $request->city);
+            });
+        }
+        if ($request->filled('stage_id')) {
+            $query->where('stage_id', $request->stage_id);
+        }
+        if ($request->filled('lesson_segment_filter')) {
+            $query->whereJsonContains('lesson_segment', $request->lesson_segment_filter);
+        }
+        if ($request->filled('from_date')) {
+            $query->whereDate('activity', '>=', $request->from_date);
+        }
+        if ($request->filled('to_date')) {
+            $query->whereDate('activity', '<=', $request->to_date);
+        }
+
+        if ($request->has('include_comments')) {
+            $query->whereNotNull('note');
+        }
+        if ($query->get()->count() == 0) {
+            return redirect()->back()->with('error', 'No observations found for set filters');
+        }
+
+        $observations = $query->pluck('id');
+
+        $obsCount = $observations->count();
+
+
+        // dd($obsCount);
+        $histories = ObservationHistory::whereIn('observation_id', $observations)->get();
+        // dd($history);
+        foreach ($histories as $history) {
+            $headerId = ObservationQuestion::find($history->question_id)->observation_header_id;
+            $data[$headerId]['questions'][$history->question_id]['avg_rating'] += $history->rate;
+        }
+
+        foreach ($data as $header) {
+            foreach ($header['questions'] as $question) {
+                $data[$header['header_id']]['questions'][$question['question_id']]['avg_rating'] = round($data[$header['header_id']]['questions'][$question['question_id']]['avg_rating'] / $obsCount, 2);
+            }
+        }
+        $cities = School::distinct()->whereNotNull('city')->pluck('city');
+        return view('admin.observers.observation_report_admin', compact('stages', 'cities', 'teachers', 'observers', 'schools', 'headers', 'data'));
     }
 }

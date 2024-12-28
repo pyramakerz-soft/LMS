@@ -98,6 +98,11 @@
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Observation Questions</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ request()->is('admin/observers/observation_report_admin') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('observers.obsReport') }}">
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Observation Report</span>
+                </a>
+            </li>
             <li class="sidebar-item {{ request()->is('admin/reports/assignment_avg_report') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('admin.assignmentAvgReport') }}">
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Assignment Avg Report</span>

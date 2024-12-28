@@ -78,10 +78,12 @@ Route::prefix('admin')->group(function () {
         Route::resource('teachers', TeacherController::class);
 
         Route::get('observers/observation_questions', [ObserverController::class, 'addQuestions'])->name('observers.addQuestions');
+        Route::get('observers/observation_report', [ObserverController::class, 'observationReport'])->name('observers.obsReport');
         Route::delete('/questions/{id}', [ObserverController::class, 'deleteQuestion'])->name('questions.destroy');
         // Routes for questions and headers
-        Route::post('/questions', [ObserverController::class, 'storeQuestion'])->name('questions.storeQuestion');
+        Route::post('/questions/store', [ObserverController::class, 'storeQuestion'])->name('questions.storeQuestion');
         Route::delete('/headers/{id}', [ObserverController::class, 'deleteHeader'])->name('headers.deleteHeader');
+        Route::post('/headers/store', [ObserverController::class, 'storeHeader'])->name('headers.storeHeader');
 
 
         Route::resource('observers', ObserverController::class);
