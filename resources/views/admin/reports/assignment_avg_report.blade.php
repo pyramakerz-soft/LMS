@@ -9,7 +9,12 @@
 
         <main class="content">
             <div class="container-fluid p-0">
-                <h2>Assignment Average Degree Report</h2>
+                <div class="d-flex" style="justify-content: space-between;">
+                    <h1 class="">Assignment Report</h1>
+                    <div class="d-flex">
+                        <button id="export-pdf" class="btn btn-primary me-2">Export as PDF</button>
+                    </div>
+                </div>
                 @if (session('error'))
                 <div class="alert alert-danger d-flex justify-content-between align-items-center" role="alert">
                     <span class="block sm:inline">{{ session('error') }}</span>
@@ -25,30 +30,24 @@
 
 
                 <form id="filter-form" action="{{ route('admin.assignmentAvgReport') }}" method="GET" enctype="multipart/form-data" class="mb-4 flex" style="gap:10px; padding:10px">
-                    <div class="mb-3">
-                        <label for="teacher_id">Teacher</label>
-                        <select name="teacher_id" id="teacher_select" class="form-control">
-                            <option value="">All Teachers</option>
-                            @foreach ($teachers as $teacher)
-                            <option value="{{ $teacher->id }}"
-                                {{ request('teacher_id') == $teacher->id ? 'selected' : '' }}>
-                                {{ $teacher->username }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="school_id">School</label>
+                    <div class="mb-3" id="school_select">
+                        <label for="school_id" class="form-label">School</label>
                         <select name="school_id" id="school_id" class="form-control">
-                            <option value="">All Schools</option>
+                            <option selected value="">All Schools</option>
                             @foreach ($schools as $school)
-                            <option value="{{ $school->id }}"
-                                {{ request('school_id') == $school->id ? 'selected' : '' }}>
+                            <option value="{{ $school->id }}" {{ request('school_id') == $school->id ? 'selected' : '' }}>
                                 {{ $school->name }}
                             </option>
                             @endforeach
                         </select>
                     </div>
+                    <div class="mb-3" id="teacher_select">
+                        <label for="teacher_id" class="form-label">Teacher</label>
+                        <select name="teacher_id" id="teacher_id" class="form-control">
+                            <option selected disabled value="">Please Select School</option>
+                        </select>
+                    </div>
+
 
                     <!-- From Date Filter -->
                     <div class="flex" style="display:flex; justify-content:space-between">
@@ -72,12 +71,63 @@
                 </form>
             </div>
 
-            @if (isset($chartData))
-            <div class="container mt-3">
-                <canvas id="groupedBarChart" width="400" height="200"></canvas>
-            </div>
-            @endif
 
+            <div id="pdf-content">
+                @if (isset($chartData))
+                <div class="container mt-3">
+                    <canvas id="groupedBarChart" width="400" height="200"></canvas>
+                </div>
+
+                <div class="container mt-3">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Grade</th>
+                                <th>Assignment Name</th>
+                                <th>Students</th>
+                                <th>Students Average</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($data as $stage)
+                            <tr>
+                                <td rowspan="{{ count($stage['assignments']) > 0 ? count($stage['assignments']) : 1 }}">
+                                    {{ $stage['stage_name'] }}
+                                </td>
+
+                                <!-- Loop through assignments -->
+                                @if (count($stage['assignments']) > 0)
+                                @foreach ($stage['assignments'] as $assignment)
+                                @if (!$loop->first)
+                            <tr>
+                                @endif
+                                <td>{{ $assignment['assignment_name'] }}</td>
+                                <td>
+                                    @if (count($assignment['students']) > 0)
+                                    @foreach ($assignment['students'] as $student_id)
+                                    @php
+                                    $student = App\Models\Student::find($student_id);
+                                    @endphp
+                                    <div>{{ $student->username }}</div>
+                                    @endforeach
+                                    @else
+                                    No Students
+                                    @endif
+                                </td>
+                                <td>{{ $assignment['students_average'] }}</td>
+                            </tr>
+                            @endforeach
+                            @else
+                            <td colspan="4">No Assignments</td>
+                            @endif
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+
+                </div>
+                @endif
+            </div>
         </main>
 
 
@@ -87,6 +137,53 @@
 
 @section('page_js')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+    document.getElementById("export-pdf").addEventListener("click", function() {
+        const pdf = new jspdf.jsPDF("p", "mm", "a4"); // Create a new PDF document
+
+        // Add the title at the top of the PDF
+        const title = "Assignment Report";
+        pdf.setFont("helvetica", "bold"); // Set font to Helvetica Bold
+        pdf.setFontSize(20); // Set font size
+        pdf.text(title, 105, 20, {
+            align: "center"
+        }); // Add the title, centered at the top
+
+        // Select the content to export
+        const content = document.getElementById("pdf-content");
+
+        // Use html2canvas to render the content
+        html2canvas(content, {
+            scale: 2, // Increase the scale for better quality
+        }).then((canvas) => {
+            const imgData = canvas.toDataURL("image/png");
+            const imgWidth = 190; // Set image width (A4 page is 210mm wide, leaving margins)
+            const pageHeight = 297; // A4 page height in mm
+            const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
+            let heightLeft = imgHeight;
+
+            let position = 30; // Start below the title (20mm title + 10mm padding)
+
+            // Add the image to the PDF
+            pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            // Add more pages if the content is taller than one page
+            while (heightLeft > 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+
+            // Save the PDF
+            pdf.save("Assignment_Report.pdf");
+        });
+    });
+</script>
 @if (isset($chartData))
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -145,7 +242,88 @@
         }
     });
 </script>
-
 @endif
+<script>
+    $(document).ready(function() {
+        $('.js-select2').select2();
+
+        $('#school_id').change(function() {
+            var schoolId = $('#school_id').val();
+            // var selectedClassId = "{{$request['class_id'] ?? '' }}";
+            // var selectedStudentId = "{{$request['student_id'] ?? '' }}";
+            var selectedTeacherId = "{{$request['teacher_id'] ?? '' }}";
+            // getSchoolClasses(schoolId, selectedClassId);
+            getSchoolTeachers(schoolId, selectedTeacherId);
+            // getSchoolStudents(schoolId, selectedStudentId);
+
+        });
+        $('#school_id').trigger('change');
+    });
+
+
+    function getSchoolStudents(schoolId, selectedStudentId) {
+        $.ajax({
+            url: '/LMS/lms_pyramakerz/public/admin/get-students-school/' + schoolId,
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+                // Clear the existing options
+                $('select[name="student_id"]').empty();
+                if (!data || data.length === 0) {
+                    $('select[name="student_id"]').append(
+                        '<option value="" selected disabled>No Available Students</option>'
+                    );
+                } else {
+                    $('select[name="student_id"]').append(
+                        '<option value="" selected>All Students</option>'
+                    );
+                    $.each(data, function(key, value) {
+                        $('select[name="student_id"]').append(
+                            '<option value="' + value.id + '">' + value.username + '</option>'
+                        );
+                    });
+                    if (selectedStudentId) {
+                        $('select[name="student_id"]').val(selectedStudentId).trigger('change');
+                    }
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', error);
+            }
+        });
+    }
+
+    function getSchoolTeachers(schoolId, selectedTeacherId) {
+        $.ajax({
+            url: '/LMS/lms_pyramakerz/public/admin/get-teachers-school/' + schoolId,
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+                // Clear the existing options
+                $('select[name="teacher_id"]').empty();
+                if (!data || data.length === 0) {
+                    $('select[name="teacher_id"]').append(
+                        '<option value="" selected disabled>No Available Teachers</option>'
+                    );
+                } else {
+                    $('select[name="teacher_id"]').append(
+                        '<option value="" selected>All Teachers</option>'
+                    );
+                    $.each(data, function(key, value) {
+                        $('select[name="teacher_id"]').append(
+                            '<option value="' + value.id + '">' + value.name + '</option>'
+                        );
+                    });
+                    if (selectedTeacherId) {
+                        $('select[name="teacher_id"]').val(selectedTeacherId).trigger('change');
+                    }
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', error);
+            }
+        });
+    }
+</script>
 
 @endsection

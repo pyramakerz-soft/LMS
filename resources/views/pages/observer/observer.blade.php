@@ -113,18 +113,6 @@ $menuItems = [
         class="bg-white rounded-lg shadow-lg p-6 w-full sm:w-3/4 md:w-1/2 lg:w-1/3 max-h-[90vh] overflow-y-auto">
         <h2 class="text-xl font-bold mb-4">Filters</h2>
         <form id="filter-form-modal" action="{{ route('observer.dashboard') }}" method="GET">
-
-            <div class="mb-4">
-                <label for="observer_id" class="block text-sm font-medium text-gray-700">Observer</label>
-                <select name="observer_id" id="observer_id" class="w-full p-2 border border-gray-300 rounded">
-                    <option value="">All Observers</option>
-                    @foreach ($observers as $observer)
-                    <option value="{{ $observer->id }}" {{ request('observer_id') == $observer->id ? 'selected' : '' }}>
-                        {{ $observer->name }}
-                    </option>
-                    @endforeach
-                </select>
-            </div>
             <div class="mb-4">
                 <label for="teacher_id_modal" class="block text-sm font-medium text-gray-700">Teacher</label>
                 <select name="teacher_id" id="teacher_id_modal" class="w-full p-2 border border-gray-300 rounded">

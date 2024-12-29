@@ -103,9 +103,14 @@
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Observation Report</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ request()->is('admin/reports/assesment_report') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('admin.assesmentReport') }}">
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Assessment Report</span>
+                </a>
+            </li>
             <li class="sidebar-item {{ request()->is('admin/reports/assignment_avg_report') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('admin.assignmentAvgReport') }}">
-                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Assignment Avg Report</span>
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Assignment Report</span>
                 </a>
             </li>
             <li class="sidebar-item {{ request()->is('admin/reports/compare_report') ? 'active' : '' }}">

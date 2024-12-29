@@ -92,8 +92,11 @@ Route::prefix('admin')->group(function () {
         Route::resource('types', TypeController::class);
         Route::resource('teacher_resources', TeacherResourceController::class);
         Route::get('reports/assignment_avg_report', [ReportController::class, 'assignmentAvgReport'])->name('admin.assignmentAvgReport');
+        Route::get('reports/assessment_report', [ReportController::class, 'assessmentReport'])->name('admin.assesmentReport');
         Route::get('reports/compare_report', [ReportController::class, 'compareReport'])->name('admin.compareReport');
         Route::get('/get-teachers-school/{schoolId}', [ReportController::class, 'getSchoolTeachers'])->name('getSchoolTeachers');
+        Route::get('/get-grades-school/{schoolId}', [ReportController::class, 'getSchoolGrades'])->name('getSchoolGrades');
+        Route::get('/get-classes-school/{schoolId}', [ReportController::class, 'getSchoolClasses'])->name('getSchoolClasses');
         Route::get('/teacher-schools/{teacherId}', [TeacherController::class, 'addSchool'])->name('teachers.addSchool');
         Route::post('/teacher-schools/store', [TeacherController::class, 'storeSchool'])->name('teachers.storeSchool');
 
