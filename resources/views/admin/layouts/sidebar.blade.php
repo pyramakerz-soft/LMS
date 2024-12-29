@@ -118,6 +118,11 @@
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Comparison Report</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ request()->is('admin/reports/login_report') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('admin.loginReport') }}">
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Login Report</span>
+                </a>
+            </li>
         </ul>
 
     </div>

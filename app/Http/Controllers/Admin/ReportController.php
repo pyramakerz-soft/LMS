@@ -11,6 +11,7 @@ use App\Models\Stage;
 use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Assignment;
+use App\Models\Observer;
 use Illuminate\Http\Request;
 use DB;
 
@@ -575,5 +576,78 @@ class ReportController extends Controller
         ];
         $request = $request->all();
         return view('admin.reports.assesment_report', compact('schools', 'chartData', 'assessments', 'request', 'totalAssesments', 'stages', 'classes', 'teachers', 'students'));
+    }
+
+    public function loginReport(Request $request)
+    {
+        $schools = School::all();
+        if ($request->filled('compare_by')) {
+            if ($request->compare_by == 'teachers') {
+                $user = 'Teacher';
+                $query = Teacher::query();
+                if ($request->filled('school_id')) {
+                    $query->where('school_id', $request->school_id);
+                    if (!$query->exists()) {
+                        $schoolName = School::where('id', $request->school_id)->value('name');
+                        return redirect()->back()->with('error', "No Teachers found in School: $schoolName");
+                    }
+                }
+                $teachers = $query->get();
+                $data = [];
+                foreach ($teachers as $teacher) {
+                    $data[] = [
+                        'name' => $teacher->name,
+                        'logins' => $teacher->num_logins
+                    ];
+                }
+            }
+            if ($request->compare_by == 'students') {
+                $user = 'Student';
+                $query = Student::query();
+                if ($request->filled('school_id')) {
+                    $query->where('school_id', $request->school_id);
+                    if (!$query->exists()) {
+                        $schoolName = School::where('id', $request->school_id)->value('name');
+                        return redirect()->back()->with('error', "No Students found in School: $schoolName");
+                    }
+                }
+                if ($request->filled('class_id')) {
+                    $query->where('class_id', $request->class_id);
+                    if (!$query->exists()) {
+                        $className = Group::where('id', $request->class_id)->value('name');
+                        return redirect()->back()->with('error', "No Students found in Class: $className");
+                    }
+                }
+                $students = $query->get();
+                $data = [];
+                foreach ($students as $student) {
+                    $data[] = [
+                        'name' => $student->username,
+                        'logins' => $student->num_logins
+                    ];
+                }
+            }
+            if ($request->compare_by == 'observers') {
+                $query = Observer::query();
+                $user = 'Observer';
+                if ($query->exists()) {
+                    $observers = $query->get();
+                    $data = [];
+                    foreach ($observers as $observer) {
+                        $data[] = [
+                            'name' => $observer->name,
+                            'logins' => $observer->num_logins
+                        ];
+                    }
+                } else {
+                    return redirect()->back()->with('error', "No Observers found");
+                }
+            }
+            $request = $request->all();
+            // dd($data);
+            return view('admin.reports.login_report', compact('schools', 'data', 'user', 'request'));
+        }
+        $request = $request->all();
+        return view('admin.reports.login_report', compact('schools', 'request'));
     }
 }

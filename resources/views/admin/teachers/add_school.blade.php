@@ -29,6 +29,7 @@
                                 <th>Username</th>
                                 <th>School</th>
                                 <th>Plain Password</th>
+                                <th>Number of Logins</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -37,6 +38,7 @@
                                 <td>{{ $mainteacher->username }}</td>
                                 <td>{{ $mainteacher->school->name}}</td>
                                 <td>{{ $mainteacher->plain_password }}</td>
+                                <td>{{ $mainteacher->num_logins }}</td>
                                 <td class="d-flex align-items-center gap-2">
                                     <a href="{{ route('teachers.edit', $mainteacher->id) }}"
                                         class="btn btn-info">Edit</a>
@@ -59,6 +61,7 @@
                                 <td>{{ $teacher->username }}</td>
                                 <td>{{ $teacher->school->name}}</td>
                                 <td>{{ $teacher->plain_password }}</td>
+                                <td>{{ $teacher->num_logins }}</td>
                                 <td class="d-flex align-items-center gap-2">
                                     <a href="{{ route('teachers.edit', $teacher->id) }}"
                                         class="btn btn-info">Edit</a>

@@ -26,6 +26,7 @@
                                 <th>Name</th>
                                 <th>Username</th>
                                 <th>Gender</th>
+                                <th>Number of Logins</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -36,6 +37,7 @@
                                 <td>{{ $observer->name ?? '' }}</td>
                                 <td>{{ $observer->username ?? '' }}</td>
                                 <td>{{ $observer->gender ?? '' }}</td>
+                                <td>{{ $observer->num_logins ?? '' }}</td>
                                 <td class="d-flex align-items-center gap-2">
                                     <a href="{{ route('observers.edit', $observer->id) }}"
                                         class="btn btn-info">Edit</a>
