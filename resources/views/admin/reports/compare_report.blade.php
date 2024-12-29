@@ -114,6 +114,7 @@
                         <thead>
                             <tr>
                                 <th>Grade</th>
+                                <th>Theme</th>
                                 <th>Assignment Name</th>
                                 <th>Students</th>
                                 <th>Students Average</th>
@@ -125,6 +126,7 @@
                                 <td rowspan="{{ count($stage['assignments']) > 0 ? count($stage['assignments']) : 1 }}">
                                     {{ $stage['stage_name'] }}
                                 </td>
+                                <td> {{ App\Models\Material::where('stage_id', $stage['stage_id'])->first()->title}}</td>
 
                                 <!-- Loop through assignments -->
                                 @if (count($stage['assignments']) > 0)
@@ -163,6 +165,7 @@
                         <thead>
                             <tr>
                                 <th>Grade</th>
+                                <th>Theme</th>
                                 <th>Assignment Name</th>
                                 <th>Students</th>
                                 <th>Students Average</th>
@@ -174,7 +177,7 @@
                                 <td rowspan="{{ count($stage['assignments']) > 0 ? count($stage['assignments']) : 1 }}">
                                     {{ $stage['stage_name'] }}
                                 </td>
-
+                                <td> {{ App\Models\Material::where('stage_id', $stage['stage_id'])->first()->title}}</td>
                                 <!-- Loop through assignments -->
                                 @if (count($stage['assignments']) > 0)
                                 @foreach ($stage['assignments'] as $assignment)

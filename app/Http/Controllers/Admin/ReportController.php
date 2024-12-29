@@ -11,6 +11,7 @@ use App\Models\Stage;
 use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Assignment;
+use App\Models\Material;
 use App\Models\Observer;
 use Illuminate\Http\Request;
 use DB;
@@ -358,7 +359,7 @@ class ReportController extends Controller
                 // Process each grade (stage)
                 foreach ($data1 as $stage) {
                     $grade = [
-                        'grade' => $stage['stage_name'], // Grade name
+                        'grade' => $stage['stage_name'] . ' - ' . Material::where('stage_id', $stage['stage_id'])->first()->title, // Grade name
                         'assignments' => [], // Initialize assignments array
                         'color' => '#9e9fdc'
                     ];
@@ -429,7 +430,7 @@ class ReportController extends Controller
                 // Process each grade (stage)
                 foreach ($data2 as $stage) {
                     $grade = [
-                        'grade' => $stage['stage_name'], // Grade name
+                        'grade' =>  $stage['stage_name'] . ' - ' . Material::where('stage_id', $stage['stage_id'])->first()->title, // Grade name
                         'assignments' => [], // Initialize assignments array
                         'color' => '#0d6efd'
                     ];
