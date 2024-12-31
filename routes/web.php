@@ -17,9 +17,11 @@ use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\TeacherResourceController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\ChapterController as ControllersChapterController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PusherController;
 use App\Http\Controllers\SchoolTypeController;
 use App\Http\Controllers\Student\PasswordStudentController;
 use App\Http\Controllers\StudentAssessmentController;
@@ -50,6 +52,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('landing'); // Displays the landing page
 })->name('landing');
+
 
 
 
@@ -125,6 +128,7 @@ Route::prefix('admin')->group(function () {
     });
 });
 
+Route::post('/pusher/auth', [PusherController::class, 'auth'])->name('pusher.auth');
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
@@ -133,6 +137,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // Student dashboard route with 'auth:student' middleware
 Route::get('/student/dashboard', [DashboardController::class, 'index'])->middleware('auth:student')->name('student.dashboard');
 
+Route::get('/chat', [ChatController::class, 'index'])->middleware('auth:student')->name('chat.index');
+Route::get('/messages', [ChatController::class, 'fetchMessages'])->middleware('auth:student')->name('chat.fetchMessages');
+Route::post('/messages', [ChatController::class, 'sendMessage'])->middleware('auth:student')->name('chat.sendMessage');
 // Start student  dashboard routes
 
 Route::get('/theme', [DashboardController::class, 'index'])->name('student.theme');
@@ -211,9 +218,12 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
 
     Route::get('teacher/api/stages/{stageId}/classes', [\App\Http\Controllers\Teacher\AssignmentController::class, 'getClassesByStage'])
-    ->name('teacher.get-classes');
+        ->name('teacher.get-classes');
 
 
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/messages', [ChatController::class, 'fetchMessages'])->name('chat.fetchMessages');
+    Route::post('/messages', [ChatController::class, 'sendMessage'])->name('chat.sendMessage');
 
 
 
