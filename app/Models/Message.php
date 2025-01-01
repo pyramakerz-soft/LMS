@@ -8,13 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'sender_id',
-        'sender_type',
-        'receiver_id',
-        'receiver_type',
-        'message',
-    ];
+    protected $fillable = ['teacher_id', 'student_id', 'message'];
+
 
     // Polymorphic relationships
     public function sender()

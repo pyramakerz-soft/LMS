@@ -8,69 +8,83 @@ use App\Models\Student;
 use App\Models\TeacherClass;
 use Auth;
 use Illuminate\Http\Request;
+use Pusher\Pusher;
 
 class ChatController extends Controller
 {
     public function index()
     {
-        $userAuth = Auth::guard('teacher')->check() ? Auth::guard('teacher')->user() : Auth::guard('student')->user();
+        $teacher = Auth::guard('teacher')->user();
 
-        if ($userAuth instanceof \App\Models\Teacher) {
-            // Fetch the teacher's classes and students
-            $teacherClasses = TeacherClass::where('teacher_id', $userAuth->id)->pluck('class_id');
-            $students = Student::whereIn('class_id', $teacherClasses)->get();
-            return view('chat.index', compact('students'));
-        } elseif ($userAuth instanceof \App\Models\Student) {
-            // Fetch teacher based on the student's class
-            $teacher = TeacherClass::where('class_id', $userAuth->class_id)->first()->teacher ?? null;
-            return view('chat.index', compact('teacher'));
+        if (!$teacher) {
+            abort(403, 'Unauthorized');
         }
 
-        return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+        $classes = $teacher->classes()->with('students')->get();
+        return view('pages.teacher.chat', compact('classes'));
     }
 
-    public function fetchMessages(Request $request)
+    public function studentIndex()
     {
-        $userAuth = Auth::guard('student')->user();
+        $student = Auth::guard('student')->user()->id;
+        $messages = Message::where('student_id', $student)
+            ->orWhereNull('student_id') // For class-wide messages
+            ->get();
+        // dd($student);
 
-        $messages = Message::where(function ($query) use ($request, $userAuth) {
-            $query->where('sender_id', $userAuth->id)
-                ->where('sender_type', 'App\Models\Student')
-                ->where('receiver_id', $request->receiver_id)
-                ->where('receiver_type', 'App\Models\Teacher');
-        })->orWhere(function ($query) use ($request, $userAuth) {
-            $query->where('sender_id', $request->receiver_id)
-                ->where('sender_type', 'App\Models\Teacher')
-                ->where('receiver_id', $userAuth->id)
-                ->where('receiver_type', 'App\Models\Student');
-        })->orderBy('created_at')->get();
-
-        return view('chat.partials.messages', compact('messages'));
+        return view('pages.student.chat', compact('messages'));
     }
 
     public function sendMessage(Request $request)
     {
-        $sender_id = Auth::user()->id;
+        try {
+            $teacherId = auth('teacher')->id();
 
-        $request->validate([
-            'message' => 'required|string',
-            'receiver_id' => 'required|exists:students,id',
-            'receiver_type' => 'required|string|in:App\Models\Teacher,App\Models\Student',
-        ]);
+            if (!$teacherId) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
 
-        // Create the message
-        $message = Message::create([
-            'sender_id' => $sender_id,
-            'sender_type' => Auth::guard('teacher')->check() ? 'App\Models\Teacher' : 'App\Models\Student',
-            'receiver_id' => $request->receiver_id,
-            'receiver_type' => $request->receiver_type,
-            'message' => $request->message,
-        ]);
+            $validatedData = $request->validate([
+                'student_id' => 'required|exists:students,id',
+                'message' => 'required|string|max:255',
+            ]);
 
-        // Broadcast the message to Pusher
-        broadcast(new MessageSent($message))->toOthers();
+            $message = Message::create([
+                'teacher_id' => $teacherId,
+                'student_id' => $validatedData['student_id'],
+                'message' => $validatedData['message'],
+            ]);
 
-        // Redirect back to the chat page with success message
-        return redirect()->route('chat.index')->with('success', 'Message sent successfully.');
+            // Broadcast the message
+            broadcast(new MessageSent($message))->toOthers();
+
+            return response()->json($message, 201);
+        } catch (\Exception $e) {
+            \Log::error('Error sending message', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Server Error'], 500);
+        }
     }
+
+    public function fetchMessages($studentId)
+    {
+        try {
+            $teacherId = auth('teacher')->id();
+
+            if (!$teacherId) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+
+            $messages = Message::where('teacher_id', $teacherId)
+                ->where('student_id', $studentId)
+                ->orderBy('created_at', 'asc')
+                ->get();
+
+            return response()->json($messages);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching messages', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Server Error'], 500);
+        }
+    }
+
+
 }

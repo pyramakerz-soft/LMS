@@ -137,9 +137,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // Student dashboard route with 'auth:student' middleware
 Route::get('/student/dashboard', [DashboardController::class, 'index'])->middleware('auth:student')->name('student.dashboard');
 
-Route::get('/chat', [ChatController::class, 'index'])->middleware('auth:student')->name('chat.index');
-Route::get('/messages', [ChatController::class, 'fetchMessages'])->middleware('auth:student')->name('chat.fetchMessages');
-Route::post('/messages', [ChatController::class, 'sendMessage'])->middleware('auth:student')->name('chat.sendMessage');
 // Start student  dashboard routes
 
 Route::get('/theme', [DashboardController::class, 'index'])->name('student.theme');
@@ -221,9 +218,6 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
         ->name('teacher.get-classes');
 
 
-    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
-    Route::get('/messages', [ChatController::class, 'fetchMessages'])->name('chat.fetchMessages');
-    Route::post('/messages', [ChatController::class, 'sendMessage'])->name('chat.sendMessage');
 
 
 
@@ -278,6 +272,20 @@ Route::prefix('observer')->middleware('auth:observer')->group(function () {
     Route::delete('/observation/delete/{id}', [ObserverDashboardController::class, 'destroy'])->name('observation.destroy');
     Route::get('/observation/view/{id}', [ObserverDashboardController::class, 'view'])->name('observation.view');
 });
+
+
+
+Route::get('/teacher/chat', [ChatController::class, 'index'])->name('teacher.chat');
+Route::post('/teacher/chat/send', [ChatController::class, 'sendMessage'])->name('teacher.chat.send');
+
+Route::get('/student/chat', [ChatController::class, 'studentIndex'])->name('student.chat');
+Route::get('/teacher/chat/messages/{student}', [ChatController::class, 'fetchMessages'])->name('teacher.chat.messages');
+
+
+
+
+
+
 
 Route::get('/create_assignment', function () {
     return view('pages.teacher.Assignment.create');
