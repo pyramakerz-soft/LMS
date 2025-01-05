@@ -218,6 +218,7 @@ class ReportController extends Controller
                 if (!$query2->exists()) {
                     return redirect()->back()->with('error', "No Assignments found for {$msg2}");
                 }
+                // dd($query1->get(), $query2->get());
             }
             if ($request->compare_by == 'classes') {
                 // $classAssignments1 = DB::table('assignment_class')
@@ -315,7 +316,7 @@ class ReportController extends Controller
                     if (!isset($data1[$stageId])) {
                         $data1[$stageId] = [
                             'stage_id' => $stageId,
-                            'stage_name' => $stages[$stageId]->name,
+                            'stage_name' => $stages1[$stageId]->name,
                             'assignments' => [],
                         ];
                     }
@@ -352,14 +353,20 @@ class ReportController extends Controller
                     }
                 }
 
-
+                // dd($data1);
                 // Prepare Chart.js data
                 $chartData = [];
 
                 // Process each grade (stage)
                 foreach ($data1 as $stage) {
+                    $material = Material::where('stage_id', $stage['stage_id'])->first();
+                    if ($material) {
+                        $material = ' - ' . $material->title;
+                    } else {
+                        $material = ' ';
+                    }
                     $grade = [
-                        'grade' => $stage['stage_name'] . ' - ' . Material::where('stage_id', $stage['stage_id'])->first()->title, // Grade name
+                        'grade' => $stage['stage_name'] . $material, // Grade name
                         'assignments' => [], // Initialize assignments array
                         'color' => '#9e9fdc'
                     ];
@@ -386,7 +393,7 @@ class ReportController extends Controller
                     if (!isset($data2[$stageId])) {
                         $data2[$stageId] = [
                             'stage_id' => $stageId,
-                            'stage_name' => $stages[$stageId]->name,
+                            'stage_name' => $stages2[$stageId]->name,
                             'assignments' => [],
                         ];
                     }
@@ -429,8 +436,15 @@ class ReportController extends Controller
 
                 // Process each grade (stage)
                 foreach ($data2 as $stage) {
+                    $material = Material::where('stage_id', $stage['stage_id'])->first();
+                    if ($material) {
+                        $material = ' - ' . $material->title;
+                    } else {
+                        $material = ' ';
+                    }
+
                     $grade = [
-                        'grade' =>  $stage['stage_name'] . ' - ' . Material::where('stage_id', $stage['stage_id'])->first()->title, // Grade name
+                        'grade' => $stage['stage_name'] . $material,
                         'assignments' => [], // Initialize assignments array
                         'color' => '#0d6efd'
                     ];

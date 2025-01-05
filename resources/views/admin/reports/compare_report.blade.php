@@ -122,19 +122,26 @@
                         </thead>
                         <tbody>
                             @foreach ($data1 as $stage)
+                            <!-- Rowspan for Grade and Theme based on assignments -->
                             <tr>
-                                <td rowspan="{{ count($stage['assignments']) > 0 ? count($stage['assignments']) : 1 }}">
+                                <td rowspan="{{ max(count($stage['assignments']), 1) }}">
                                     {{ $stage['stage_name'] }}
                                 </td>
-                                <td> {{ App\Models\Material::where('stage_id', $stage['stage_id'])->first()->title}}</td>
+                                <td rowspan="{{ max(count($stage['assignments']), 1) }}">
+                                    {{ App\Models\Material::where('stage_id', $stage['stage_id'])->first()->title ?? '-' }}
+                                </td>
 
-                                <!-- Loop through assignments -->
+                                <!-- Check if assignments exist -->
                                 @if (count($stage['assignments']) > 0)
                                 @foreach ($stage['assignments'] as $assignment)
                                 @if (!$loop->first)
                             <tr>
                                 @endif
+
+                                <!-- Assignment Name -->
                                 <td>{{ $assignment['assignment_name'] }}</td>
+
+                                <!-- Students -->
                                 <td>
                                     @if (count($assignment['students']) > 0)
                                     @foreach ($assignment['students'] as $student_id)
@@ -147,18 +154,21 @@
                                     No Students
                                     @endif
                                 </td>
+
+                                <!-- Students Average -->
                                 <td>{{ $assignment['students_average'] }}</td>
                             </tr>
                             @endforeach
                             @else
-                            <td colspan="4">No Assignments</td>
+                            <!-- No Assignments -->
+                            <td colspan="3">No Assignments</td>
                             @endif
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
-
                 </div>
+
                 <div class="container mt-3">
                     <h4 style="color:#495057">{{$msg2}} Assignments</h4>
                     <table class="table table-bordered">
@@ -173,18 +183,26 @@
                         </thead>
                         <tbody>
                             @foreach ($data2 as $stage)
+                            <!-- Rowspan for Grade and Theme based on assignments -->
                             <tr>
-                                <td rowspan="{{ count($stage['assignments']) > 0 ? count($stage['assignments']) : 1 }}">
+                                <td rowspan="{{ max(count($stage['assignments']), 1) }}">
                                     {{ $stage['stage_name'] }}
                                 </td>
-                                <td> {{ App\Models\Material::where('stage_id', $stage['stage_id'])->first()->title}}</td>
-                                <!-- Loop through assignments -->
+                                <td rowspan="{{ max(count($stage['assignments']), 1) }}">
+                                    {{ App\Models\Material::where('stage_id', $stage['stage_id'])->first()->title ?? '-' }}
+                                </td>
+
+                                <!-- Check if assignments exist -->
                                 @if (count($stage['assignments']) > 0)
                                 @foreach ($stage['assignments'] as $assignment)
                                 @if (!$loop->first)
                             <tr>
                                 @endif
+
+                                <!-- Assignment Name -->
                                 <td>{{ $assignment['assignment_name'] }}</td>
+
+                                <!-- Students -->
                                 <td>
                                     @if (count($assignment['students']) > 0)
                                     @foreach ($assignment['students'] as $student_id)
@@ -197,17 +215,19 @@
                                     No Students
                                     @endif
                                 </td>
+
+                                <!-- Students Average -->
                                 <td>{{ $assignment['students_average'] }}</td>
                             </tr>
                             @endforeach
                             @else
-                            <td colspan="4">No Assignments</td>
+                            <!-- No Assignments -->
+                            <td colspan="3">No Assignments</td>
                             @endif
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
-
                 </div>
                 @endif
             </div>
@@ -331,6 +351,7 @@
             });
         });
     });
+
 
     const ctx = document.getElementById("groupedBarChart").getContext("2d");
     const groupedBarChart = new Chart(ctx, {
@@ -508,7 +529,7 @@
                     );
                 } else {
                     $('select[name="class_id"]').append(
-                        '<option value="" selected>All Classes</option>'
+                        '<option value="" selected disabled>Select First Class</option>'
                     );
                     $.each(data, function(key, value) {
                         $('select[name="class_id"]').append(
@@ -533,14 +554,14 @@
             dataType: "json",
             success: function(data) {
                 // Clear the existing options
-                $('select[name="class_id"]').empty();
+                $('select[name="class_id2"]').empty();
                 if (!data || data.length === 0) {
                     $('select[name="class_id2"]').append(
                         '<option value="" selected disabled>No Available Class</option>'
                     );
                 } else {
                     $('select[name="class_id2"]').append(
-                        '<option value="" selected>All Classes</option>'
+                        '<option value="" selected disabled >Select Second Class</option>'
                     );
                     $.each(data, function(key, value) {
                         $('select[name="class_id2"]').append(

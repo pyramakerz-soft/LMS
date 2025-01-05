@@ -88,7 +88,7 @@
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Teacher</span>
                 </a>
             </li>
-            <li class="sidebar-item {{ request()->is('admin/observers') ? 'active' : '' }}">
+            <!-- <li class="sidebar-item {{ request()->is('admin/observers') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('observers.index') }}">
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Observer</span>
                 </a>
@@ -122,7 +122,7 @@
                 <a class="sidebar-link" href="{{ route('admin.loginReport') }}">
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Login Report</span>
                 </a>
-            </li>
+            </li> -->
         </ul>
 
     </div>
