@@ -17,9 +17,11 @@ use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\TeacherResourceController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\ChapterController as ControllersChapterController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PusherController;
 use App\Http\Controllers\SchoolTypeController;
 use App\Http\Controllers\Student\PasswordStudentController;
 use App\Http\Controllers\StudentAssessmentController;
@@ -50,6 +52,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('landing'); // Displays the landing page
 })->name('landing');
+
 
 
 
@@ -141,6 +144,7 @@ Route::prefix('admin')->group(function () {
     });
 });
 
+Route::post('/pusher/auth', [PusherController::class, 'auth'])->name('pusher.auth');
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
@@ -284,6 +288,20 @@ Route::prefix('observer')->middleware('auth:observer')->group(function () {
     Route::delete('/observation/delete/{id}', [ObserverDashboardController::class, 'destroy'])->name('observation.destroy');
     Route::get('/observation/view/{id}', [ObserverDashboardController::class, 'view'])->name('observation.view');
 });
+
+
+
+Route::get('/teacher/chat', [ChatController::class, 'index'])->name('teacher.chat');
+Route::post('/teacher/chat/send', [ChatController::class, 'sendMessage'])->name('teacher.chat.send');
+
+Route::get('/student/chat', [ChatController::class, 'studentIndex'])->name('student.chat');
+Route::get('/teacher/chat/messages/{student}', [ChatController::class, 'fetchMessages'])->name('teacher.chat.messages');
+
+
+
+
+
+
 
 Route::get('/create_assignment', function () {
     return view('pages.teacher.Assignment.create');
