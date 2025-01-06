@@ -32,18 +32,7 @@ jobs:
             cd domains/dev-pyramakerz.cloud/public_html/LMS/lms_pyramakerz/
 
             echo "Starting deployment at $(date)..."
-
-<<<<<<< HEAD
-            # Clean up any unmerged changes
-            git reset --merge || git reset --hard
-
-            # Pull the latest changes from Ragal
-            git pull origin Ragal || exit 1
-
-            # Merge main into Ragal for testing
-=======
-            # Pull latest changes from main branch (to simulate production environment)
->>>>>>> 08b0746 (Fixing test deployment)
+            
             git fetch origin main || exit 1
             git reset --hard origin/main || exit 1
 
