@@ -39,7 +39,6 @@ jobs:
             
             # Ensure we're on the correct branch
             git fetch origin
-            git checkout Ragal || git checkout -b Ragal origin/Ragal
             
             # Pull the latest changes from Ragal
             
