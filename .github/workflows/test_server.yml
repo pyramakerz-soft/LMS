@@ -21,6 +21,31 @@ jobs:
       - name: Install SSH Client
         run: sudo apt-get install -y sshpass
 
+name: Sync Laravel with Hostinger
+
+on:
+  push:
+    branches:
+      - Ragal
+
+  schedule:
+    - cron: '0 9 * * *'
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: Ragal  # Ensures we are on the Ragal branch
+
+      - name: Install SSH Client
+        run: sudo apt-get install -y sshpass
+
       - name: Sync Files via SSH and Capture Metrics
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -33,42 +58,30 @@ jobs:
 
             echo "Starting deployment at $(date)..."
 
-<<<<<<< HEAD
-            # Ensure we're on the correct branch
-            git fetch origin || exit 1
-            git checkout Ragal || git checkout -b Ragal || exit 1
+            # Clean up any unmerged changes
+            git reset --merge || git reset --hard
 
             # Pull the latest changes from Ragal
-            git reset --hard origin/Ragal || exit 1
             git pull origin Ragal || exit 1
 
-            # Pull the latest changes from main to simulate production environment
+            # Merge main into Ragal for testing
             git fetch origin main || exit 1
             git merge origin/main || exit 1
-            
-=======
-            # Pull latest changes from main branch (to simulate production environment)
-            git fetch origin main || exit 1
-            git reset --hard origin/main || exit 1
 
-            # Merge test branch (Ragal) into the working directory
-            git fetch origin Ragal || exit 1
-            git merge origin/Ragal || exit 1
-
->>>>>>> 08b0746 (Fixing test deployment)
+            # Install dependencies and optimize the application
             if [ -f "composer.phar" ]; then
               php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
             else
               composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
             fi
 
+            # Cache configurations and migrations
             php artisan config:cache || echo "Config cache failed"
             php artisan route:cache || echo "Route cache failed"
             php artisan view:cache || echo "View cache failed"
-
-            # Check for existing column before migration
             php artisan migrate --force || echo "Migrations failed"
 
+            # Metrics collection
             CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')
             MEM=$(free -m | awk 'NR==2{printf "%.2f", $3*100/$2 }')
             DISK=$(df -h / | awk '$NF=="/"{printf "%d", $5}')
@@ -95,6 +108,7 @@ jobs:
           echo "CPU=$CPU" >> $GITHUB_ENV
           echo "MEM=$MEM" >> $GITHUB_ENV
           echo "DISK=$DISK" >> $GITHUB_ENV
+
 
       - name: Health Check (Login and Admin Page)
         run: |
