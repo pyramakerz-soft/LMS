@@ -33,6 +33,7 @@ jobs:
 
             echo "Starting deployment at $(date)..."
 
+<<<<<<< HEAD
             # Clean up any unmerged changes
             git reset --merge || git reset --hard
 
@@ -40,8 +41,15 @@ jobs:
             git pull origin Ragal || exit 1
 
             # Merge main into Ragal for testing
+=======
+            # Pull latest changes from main branch (to simulate production environment)
+>>>>>>> 08b0746 (Fixing test deployment)
             git fetch origin main || exit 1
-            git merge origin/main || exit 1
+            git reset --hard origin/main || exit 1
+
+            # Merge test branch (Ragal) into the working directory
+            git fetch origin Ragal || exit 1
+            git merge origin/Ragal || exit 1
 
             # Install dependencies and optimize the application
             if [ -f "composer.phar" ]; then
