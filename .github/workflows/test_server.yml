@@ -32,28 +32,13 @@ jobs:
             cd domains/dev-pyramakerz.cloud/public_html/LMS/lms_pyramakerz/
 
             echo "Starting deployment at $(date)..."
-<<<<<<< HEAD
-
-            # Clean up any unmerged changes
-            git reset --merge || git reset --hard
-
-            # Pull the latest changes from Ragal
-            git pull origin Ragal || exit 1
-
-            # Merge main into Ragal for testing
-=======
-            
->>>>>>> origin/Ragal
             git fetch origin main || exit 1
-            git reset --hard origin/main || exit 1
-
-<<<<<<< HEAD
-=======
-            # Merge test branch (Ragal) into the working directory
             git fetch origin Ragal || exit 1
-            git merge origin/Ragal || exit 1
+            git reset --hard origin/main || echo "Reset failed, trying pull..."
+            git pull origin main || exit 1
+            git pull origin Ragal || exit 1
+            
 
->>>>>>> origin/Ragal
             # Install dependencies and optimize the application
             if [ -f "composer.phar" ]; then
               php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
