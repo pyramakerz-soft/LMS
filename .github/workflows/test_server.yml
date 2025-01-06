@@ -33,6 +33,7 @@ jobs:
 
             echo "Starting deployment at $(date)..."
 
+<<<<<<< HEAD
             # Ensure we're on the correct branch
             git fetch origin || exit 1
             git checkout Ragal || git checkout -b Ragal || exit 1
@@ -45,6 +46,16 @@ jobs:
             git fetch origin main || exit 1
             git merge origin/main || exit 1
             
+=======
+            # Pull latest changes from main branch (to simulate production environment)
+            git fetch origin main || exit 1
+            git reset --hard origin/main || exit 1
+
+            # Merge test branch (Ragal) into the working directory
+            git fetch origin Ragal || exit 1
+            git merge origin/Ragal || exit 1
+
+>>>>>>> 08b0746 (Fixing test deployment)
             if [ -f "composer.phar" ]; then
               php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
             else
