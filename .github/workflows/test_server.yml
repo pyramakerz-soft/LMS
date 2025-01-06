@@ -34,34 +34,29 @@ jobs:
             echo "Starting deployment at $(date)..."
 
             # Clean up any unmerged changes
-            
             git reset --merge || git reset --hard
-            
-            # Ensure we're on the correct branch
-            git fetch origin
-            
+
             # Pull the latest changes from Ragal
-            
             git pull origin Ragal || exit 1
-            
+
             # Merge main into Ragal for testing
-            
             git fetch origin main || exit 1
             git merge origin/main || exit 1
 
+            # Install dependencies and optimize the application
             if [ -f "composer.phar" ]; then
               php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
             else
               composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
             fi
 
+            # Cache configurations and migrations
             php artisan config:cache || echo "Config cache failed"
             php artisan route:cache || echo "Route cache failed"
             php artisan view:cache || echo "View cache failed"
-
-            # Check for existing column before migration
             php artisan migrate --force || echo "Migrations failed"
 
+            # Metrics collection
             CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')
             MEM=$(free -m | awk 'NR==2{printf "%.2f", $3*100/$2 }')
             DISK=$(df -h / | awk '$NF=="/"{printf "%d", $5}')
