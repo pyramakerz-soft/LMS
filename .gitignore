@@ -5,6 +5,7 @@
 /public/storage
 /storage/*.key
 /vendor
+/.github/workflows
 .env
 .env.backup
 .env.production
