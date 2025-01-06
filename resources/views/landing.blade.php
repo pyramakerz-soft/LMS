@@ -163,7 +163,7 @@
                     Pyramakerz LMS is not just a platform—it’s a complete digital learning ecosystem. With seamless integration, 
                     real-time performance metrics, and a user-friendly interface, it empowers educators to create immersive learning 
                     experiences. Whether you’re a teacher managing multiple classrooms or a student accessing learning materials on the go, 
-                    our LMS simplifies the process for all users!
+                    our LMS simplifies the process for all users.
                 </p>
             </div>
         </div>
