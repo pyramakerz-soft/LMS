@@ -35,11 +35,10 @@
                 <div class=" bg-white ">
 
                     <div class="p-4">
-                        <button onclick="  openModal('ebook', '{{ $lesson->file_path }}');" class="object-cover w-full">
+                        <button onclick="  openModal('ebook', `https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/ebooks/Grade%203/G3%20-%20Nature's%20Balance`);" class="object-cover w-full">
                             <img src="{{ $lesson->image ? asset($lesson->image) : asset('images/defaultCard.webp') }}"
 alt="{{ $lesson->title }}">
                         </button>
-
                     </div>
                     <h3 class="px-4 py-2 text-lg font-bold truncate">{{ $lesson->title }}</h3>
                 </div>
