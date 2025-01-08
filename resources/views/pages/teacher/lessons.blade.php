@@ -17,7 +17,7 @@
 
 @section('content')
     @include('components.profile')
-    
+
     <div class="p-3 text-[#667085] my-8">
         <i class="fa-solid fa-house mx-2"></i>
         <span class="mx-2 text-[#D0D5DD]">/</span>
@@ -35,14 +35,11 @@
                 <div class=" bg-white ">
 
                     <div class="p-4">
-
-                        <button
-                            onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook', '{{ $lesson->file_path }}');"
-                            class="object-cover w-full">
-                            {{-- <img src="{{ $lesson->image ? asset($lesson->image) : asset('images/defaultCard.webp') }}"
-                                alt="{{ $lesson->title }}"> --}}
-                                OPEN
+                        <button onclick="  openModal('ebook', '{{ $lesson->file_path }}');" class="object-cover w-full">
+                            <img src="{{ $lesson->image ? asset($lesson->image) : asset('images/defaultCard.webp') }}"
+alt="{{ $lesson->title }}">
                         </button>
+
                     </div>
                     <h3 class="px-4 py-2 text-lg font-bold truncate">{{ $lesson->title }}</h3>
                 </div>
