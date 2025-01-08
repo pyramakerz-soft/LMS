@@ -1,2 +1,2 @@
-import './bootstrap';
-<script src="{{ mix('js/app.js') }}"></script>
+import "./bootstrap";
+{/* <script src="{{ mix('js/app.js') }}"></script>; */}

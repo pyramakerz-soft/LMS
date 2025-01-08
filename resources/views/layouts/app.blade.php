@@ -49,20 +49,7 @@
             }
         }
     </style>
-    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-    <script>
-        // Enable pusher logging - don't include this in production
-        Pusher.logToConsole = true;
-
-        var pusher = new Pusher('1f6e2bbc9641e27bd2d7', {
-            cluster: 'mt1'
-        });
-
-        var channel = pusher.subscribe('my-channel');
-        channel.bind('my-event', function(data) {
-            alert(JSON.stringify(data));
-        });
-    </script>
+   
 </head>
 
 <body>
