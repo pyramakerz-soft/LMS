@@ -88,14 +88,29 @@
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Teacher</span>
                 </a>
             </li>
-            <li class="sidebar-item {{ request()->is('admin/observer') ? 'active' : '' }}">
+            <!-- <li class="sidebar-item {{ request()->is('admin/observers') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('observers.index') }}">
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Observer</span>
                 </a>
             </li>
-            <li class="sidebar-item {{ request()->is('admin/reports/assignmentAvgReport') ? 'active' : '' }}">
+            <li class="sidebar-item {{ request()->is('admin/observers/observation_questions') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('observers.addQuestions') }}">
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Observation Questions</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ request()->is('admin/observers/observation_report_admin') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('observers.obsReport') }}">
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Observation Report</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ request()->is('admin/reports/assesment_report') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('admin.assesmentReport') }}">
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Assessment Report</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ request()->is('admin/reports/assignment_avg_report') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('admin.assignmentAvgReport') }}">
-                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Assignment Avg Report</span>
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Assignment Report</span>
                 </a>
             </li>
             <li class="sidebar-item {{ request()->is('admin/reports/compare_report') ? 'active' : '' }}">
@@ -103,6 +118,11 @@
                     <i class="align-middle" data-feather="square"></i> <span class="align-middle">Comparison Report</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ request()->is('admin/reports/login_report') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('admin.loginReport') }}">
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Login Report</span>
+                </a>
+            </li> -->
         </ul>
 
     </div>

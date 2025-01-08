@@ -48,6 +48,7 @@
                                 <th>School</th>
                                 <th>Stage</th>
                                 <th>Class</th>
+                                <th>#Logins</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -71,6 +72,7 @@
                                 <td>{{ $student->school->name ?? '' }}</td>
                                 <td>{{ $student->stage->name ?? '' }}</td>
                                 <td>{{ $student->classes->name ?? '' }}</td>
+                                <td>{{$student->num_logins}}</td>
                                 <td class="d-flex align-items-center gap-2">
                                     <a href="{{ route('students.edit', $student->id) }}"
                                         class="btn btn-info">Edit</a>

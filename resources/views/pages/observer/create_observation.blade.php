@@ -43,9 +43,24 @@ $menuItems = [
 
 @section('content')
 <div class="p-3 text-[#667085] my-8">
+
+    <div id="timer" style="
+    margin-bottom: 20px;
+    color: #fff;
+    background-color: #17253e;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+">Timer: 25:00
+    </div>
+
     <div class="overflow-x-auto">
-        <form action="{{ route('observation.store') }}" method="GET" enctype="multipart/form-data" class="mb-4 flex" style="gap:10px; padding:10px">
+        <form action="{{ route('observation.store') }}" method="GET" enctype="multipart/form-data" class="mb-4 flex" style="gap:10px; padding:10px" id="observation_form">
             @csrf
+
 
             <div class="questions mb-3" style="max-width: 65%;">
                 @foreach ($headers as $header)
@@ -79,13 +94,17 @@ $menuItems = [
                 <textarea
                     name="note"
                     placeholder="Enter your comments here..."
-                    class="w-full mb-3 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    class="w-full mb-3 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
                     rows="4"></textarea>
 
-                <button type="submit" class="mt-2 text-white hover:bg-blue-700 px-4 py-2 rounded-lg" style="background-color: #17253e;">Create Observation</button>
+                <button type="submit" id="submit-button" class="mt-2 text-white hover:bg-blue-700 px-4 py-2 rounded-lg" style="background-color: #17253e;">Create Observation</button>
             </div>
             <div class="w-1/3 p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-lg">
                 <div class="info mb-3">
+                    <div class="mb-3">
+                        <label for="observation_name" class="block text-sm font-medium text-gray-700">Observation Name</label>
+                        <input class="w-full p-2 border border-gray-300 rounded" type="text" name="observation_name" required>
+                    </div>
                     <div class="mb-3">
                         <label for="observer" class="block text-sm font-medium text-gray-700">Observer Username</label>
                         <select name="observer_id" id="observer_id" class="w-full p-2 border border-gray-300 rounded" required>
@@ -97,7 +116,7 @@ $menuItems = [
                         <select name="teacher_id" id="teacher_id" class="w-full p-2 border border-gray-300 rounded" required>
                             <option value="">Select Teacher</option>
                             @foreach ($teachers as $teacher)
-                            <option value="{{ $teacher->id }}">{{ $teacher->username }}</option>
+                            <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -119,23 +138,33 @@ $menuItems = [
                     <div class="mb-3">
                         <label for="city" class="block text-sm font-medium text-gray-700">City</label>
                         <select name="city_id" id="city_id" class="w-full p-2 border border-gray-300 rounded" required>
-                            <option value="" selected disabled>No Available City</option>
+                            <option value="" disabled selected>Select City</option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="grade" class="block text-sm font-medium text-gray-700">Grade</label>
                         <select name="grade_id" id="grade_id" class="w-full p-2 border border-gray-300 rounded" required>
-                            <option value="" selected disabled>No Available Grade</option>
+                            <option value="" disabled selected>Select Grade</option>
+                            @foreach ($grades as $grade)
+                            <option value="{{$grade->id}}">{{$grade->name}}</option>
+                            @endforeach
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label for="lesson_segment" class="block text-sm font-medium text-gray-700">Subject Area(Multiselect)</label>
+                        <select class="w-full p-2 border border-gray-300 rounded" name="lesson_segment[]" id="lesson_segment" multiple required style="overflow: hidden;">
+                            <option value="Beginning">Beginning</option>
+                            <option value="Middle">Middle</option>
+                            <option value="End">End</option>
+                        </select>
+                    </div>
+
                     <div class="mb-3">
                         <label for="date" class="block text-sm font-medium text-gray-700">Date of Observation</label>
                         <input type="date" name="date" required class="w-full p-2 border border-gray-300 rounded">
                     </div>
                 </div>
             </div>
-
-
         </form>
     </div>
 </div>
@@ -156,71 +185,145 @@ $menuItems = [
     }
 </style>
 @section('page_js')
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        localStorage.setItem('lastSubmissionTime', new Date().getTime());
+        const submitButton = document.getElementById('submit-button');
+        const timerElement = document.getElementById('timer');
+        const form = document.getElementById('my-form');
+        const restrictionTime = 1 * 60 * 1000 - 1000; // 25 minutes in milliseconds
+        // const restrictionTime = 0; // 25 minutes in milliseconds
+
+        // Check localStorage for last submission time
+        const lastSubmissionTime = localStorage.getItem('lastSubmissionTime');
+        const now = new Date().getTime();
+
+        // If last submission time exists and 25 minutes haven't passed
+        if (lastSubmissionTime && now - lastSubmissionTime < restrictionTime) {
+            const remainingTime = Math.ceil((restrictionTime - (now - lastSubmissionTime)) / 1000);
+
+            // Start the countdown
+            startCountdown(remainingTime);
+
+            // Disable the submit button
+            submitButton.disabled = true;
+        } else {
+            // Allow submission if restriction time has passed
+            timerElement.textContent = 'You can now submit the form.';
+        }
+
+        // Form submission handler
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent form submission for demo purposes
+            localStorage.setItem('lastSubmissionTime', new Date().getTime());
+            submitButton.disabled = true;
+            startCountdown(25 * 60);
+        });
+
+        function startCountdown(seconds) {
+            let remainingTime = seconds;
+            const interval = setInterval(() => {
+                if (remainingTime <= 0) {
+                    clearInterval(interval);
+                    timerElement.textContent = 'You can now submit the form.';
+                    submitButton.disabled = false;
+                } else {
+                    const minutes = Math.floor(remainingTime / 60);
+                    const seconds = remainingTime % 60;
+                    timerElement.textContent = `Timer:  ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    remainingTime--;
+                }
+            }, 1000);
+        }
+    });
+</script>
 <script>
     $(document).ready(function() {
-
         function updateOptions(selectedValue, selectToUpdate) {
             // Enable all options first
-            $(`#${selectToUpdate} option`).prop('disabled', false);
+            $(`#${selectToUpdate} option`).prop("disabled", false);
 
             // Disable the matching option in the other select
             if (selectedValue) {
-                $(`#${selectToUpdate} option[value="${selectedValue}"]`).prop('disabled', true);
-                $(`#${selectToUpdate} option[value="${selectedValue}"]`).addClass('dim-option');
+                $(`#${selectToUpdate} option[value="${selectedValue}"]`)
+                    .prop("disabled", true)
+                    .addClass("dim-option");
             }
         }
 
         // Trigger getProgramsByGroup on group change
-        $('#teacher_id').change(function() {
-            var teacherId = $('#teacher_id').val();
-            updateOptions(teacherId, 'coteacher_id'); // Update coteacher dropdown
+        $("#teacher_id").change(function() {
+            var teacherId = $("#teacher_id").val();
+            updateOptions(teacherId, "coteacher_id"); // Update coteacher dropdown
             getSchool(teacherId);
-            getStages(teacherId);
         });
 
-        $('#coteacher_id').change(function() {
-            var coteacherId = $('#coteacher_id').val();
-            updateOptions(coteacherId, 'teacher_id'); // Update teacher dropdown
+        $("#coteacher_id").change(function() {
+            var coteacherId = $("#coteacher_id").val();
+            updateOptions(coteacherId, "teacher_id"); // Update teacher dropdown
         });
 
         // Trigger change on page load to fetch programs for the selected group
-        $('#teacher_id').trigger('change');
+        $("#teacher_id").trigger("change");
+
+        // Update city select when school is selected
+        $("select[name='school_id']").change(function() {
+            var selectedSchool = $(this).find(":selected");
+            var schoolCity = selectedSchool.data("city"); // Retrieve the city from the data attribute
+            var citySelect = $("select[name='city_id']");
+
+            citySelect.empty(); // Clear existing city options
+            if (schoolCity) {
+                citySelect.append(
+                    '<option value="' + schoolCity + '" selected>' + schoolCity + '</option>'
+                );
+            }
+        });
     });
-
-
 
     function getSchool(teacherId) {
         $.ajax({
-            url: '/observer/observation/get_school/' + teacherId,
+            url: '/LMS/lms_pyramakerz/public/observer/observation/get_school/' + teacherId,
+            // url: "/observer/observation/get_school/" + teacherId,
             type: "GET",
             dataType: "json",
             success: function(data) {
                 // Clear the existing options
-                $('select[name="school_id"]').empty();
-                $('select[name="city_id"]').empty();
+                $("select[name='school_id']").empty();
 
                 if (data.error) {
-                    $('select[name="school_id"]').append(
-                        '<option value="" selected disabled>' + data.error + '</option>'
+                    $("select[name='school_id']").append(
+                        '<option value="" selected disabled>' + data.error + "</option>"
                     );
                 } else {
-                    $('select[name="school_id"]').append(
-                        '<option value="' + data.id + '" selected disabled>' + data.name + '</option>'
+                    // Loop through each school and append them to the school_id dropdown
+                    $("select[name='school_id']").append(
+                        '<option value="" selected disabled>Select School</option>'
                     );
-                    $('select[name="city_id"]').append(
-                        '<option value="' + data.city + '" selected disabled>' + data.city + '</option>'
-                    );
+                    data.forEach(function(school) {
+                        $("select[name='school_id']").append(
+                            '<option value="' +
+                            school.id +
+                            '" data-city="' +
+                            school.city +
+                            '">' +
+                            school.name +
+                            "</option>"
+                        );
+                    });
                 }
             },
             error: function(xhr, status, error) {
-                console.error('AJAX Error:', error);
-            }
+                console.error("AJAX Error:", error);
+            },
         });
     }
 
     function getStages(teacherId) {
         $.ajax({
-            url: '/observer/observation/get_stages/' + teacherId,
+            url: '/LMS/lms_pyramakerz/public/observer/observation/get_stages/' + teacherId,
+            // url: '/observer/observation/get_stages/' + teacherId,
             type: "GET",
             dataType: "json",
             success: function(data) {

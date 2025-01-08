@@ -27,6 +27,7 @@ class LoginController extends Controller
         $student = Student::where('username', $request->input('username'))->where('plain_password', $request->input('password'))->first();
         if ($student) {
             if (Hash::check($request->input('password'), $student->password)) {
+                $student->increment('num_logins');
                 Auth::guard('student')->login($student); // Log in the student
                 return redirect()->route('student.dashboard');
             } else {
@@ -40,6 +41,7 @@ class LoginController extends Controller
         $teacher = Teacher::where('username', $request->input('username'))->where('plain_password', $request->input('password'))->first();
         if ($teacher) {
             if (Hash::check($request->input('password'), $teacher->password)) {
+                $teacher->increment('num_logins');
                 Auth::guard('teacher')->login($teacher); // Log in the teacher
                 return redirect()->route('teacher.dashboard');
             } else {
@@ -53,6 +55,7 @@ class LoginController extends Controller
         $observer = Observer::where('username', $request->input('username'))->first();
         if ($observer) {
             if (Hash::check($request->input('password'), $observer->password)) {
+                $observer->increment('num_logins');
                 Auth::guard('observer')->login($observer);
                 return redirect()->route('observer.dashboard');
             } else {

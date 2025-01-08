@@ -94,6 +94,10 @@ $menuItems = [
             <div class="w-1/3 p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-lg">
                 <div class="info mb-3">
                     <div class="mb-3">
+                        <label for="observation_name" class="block text-sm font-medium text-gray-700">Observation Name</label>
+                        <input class="w-full p-2 border border-gray-300 rounded" type="text" name="observation_name" value="{{$observation->name}}" disabled required>
+                    </div>
+                    <div class="mb-3">
                         <label for="observer" class="block text-sm font-medium text-gray-700">Observer Username</label>
                         <select name="observer_id" id="observer_id" class="w-full p-2 border border-gray-300 rounded" required>
                             <option value="{{$observer->id}}">{{$observer->username}}</option>
@@ -130,6 +134,17 @@ $menuItems = [
                         </select>
                     </div>
                     <div class="mb-3">
+                        <label for="lesson_segment" class="block text-sm font-medium text-gray-700">Subject Area</label>
+                        <select class="w-full p-2 border border-gray-300 rounded" name="lesson_segment[]" id="lesson_segment" multiple required disabled style="overflow: hidden;">
+                            @if ($observation->lesson_segment)
+                            @foreach (json_decode($observation->lesson_segment, true) as $segment)
+                            <option value="{{ $segment }}" selected>{{ $segment }}</option>
+                            @endforeach
+                            @endif
+                        </select>
+                    </div>
+
+                    <div class=" mb-3">
                         <label for="date" class="block text-sm font-medium text-gray-700">Date of Observation</label>
                         <input type="date" name="date" required class="w-full p-2 border border-gray-300 rounded" value="{{$observation->activity}}">
                     </div>
@@ -190,7 +205,7 @@ $menuItems = [
 
     function getSchool(teacherId) {
         $.ajax({
-            url: '/observer/observation/get_school/' + teacherId,
+            url: '/LMS/lms_pyramakerz/public/observer/observation/get_school/' + teacherId,
             type: "GET",
             dataType: "json",
             success: function(data) {
@@ -219,7 +234,7 @@ $menuItems = [
 
     function getStages(teacherId) {
         $.ajax({
-            url: '/observer/observation/get_stages/' + teacherId,
+            url: '/LMS/lms_pyramakerz/public/observer/observation/get_stages/' + teacherId,
             type: "GET",
             dataType: "json",
             success: function(data) {

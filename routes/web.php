@@ -84,14 +84,30 @@ Route::prefix('admin')->group(function () {
 
         Route::resource('students', StudentController::class);
         Route::resource('teachers', TeacherController::class);
+
+        Route::get('observers/observation_questions', [ObserverController::class, 'addQuestions'])->name('observers.addQuestions');
+        Route::get('observers/observation_report', [ObserverController::class, 'observationReport'])->name('observers.obsReport');
+        Route::delete('/questions/{id}', [ObserverController::class, 'deleteQuestion'])->name('questions.destroy');
+        // Routes for questions and headers
+        Route::post('/questions/store', [ObserverController::class, 'storeQuestion'])->name('questions.storeQuestion');
+        Route::delete('/headers/{id}', [ObserverController::class, 'deleteHeader'])->name('headers.deleteHeader');
+        Route::post('/headers/store', [ObserverController::class, 'storeHeader'])->name('headers.storeHeader');
+
+
         Route::resource('observers', ObserverController::class);
         Route::resource('admins', AdminController::class);
         Route::resource('images', ImageController::class);
         Route::resource('types', TypeController::class);
         Route::resource('teacher_resources', TeacherResourceController::class);
         Route::get('reports/assignment_avg_report', [ReportController::class, 'assignmentAvgReport'])->name('admin.assignmentAvgReport');
+        Route::get('reports/assessment_report', [ReportController::class, 'assessmentReport'])->name('admin.assesmentReport');
+        Route::get('reports/login_report', [ReportController::class, 'loginReport'])->name('admin.loginReport');
         Route::get('reports/compare_report', [ReportController::class, 'compareReport'])->name('admin.compareReport');
         Route::get('/get-teachers-school/{schoolId}', [ReportController::class, 'getSchoolTeachers'])->name('getSchoolTeachers');
+        Route::get('/get-grades-school/{schoolId}', [ReportController::class, 'getSchoolGrades'])->name('getSchoolGrades');
+        Route::get('/get-classes-school/{schoolId}', [ReportController::class, 'getSchoolClasses'])->name('getSchoolClasses');
+        Route::get('/teacher-schools/{teacherId}', [TeacherController::class, 'addSchool'])->name('teachers.addSchool');
+        Route::post('/teacher-schools/store', [TeacherController::class, 'storeSchool'])->name('teachers.storeSchool');
 
 
         Route::get('school/{schoolId}/curriculum', [AdminController::class, 'assignCurriculum'])->name('school.curriculum.assign');
