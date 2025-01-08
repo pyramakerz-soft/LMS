@@ -23,38 +23,31 @@ class ChatController extends Controller
             abort(404, 'Receiver not found');
         }
 
-        $students = collect(); 
-        $teachers = collect(); 
+        $students = collect();
+        $teachers = collect();
 
-        if (auth()->guard('teacher')->check()) {
-            $userId = auth()->guard('teacher')->user()->id;
-            $userType = 'teacher';
-
-            // Get the classes assigned to the teacher
-            $teacherClasses = TeacherClass::where('teacher_id', $userId)->pluck('class_id');
-
-            // Get the students belonging to these classes
-            $students = Student::whereIn('class_id', $teacherClasses)->get();
-        } elseif (auth()->guard('student')->check()) {
+        if (auth()->guard('student')->check()) {
             $userId = auth()->guard('student')->user()->id;
             $userType = 'student';
 
-            // Get the student's class
             $student = Student::find($userId);
-
             if (!$student) {
                 abort(404, 'Student not found');
             }
 
-            // Get the teachers assigned to the student's class
             $teachers = Teacher::whereHas('classes', function ($query) use ($student) {
                 $query->where('class_id', $student->class_id);
             })->get();
+        } elseif (auth()->guard('teacher')->check()) {
+            $userId = auth()->guard('teacher')->user()->id;
+            $userType = 'teacher';
+
+            $teacherClasses = TeacherClass::where('teacher_id', $userId)->pluck('class_id');
+            $students = Student::whereIn('class_id', $teacherClasses)->get();
         } else {
             abort(403, 'Unauthorized access');
         }
 
-        // Fetch messages between the authenticated user and the receiver
         $messages = Message::where(function ($query) use ($userId, $userType, $receiverId, $receiverType) {
             $query->where('sender_id', $userId)
                 ->where('sender_type', $userType)
@@ -70,12 +63,11 @@ class ChatController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-        // Pass variables to the view
-        return view('pages.student.chat', compact('receiver', 'receiverType', 'messages', 'students', 'teachers'));
+        // Get the last message ID
+        $lastMessageId = $messages->last() ? $messages->last()->id : 0;
+
+        return view('pages.student.chat', compact('receiver', 'receiverType', 'messages', 'students', 'teachers', 'lastMessageId'));
     }
-
-
-
 
 
     public function sendMessage($receiverId, $receiverType, Request $request)
@@ -115,7 +107,7 @@ class ChatController extends Controller
                     ->where('receiver_id', $userId)
                     ->where('receiver_type', $userType);
             })
-            ->where('id', '>', $lastMessageId)
+            ->where('id', '>', $lastMessageId) // Fetch only messages after last_message_id
             ->orderBy('created_at', 'asc')
             ->get();
 

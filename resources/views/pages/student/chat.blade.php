@@ -9,7 +9,7 @@
 
         <div class="flex flex-1">
             <!-- Left Sidebar -->
-            <div class="w-1/4 bg-gray-200 p-4 overflow-y-auto">
+            <div class="w-1/4 bg-gray-200 p-4 overflow-y-auto" style="max-height: 700px;">
                 <h2 class="text-lg font-semibold mb-4">Contacts</h2>
                 @if (auth()->guard('teacher')->check())
                     <!-- List students for the teacher -->
@@ -86,7 +86,8 @@
         const authId = parseInt(chatArea.getAttribute('data-auth-id'), 10);
         const authType = chatArea.getAttribute('data-auth-type');
 
-        let lastMessageId = 0;
+        // Initialize lastMessageId with the value passed from the server
+        let lastMessageId = {{ $lastMessageId }};
 
         chatForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -101,11 +102,11 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
                     },
                     body: JSON.stringify({
-                        message: message
-                    })
+                        message: message,
+                    }),
                 })
                 .then(response => {
                     if (!response.ok) {
@@ -120,6 +121,7 @@
                 </div>`;
                     chatArea.innerHTML += newMessage;
 
+                    // Update lastMessageId to prevent duplication
                     lastMessageId = data.message.id;
 
                     messageInput.value = '';
@@ -129,8 +131,6 @@
                 .finally(() => {
                     sendButton.disabled = false;
                 });
-            chatArea.scrollTop = chatArea.scrollHeight;
-
         });
 
         setInterval(function() {
@@ -156,10 +156,12 @@
 
                             chatArea.innerHTML += messageHtml;
 
+                            // Update the lastMessageId
                             lastMessageId = message.id;
                         }
                     });
 
+                    chatArea.scrollTop = chatArea.scrollHeight;
                 })
                 .catch(error => console.error('Error fetching messages:', error));
         }, 2000);
