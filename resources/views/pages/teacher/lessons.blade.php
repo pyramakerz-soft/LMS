@@ -39,8 +39,9 @@
                         <button
                             onclick="event.stopPropagation(); event.preventDefault(); openModal('ebook', '{{ $lesson->file_path }}');"
                             class="object-cover w-full">
-                            <img src="{{ $lesson->image ? asset($lesson->image) : asset('images/defaultCard.webp') }}"
-                                alt="{{ $lesson->title }}">
+                            {{-- <img src="{{ $lesson->image ? asset($lesson->image) : asset('images/defaultCard.webp') }}"
+                                alt="{{ $lesson->title }}"> --}}
+                                OPEN
                         </button>
                     </div>
                     <h3 class="px-4 py-2 text-lg font-bold truncate">{{ $lesson->title }}</h3>
