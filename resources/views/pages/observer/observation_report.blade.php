@@ -50,6 +50,7 @@ $menuItems = [
             </button>
         </div>
         @endif
+        @if (isset($data))
         <div class="flex mb-4" style="gap:10px; padding:10px; justify-content:space-between">
             <div class="mb-4" style="gap:10px; padding:10px; max-width:75%">
                 <div class="questions mb-3" style="max-width: 100%;">
@@ -97,6 +98,9 @@ $menuItems = [
 
             </div>
         </div>
+        @else
+        <p>No Observation Questions Found</p>
+        @endif
     </div>
 </div>
 <div id="filter-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">

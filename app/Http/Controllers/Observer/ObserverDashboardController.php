@@ -276,13 +276,17 @@ class ObserverDashboardController extends Controller
             $headerId = ObservationQuestion::find($history->question_id)->observation_header_id;
             $data[$headerId]['questions'][$history->question_id]['avg_rating'] += $history->rate;
         }
-
-        foreach ($data as $header) {
-            foreach ($header['questions'] as $question) {
-                $data[$header['header_id']]['questions'][$question['question_id']]['avg_rating'] = round($data[$header['header_id']]['questions'][$question['question_id']]['avg_rating'] / $obsCount, 2);
+        if (isset($data)) {
+            foreach ($data as $header) {
+                foreach ($header['questions'] as $question) {
+                    $data[$header['header_id']]['questions'][$question['question_id']]['avg_rating'] = round($data[$header['header_id']]['questions'][$question['question_id']]['avg_rating'] / $obsCount, 2);
+                }
             }
+            $cities = School::distinct()->whereNotNull('city')->pluck('city');
+            return view('pages.observer.observation_report', compact('stages', 'cities', 'teachers', 'observer', 'observers', 'schools', 'headers', 'data'));
+        } else {
+            $cities = School::distinct()->whereNotNull('city')->pluck('city');
+            return view('pages.observer.observation_report', compact('stages', 'cities', 'teachers', 'observer', 'observers', 'schools', 'headers'));
         }
-        $cities = School::distinct()->whereNotNull('city')->pluck('city');
-        return view('pages.observer.observation_report', compact('stages', 'cities', 'teachers', 'observer', 'observers', 'schools', 'headers', 'data'));
     }
 }

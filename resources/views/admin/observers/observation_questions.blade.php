@@ -20,6 +20,7 @@
                 @endif
                 <div class="overflow-x-auto">
                     <div class="mb-4 flex" style="gap:10px; padding:10px">
+                        @if (isset($data))
                         <div class="questions mb-3">
                             @foreach ($data as $header)
                             <div class="flex justify-between items-center mb-4">
@@ -77,6 +78,9 @@
                             @endif
                             @endforeach
                         </div>
+                        @else
+                        <p>No Observation Questions Found</p>
+                        @endif
                     </div>
                 </div>
             </div>
