@@ -171,11 +171,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-<<<<<<< HEAD
-        <p>&copy; 2024 Pyramakerz LMS. All Rights Reserved. Visit us att~<a href="https://pyramakerz.com/">pyramakerz.com</a></p>
-=======
         <p>&copy; 2024 Pyramakerz LMS. All Rights Reserved. Visit us at: <a href="https://pyramakerz.com/">pyramakerz.com</a></p>
->>>>>>> 624d5b9 (Main Test)
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
