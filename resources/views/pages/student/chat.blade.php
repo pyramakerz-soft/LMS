@@ -1,5 +1,27 @@
 @extends('layouts.app')
-
+@section('title')
+    Chat
+@endsection
+@php
+    if (auth()->guard('student')->check()) {
+        $menuItems = [
+            ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('student.theme')],
+            ['label' => 'Assignment', 'icon' => 'fas fa-home', 'route' => route('student.assignment')],
+            ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
+        ];
+    } elseif (auth()->guard('teacher')->check()) {
+        $menuItems = [
+            ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
+            ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
+            ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
+        ];
+    } else {
+        $menuItems = [];
+    }
+@endphp
+@section('sidebar')
+    @include('components.sidebar', ['menuItems' => $menuItems])
+@endsection
 @section('content')
     <div class="flex flex-col h-screen">
         <!-- Header -->
@@ -161,7 +183,7 @@
                         }
                     });
 
-                    chatArea.scrollTop = chatArea.scrollHeight;
+                    // chatArea.scrollTop = chatArea.scrollHeight;
                 })
                 .catch(error => console.error('Error fetching messages:', error));
         }, 2000);

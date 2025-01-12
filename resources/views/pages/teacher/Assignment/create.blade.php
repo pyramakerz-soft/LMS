@@ -6,6 +6,7 @@
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
         ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
+        ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
     ];
 
     $fileExErr = false;
