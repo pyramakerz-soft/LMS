@@ -155,7 +155,8 @@
         });
 
         setInterval(function() {
-            fetch(`https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/chat/{{ $receiver->id }}/{{ $receiverType }}/messages?last_message_id=${lastMessageId}`)
+            fetch(
+                    `https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/chat/{{ $receiver->id }}/{{ $receiverType }}/messages?last_message_id=${lastMessageId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Failed to fetch messages');
