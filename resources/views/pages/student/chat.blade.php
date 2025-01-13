@@ -124,6 +124,10 @@
         }
     </style>
 @endsection
+@extends('layouts.app')
+@section('title')
+    Chat
+@endsection
 @php
     if (auth()->guard('student')->check()) {
         $menuItems = [
@@ -145,23 +149,23 @@
     @include('components.sidebar', ['menuItems' => $menuItems])
 @endsection
 @section('content')
-    <div class="flex flex-col h-screen">
+    <div class="chat-container">
         <!-- Header -->
-        <header class="bg-gray-800 text-white p-4">
-            <h1 class="text-xl">Chat</h1>
+        <header class="chat-header">
+            <h1>Chat</h1>
         </header>
 
         <div class="chat-content">
             <!-- Left Sidebar -->
-            <div class=" chat-sidebar w-1/4 bg-gray-200 p-4 overflow-y-auto" style="max-height: 700px;">
-                <h2 class="text-lg font-semibold mb-4">Contacts</h2>
+            <div class="chat-sidebar">
+                <h2>Contacts</h2>
                 @if (auth()->guard('teacher')->check())
                     <!-- List students for the teacher -->
                     <ul>
                         @foreach ($students as $student)
-                            <li class="mb-2">
-                                <a href="{{ route('chat.form', ['receiverId' => $student->id, 'receiverType' => 'student']) }}"
-                                    class="block bg-white p-2 rounded shadow hover:bg-gray-300">
+                            <li>
+                                <a
+                                    href="{{ route('chat.form', ['receiverId' => $student->id, 'receiverType' => 'student']) }}">
                                     {{ $student->username }}
                                 </a>
                             </li>
@@ -171,9 +175,9 @@
                     <!-- List teachers for the student -->
                     <ul>
                         @foreach ($teachers as $teacher)
-                            <li class="mb-2">
-                                <a href="{{ route('chat.form', ['receiverId' => $teacher->id, 'receiverType' => 'teacher']) }}"
-                                    class="block bg-white p-2 rounded shadow hover:bg-gray-300">
+                            <li>
+                                <a
+                                    href="{{ route('chat.form', ['receiverId' => $teacher->id, 'receiverType' => 'teacher']) }}">
                                     {{ $teacher->username }}
                                 </a>
                             </li>
@@ -184,11 +188,8 @@
 
             <!-- Chat Area -->
             <div class="flex-1 flex flex-col">
-<<<<<<< HEAD
-                <div id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="    max-height: 700px;"
-=======
+ 
                 <div class="chat-area" id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="    max-height: 700px;"
->>>>>>> bc82ed6 (edit chat)
                     data-auth-id="{{ auth()->guard('student')->check() ? auth()->guard('student')->id() : auth()->guard('teacher')->id() }}"
                     data-auth-type="{{ auth()->guard('student')->check() ? 'student' : 'teacher' }}">
                     @foreach ($messages as $message)
@@ -220,6 +221,14 @@
                     </form>
                 </footer>
             </div>
+
+            <!-- Input -->
+            <footer class="chat-footer">
+                <form id="chatForm" class="chat-form">
+                    <input type="text" id="messageInput" class="message-input" placeholder="Type your message...">
+                    <button type="submit" class="send-button">Send</button>
+                </form>
+            </footer>
         </div>
     </div>
 @endsection
@@ -263,9 +272,9 @@
                 })
                 .then(data => {
                     const newMessage = `
-                <div class="text-right">
-                    <div class="bg-blue-500 text-white rounded p-2 mb-2 inline-block">${message}</div>
-                </div>`;
+                    <div class="sent-message">
+                        <div class="message sent">${message}</div>
+                    </div>`;
                     chatArea.innerHTML += newMessage;
 
                     // Update lastMessageId to prevent duplication
@@ -281,13 +290,9 @@
         });
 
         setInterval(function() {
-<<<<<<< HEAD
-            fetch(`https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/chat/{{ $receiver->id }}/{{ $receiverType }}/messages?last_message_id=${lastMessageId}`)
-=======
             fetch(
                     `https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/chat/{{ $receiver->id }}/{{ $receiverType }}/messages?last_message_id=${lastMessageId}`
                 )
->>>>>>> bc82ed6 (edit chat)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Failed to fetch messages');
@@ -301,8 +306,8 @@
                                 authType;
 
                             const messageHtml = `
-                        <div class="${isAuthUser ? 'text-right' : 'text-left'}">
-                            <div class="${isAuthUser ? 'bg-blue-500 text-white' : 'bg-gray-200'} rounded p-2 mb-2 inline-block">
+                        <div class="${isAuthUser ? 'sent-message' : 'received-message'}">
+                            <div class="message ${isAuthUser ? 'sent' : 'received'}">
                                 ${message.message}
                             </div>
                         </div>`;
