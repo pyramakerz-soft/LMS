@@ -62,7 +62,7 @@
 
             <!-- Chat Area -->
             <div class="flex-1 flex flex-col">
-                <div id="chatArea" class="flex-1  p-4 bg-gray-100" style="    max-height: 700px;
+                <div id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="    max-height: 700px;
 "
                     data-auth-id="{{ auth()->guard('student')->check() ? auth()->guard('student')->id() : auth()->guard('teacher')->id() }}"
                     data-auth-type="{{ auth()->guard('student')->check() ? 'student' : 'teacher' }}">
