@@ -105,8 +105,7 @@
 
 {{-- Ebook Modal --}}
 <div id="ebook" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-10 hidden">
-    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll w-[9*
-    0%]">
+    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll w-[90%]" style="height: 95% !important">
         <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <h3 class="text-lg font-semibold text-gray-900">
                 EBook
@@ -124,7 +123,7 @@
 
 {{-- How To Use Modal --}}
 <div id="use" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-10 hidden">
-    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll w-[90%]">
+    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll w-[90%]" style="height: 95% !important">
         <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <h3 class="text-lg font-semibold text-gray-900">
                 How To Use
@@ -142,7 +141,7 @@
 
 {{-- Learning Modal --}}
 <div id="learn" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-10 hidden">
-    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll w-[90%]">
+    <div class="bg-white rounded-lg shadow-lg h-[95vh] overflow-y-scroll w-[90%]" style="height: 95% !important">
         <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <h3 class="text-lg font-semibold text-gray-900">
                 Learning
