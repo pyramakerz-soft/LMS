@@ -14,6 +14,64 @@ use Pusher\Pusher;
 
 class ChatController extends Controller
 {
+    public function viewAllChats(Request $request)
+    {
+        $students = collect();
+        $teachers = collect();
+        $classes = collect();
+        $perPage = 10; // Number of results per page
+
+        if (auth()->guard('teacher')->check()) {
+            $userId = auth()->guard('teacher')->user()->id;
+
+            // Get the classes assigned to the teacher
+            $classes = TeacherClass::where('teacher_id', $userId)->with('class')->get();
+
+            // Filter and sort students
+            $classId = $request->query('class_id');
+            $search = $request->query('search');
+            $sortBy = $request->query('sort_by', 'username'); // Default sort by 'username'
+            $sortOrder = $request->query('sort_order', 'asc'); // Default order 'asc'
+
+            $studentsQuery = Student::query();
+
+            if ($classId) {
+                $studentsQuery->where('class_id', $classId);
+            }
+
+            if ($search) {
+                $studentsQuery->where('username', 'like', "%$search%");
+            }
+
+            $students = $studentsQuery->whereIn('class_id', $classes->pluck('class_id'))
+                ->orderBy($sortBy, $sortOrder)
+                ->paginate($perPage);
+        } elseif (auth()->guard('student')->check()) {
+            $userId = auth()->guard('student')->user()->id;
+
+            // Get the student's class
+            $student = Student::find($userId);
+
+            if (!$student) {
+                abort(404, 'Student not found');
+            }
+
+            // Filter and sort teachers
+            $teachersQuery = Teacher::query();
+            $teachers = $teachersQuery->whereHas('classes', function ($query) use ($student) {
+                $query->where('class_id', $student->class_id);
+            })
+                ->orderBy('username', 'asc') // Default sort for teachers
+                ->paginate($perPage);
+        } else {
+            abort(403, 'Unauthorized access');
+        }
+
+        return view('pages.student.all', compact('students', 'teachers', 'classes'));
+    }
+
+
+
 
     public function chatForm($receiverId, $receiverType, UserService $userService)
     {
