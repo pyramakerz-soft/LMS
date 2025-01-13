@@ -14,8 +14,12 @@ export default {
 =======
         "./resources/**/*.js",
         "./resources/**/*.vue",
+<<<<<<< HEAD
         "./src/**/*.{html , js, jsx, ts , tsx}",
 >>>>>>> d32742d (edit chat)
+=======
+        // "./src/**/*.{html , js, jsx, ts , tsx}",
+>>>>>>> ded3858 (edit chat)
     ],
     theme: {
         extend: {
