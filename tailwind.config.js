@@ -3,6 +3,7 @@ export default {
     content: [
         "./resources/**/*.blade.php",
 <<<<<<< HEAD
+<<<<<<< HEAD
         "./resources/**/*.js",
         "./resources/**/*.vue",
         // "./src/**/*.{html , js, jsx, ts , tsx}",
@@ -10,6 +11,11 @@ export default {
         "./resources/**/*.{html , js , jsx , tsx, ts}",
         "./resources/**/*.vue",
 >>>>>>> c5b5c4e (edit chat)
+=======
+        "./resources/**/*.js",
+        "./resources/**/*.vue",
+        "./src/**/*.{html , js, jsx, ts , tsx}",
+>>>>>>> d32742d (edit chat)
     ],
     theme: {
         extend: {
