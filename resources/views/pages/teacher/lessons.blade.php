@@ -8,6 +8,7 @@
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
         ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
+        ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
     ];
 @endphp
 
@@ -36,7 +37,8 @@
 
                     <div class="p-4">
                         <button onclick="  openModal('ebook', `{{ $lesson->file_path }}`);" class="object-cover w-full">
-                            <img src="{{ $lesson->image ? asset($lesson->image) : asset('images/defaultCard.webp') }}" alt="{{ $lesson->title }}">
+                            <img src="{{ $lesson->image ? asset($lesson->image) : asset('images/defaultCard.webp') }}"
+                                alt="{{ $lesson->title }}">
                         </button>
                         {{-- <button onclick="  openModal('ebook', `https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/ebooks/Grade 3/G3 - Nature's Balance`);" class="object-cover w-full"> --}}
 

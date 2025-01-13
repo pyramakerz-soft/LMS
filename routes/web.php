@@ -52,6 +52,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('landing'); // Displays the landing page
 })->name('landing');
+Route::get('/chats', [ChatController::class, 'viewAllChats'])->name('chat.all');
+
+Route::get('/chat/{receiverId}/{receiverType}', [ChatController::class, 'chatForm'])->name('chat.form');
+Route::post('/chat/{receiverId}/{receiverType}', [ChatController::class, 'sendMessage'])->name('chat.send');
+Route::get('/chat/{receiverId}/{receiverType}/messages', [ChatController::class, 'fetchMessages']);
+
 
 Route::get('/chat/{receiverId}/{receiverType}', [ChatController::class, 'chatForm'])->name('chat.form');
 Route::post('/chat/{receiverId}/{receiverType}', [ChatController::class, 'sendMessage'])->name('chat.send');
