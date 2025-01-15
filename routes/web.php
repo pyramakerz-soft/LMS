@@ -98,6 +98,8 @@ Route::prefix('admin')->group(function () {
         Route::post('/questions/store', [ObserverController::class, 'storeQuestion'])->name('questions.storeQuestion');
         Route::delete('/headers/{id}', [ObserverController::class, 'deleteHeader'])->name('headers.deleteHeader');
         Route::post('/headers/store', [ObserverController::class, 'storeHeader'])->name('headers.storeHeader');
+        Route::post('/headers/edit', [ObserverController::class, 'editHeader'])->name('headers.editHeader');
+        Route::post('/questions/edit', [ObserverController::class, 'editQuestion'])->name('questions.editQuestion');
 
 
         Route::resource('observers', ObserverController::class);

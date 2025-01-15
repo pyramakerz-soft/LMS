@@ -401,14 +401,41 @@
     });
 </script>
 @endif
-
+<style>
+    /* Style for dimmed options */
+    .dim-option {
+        color: gray;
+        /* Dimmed text color */
+        background-color: #ddd;
+        /* Optional: dimmed background color */
+        pointer-events: none;
+        /* Prevent interaction */
+        cursor: not-allowed;
+        /* Change cursor to indicate non-clickable */
+    }
+</style>
 <script>
     $(document).ready(function() {
         $('.js-select2').select2();
 
+        function updateOptions(selectedValue, selectToUpdate) {
+            // Enable all options first
+            $(`#${selectToUpdate} option`).prop("disabled", false);
+
+            // Disable the matching option in the other select
+            if (selectedValue) {
+                $(`#${selectToUpdate} option[value="${selectedValue}"]`)
+                    .prop("disabled", true)
+                    .addClass("dim-option");
+            }
+        }
+
+
+
         $('#school_id').change(function() {
             var schoolId = $('#school_id').val();
             var compareBy = $('#compare_by').val();
+            updateOptions(schoolId, "school_id2");
 
             switch (compareBy) {
                 case 'classes':
@@ -426,6 +453,7 @@
         $('#school_id2').change(function() {
             var schoolId2 = $('#school_id2').val();
             var compareBy = $('#compare_by').val();
+            updateOptions(schoolId2, "school_id");
 
             switch (compareBy) {
                 case 'classes':

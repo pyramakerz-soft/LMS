@@ -180,6 +180,35 @@ class ObserverController extends Controller
         ]);
         return redirect()->route('observers.addQuestions')->with('success', 'Header added successfully.');
     }
+    public function editHeader(Request $request)
+    {
+        $request->validate([
+            'header_name' => 'required|string',
+        ]);
+        $obs  = ObservationHeader::findOrFail($request->header_id);
+
+        $obs->update([
+            'header' => $request->header_name,
+        ]);
+
+        return redirect()->route('observers.addQuestions')->with('success', 'Header Updated successfully.');
+    }
+    public function editQuestion(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            'question_name' => 'required|string',
+            'max_rating' => 'required|integer|min:1',
+        ]);
+        $obs  = ObservationQuestion::findOrFail($request->question_id);
+
+        $obs->update([
+            'question' => $request->question_name,
+            'max_rate' => $request->max_rating,
+        ]);
+
+        return redirect()->route('observers.addQuestions')->with('success', 'Question Updated successfully.');
+    }
 
     public function deleteHeader($id)
     {
