@@ -301,7 +301,7 @@
                     );
                 } else {
                     $('select[name="class_id"]').append(
-                        '<option value="" selected>All Classes</option>'
+                        '<option value="" selected disabled>Select Class</option>'
                     );
                     $.each(data, function(key, value) {
                         $('select[name="class_id"]').append(
@@ -319,4 +319,13 @@
         });
     }
 </script>
+@if (!isset($data))
+<script>
+    const exportButton = document.getElementById('export-pdf');
+    exportButton.disabled = true;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+@endif
+
+
 @endsection

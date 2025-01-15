@@ -17,7 +17,7 @@ $menuItems = [
 
 @section('content')
 <div id="content-to-export">
-    <div class="p-3 text-[#667085] my-8" style="padding:20px">
+    < class="p-3 text-[#667085] my-8" style="padding:20px">
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-bold">Observations Report</h1>
             <div class="flex">
@@ -52,7 +52,7 @@ $menuItems = [
         @endif
         @if (isset($data))
         <div class="flex mb-4" style="gap:10px; padding:10px; justify-content:space-between">
-            <div class="mb-4" style="gap:10px; padding:10px; max-width:75%">
+            <div class="mb-4" style="gap:10px; padding:10px; max-width:75%; flex:1">
                 <div class="questions mb-3" style="max-width: 100%;">
                     @foreach ($data as $header)
                     <h1 class="text-lg font-semibold text-[#667085] mb-4" style="font-size:20px">{{$header['name']}}</h1>
@@ -70,7 +70,7 @@ $menuItems = [
                     @endforeach
                 </div>
             </div>
-            <div class="rounded-lg">
+            <div class="rounded-lg" style="width: 21%;">
                 <div class="mb-3">
                     <label for="observation_name" class="block text-sm font-medium text-gray-700">Observer Name</label>
                     <input class="w-full p-2 border border-gray-300 rounded" type="text" style="font-size:14px" name="observation_name" value="{{ Auth::guard('observer')->user()->name}}" disabled required>
@@ -101,7 +101,7 @@ $menuItems = [
         @else
         <p>No Observation Questions Found</p>
         @endif
-    </div>
+</div>
 </div>
 <div id="filter-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
     <div
@@ -295,4 +295,13 @@ $menuItems = [
         XLSX.writeFile(workbook, 'Observations_Report.xlsx');
     });
 </script>
+@if (!isset($data))
+<script>
+    const exportButton = document.getElementById('export-pdf');
+    const filterButton = document.getElementById('filter-modal-btn');
+    exportButton.disabled = true;
+    filterButton.disabled = true;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+@endif
 @endsection
