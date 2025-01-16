@@ -143,17 +143,17 @@
         //     // Add styles for the screenshot protector
         //     const style = document.createElement('style');
         //     style.innerHTML = `
-    //     .screenshot-protector {
-    //         position: fixed;
-    //         top: 0;
-    //         left: 0;
-    //         width: 100vw;
-    //         height: 100vh;
-    //         background: rgba(255, 255, 255, 0.01);
-    //         pointer-events: none;
-    //         z-index: 9999;
-    //     }
-    // `;
+        //     .screenshot-protector {
+        //         position: fixed;
+        //         top: 0;
+        //         left: 0;
+        //         width: 100vw;
+        //         height: 100vh;
+        //         background: rgba(255, 255, 255, 0.01);
+        //         pointer-events: none;
+        //         z-index: 9999;
+        //     }
+        // `;
         //     document.head.appendChild(style);
 
         //     $(window).on('blur', function() {

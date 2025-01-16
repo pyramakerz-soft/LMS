@@ -108,99 +108,83 @@ $menuItems = [
 </div>
 
 <!-- Filter Modal -->
-<div id="filter-modal" class="modal fade" tabindex="-1" aria-labelledby="filter-modal-label" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="filter-modal-label">Filters</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div id="filter-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
+    <div
+        class="bg-white rounded-lg shadow-lg p-6 w-full sm:w-3/4 md:w-1/2 lg:w-1/3 max-h-[90vh] overflow-y-auto" style="padding:30px">
+        <h2 class="text-xl font-bold mb-4">Filters</h2>
+        <form id="filter-form-modal" action="{{ route('observer.dashboard') }}" method="GET">
+            <div class="mb-4">
+                <label for="teacher_id_modal" class="block text-sm font-medium text-gray-700">Teacher</label>
+                <select name="teacher_id" id="teacher_id_modal" class="w-full p-2 border border-gray-300 rounded">
+                    <option value="">All Teachers</option>
+                    @foreach ($teachers as $teacher)
+                    <option value="{{ $teacher->id }}" {{ request('teacher_id') == $teacher->id ? 'selected' : '' }}>
+                        {{ $teacher->name }}
+                    </option>
+                    @endforeach
+                </select>
             </div>
-            <form id="filter-form-modal" action="{{ route('observers.obsReport') }}" method="GET">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="observer_id" class="form-label">Observer</label>
-                        <select name="observer_id" id="observer_id" class="form-select">
-                            <option value="">All Observers</option>
-                            @foreach ($observers as $observer)
-                            <option value="{{ $observer->id }}" {{ request('observer_id') == $observer->id ? 'selected' : '' }}>
-                                {{ $observer->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="teacher_id_modal" class="form-label">Teacher</label>
-                        <select name="teacher_id" id="teacher_id_modal" class="form-select">
-                            <option value="">All Teachers</option>
-                            @foreach ($teachers as $teacher)
-                            <option value="{{ $teacher->id }}" {{ request('teacher_id') == $teacher->id ? 'selected' : '' }}>
-                                {{ $teacher->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="school_id" class="form-label">School</label>
-                        <select name="school_id[]" id="school_id" class="form-select" multiple>
-                            @foreach ($schools as $school)
-                            <option value="{{ $school->id }}" {{ is_array(request('school_id')) && in_array($school->id, request('school_id')) ? 'selected' : '' }}>
-                                {{ $school->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="city" class="form-label">City</label>
-                        <select name="city[]" id="city" class="form-select" multiple>
-                            @foreach ($cities as $city)
-                            <option value="{{ $city }}" {{ is_array(request('city')) && in_array($city, request('city')) ? 'selected' : '' }}>
-                                {{ $city }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="stage_id" class="form-label">Stage</label>
-                        <select name="stage_id" id="stage_id" class="form-select">
-                            <option value="">All Stages</option>
-                            @foreach ($stages as $stage)
-                            <option value="{{ $stage->id }}" {{ request('stage_id') == $stage->id ? 'selected' : '' }}>
-                                {{ $stage->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="lesson_segment_filter" class="form-label">Lesson Segment</label>
-                        <select class="form-select" name="lesson_segment_filter" id="lesson_segment_filter">
-                            <option value="">All</option>
-                            <option value="Beginning" {{ request('lesson_segment_filter') == 'Beginning' ? 'selected' : '' }}>Beginning</option>
-                            <option value="Middle" {{ request('lesson_segment_filter') == 'Middle' ? 'selected' : '' }}>Middle</option>
-                            <option value="End" {{ request('lesson_segment_filter') == 'End' ? 'selected' : '' }}>End</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="from_date" class="form-label">Date From</label>
-                        <input type="date" name="from_date" id="from_date" class="form-control" value="{{ request('from_date') }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="to_date" class="form-label">Date To</label>
-                        <input type="date" name="to_date" id="to_date" class="form-control" value="{{ request('to_date') }}">
-                    </div>
-                    <div class="form-check mb-3">
-                        <input type="checkbox" class="form-check-input" name="include_comments" id="include_comments" value="1" {{ request('include_comments') ? 'checked' : '' }}>
-                        <label class="form-check-label" for="include_comments">Include Comments</label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Apply Filters</button>
-                </div>
-            </form>
-        </div>
+            <div class="mb-4">
+                <label for="school_id" class="block text-sm font-medium text-gray-700">School</label>
+                <select name="school_id[]" id="school_id" class="w-full p-2 border border-gray-300 rounded" multiple>
+                    <!-- <option value="" disabled selected>Select Schools</option> -->
+                    @foreach ($schools as $school)
+                    <option value="{{ $school->id }}"
+                        {{ is_array(request('school_id')) && in_array($school->id, request('school_id')) ? 'selected' : '' }}>
+                        {{ $school->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                <select name="city[]" id="city" class="w-full p-2 border border-gray-300 rounded" multiple>
+                    <!-- <option value="" disabled selected>Select Schools</option> -->
+                    @foreach ($cities as $city)
+                    <option value="{{ $city }}"
+                        {{ is_array(request('city')) && in_array($city, request('city')) ? 'selected' : '' }}>
+                        {{ $city }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="school_id" class="block text-sm font-medium text-gray-700">Stage</label>
+                <select name="stage_id" id="stage_id" class="w-full p-2 border border-gray-300 rounded">
+                    <option value="">All Stages</option>
+                    @foreach ($stages as $stage)
+                    <option value="{{ $stage->id }}" {{ request('stage_id') == $stage->id ? 'selected' : '' }}>
+                        {{ $stage->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="lesson_segment_filter" class="block text-sm font-medium text-gray-700">Lesson Segment</label>
+                <select class="w-full p-2 border border-gray-300 rounded" name="lesson_segment_filter" id="lesson_segment_filter">
+                    <option value="">All</option>
+                    <option value="Beginning" {{ request('lesson_segment_filter') == 'Beginning' ? 'selected' : '' }}>Beginning</option>
+                    <option value="Middle" {{ request('lesson_segment_filter') == 'Middle' ? 'selected' : '' }}>Middle</option>
+                    <option value="End" {{ request('lesson_segment_filter') == 'End' ? 'selected' : '' }}>End</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="from_date" class="block text-sm font-medium text-gray-700">Date From</label>
+                <input type="date" name="from_date" id="from_date" class="w-full p-2 border border-gray-300 rounded" value="{{ request('from_date') }}">
+            </div>
+            <div class="mb-4">
+                <label for="to_date" class="block text-sm font-medium text-gray-700">Date To</label>
+                <input type="date" name="to_date" id="to_date" class="w-full p-2 border border-gray-300 rounded" value="{{ request('to_date') }}">
+            </div>
+            <input type="checkbox" name="include_comments" value="1" {{ request('include_comments') ? 'checked' : '' }}> Includes Comments
+            <div class="flex justify-end">
+                <button type="button" id="close-modal-btn" class="px-4 py-2 bg-gray-500 text-white rounded mr-2">Close</button>
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Apply Filters</button>
+            </div>
+        </form>
     </div>
 </div>
-
 
 @endsection
 
