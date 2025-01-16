@@ -104,18 +104,14 @@ $menuItems = [
             </tbody>
         </table>
     </div>
-
 </div>
-
-<!-- Filter Modal -->
-<div id="filter-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
-    <div
-        class="bg-white rounded-lg shadow-lg p-6 w-full sm:w-3/4 md:w-1/2 lg:w-1/3 max-h-[90vh] overflow-y-auto" style="padding:30px">
-        <h2 class="text-xl font-bold mb-4">Filters</h2>
+<div id="filter-modal">
+    <div>
+        <h2>Filters</h2>
         <form id="filter-form-modal" action="{{ route('observer.dashboard') }}" method="GET">
-            <div class="mb-4">
-                <label for="teacher_id_modal" class="block text-sm font-medium text-gray-700">Teacher</label>
-                <select name="teacher_id" id="teacher_id_modal" class="w-full p-2 border border-gray-300 rounded">
+            <div>
+                <label for="teacher_id_modal">Teacher</label>
+                <select name="teacher_id" id="teacher_id_modal">
                     <option value="">All Teachers</option>
                     @foreach ($teachers as $teacher)
                     <option value="{{ $teacher->id }}" {{ request('teacher_id') == $teacher->id ? 'selected' : '' }}>
@@ -124,9 +120,9 @@ $menuItems = [
                     @endforeach
                 </select>
             </div>
-            <div class="mb-4">
-                <label for="school_id" class="block text-sm font-medium text-gray-700">School</label>
-                <select name="school_id[]" id="school_id" class="w-full p-2 border border-gray-300 rounded" multiple>
+            <div>
+                <label for="school_id">School</label>
+                <select name="school_id[]" id="school_id" multiple>
                     <!-- <option value="" disabled selected>Select Schools</option> -->
                     @foreach ($schools as $school)
                     <option value="{{ $school->id }}"
@@ -136,9 +132,9 @@ $menuItems = [
                     @endforeach
                 </select>
             </div>
-            <div class="mb-4">
-                <label for="city" class="block text-sm font-medium text-gray-700">City</label>
-                <select name="city[]" id="city" class="w-full p-2 border border-gray-300 rounded" multiple>
+            <div>
+                <label for="city">City</label>
+                <select name="city[]" id="city" multiple>
                     <!-- <option value="" disabled selected>Select Schools</option> -->
                     @foreach ($cities as $city)
                     <option value="{{ $city }}"
@@ -149,9 +145,9 @@ $menuItems = [
                 </select>
             </div>
 
-            <div class="mb-4">
-                <label for="school_id" class="block text-sm font-medium text-gray-700">Stage</label>
-                <select name="stage_id" id="stage_id" class="w-full p-2 border border-gray-300 rounded">
+            <div>
+                <label for="school_id">Stage</label>
+                <select name="stage_id" id="stage_id">
                     <option value="">All Stages</option>
                     @foreach ($stages as $stage)
                     <option value="{{ $stage->id }}" {{ request('stage_id') == $stage->id ? 'selected' : '' }}>
@@ -160,43 +156,124 @@ $menuItems = [
                     @endforeach
                 </select>
             </div>
-            <div class="mb-4">
-                <label for="lesson_segment_filter" class="block text-sm font-medium text-gray-700">Lesson Segment</label>
-                <select class="w-full p-2 border border-gray-300 rounded" name="lesson_segment_filter" id="lesson_segment_filter">
+            <div>
+                <label for="lesson_segment_filter">Lesson Segment</label>
+                <select name="lesson_segment_filter" id="lesson_segment_filter">
                     <option value="">All</option>
                     <option value="Beginning" {{ request('lesson_segment_filter') == 'Beginning' ? 'selected' : '' }}>Beginning</option>
                     <option value="Middle" {{ request('lesson_segment_filter') == 'Middle' ? 'selected' : '' }}>Middle</option>
                     <option value="End" {{ request('lesson_segment_filter') == 'End' ? 'selected' : '' }}>End</option>
                 </select>
             </div>
-            <div class="mb-4">
+            <div>
                 <label for="from_date" class="block text-sm font-medium text-gray-700">Date From</label>
-                <input type="date" name="from_date" id="from_date" class="w-full p-2 border border-gray-300 rounded" value="{{ request('from_date') }}">
+                <input type="date" name="from_date" id="from_date" value="{{ request('from_date') }}">
             </div>
             <div class="mb-4">
                 <label for="to_date" class="block text-sm font-medium text-gray-700">Date To</label>
-                <input type="date" name="to_date" id="to_date" class="w-full p-2 border border-gray-300 rounded" value="{{ request('to_date') }}">
+                <input type="date" name="to_date" id="to_date" value="{{ request('to_date') }}">
             </div>
             <input type="checkbox" name="include_comments" value="1" {{ request('include_comments') ? 'checked' : '' }}> Includes Comments
-            <div class="flex justify-end">
-                <button type="button" id="close-modal-btn" class="px-4 py-2 bg-gray-500 text-white rounded mr-2">Close</button>
-                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Apply Filters</button>
+            <div>
+                <button type="button" id="close-modal-btn">Close</button>
+                <button type="submit">Apply Filters</button>
             </div>
         </form>
     </div>
 </div>
 
+<style>
+    #filter-modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50%;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        z-index: 1001;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #filter-modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    #filter-modal h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    #filter-modal label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+
+    #filter-modal select,
+    #filter-modal input {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    #filter-modal button {
+        padding: 0.5rem 1rem;
+        margin-top: 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #filter-modal button#close-modal-btn {
+        background-color: #ccc;
+        margin-right: 1rem;
+    }
+
+    #filter-modal button[type="submit"] {
+        background-color: #667085;
+        color: white;
+    }
+</style>
+
 @endsection
 
 @section('page_js')
 <script>
-    // Modal toggle
-    document.getElementById('filter-modal-btn').addEventListener('click', function() {
-        document.getElementById('filter-modal').classList.remove('hidden');
-    });
+    document.addEventListener("DOMContentLoaded", function() {
+        const filterModalBtn = document.getElementById("filter-modal-btn");
+        const filterModal = document.getElementById("filter-modal");
+        const filterModalOverlay = document.createElement("div");
+        filterModalOverlay.id = "filter-modal-overlay";
+        document.body.appendChild(filterModalOverlay);
 
-    document.getElementById('close-modal-btn').addEventListener('click', function() {
-        document.getElementById('filter-modal').classList.add('hidden');
+        const closeModalBtn = document.getElementById("close-modal-btn");
+
+        filterModalBtn.addEventListener("click", () => {
+            filterModal.style.display = "block";
+            filterModalOverlay.style.display = "block";
+        });
+
+        closeModalBtn.addEventListener("click", () => {
+            filterModal.style.display = "none";
+            filterModalOverlay.style.display = "none";
+        });
+
+        filterModalOverlay.addEventListener("click", () => {
+            filterModal.style.display = "none";
+            filterModalOverlay.style.display = "none";
+        });
     });
 </script>
 @endsection
