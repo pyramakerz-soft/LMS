@@ -52,7 +52,6 @@ $menuItems = [
         </button>
     </div>
     @endif
-    <p>kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk</p>
     <div class="overflow-x-auto w-full">
         <table class="w-full border border-gray-300 text-sm text-left">
             <thead class="bg-gray-100">

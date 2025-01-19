@@ -560,6 +560,10 @@ class ReportController extends Controller
                 }
             }
             $assessments = $query->get();
+
+            if ($assessments->isEmpty()) {
+                return redirect()->back()->with('error', 'No assessments found for the selected criteria.');
+            }
             $homeworkAvg = 0;
             $participationAvg = 0;
             $attendanceAvg = 0;
