@@ -202,9 +202,3 @@ $menuItems = [];
     @endif
 </div>
 </div>
-<<<<<<< HEAD
-    </div>
-    @endsection
-    =======
-    @endsection --}}
-    >>>>>>> a67e48e (edit chat)
