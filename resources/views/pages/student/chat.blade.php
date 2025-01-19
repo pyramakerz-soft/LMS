@@ -2,6 +2,128 @@
 @section('title')
     Chat
 @endsection
+@section('page_css')
+    <style>
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .chat-header {
+            background-color: #2d3748;
+            color: white;
+            padding: 16px;
+            font-size: 1.25rem;
+        }
+
+        .chat-content {
+            display: flex;
+            flex: 1;
+        }
+
+        .chat-sidebar {
+            width: 25%;
+            background-color: #edf2f7;
+            padding: 16px;
+            overflow-y: auto;
+            max-height: 700px;
+        }
+
+        .chat-sidebar h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .chat-sidebar ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        .chat-sidebar li {
+            margin-bottom: 8px;
+        }
+
+        .chat-sidebar a {
+            display: block;
+            background-color: white;
+            padding: 8px;
+            border-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        .chat-sidebar a:hover {
+            background-color: #e2e8f0;
+        }
+
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 16px;
+            background-color: #f7fafc;
+            max-height: 700px;
+        }
+
+        .sent-message,
+        .received-message {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 4px;
+            max-width: 60%;
+            word-wrap: break-word;
+        }
+
+        .sent .message {
+            background-color: #3182ce;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .received .message {
+            background-color: #edf2f7;
+        }
+
+        .chat-footer {
+            padding: 16px;
+            background-color: white;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .chat-form {
+            display: flex;
+        }
+
+        .message-input {
+            flex: 1;
+            border: 1px solid #e2e8f0;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .send-button {
+            background-color: #3182ce;
+            color: white;
+            padding: 8px 16px;
+            margin-left: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .send-button:disabled {
+            background-color: #b0c4de;
+            cursor: not-allowed;
+        }
+    </style>
+@endsection
 @php
     if (auth()->guard('student')->check()) {
         $menuItems = [
@@ -29,9 +151,9 @@
             <h1 class="text-xl">Chat</h1>
         </header>
 
-        <div class="flex flex-1">
+        <div class="chat-content">
             <!-- Left Sidebar -->
-            <div class="w-1/4 bg-gray-200 p-4 overflow-y-auto" style="max-height: 700px;">
+            <div class=" chat-sidebar w-1/4 bg-gray-200 p-4 overflow-y-auto" style="max-height: 700px;">
                 <h2 class="text-lg font-semibold mb-4">Contacts</h2>
                 @if (auth()->guard('teacher')->check())
                     <!-- List students for the teacher -->
@@ -62,7 +184,11 @@
 
             <!-- Chat Area -->
             <div class="flex-1 flex flex-col">
+<<<<<<< HEAD
                 <div id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="    max-height: 700px;"
+=======
+                <div class="chat-area" id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="    max-height: 700px;"
+>>>>>>> bc82ed6 (edit chat)
                     data-auth-id="{{ auth()->guard('student')->check() ? auth()->guard('student')->id() : auth()->guard('teacher')->id() }}"
                     data-auth-type="{{ auth()->guard('student')->check() ? 'student' : 'teacher' }}">
                     @foreach ($messages as $message)
@@ -155,7 +281,13 @@
         });
 
         setInterval(function() {
+<<<<<<< HEAD
             fetch(`https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/chat/{{ $receiver->id }}/{{ $receiverType }}/messages?last_message_id=${lastMessageId}`)
+=======
+            fetch(
+                    `https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/chat/{{ $receiver->id }}/{{ $receiverType }}/messages?last_message_id=${lastMessageId}`
+                )
+>>>>>>> bc82ed6 (edit chat)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Failed to fetch messages');
