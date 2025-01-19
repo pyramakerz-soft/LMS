@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 @section('title')
     Chat
 @endsection
@@ -62,8 +62,7 @@
 
             <!-- Chat Area -->
             <div class="flex-1 flex flex-col">
-                <div id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="    max-height: 700px;
-"
+                <div id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="    max-height: 700px;"
                     data-auth-id="{{ auth()->guard('student')->check() ? auth()->guard('student')->id() : auth()->guard('teacher')->id() }}"
                     data-auth-type="{{ auth()->guard('student')->check() ? 'student' : 'teacher' }}">
                     @foreach ($messages as $message)
@@ -120,7 +119,7 @@
             const sendButton = chatForm.querySelector('button[type="submit"]');
             sendButton.disabled = true;
 
-            fetch(`/chat/{{ $receiver->id }}/{{ $receiverType }}`, {
+            fetch(`https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/chat/{{ $receiver->id }}/{{ $receiverType }}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -156,7 +155,9 @@
         });
 
         setInterval(function() {
-            fetch(`/chat/{{ $receiver->id }}/{{ $receiverType }}/messages?last_message_id=${lastMessageId}`)
+            fetch(
+                    `https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/chat/{{ $receiver->id }}/{{ $receiverType }}/messages?last_message_id=${lastMessageId}`
+                    )
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Failed to fetch messages');
@@ -188,4 +189,4 @@
                 .catch(error => console.error('Error fetching messages:', error));
         }, 2000);
     </script>
-@endsection
+@endsection --}}

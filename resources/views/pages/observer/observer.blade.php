@@ -107,7 +107,6 @@ $menuItems = [
 
 </div>
 
-<!-- Filter Modal -->
 
 
 @endsection
