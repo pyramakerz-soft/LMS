@@ -1,4 +1,127 @@
 {{-- @extends('layouts.app')
+@section('page_css')
+    <style>
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .chat-header {
+            background-color: #2d3748;
+            color: white;
+            padding: 16px;
+            font-size: 1.25rem;
+        }
+
+        .chat-content {
+            display: flex;
+            flex: 1;
+        }
+
+        .chat-sidebar {
+            width: 25%;
+            background-color: #edf2f7;
+            padding: 16px;
+            overflow-y: auto;
+            max-height: 700px;
+        }
+
+        .chat-sidebar h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .chat-sidebar ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        .chat-sidebar li {
+            margin-bottom: 8px;
+        }
+
+        .chat-sidebar a {
+            display: block;
+            background-color: white;
+            padding: 8px;
+            border-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        .chat-sidebar a:hover {
+            background-color: #e2e8f0;
+        }
+
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 16px;
+            background-color: #f7fafc;
+            max-height: 700px;
+        }
+
+        .sent-message,
+        .received-message {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 4px;
+            max-width: 60%;
+            word-wrap: break-word;
+        }
+
+        .sent .message {
+            background-color: #3182ce;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .received .message {
+            background-color: #edf2f7;
+        }
+
+        .chat-footer {
+            padding: 16px;
+            background-color: white;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .chat-form {
+            display: flex;
+        }
+
+        .message-input {
+            flex: 1;
+            border: 1px solid #e2e8f0;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .send-button {
+            background-color: #3182ce;
+            color: white;
+            padding: 8px 16px;
+            margin-left: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .send-button:disabled {
+            background-color: #b0c4de;
+            cursor: not-allowed;
+        }
+    </style>
+@endsection
+@extends('layouts.app')
 @section('title')
     Chat
 @endsection
