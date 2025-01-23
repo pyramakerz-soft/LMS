@@ -293,22 +293,35 @@
         const schoolFields = document.getElementById('school-fields');
         const classFields = document.getElementById('class-fields');
 
-        // Function to show relevant fields based on the selected option
+        // Function to show relevant fields and set required attributes based on the selected option
         const showFields = (selectedOption) => {
-            // Hide all fields initially
+            // Hide all fields initially and remove required attributes
             teacherFields.style.display = 'none';
             schoolFields.style.display = 'none';
             classFields.style.display = 'none';
 
-            // Show the relevant fields based on the selected option
+            const allSelects = document.querySelectorAll('.comparison-fields select');
+            allSelects.forEach(select => select.removeAttribute('required'));
+
+            // Show the relevant fields and set required attributes based on the selected option
             if (selectedOption === 'teachers') {
                 schoolFields.style.display = 'block';
                 teacherFields.style.display = 'block';
+                document.getElementById('school_id').setAttribute('required', 'required');
+                document.getElementById('school_id2').setAttribute('required', 'required');
+                document.getElementById('teacher_id').setAttribute('required', 'required');
+                document.getElementById('teacher_select2').setAttribute('required', 'required');
             } else if (selectedOption === 'schools') {
                 schoolFields.style.display = 'block';
+                document.getElementById('school_id').setAttribute('required', 'required');
+                document.getElementById('school_id2').setAttribute('required', 'required');
             } else if (selectedOption === 'classes') {
                 schoolFields.style.display = 'block';
                 classFields.style.display = 'block';
+                document.getElementById('school_id').setAttribute('required', 'required');
+                document.getElementById('school_id2').setAttribute('required', 'required');
+                document.getElementById('class_id').setAttribute('required', 'required');
+                document.getElementById('class_id2').setAttribute('required', 'required');
             }
         };
 

@@ -37,7 +37,7 @@
                     </div>
                     <div class="mb-3" id="teacher_select">
                         <label for="teacher_id" class="form-label">Teacher</label>
-                        <select name="teacher_id" id="teacher_id" class="form-control">
+                        <select name="teacher_id" id="teacher_id" class="form-control" required>
                             <option selected disabled value="">Please Select School</option>
                         </select>
                     </div>
@@ -299,7 +299,7 @@
                     );
                 } else {
                     $('select[name="teacher_id"]').append(
-                        '<option selected value="" selected>All Teachers</option>'
+                        '<option selected value="" selected disabled>Select a Teacher</option>'
                     );
                     $.each(data, function(key, value) {
                         $('select[name="teacher_id"]').append(
