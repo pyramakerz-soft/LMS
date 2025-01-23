@@ -18,8 +18,6 @@ use DB;
 
 class ReportController extends Controller
 {
-
-
     public function getSchoolStudents($schoolId)
     {
         $students =  Student::where('school_id', $schoolId)->get();
