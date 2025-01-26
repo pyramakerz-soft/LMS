@@ -193,6 +193,7 @@ $menuItems = [];
     </ul>
 </div>
 
+<<<<<<< HEAD
 <!-- Pagination -->
 <div class="mt-4">
     @if (auth()->guard('teacher')->check())
@@ -202,3 +203,16 @@ $menuItems = [];
     @endif
 </div>
 </div>
+=======
+            <!-- Pagination -->
+            <div class="mt-4">
+                @if (auth()->guard('teacher')->check())
+                    {{ $students->appends(request()->query())->links() }}
+                @elseif (auth()->guard('student')->check())
+                    {{ $teachers->appends(request()->query())->links() }}
+                @endif
+            </div>
+        </div>
+    </div>
+@endsection --}}
+>>>>>>> origin/main

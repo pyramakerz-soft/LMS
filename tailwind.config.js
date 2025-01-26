@@ -5,12 +5,15 @@ export default {
         "./resources/**/*.js",
         "./resources/**/*.vue",
         // "./src/**/*.{html , js, jsx, ts , tsx}",
+<<<<<<< HEAD
         "./resources/**/*.{html , js , jsx , tsx, ts}",
         "./resources/**/*.vue",
         "./resources/**/*.js",
         "./resources/**/*.vue",
         "./src/**/*.{html , js, jsx, ts , tsx}",
         // "./src/**/*.{html , js, jsx, ts , tsx}",
+=======
+>>>>>>> origin/main
     ],
     theme: {
         extend: {

@@ -1,4 +1,5 @@
 {{-- @extends('layouts.app')
+<<<<<<< HEAD
 @section('page_css')
     <style>
         .chat-container {
@@ -122,6 +123,8 @@
     </style>
 @endsection
 @extends('layouts.app')
+=======
+>>>>>>> origin/main
 @section('title')
     Chat
 @endsection
