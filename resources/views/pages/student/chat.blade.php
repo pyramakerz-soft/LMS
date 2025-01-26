@@ -119,7 +119,7 @@
             const sendButton = chatForm.querySelector('button[type="submit"]');
             sendButton.disabled = true;
 
-            fetch(`/chat/{{ $receiver->id }}/{{ $receiverType }}`, {
+            fetch(`https://dev-pyramakerz.cloud/LMS/lms_pyramakerz/public/chat/{{ $receiver->id }}/{{ $receiverType }}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -156,7 +156,7 @@
 
         setInterval(function() {
             fetch(
-                    `/chat/{{ $receiver->id }}/{{ $receiverType }}/messages?last_message_id=${lastMessageId}`
+                    `https://dev-pyramakerz.cloud/LMS/lms_pyramakerz/public/chat/{{ $receiver->id }}/{{ $receiverType }}/messages?last_message_id=${lastMessageId}`
                 )
                 .then(response => {
                     if (!response.ok) {
