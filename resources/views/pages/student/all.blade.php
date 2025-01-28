@@ -26,7 +26,7 @@
     @include('components.sidebar', ['menuItems' => $menuItems])
 @endsection
 @section('page_css')
-    {{-- <style>
+    <style>
         .chat-card {
             max-height: 700px;
             border-radius: 10px;
@@ -108,7 +108,7 @@
         .bg-red-500:hover {
             background-color: #c53030;
         }
-    </style> --}}
+    </style>
 @endsection
 
 @section('content')
