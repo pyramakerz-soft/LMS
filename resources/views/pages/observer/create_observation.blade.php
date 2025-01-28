@@ -125,7 +125,7 @@ $menuItems = [
                         <select name="coteacher_id" id="coteacher_id" class="w-full p-2 border border-gray-300 rounded">
                             <option value="">None</option>
                             @foreach ($teachers as $teacher)
-                            <option value="{{ $teacher->id }}">{{ $teacher->username }}</option>
+                            <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
                             @endforeach
                         </select>
                     </div>
