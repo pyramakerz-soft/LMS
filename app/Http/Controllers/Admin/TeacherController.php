@@ -19,7 +19,7 @@ class TeacherController extends Controller
      */
     public function index(Request $request)
     {
-        $this->updateTeacherNames();
+        // $this->updateTeacherNames();
 
         $teacherQuery = Teacher::with('school')->whereNull('alias_id');
 
@@ -37,23 +37,23 @@ class TeacherController extends Controller
      * Show the form for creating a new resource.
      */
 
-    function updateTeacherNames()
-    {
-        // Fetch all teachers
-        $teachers = Teacher::all();
+    // function updateTeacherNames()
+    // {
+    //     // Fetch all teachers
+    //     $teachers = Teacher::all();
 
-        foreach ($teachers as $teacher) {
-            // Format the username into a name
-            if ($teacher->username) {
-                $formattedName = collect(explode('_', $teacher->username))
-                    ->map(fn($part) => ucfirst($part)) // Capitalize each part
-                    ->join(' '); // Join the parts with a space
+    //     foreach ($teachers as $teacher) {
+    //         // Format the username into a name
+    //         if ($teacher->username) {
+    //             $formattedName = collect(explode('_', $teacher->username))
+    //                 ->map(fn($part) => ucfirst($part)) // Capitalize each part
+    //                 ->join(' '); // Join the parts with a space
 
-                // Update the name column
-                $teacher->update(['name' => $formattedName]);
-            }
-        }
-    }
+    //             // Update the name column
+    //             $teacher->update(['name' => $formattedName]);
+    //         }
+    //     }
+    // }
     public function create()
     {
         $schools = School::all();
@@ -145,7 +145,7 @@ class TeacherController extends Controller
         $teacher->classes()->attach($request->input('class_id'));
 
         $teacher->stages()->attach($request->input('stage_ids'));
-
+        // dd($teacher);
         return redirect()->route('teachers.index')->with('success', 'Teacher created successfully.');
     }
     public function generate(Request $request)
