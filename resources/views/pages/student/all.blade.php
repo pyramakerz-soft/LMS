@@ -26,6 +26,8 @@
     @include('components.sidebar', ['menuItems' => $menuItems])
 @endsection
 @section('page_css')
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+
     <style>
         .chat-card {
             max-height: 700px;

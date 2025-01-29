@@ -20,6 +20,8 @@
     }
 @endphp
 @section('page_css')
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+
     <style>
         /* Header styles */
         .bg-gray-800 {
