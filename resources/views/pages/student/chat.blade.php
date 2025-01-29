@@ -94,7 +94,7 @@
                     <form id="chatForm" class="flex">
                         <input type="text" id="messageInput" class="flex-1 border rounded p-2"
                             placeholder="Type your message...">
-                        <button type="submit" style="background-color: #00f"
+                        <button type="submit" style="background-color: #ff731a"
                             class="ml-2  bg-blue-500 text-white px-4 py-2 rounded">Send</button>
                     </form>
                 </footer>
