@@ -43,7 +43,8 @@
                         @foreach ($students as $student)
                             <li class="mb-2">
                                 <a href="{{ route('chat.form', ['receiverId' => $student->id, 'receiverType' => 'student']) }}"
-                                    class="block bg-white p-2 rounded shadow hover:bg-gray-300">
+                                    class="block bg-white p-2 rounded shadow hover:bg-gray-300"
+                                    style="word-wrap: break-word;">
                                     {{ $student->username }}
                                 </a>
                             </li>
@@ -55,7 +56,8 @@
                         @foreach ($teachers as $teacher)
                             <li class="mb-2">
                                 <a href="{{ route('chat.form', ['receiverId' => $teacher->id, 'receiverType' => 'teacher']) }}"
-                                    class="block bg-white p-2 rounded shadow hover:bg-gray-300">
+                                    class="block bg-white p-2 rounded shadow hover:bg-gray-300"
+                                    style="word-wrap: break-word;">
                                     {{ $teacher->username }}
                                 </a>
                             </li>
