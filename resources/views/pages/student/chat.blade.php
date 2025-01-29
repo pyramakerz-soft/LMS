@@ -78,13 +78,16 @@
                                 $message->sender_type == (auth()->guard('student')->check() ? 'student' : 'teacher'))
                             <div class="text-right">
                                 <div class="bg-blue-500 text-white rounded p-2 mb-2 inline-block"
-                                    style="background-color: #ff731a">
+                                    style="background-color: #ff731a;     word-wrap: break-word;
+    width: 50%;">
                                     {{ $message->message }}
                                 </div>
                             </div>
                         @else
                             <div class="text-left">
-                                <div class="bg-gray-200 rounded p-2 mb-2 inline-block">
+                                <div class="bg-gray-200 rounded p-2 mb-2 inline-block"
+                                    style="    word-wrap: break-word;
+    width: 50%;">
                                     {{ $message->message }}
                                 </div>
                             </div>
