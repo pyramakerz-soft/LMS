@@ -63,7 +63,7 @@
                     </ul>
                 @endif
             </div>
-<div class="h-full">
+
             <!-- Chat Area -->
             <div class="flex-1 flex flex-col">
                 <div id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="max-height: 700px;"
@@ -99,7 +99,7 @@
                     </form>
                 </footer>
             </div>
-</div>
+
         </div>
     </div>
 @endsection
