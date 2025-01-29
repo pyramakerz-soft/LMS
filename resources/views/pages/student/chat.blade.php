@@ -35,7 +35,7 @@
 
         <div class="flex flex-1">
             <!-- Left Sidebar -->
-            <div class="w-1/3 bg-gray-200 p-4 overflow-y-auto" style="max-height: 100vh;">
+            <div class="w-1/3 bg-gray-200 p-4 overflow-y-auto" style="max-height: 95vh;">
                 <h2 class="text-lg font-semibold mb-4">Contacts</h2>
                 @if (auth()->guard('teacher')->check())
                     <!-- List students for the teacher -->
@@ -56,8 +56,7 @@
                         @foreach ($teachers as $teacher)
                             <li class="mb-2">
                                 <a href="{{ route('chat.form', ['receiverId' => $teacher->id, 'receiverType' => 'teacher']) }}"
-                                    class="block bg-white p-2 rounded shadow hover:bg-gray-300"
-                                    style="word-wrap: break-word;">
+                                    class="block bg-white p-2 rounded shadow hover:bg-gray-300" style="word-wrap: break-word;">
                                     {{ $teacher->username }}
                                 </a>
                             </li>
@@ -68,7 +67,7 @@
 
             <!-- Chat Area -->
             <div class="flex-1 flex flex-col">
-                <div id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="max-height: 100vh;"
+                <div id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="max-height: 95vh;"
                     data-auth-id="{{ auth()->guard('student')->check() ? auth()->guard('student')->id() : auth()->guard('teacher')->id() }}"
                     data-auth-type="{{ auth()->guard('student')->check() ? 'student' : 'teacher' }}">
                     @foreach ($messages as $message)
