@@ -150,7 +150,8 @@
                 .then(data => {
                     const newMessage = `
                 <div class="text-right">
-                    <div class="bg-blue-500 text-white rounded p-2 mb-2 inline-block" style="background-color: #ff731a">${message}</div>
+                    <div class="bg-blue-500 text-white rounded p-2 mb-2 inline-block" style="background-color: #ff731a;  word-wrap: break-word;
+    width: 50%;">${message}</div>
                 </div>`;
                     chatArea.innerHTML += newMessage;
 
