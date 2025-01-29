@@ -1,7 +1,6 @@
 @extends('layouts.app')
-@section('title')
-    Chat
-@endsection
+@section('title', 'Chat')
+
 @php
     if (auth()->guard('student')->check()) {
         $menuItems = [
@@ -19,93 +18,53 @@
         $menuItems = [];
     }
 @endphp
-@section('page_css')
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-@endsection
 
 @section('sidebar')
     @include('components.sidebar', ['menuItems' => $menuItems])
 @endsection
+
 @section('content')
     <div class="flex flex-col h-screen">
-        <!-- Header -->
         <header class="bg-gray-800 text-white p-4">
             <h1 class="text-xl">Chat</h1>
         </header>
 
         <div class="flex flex-1">
-            <!-- Left Sidebar -->
-            <div class="w-1/3 bg-gray-200 p-4 overflow-y-auto" style="max-height: 95vh;">
+            <div class="w-1/3 bg-gray-200 p-4 overflow-y-auto max-h-[95vh]">
                 <h2 class="text-lg font-semibold mb-4">Contacts</h2>
-                @if (auth()->guard('teacher')->check())
-                    <!-- List students for the teacher -->
-                    <ul>
-                        @foreach ($students as $student)
-                            <li class="mb-2">
-                                <a href="{{ route('chat.form', ['receiverId' => $student->id, 'receiverType' => 'student']) }}"
-                                    class="block bg-white p-2 rounded shadow hover:bg-gray-300"
-                                    style="word-wrap: break-word;">
-                                    {{ $student->username }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                @elseif (auth()->guard('student')->check())
-                    <!-- List teachers for the student -->
-                    <ul>
-                        @foreach ($teachers as $teacher)
-                            <li class="mb-2">
-                                <a href="{{ route('chat.form', ['receiverId' => $teacher->id, 'receiverType' => 'teacher']) }}"
-                                    class="block bg-white p-2 rounded shadow hover:bg-gray-300"
-                                    style="word-wrap: break-word;">
-                                    {{ $teacher->username }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
+                <ul>
+                    @foreach ($contacts as $contact)
+                        <li class="mb-2">
+                            <a href="{{ route('chat.form', ['receiverId' => $contact->id]) }}"
+                                class="block bg-white p-2 rounded shadow hover:bg-gray-300 truncate">
+                                {{ $contact->username }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
             </div>
 
-            <!-- Chat Area -->
             <div class="flex-1 flex flex-col">
-                <div id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="max-height: 95vh;"
-                    data-auth-id="{{ auth()->guard('student')->check() ? auth()->guard('student')->id() : auth()->guard('teacher')->id() }}"
-                    data-auth-type="{{ auth()->guard('student')->check() ? 'student' : 'teacher' }}">
+                <div id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100 max-h-[80vh]"
+                    data-auth-id="{{ auth()->id() }}">
                     @foreach ($messages as $message)
-                        @if (
-                            $message->sender_id ==
-                                (auth()->guard('student')->check() ? auth()->guard('student')->id() : auth()->guard('teacher')->id()) &&
-                                $message->sender_type == (auth()->guard('student')->check() ? 'student' : 'teacher'))
-                            <div class="text-right">
-                                <div class="bg-blue-500 text-white rounded p-2 mb-2 inline-block"
-                                    style="background-color: #ff731a;     word-wrap: break-word;
-    width: 50%;">
-                                    {{ $message->message }}
-                                </div>
+                        <div class="{{ $message->sender_id === auth()->id() ? 'text-right' : 'text-left' }}">
+                            <div
+                                class="p-2 mb-2 inline-block rounded-lg max-w-[70%] break-words {{ $message->sender_id === auth()->id() ? 'bg-orange-500 text-white' : 'bg-gray-200' }}">
+                                {{ $message->message }}
                             </div>
-                        @else
-                            <div class="text-left">
-                                <div class="bg-gray-200 rounded p-2 mb-2 inline-block"
-                                    style="    word-wrap: break-word;
-    width: 50%;">
-                                    {{ $message->message }}
-                                </div>
-                            </div>
-                        @endif
+                        </div>
                     @endforeach
                 </div>
 
-                <!-- Input -->
                 <footer class="p-4 bg-white border-t">
                     <form id="chatForm" class="flex">
                         <input type="text" id="messageInput" class="flex-1 border rounded p-2"
                             placeholder="Type your message...">
-                        <button type="submit" style="background-color: #ff731a"
-                            class="ml-2  bg-blue-500 text-white px-4 py-2 rounded">Send</button>
+                        <button type="submit" class="ml-2 bg-orange-500 text-white px-4 py-2 rounded">Send</button>
                     </form>
                 </footer>
             </div>
-
         </div>
     </div>
 @endsection
