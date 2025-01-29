@@ -56,7 +56,8 @@
                         @foreach ($teachers as $teacher)
                             <li class="mb-2">
                                 <a href="{{ route('chat.form', ['receiverId' => $teacher->id, 'receiverType' => 'teacher']) }}"
-                                    class="block bg-white p-2 rounded shadow hover:bg-gray-300" style="word-wrap: break-word;">
+                                    class="block bg-white p-2 rounded shadow hover:bg-gray-300"
+                                    style="word-wrap: break-word;">
                                     {{ $teacher->username }}
                                 </a>
                             </li>
@@ -76,7 +77,8 @@
                                 (auth()->guard('student')->check() ? auth()->guard('student')->id() : auth()->guard('teacher')->id()) &&
                                 $message->sender_type == (auth()->guard('student')->check() ? 'student' : 'teacher'))
                             <div class="text-right">
-                                <div class="bg-blue-500 text-white rounded p-2 mb-2 inline-block">
+                                <div class="bg-blue-500 text-white rounded p-2 mb-2 inline-block"
+                                    style="background-color: #ff731a">
                                     {{ $message->message }}
                                 </div>
                             </div>
@@ -145,7 +147,7 @@
                 .then(data => {
                     const newMessage = `
                 <div class="text-right">
-                    <div class="bg-blue-500 text-white rounded p-2 mb-2 inline-block">${message}</div>
+                    <div class="bg-blue-500 text-white rounded p-2 mb-2 inline-block" style="background-color: #ff731a">${message}</div>
                 </div>`;
                     chatArea.innerHTML += newMessage;
 
