@@ -21,19 +21,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 @endif
-                @if (!isset($chartData))
-                <div class="alert alert-danger d-flex justify-content-between align-items-center" role="alert">
-                    <span class="block sm:inline">No Submitted Assignment Found</span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                @endif
 
 
                 <form id="filter-form" action="{{ route('admin.assignmentAvgReport') }}" method="GET" enctype="multipart/form-data" class="mb-4 flex" style="gap:10px; padding:10px">
                     <div class="mb-3" id="school_select">
                         <label for="school_id" class="form-label">School</label>
-                        <select name="school_id" id="school_id" class="form-control">
-                            <option selected value="">All Schools</option>
+                        <select name="school_id" id="school_id" class="form-control" required>
+                            <option selected disabled value="">Please Select School</option>
                             @foreach ($schools as $school)
                             <option value="{{ $school->id }}" {{ request('school_id') == $school->id ? 'selected' : '' }}>
                                 {{ $school->name }}
@@ -43,7 +37,7 @@
                     </div>
                     <div class="mb-3" id="teacher_select">
                         <label for="teacher_id" class="form-label">Teacher</label>
-                        <select name="teacher_id" id="teacher_id" class="form-control">
+                        <select name="teacher_id" id="teacher_id" class="form-control" required>
                             <option selected disabled value="">Please Select School</option>
                         </select>
                     </div>
@@ -249,8 +243,6 @@
 
         $('#school_id').change(function() {
             var schoolId = $('#school_id').val();
-            // var selectedClassId = "{{$request['class_id'] ?? '' }}";
-            // var selectedStudentId = "{{$request['student_id'] ?? '' }}";
             var selectedTeacherId = "{{$request['teacher_id'] ?? '' }}";
             // getSchoolClasses(schoolId, selectedClassId);
             getSchoolTeachers(schoolId, selectedTeacherId);
@@ -307,7 +299,7 @@
                     );
                 } else {
                     $('select[name="teacher_id"]').append(
-                        '<option value="" selected>All Teachers</option>'
+                        '<option selected value="" selected disabled>Select a Teacher</option>'
                     );
                     $.each(data, function(key, value) {
                         $('select[name="teacher_id"]').append(
@@ -325,5 +317,11 @@
         });
     }
 </script>
-
+@if (!isset($chartData))
+<script>
+    const exportButton = document.getElementById('export-pdf');
+    exportButton.disabled = true;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+@endif
 @endsection

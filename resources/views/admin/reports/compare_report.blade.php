@@ -293,22 +293,35 @@
         const schoolFields = document.getElementById('school-fields');
         const classFields = document.getElementById('class-fields');
 
-        // Function to show relevant fields based on the selected option
+        // Function to show relevant fields and set required attributes based on the selected option
         const showFields = (selectedOption) => {
-            // Hide all fields initially
+            // Hide all fields initially and remove required attributes
             teacherFields.style.display = 'none';
             schoolFields.style.display = 'none';
             classFields.style.display = 'none';
 
-            // Show the relevant fields based on the selected option
+            const allSelects = document.querySelectorAll('.comparison-fields select');
+            allSelects.forEach(select => select.removeAttribute('required'));
+
+            // Show the relevant fields and set required attributes based on the selected option
             if (selectedOption === 'teachers') {
                 schoolFields.style.display = 'block';
                 teacherFields.style.display = 'block';
+                document.getElementById('school_id').setAttribute('required', 'required');
+                document.getElementById('school_id2').setAttribute('required', 'required');
+                document.getElementById('teacher_id').setAttribute('required', 'required');
+                document.getElementById('teacher_select2').setAttribute('required', 'required');
             } else if (selectedOption === 'schools') {
                 schoolFields.style.display = 'block';
+                document.getElementById('school_id').setAttribute('required', 'required');
+                document.getElementById('school_id2').setAttribute('required', 'required');
             } else if (selectedOption === 'classes') {
                 schoolFields.style.display = 'block';
                 classFields.style.display = 'block';
+                document.getElementById('school_id').setAttribute('required', 'required');
+                document.getElementById('school_id2').setAttribute('required', 'required');
+                document.getElementById('class_id').setAttribute('required', 'required');
+                document.getElementById('class_id2').setAttribute('required', 'required');
             }
         };
 
@@ -401,14 +414,41 @@
     });
 </script>
 @endif
-
+<style>
+    /* Style for dimmed options */
+    .dim-option {
+        color: gray;
+        /* Dimmed text color */
+        background-color: #ddd;
+        /* Optional: dimmed background color */
+        pointer-events: none;
+        /* Prevent interaction */
+        cursor: not-allowed;
+        /* Change cursor to indicate non-clickable */
+    }
+</style>
 <script>
     $(document).ready(function() {
         $('.js-select2').select2();
 
+        function updateOptions(selectedValue, selectToUpdate) {
+            // Enable all options first
+            $(`#${selectToUpdate} option`).prop("disabled", false);
+
+            // Disable the matching option in the other select
+            if (selectedValue) {
+                $(`#${selectToUpdate} option[value="${selectedValue}"]`)
+                    .prop("disabled", true)
+                    .addClass("dim-option");
+            }
+        }
+
+
+
         $('#school_id').change(function() {
             var schoolId = $('#school_id').val();
             var compareBy = $('#compare_by').val();
+            updateOptions(schoolId, "school_id2");
 
             switch (compareBy) {
                 case 'classes':
@@ -426,6 +466,7 @@
         $('#school_id2').change(function() {
             var schoolId2 = $('#school_id2').val();
             var compareBy = $('#compare_by').val();
+            updateOptions(schoolId2, "school_id");
 
             switch (compareBy) {
                 case 'classes':
@@ -579,4 +620,11 @@
         });
     }
 </script>
+@if (!isset($chartData))
+<script>
+    const exportButton = document.getElementById('export-pdf');
+    exportButton.disabled = true;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+@endif
 @endsection

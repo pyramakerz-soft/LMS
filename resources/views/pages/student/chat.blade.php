@@ -19,6 +19,10 @@
         $menuItems = [];
     }
 @endphp
+@section('page_css')
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+@endsection
+
 @section('sidebar')
     @include('components.sidebar', ['menuItems' => $menuItems])
 @endsection
@@ -62,7 +66,7 @@
 
             <!-- Chat Area -->
             <div class="flex-1 flex flex-col">
-                <div id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="    max-height: 700px;"
+                <div id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="max-height: 700px;"
                     data-auth-id="{{ auth()->guard('student')->check() ? auth()->guard('student')->id() : auth()->guard('teacher')->id() }}"
                     data-auth-type="{{ auth()->guard('student')->check() ? 'student' : 'teacher' }}">
                     @foreach ($messages as $message)
@@ -157,7 +161,7 @@
         setInterval(function() {
             fetch(
                     `/chat/{{ $receiver->id }}/{{ $receiverType }}/messages?last_message_id=${lastMessageId}`
-                    )
+                )
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Failed to fetch messages');

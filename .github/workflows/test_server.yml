@@ -31,17 +31,11 @@ jobs:
           -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd domains/dev-pyramakerz.cloud/public_html/LMS/lms_pyramakerz/
 
-            echo "Starting deployment at $(date)..."
-
-            # Clean up any unmerged changes
-            git reset --merge || git reset --hard
-
-            # Pull the latest changes from Ragal
+            # Fetch and pull only the Ragal branch
+            git fetch origin Ragal || exit 1
+            git checkout Ragal || exit 1
             git pull origin Ragal || exit 1
-
-            # Merge main into Ragal for testing
-            git fetch origin main || exit 1
-            git merge origin/main || exit 1
+            
 
             # Install dependencies and optimize the application
             if [ -f "composer.phar" ]; then

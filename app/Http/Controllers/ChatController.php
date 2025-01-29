@@ -19,17 +19,19 @@ class ChatController extends Controller
         $students = collect();
         $teachers = collect();
         $classes = collect();
-        $perPage = 15; 
+        $perPage = 10; // Number of results per page
 
         if (auth()->guard('teacher')->check()) {
             $userId = auth()->guard('teacher')->user()->id;
 
+            // Get the classes assigned to the teacher
             $classes = TeacherClass::where('teacher_id', $userId)->with('class')->get();
 
+            // Filter and sort students
             $classId = $request->query('class_id');
             $search = $request->query('search');
-            $sortBy = $request->query('sort_by', 'username'); 
-            $sortOrder = $request->query('sort_order', 'asc'); 
+            $sortBy = $request->query('sort_by', 'username'); // Default sort by 'username'
+            $sortOrder = $request->query('sort_order', 'asc'); // Default order 'asc'
 
             $studentsQuery = Student::query();
 
@@ -47,17 +49,19 @@ class ChatController extends Controller
         } elseif (auth()->guard('student')->check()) {
             $userId = auth()->guard('student')->user()->id;
 
+            // Get the student's class
             $student = Student::find($userId);
 
             if (!$student) {
                 abort(404, 'Student not found');
             }
 
+            // Filter and sort teachers
             $teachersQuery = Teacher::query();
             $teachers = $teachersQuery->whereHas('classes', function ($query) use ($student) {
                 $query->where('class_id', $student->class_id);
             })
-                ->orderBy('username', 'asc') 
+                ->orderBy('username', 'asc') // Default sort for teachers
                 ->paginate($perPage);
         } else {
             abort(403, 'Unauthorized access');
@@ -117,6 +121,7 @@ class ChatController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
+        // Get the last message ID
         $lastMessageId = $messages->last() ? $messages->last()->id : 0;
 
         return view('pages.student.chat', compact('receiver', 'receiverType', 'messages', 'students', 'teachers', 'lastMessageId'));
@@ -160,7 +165,7 @@ class ChatController extends Controller
                     ->where('receiver_id', $userId)
                     ->where('receiver_type', $userType);
             })
-            ->where('id', '>', $lastMessageId)
+            ->where('id', '>', $lastMessageId) // Fetch only messages after last_message_id
             ->orderBy('created_at', 'asc')
             ->get();
 

@@ -31,6 +31,7 @@
                                 <button id="filter-modal-btn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filter-modal">Filters</button>
                             </div>
                         </div>
+                        @if (isset($data))
                         <div class="d-flex mb-4" style="gap: 10px; padding: 10px; justify-content: space-between;">
                             <div class="flex-grow-1" style="max-width: 75%;">
                                 <div class="questions mb-3" style="max-width: 100%;">
@@ -82,6 +83,9 @@
                                 </div>
                             </div>
                         </div>
+                        @else
+                        <p>No Observation Questions Found</p>
+                        @endif
                     </div>
                 </div>
 
@@ -257,4 +261,13 @@
         XLSX.writeFile(workbook, 'Observations_Report.xlsx');
     });
 </script>
+@if (!isset($data))
+<script>
+    const exportButton = document.getElementById('export-pdf');
+    const filterButton = document.getElementById('filter-modal-btn');
+    exportButton.disabled = true;
+    filterButton.disabled = true;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+@endif
 @endsection
