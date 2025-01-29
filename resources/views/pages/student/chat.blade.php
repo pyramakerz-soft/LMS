@@ -123,7 +123,7 @@
             const sendButton = chatForm.querySelector('button[type="submit"]');
             sendButton.disabled = true;
 
-            fetch(`/chat/{{ $receiver->id }}/{{ $receiverType }}`, {
+            fetch(`https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/chat/{{ $receiver->id }}/{{ $receiverType }}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
