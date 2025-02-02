@@ -35,7 +35,7 @@ $menuItems = [];
 
     <div class="flex flex-1">
         <!-- Left Sidebar -->
-        <div class="w-1/3 bg-gray-200 p-4 overflow-y-auto" style="max-height: 95vh;">
+        <div class="w-1/3 bg-gray-200 p-4" style="max-height: 95vh;">
             <h2 class="text-lg font-semibold mb-4">Contacts</h2>
             @if (auth()->guard('teacher')->check())
             <!-- List students for the teacher -->
