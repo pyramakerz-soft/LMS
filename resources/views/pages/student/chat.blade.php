@@ -36,14 +36,15 @@
                 @if (auth()->guard('teacher')->check())
                     <!-- List students for the teacher -->
                     <ul>
-                        @foreach ($students as $student)
-                            <li class="mb-2">
-                                <a href="{{ route('chat.form', ['receiverId' => $student->id, 'receiverType' => 'student']) }}"
-                                    class="block bg-white p-2 rounded shadow hover:bg-gray-300">
-                                    {{ $student->username }}
-                                </a>
-                            </li>
-                        @endforeach
+                    @foreach ($students as $student)
+                    <li class="mb-2">
+                        <a href="{{ route('chat.form', ['receiverId' => $student->id, 'receiverType' => 'student']) }}"
+                            class="block bg-white p-2 rounded shadow hover:bg-gray-300"
+                            title="{{ $student->username }}">
+                            {{ \Illuminate\Support\Str::limit($student->username, 25, '...') }}
+                        </a>
+                    </li>
+                    @endforeach
                     </ul>
                 @elseif (auth()->guard('student')->check())
                     <!-- List teachers for the student -->
@@ -51,8 +52,9 @@
                         @foreach ($teachers as $teacher)
                             <li class="mb-2">
                                 <a href="{{ route('chat.form', ['receiverId' => $teacher->id, 'receiverType' => 'teacher']) }}"
-                                    class="block bg-white p-2 rounded shadow hover:bg-gray-300">
-                                    {{ $teacher->username }}
+                                    class="block bg-white p-2 rounded shadow hover:bg-gray-300"
+                                    title="{{ $teacher->username }}">>
+                                    {{ \Illuminate\Support\Str::limit($teacher->username, 25, '...') }}
                                 </a>
                             </li>
                         @endforeach
