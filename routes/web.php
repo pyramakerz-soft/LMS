@@ -52,6 +52,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('landing'); // Displays the landing page
 })->name('landing');
+Route::get('/chats', [ChatController::class, 'viewAllChats'])->name('chat.all');
+
+Route::get('/chat/{receiverId}/{receiverType}', [ChatController::class, 'chatForm'])->name('chat.form');
+Route::post('/chat/{receiverId}/{receiverType}', [ChatController::class, 'sendMessage'])->name('chat.send');
+Route::get('/chat/{receiverId}/{receiverType}/messages', [ChatController::class, 'fetchMessages']);
+
+
+Route::get('/chat/{receiverId}/{receiverType}', [ChatController::class, 'chatForm'])->name('chat.form');
+Route::post('/chat/{receiverId}/{receiverType}', [ChatController::class, 'sendMessage'])->name('chat.send');
+Route::get('/chat/{receiverId}/{receiverType}/messages', [ChatController::class, 'fetchMessages']);
+
 
 
 
@@ -87,6 +98,8 @@ Route::prefix('admin')->group(function () {
         Route::post('/questions/store', [ObserverController::class, 'storeQuestion'])->name('questions.storeQuestion');
         Route::delete('/headers/{id}', [ObserverController::class, 'deleteHeader'])->name('headers.deleteHeader');
         Route::post('/headers/store', [ObserverController::class, 'storeHeader'])->name('headers.storeHeader');
+        Route::post('/headers/edit', [ObserverController::class, 'editHeader'])->name('headers.editHeader');
+        Route::post('/questions/edit', [ObserverController::class, 'editQuestion'])->name('questions.editQuestion');
 
 
         Route::resource('observers', ObserverController::class);
@@ -289,13 +302,6 @@ Route::prefix('observer')->middleware('auth:observer')->group(function () {
     Route::get('/observation/view/{id}', [ObserverDashboardController::class, 'view'])->name('observation.view');
 });
 
-
-
-Route::get('/teacher/chat', [ChatController::class, 'index'])->name('teacher.chat');
-Route::post('/teacher/chat/send', [ChatController::class, 'sendMessage'])->name('teacher.chat.send');
-
-Route::get('/student/chat', [ChatController::class, 'studentIndex'])->name('student.chat');
-Route::get('/teacher/chat/messages/{student}', [ChatController::class, 'fetchMessages'])->name('teacher.chat.messages');
 
 
 

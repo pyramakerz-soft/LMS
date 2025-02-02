@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +17,8 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .navbar-brand, .nav-link {
+        .navbar-brand,
+        .nav-link {
             color: #f97233 !important;
             font-weight: bold;
         }
@@ -93,19 +95,21 @@
         }
     </style>
 </head>
+
 <body>
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="https://pyramakerz.com/">Pyramakerz LMS</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('login')}}">Login</a>
+                        <a class="nav-link" href="{{ route('login') }}">Login</a>
                     </li>
                 </ul>
             </div>
@@ -117,7 +121,7 @@
         <div class="container">
             <h1>Pyramakerz LMS</h1>
             <p>Empowering digital learning from PreK1 to Grade 12 with cutting-edge technology.</p>
-            <a href="{{route('login')}}" class="btn btn-custom btn-lg">Login Now</a>
+            <a href="{{ route('login') }}" class="btn btn-custom btn-lg">Login Now</a>
         </div>
     </header>
 
@@ -130,8 +134,10 @@
                     <div class="card-header">About Pyramakerz LMS</div>
                     <div class="card-body">
                         <p>
-                            Pyramakerz LMS is designed to provide a seamless digital learning experience for students, teachers, and administrators. 
-                            It offers a wide range of tools for managing eBooks, quizzes, assignments, and more, making it an essential platform 
+                            Pyramakerz LMS is designed to provide a seamless digital learning experience for students,
+                            teachers, and administrators.
+                            It offers a wide range of tools for managing eBooks, quizzes, assignments, and more, making
+                            it an essential platform
                             for modern education.
                         </p>
                     </div>
@@ -144,11 +150,16 @@
                     <div class="card-header">Key Features</div>
                     <div class="card-body">
                         <ul>
-                            <li><strong>Digital Learning Resources:</strong> Access eBooks, quizzes, and assignments from any device.</li>
-                            <li><strong>Assignment Management:</strong> Teachers can assign tasks and monitor student progress with ease.</li>
-                            <li><strong>Performance Analytics:</strong> Real-time data allows schools to analyze student performance.</li>
-                            <li><strong>Customizable Curriculum:</strong> Design lessons, courses, and assessments tailored to student needs.</li>
-                            <li><strong>Interactive Classrooms:</strong> Engage students with interactive lessons and quizzes.</li>
+                            <li><strong>Digital Learning Resources:</strong> Access eBooks, quizzes, and assignments
+                                from any device.</li>
+                            <li><strong>Assignment Management:</strong> Teachers can assign tasks and monitor student
+                                progress with ease.</li>
+                            <li><strong>Performance Analytics:</strong> Real-time data allows schools to analyze student
+                                performance.</li>
+                            <li><strong>Customizable Curriculum:</strong> Design lessons, courses, and assessments
+                                tailored to student needs.</li>
+                            <li><strong>Interactive Classrooms:</strong> Engage students with interactive lessons and
+                                quizzes.</li>
                         </ul>
                     </div>
                 </div>
@@ -160,9 +171,12 @@
             <div class="card-header">Why Choose Pyramakerz LMS?</div>
             <div class="card-body">
                 <p>
-                    Pyramakerz LMS is not just a platform—it’s a complete digital learning ecosystem. With seamless integration, 
-                    real-time performance metrics, and a user-friendly interface, it empowers educators to create immersive learning 
-                    experiences. Whether you’re a teacher managing multiple classrooms or a student accessing learning materials on the go, 
+                    Pyramakerz LMS is not just a platform—it’s a complete digital learning ecosystem. With seamless
+                    integration,
+                    real-time performance metrics, and a user-friendly interface, it empowers educators to create
+                    immersive learning
+                    experiences. Whether you’re a teacher managing multiple classrooms or a student accessing learning
+                    materials on the go,
                     our LMS simplifies the process for all users.
                 </p>
             </div>
@@ -171,9 +185,11 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2024 Pyramakerz LMS. All Rights Reserved. Visit us at <a href="https://pyramakerz.com/">pyramakerz.com</a></p>
+        <p>&copy; 2024 Pyramakerz LMS. All Rights Reserved. Visit us att: <a
+                href="https://pyramakerz.com/">pyramakerz.com</a></p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

@@ -7,8 +7,9 @@
 @php
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
-       
+
         ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
+        ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
     ];
 @endphp
 
@@ -38,7 +39,7 @@
 
                         <!-- Chapter Image -->
                         <div class="p-4">
-                            <img src="{{ $chapter->image ? asset('storage/' . $chapter->image) : asset('images/defaultCard.webp')  }}"
+                            <img src="{{ $chapter->image ? asset('storage/' . $chapter->image) : asset('images/defaultCard.webp') }}"
                                 alt="{{ $chapter->title }}" class="object-cover w-full h-32 rounded-md">
                         </div>
                     </div>

@@ -1,0 +1,220 @@
+name: Sync Laravel with Hostinger
+
+on:
+  push:
+    branches:
+      - Ragal
+
+  schedule:
+    - cron: '0 9 * * *'
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install SSH Client
+        run: sudo apt-get install -y sshpass
+
+      - name: Sync Files via SSH and Capture Metrics
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          set -e
+
+          METRICS=$(sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -T -o StrictHostKeyChecking=no \
+          -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd domains/dev-pyramakerz.cloud/public_html/LMS/lms_pyramakerz/
+
+            # Fetch and pull only the Ragal branch
+            git fetch origin Ragal || exit 1
+            git checkout Ragal || exit 1
+            git pull origin Ragal || exit 1
+            
+
+            # Install dependencies and optimize the application
+            if [ -f "composer.phar" ]; then
+              php composer.phar install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+            else
+              composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+            fi
+
+            # Cache configurations and migrations
+            php artisan config:cache || echo "Config cache failed"
+            php artisan route:cache || echo "Route cache failed"
+            php artisan view:cache || echo "View cache failed"
+            php artisan migrate --force || echo "Migrations failed"
+
+            # Metrics collection
+            CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')
+            MEM=$(free -m | awk 'NR==2{printf "%.2f", $3*100/$2 }')
+            DISK=$(df -h / | awk '$NF=="/"{printf "%d", $5}')
+
+            echo "CPU=$CPU"
+            echo "MEM=$MEM"
+            echo "DISK=$DISK"
+          EOF
+          )
+
+          echo "Captured Metrics: $METRICS"
+
+          CPU=$(echo "$METRICS" | grep "CPU=" | cut -d'=' -f2)
+          MEM=$(echo "$METRICS" | grep "MEM=" | cut -d'=' -f2)
+          DISK=$(echo "$METRICS" | grep "DISK=" | cut -d'=' -f2)
+
+          echo "Parsed CPU=$CPU, MEM=$MEM, DISK=$DISK"
+
+          if [ -z "$CPU" ] || [ -z "$MEM" ] || [ -z "$DISK" ]; then
+            echo "Failed to capture valid metrics"
+            exit 1
+          fi
+
+          echo "CPU=$CPU" >> $GITHUB_ENV
+          echo "MEM=$MEM" >> $GITHUB_ENV
+          echo "DISK=$DISK" >> $GITHUB_ENV
+
+      - name: Health Check (Login and Admin Page)
+        run: |
+          # Step 1: Get CSRF token from the admin login page and store cookies
+          CSRF_TOKEN=$(curl -s -c cookies.txt \
+            https://dev-pyramakerz.cloud/LMS/lms_pyramakerz/public/admin/login | \
+            grep -oP '(?<=name="_token" value=")[^"]+')
+
+          if [ -z "$CSRF_TOKEN" ]; then
+            echo "Failed to retrieve CSRF token"
+            exit 1
+          fi
+
+          echo "CSRF Token: $CSRF_TOKEN"
+
+          # Step 2: Log in and maintain session cookies
+          LOGIN_RESPONSE=$(curl -L -s -b cookies.txt -c cookies.txt -X POST \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -H "Referer: https://dev-pyramakerz.cloud/LMS/lms_pyramakerz/public/admin/login" \
+            --data-urlencode "email=admin@admin.com" \
+            --data-urlencode "password=123456789" \
+            --data-urlencode "_token=$CSRF_TOKEN" \
+            https://dev-pyramakerz.cloud/LMS/lms_pyramakerz/public/admin/loginP)
+
+          echo "Login Response: $LOGIN_RESPONSE"
+
+          # Step 3: Follow redirect and verify final destination
+          REDIRECT_CHECK=$(curl -L -s -b cookies.txt -o /dev/null -w "%{url_effective}" \
+            https://dev-pyramakerz.cloud/LMS/lms_pyramakerz/public/admin)
+
+          echo "Redirected to: $REDIRECT_CHECK"
+
+          if ! echo "$REDIRECT_CHECK" | grep -q "/admin"; then
+            echo "Login failed. Not redirected to the expected admin page."
+            exit 1
+          fi
+
+          echo "Login successful and redirected to the admin page."
+
+          # Step 4: Access the admin page with session cookie
+          ADMIN_RESPONSE=$(curl -s -b cookies.txt -o /dev/null -w "%{http_code}" \
+            https://dev-pyramakerz.cloud/LMS/lms_pyramakerz/public/admin/admins)
+
+          echo "Health Check Response: $ADMIN_RESPONSE"
+
+          if [ "$ADMIN_RESPONSE" != "200" ]; then
+            echo "Health check failed with status $ADMIN_RESPONSE"
+            exit 1
+          fi
+
+          echo "RESPONSE=$ADMIN_RESPONSE" >> $GITHUB_ENV
+
+      - name: Send Slack Notification
+        if: always()  # Run on both success and failure
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          CPU=${{ env.CPU }}
+          MEM=${{ env.MEM }}
+          DISK=${{ env.DISK }}
+          STATUS="❌ Failed"
+          COLOR="danger"
+
+          if [ "${{ env.RESPONSE }}" == "200" ]; then
+            STATUS="✅ Successful"
+            COLOR="good"
+          fi
+
+          curl -X POST -H 'Content-type: application/json' --data '{
+            "text": "Health Check Report: *'"$STATUS"'*",
+            "attachments": [
+              {
+                "color": "'"$COLOR"'",
+                "fields": [
+                  { "title": "Environment", "value": "Production", "short": true },
+                  { "title": "Status", "value": "'"$STATUS"'", "short": true },
+                  { "title": "Admin Response", "value": "'"${{ env.RESPONSE }}"'", "short": true },
+                  { "title": "CPU Usage (%)", "value": "'"$CPU"'", "short": true },
+                  { "title": "Memory Usage (%)", "value": "'"$MEM"'", "short": true },
+                  { "title": "Disk Usage (%)", "value": "'"$DISK"'", "short": true }
+                ]
+              }
+            ]
+          }' $SLACK_WEBHOOK
+
+      - name: Send Monitoring Data to Slack
+        if: success() || failure()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          STATUS=$(if [ $? -eq 0 ]; then echo '✅ Successful'; else echo '❌ Failed'; fi)
+          COLOR=$(if [ $? -eq 0 ]; then echo 'good'; else echo 'danger'; fi)
+          DEPLOYER="@${{ github.actor }}"
+
+          CPU=${{ env.CPU }}
+          MEM=${{ env.MEM }}
+          DISK=${{ env.DISK }}
+          RESPONSE=${{ env.RESPONSE }}
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          COMMIT_HASH="${{ github.event.head_commit.id }}"
+
+          curl -X POST -H "Content-type: application/json" --data '{
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Deployment Status:* '"$STATUS"'"
+                }
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "section",
+                "fields": [
+                  { "type": "mrkdwn", "text": "*Branch:* Ragal" },
+                  { "type": "mrkdwn", "text": "*User:* '"$DEPLOYER"'" },
+                  { "type": "mrkdwn", "text": "*Commit:* '"${COMMIT_HASH:0:7}"'" },
+                  { "type": "mrkdwn", "text": "*Commit Message:* '"$COMMIT_MSG"'" }
+                ]
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "context",
+                "elements": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "Deployment completed on: '"$(date)"'"
+                  }
+                ]
+              }
+            ],
+            "attachments": [
+              {
+                "color": "'"$COLOR"'"
+              }
+            ]
+          }' $SLACK_WEBHOOK
