@@ -67,7 +67,7 @@ $menuItems = [];
         </div>
 
         <!-- Chat Area -->
-        <div class="flex-1">
+        <div class="w-2/3">
             <div class="flex flex-col h-full">
                 <div id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="max-height: 95vh;"
                     data-auth-id="{{ auth()->guard('student')->check() ? auth()->guard('student')->id() : auth()->guard('teacher')->id() }}"
