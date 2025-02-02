@@ -139,8 +139,12 @@ class ObserverController extends Controller
             }
             $data[$header->id]['questions'] = $headerQuestions;
         }
-        // dd($data);
-        return view('admin.observers.observation_questions', compact('observers', 'data'));
+        if (isset($data)) {
+            return view('admin.observers.observation_questions', compact('observers', 'data'));
+        } else {
+
+            return view('admin.observers.observation_questions', compact('observers'));
+        }
     }
     public function deleteQuestion($id)
     {
@@ -175,6 +179,35 @@ class ObserverController extends Controller
             'header' => $request->name,
         ]);
         return redirect()->route('observers.addQuestions')->with('success', 'Header added successfully.');
+    }
+    public function editHeader(Request $request)
+    {
+        $request->validate([
+            'header_name' => 'required|string',
+        ]);
+        $obs  = ObservationHeader::findOrFail($request->header_id);
+
+        $obs->update([
+            'header' => $request->header_name,
+        ]);
+
+        return redirect()->route('observers.addQuestions')->with('success', 'Header Updated successfully.');
+    }
+    public function editQuestion(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            'question_name' => 'required|string',
+            'max_rating' => 'required|integer|min:1',
+        ]);
+        $obs  = ObservationQuestion::findOrFail($request->question_id);
+
+        $obs->update([
+            'question' => $request->question_name,
+            'max_rate' => $request->max_rating,
+        ]);
+
+        return redirect()->route('observers.addQuestions')->with('success', 'Question Updated successfully.');
     }
 
     public function deleteHeader($id)
@@ -275,13 +308,17 @@ class ObserverController extends Controller
             $headerId = ObservationQuestion::find($history->question_id)->observation_header_id;
             $data[$headerId]['questions'][$history->question_id]['avg_rating'] += $history->rate;
         }
-
-        foreach ($data as $header) {
-            foreach ($header['questions'] as $question) {
-                $data[$header['header_id']]['questions'][$question['question_id']]['avg_rating'] = round($data[$header['header_id']]['questions'][$question['question_id']]['avg_rating'] / $obsCount, 2);
+        if (isset($data)) {
+            foreach ($data as $header) {
+                foreach ($header['questions'] as $question) {
+                    $data[$header['header_id']]['questions'][$question['question_id']]['avg_rating'] = round($data[$header['header_id']]['questions'][$question['question_id']]['avg_rating'] / $obsCount, 2);
+                }
             }
+            $cities = School::distinct()->whereNotNull('city')->pluck('city');
+            return view('admin.observers.observation_report_admin', compact('stages', 'cities', 'teachers', 'observers', 'schools', 'headers', 'data'));
+        } else {
+            $cities = School::distinct()->whereNotNull('city')->pluck('city');
+            return view('admin.observers.observation_report_admin', compact('stages', 'cities', 'teachers', 'observers', 'schools', 'headers'));
         }
-        $cities = School::distinct()->whereNotNull('city')->pluck('city');
-        return view('admin.observers.observation_report_admin', compact('stages', 'cities', 'teachers', 'observers', 'schools', 'headers', 'data'));
     }
 }
