@@ -67,41 +67,43 @@ $menuItems = [];
         </div>
 
         <!-- Chat Area -->
-        <div class="flex flex-col flex-1">
-            <div id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="max-height: 95vh;"
-                data-auth-id="{{ auth()->guard('student')->check() ? auth()->guard('student')->id() : auth()->guard('teacher')->id() }}"
-                data-auth-type="{{ auth()->guard('student')->check() ? 'student' : 'teacher' }}">
-                @foreach ($messages as $message)
-                @if (
-                $message->sender_id ==
-                (auth()->guard('student')->check() ? auth()->guard('student')->id() : auth()->guard('teacher')->id()) &&
-                $message->sender_type == (auth()->guard('student')->check() ? 'student' : 'teacher'))
-                <div class="text-right">
-                    <div class="bg-blue-500 text-white rounded p-2 mb-2 inline-block"
-                        style="background-color: #ff731a;     word-wrap: break-word;
-    width: 50%;">
-                        {{ $message->message }}
+        <div class="flex-1">
+            <div class="flex flex-col h-full">
+                <div id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="max-height: 95vh;"
+                    data-auth-id="{{ auth()->guard('student')->check() ? auth()->guard('student')->id() : auth()->guard('teacher')->id() }}"
+                    data-auth-type="{{ auth()->guard('student')->check() ? 'student' : 'teacher' }}">
+                    @foreach ($messages as $message)
+                    @if (
+                    $message->sender_id ==
+                    (auth()->guard('student')->check() ? auth()->guard('student')->id() : auth()->guard('teacher')->id()) &&
+                    $message->sender_type == (auth()->guard('student')->check() ? 'student' : 'teacher'))
+                    <div class="text-right">
+                        <div class="bg-blue-500 text-white rounded p-2 mb-2 inline-block"
+                            style="background-color: #ff731a;     word-wrap: break-word;
+        width: 50%;">
+                            {{ $message->message }}
+                        </div>
                     </div>
-                </div>
-                @else
-                <div class="text-left">
-                    <div class="bg-gray-200 rounded p-2 mb-2 inline-block"
-                        style="    word-wrap: break-word;
-    width: 50%;">
-                        {{ $message->message }}
+                    @else
+                    <div class="text-left">
+                        <div class="bg-gray-200 rounded p-2 mb-2 inline-block"
+                            style="    word-wrap: break-word;
+        width: 50%;">
+                            {{ $message->message }}
+                        </div>
                     </div>
+                    @endif
+                    @endforeach
                 </div>
-                @endif
-                @endforeach
-            </div>
-            <!-- Input -->
-            <div class="p-4 bg-white border-t">
-                <form id="chatForm" class="flex">
-                    <input type="text" id="messageInput" class="flex-1 border rounded p-2"
-                        placeholder="Type your message...">
-                    <button type="submit" style="background-color: #ff731a"
-                        class="ml-2  bg-blue-500 text-white px-4 py-2 rounded">Send</button>
-                </form>
+
+                <div class="p-4 bg-white border-t">
+                    <form id="chatForm" class="flex">
+                        <input type="text" id="messageInput" class="flex-1 border rounded p-2"
+                            placeholder="Type your message...">
+                        <button type="submit" style="background-color: #ff731a"
+                            class="ml-2  bg-blue-500 text-white px-4 py-2 rounded">Send</button>
+                    </form>
+                </div>
             </div>
         </div>
 
