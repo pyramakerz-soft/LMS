@@ -45,6 +45,6 @@ class Lesson extends Model
     }
     public function getFilePathAttribute($val)
     {
-        return ($val !== null) ? Storage::disk('s3')->url($val) : "";
+        return ($val !== null) ? Storage::disk('s3')->url("pyra-public/ebooks/$val/index.html") : "";
     }
 }

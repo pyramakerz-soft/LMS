@@ -44,6 +44,7 @@ class Teacher extends Authenticatable
 //     }
     public function getImageAttribute($val)
     {
-        return ($val !== null) ? Storage::disk('s3')->url($val) : "";
+        return ($val !== null) ? Storage::disk('s3')->url("pyra-public/$val") : "";
+
     }
 }
