@@ -85,6 +85,14 @@ class AdminController extends Controller
             'classes.*.stage_id' => 'required|exists:stages,id', // Validate each class's stage_id
         ]);
 
+        $existingSchool = School::where('name', $request->name)
+            ->where('address', $request->address)
+            ->first();
+
+        if ($existingSchool) {
+            return redirect()->back()->withErrors(['error' => 'This school already exists!']);
+        }
+
         // Create the school
         $school = School::create([
             'name' => $request->name,
