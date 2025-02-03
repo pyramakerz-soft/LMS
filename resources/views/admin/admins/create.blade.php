@@ -84,14 +84,14 @@
 
 
 
-                        <button type="submit" class="btn btn-primary mt-5">Add School</button>
+                        <button type="submit" id="submit-btn" class="btn btn-primary mt-5">Add School</button>
                     </form>
 
 
                 </div>
             </main>
 
-             
+
         </div>
     </div>
 @endsection
@@ -99,27 +99,27 @@
 @section('page_js')
     <script>
         $(document).ready(function() {
-    $('#stage_id').select2({
-        placeholder: "Select Grades",
-        allowClear: true
-    });
+            $('#stage_id').select2({
+                placeholder: "Select Grades",
+                allowClear: true
+            });
 
-    const addClassBtn = document.getElementById('add-class-btn');
-    const classContainer = document.getElementById('class-container');
-    let classCount = 0;
+            const addClassBtn = document.getElementById('add-class-btn');
+            const classContainer = document.getElementById('class-container');
+            let classCount = 0;
 
-    function addClassField(stages) {
-        classCount++;
-        const classGroup = document.createElement('div');
-        classGroup.classList.add('class-group', 'mb-3');
-        classGroup.setAttribute('id', `class-group-${classCount}`);
+            function addClassField(stages) {
+                classCount++;
+                const classGroup = document.createElement('div');
+                classGroup.classList.add('class-group', 'mb-3');
+                classGroup.setAttribute('id', `class-group-${classCount}`);
 
-        let stageOptions = '';
-        stages.forEach(stage => {
-            stageOptions += `<option value="${stage.id}">${stage.text}</option>`;
-        });
+                let stageOptions = '';
+                stages.forEach(stage => {
+                    stageOptions += `<option value="${stage.id}">${stage.text}</option>`;
+                });
 
-        classGroup.innerHTML = `
+                classGroup.innerHTML = `
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="mb-3">
@@ -137,41 +137,52 @@
             </div>
         `;
 
-        classContainer.appendChild(classGroup);
+                classContainer.appendChild(classGroup);
 
-        classGroup.querySelector('.remove-class-btn').addEventListener('click', function() {
-            const classId = this.getAttribute('data-class-id');
-            document.getElementById(`class-group-${classId}`).remove();
+                classGroup.querySelector('.remove-class-btn').addEventListener('click', function() {
+                    const classId = this.getAttribute('data-class-id');
+                    document.getElementById(`class-group-${classId}`).remove();
+                });
+            }
+
+            $('#stage_id').on('change', function() {
+                const selectedStages = $('#stage_id').select2('data'); // Get selected stages
+                if (selectedStages.length > 0) {
+                    addClassBtn.disabled = false;
+                } else {
+                    addClassBtn.disabled = true;
+                }
+
+                classContainer.innerHTML = '';
+            });
+
+            addClassBtn.addEventListener('click', function() {
+                const selectedStages = $('#stage_id').select2('data');
+                if (selectedStages.length > 0) {
+                    const formattedStages = selectedStages.map(stage => ({
+                        id: stage.id,
+                        text: stage.text
+                    }));
+                    addClassField(formattedStages);
+                }
+            });
         });
-    }
-
-    $('#stage_id').on('change', function() {
-        const selectedStages = $('#stage_id').select2('data'); // Get selected stages
-        if (selectedStages.length > 0) {
-            addClassBtn.disabled = false;
-        } else {
-            addClassBtn.disabled = true;
-        }
-
-        classContainer.innerHTML = '';
-    });
-
-    addClassBtn.addEventListener('click', function() {
-        const selectedStages = $('#stage_id').select2('data');
-        if (selectedStages.length > 0) {
-            const formattedStages = selectedStages.map(stage => ({
-                id: stage.id,
-                text: stage.text
-            }));
-            addClassField(formattedStages);
-        }
-    });
-});
 
 
 
-        document.getElementById('city').addEventListener('input', function (event) {
+        document.getElementById('city').addEventListener('input', function(event) {
             this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector("form");
+            const submitButton = document.getElementById("submit-btn");
+
+            form.addEventListener("submit", function() {
+                submitButton.disabled = true;
+                submitButton.innerHTML = "Processing...";
+            });
         });
     </script>
 @endsection
