@@ -89,9 +89,9 @@ class AdminController extends Controller
             ->where('address', $request->address)
             ->first();
 
-        if ($existingSchool) {
-            return redirect()->back()->withErrors(['error' => 'This school already exists!']);
-        }
+        // if ($existingSchool) {
+        //     return redirect()->back()->withErrors(['error' => 'This school already exists!']);
+        // }
 
         // Create the school
         $school = School::create([
