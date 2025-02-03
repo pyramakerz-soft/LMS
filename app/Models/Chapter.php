@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Chapter extends Model
 {
@@ -27,9 +28,13 @@ class Chapter extends Model
     {
         return $this->belongsToMany(School::class, 'chapter_school');
     }
-     public function getImageAttribute($val)
-    {
-        return ($val !== null) ? asset( $val) : "";
-    }
+    //  public function getImageAttribute($val)
+    // {
+    //     return ($val !== null) ? asset( $val) : "";
+    // }
 
+    public function getImageAttribute($val)
+    {
+        return $val ? Storage::disk('s3')->url("pyra-public/$val") : "";
+    }
 }

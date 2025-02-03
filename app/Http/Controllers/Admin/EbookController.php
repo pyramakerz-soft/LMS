@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Ebook;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use ZipArchive;
 
 class EbookController extends Controller
@@ -47,40 +48,46 @@ class EbookController extends Controller
 
         // If it's a zip file, extract it
         if ($isZip) {
-            $filePath = $file->store('ebooks', 'public'); // Store the zip file temporarily
+            // Store ZIP file in S3 temporarily
+            $zipFilePath = $file->store('pyra-public/ebooks', 's3');
+            $zipFileName = pathinfo($zipFilePath, PATHINFO_FILENAME);
 
-            // Create a path for the extracted files
-            $extractPath = storage_path('app/public/ebooks/' . pathinfo($filePath, PATHINFO_FILENAME));
+            // Download the ZIP file from S3 to extract it
+            $localZipPath = storage_path("app/temp/$zipFileName.zip");
+            Storage::disk('s3')->download($zipFilePath, $localZipPath);
 
-            // Extract the zip file
-            $zip = new \ZipArchive;
-            if ($zip->open(storage_path('app/public/' . $filePath)) === TRUE) {
+            // Extract ZIP file locally
+            $extractPath = storage_path("app/temp/$zipFileName");
+            $zip = new ZipArchive;
+
+            if ($zip->open($localZipPath) === TRUE) {
                 $zip->extractTo($extractPath);
                 $zip->close();
 
-                // Update the file path to the folder where files are extracted
-                $filePath = 'ebooks/' . pathinfo($filePath, PATHINFO_FILENAME);
-
-                // Check if there's an index.html file in the extracted folder
-                if (file_exists(public_path('storage/' . $filePath . '/index.html'))) {
-                    // Save the ebook record and redirect to view index.html
-                    $ebook = Ebook::create([
-                        'title' => $request->title,
-                        'author' => $request->author,
-                        'description' => $request->description,
-                        'file_path' => $filePath,
-                        'lesson_id' => $request->lesson_id,
-                    ]);
-
-                    // Redirect to view the index.html file
-                    return redirect()->back();
+                // Upload extracted files to S3
+                foreach (scandir($extractPath) as $file) {
+                    if ($file !== '.' && $file !== '..') {
+                        Storage::disk('s3')->put("pyra-public/ebooks/$zipFileName/$file", file_get_contents("$extractPath/$file"));
+                    }
                 }
+
+                // Check if there's an `index.html` file
+                $indexHtmlPath = "pyra-public/ebooks/$zipFileName/index.html";
+                if (Storage::disk('s3')->exists($indexHtmlPath)) {
+                    $filePath = "pyra-public/ebooks/$zipFileName"; // Save extracted folder path
+                } else {
+                    return back()->withErrors(['file_path' => 'index.html not found in ZIP file.']);
+                }
+
+                // Delete the local ZIP file and extracted folder
+                unlink($localZipPath);
+                Storage::disk('s3')->delete($zipFilePath);
             } else {
-                return back()->withErrors(['file_path' => 'Failed to extract the zip file.']);
+                return back()->withErrors(['file_path' => 'Failed to extract the ZIP file.']);
             }
         } else {
-            // Store non-zip files (pdf, ppt, etc.)
-            $filePath = $file->store('ebooks', 'public');
+            // Store non-zip files (PDF, PPT, etc.) in S3
+            $filePath = $file->store('pyra-public/ebooks', 's3');
         }
 
         // Create the Ebook record in the database
@@ -103,24 +110,23 @@ class EbookController extends Controller
     {
         //
     }
+
+
     public function viewEbook(Ebook $ebook)
     {
-        // Ensure that $ebook->file_path contains only the relative path
-        $relativePath = 'storage/' . $ebook->file_path . '/index.html'; // Correct path for web
+        $indexHtmlPath = $ebook->file_path . '/index.html';
 
-        // Construct the URL to the index.html file
-        $fileUrl = asset($relativePath); // This creates a public URL
+        $fileUrl = Storage::disk('s3')->url($indexHtmlPath);
 
-        // Debugging: log the URL
         \Log::info('Looking for index.html at: ' . $fileUrl);
 
-        // Check if the file exists in the storage path
-        if (file_exists(public_path($relativePath))) {
-            return redirect($fileUrl); // Redirect to the file URL for viewing
+        if (Storage::disk('s3')->exists($indexHtmlPath)) {
+            return redirect($fileUrl);
         } else {
             return abort(404, 'Index file not found.');
         }
     }
+
 
 
     /**
@@ -147,12 +153,10 @@ class EbookController extends Controller
             'file_path' => 'nullable|file|mimes:pdf,ppt,pptx,doc,docx,html,txt,zip|max:10240', // Allow multiple types
             'lesson_id' => 'required|exists:lessons,id',
         ]);
-
         if ($request->hasFile('file_path')) {
-            $filePath = $request->file('file_path')->store('ebooks', 'public');
-            $ebook->file_path = $filePath;
+            $filePath = $request->file('file_path')->store('pyra-public/ebooks', 's3');
+            $ebook->file_path = Storage::disk('s3')->url($filePath);
         }
-
         $ebook->update([
             'title' => $request->title,
             'author' => $request->author,

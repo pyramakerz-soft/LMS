@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Material;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UnitController extends Controller
 {
@@ -74,10 +75,11 @@ class UnitController extends Controller
                 ->withInput();
         }
 
-        // Handle image upload or existing image
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('units', 'public');
+            $imagePath = $request->file('image')->store('pyra-public/units', 's3');
+
+            $imagePath = Storage::disk('s3')->url($imagePath);
         } elseif ($request->existing_image) {
             $imagePath = $request->existing_image;
         }
@@ -126,10 +128,15 @@ class UnitController extends Controller
             'is_active' => 'nullable|boolean',
         ]);
 
-        // Handle image upload if exists
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('units', 'public');
-            $unit->image = $imagePath;
+            if ($unit->image) {
+                $oldImagePath = str_replace(Storage::disk('s3')->url(''), '', $unit->image);
+                Storage::disk('s3')->delete($oldImagePath);
+            }
+        
+            $imagePath = $request->file('image')->store('pyra-public/units', 's3');
+        
+            $unit->image = Storage::disk('s3')->url($imagePath);
         }
 
         // Update the unit

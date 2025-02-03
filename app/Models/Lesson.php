@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Lesson extends Model
 {
@@ -34,12 +35,16 @@ class Lesson extends Model
     {
         return $this->hasMany(Ebook::class);
     }
-     public function getImageAttribute($val)
+    //  public function getImageAttribute($val)
+    // {
+    //     return ($val !== null) ? asset( $val) : "";
+    // }
+    public function getImageAttribute($val)
     {
-        return ($val !== null) ? asset( $val) : "";
+        return $val ? Storage::disk('s3')->url("pyra-public/$val") : "";
     }
-         public function getFilePathAttribute($val)
+    public function getFilePathAttribute($val)
     {
-        return ($val !== null) ? asset('ebooks/'. $val) : "";
+        return ($val !== null) ? asset('ebooks/' . $val) : "";
     }
 }

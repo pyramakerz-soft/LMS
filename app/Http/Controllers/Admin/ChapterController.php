@@ -7,6 +7,7 @@ use App\Models\Chapter;
 use App\Models\Material;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ChapterController extends Controller
 {
@@ -81,7 +82,9 @@ class ChapterController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('chapters', 'public');
+            $imagePath = $request->file('image')->store('pyra-public/chapters', 's3');
+
+            $imagePath = Storage::disk('s3')->url($imagePath);
         } elseif ($request->existing_image) {
             $imagePath = $request->existing_image;
         }
@@ -133,9 +136,11 @@ class ChapterController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('chapters', 'public');
-            $chapter->image = $imagePath;
+            $imagePath = $request->file('image')->store('pyra-public/chapters', 's3');
+
+            $chapter->image = Storage::disk('s3')->url($imagePath);
         }
+
 
         $chapter->update([
             'title' => $request->title,

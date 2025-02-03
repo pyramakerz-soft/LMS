@@ -8,6 +8,7 @@ use App\Models\Lesson;
 use App\Models\School;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AssignmentController extends Controller
 {
@@ -50,10 +51,15 @@ class AssignmentController extends Controller
             'is_active' => 'nullable|boolean',
         ]);
 
+
         $filePath = null;
+
         if ($request->hasFile('path_file')) {
-            $filePath = $request->file('path_file')->store('assignments', 'public');
+            $filePath = $request->file('path_file')->store('pyra-public/assignments', 's3');
+
+            $filePath = Storage::disk('s3')->url($filePath);
         }
+
         $assignment = Assignment::create([
             'title' => $request->title,
             'description' => $request->description,
@@ -173,8 +179,8 @@ class AssignmentController extends Controller
 
         // Handle file upload if exists
         if ($request->hasFile('path_file')) {
-            $filePath = $request->file('path_file')->store('assignments', 'public');
-            $assignment->path_file = $filePath;
+            $filePath = $request->file('path_file')->store('pyra-public/assignments', 's3');
+            $assignment->path_file = Storage::disk('s3')->url($filePath);
         }
 
         // Update the assignment
@@ -223,5 +229,5 @@ class AssignmentController extends Controller
     {
         //
     }
-  
+
 }

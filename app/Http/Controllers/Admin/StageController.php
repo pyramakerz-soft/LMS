@@ -8,6 +8,7 @@ use App\Models\Material;
 use App\Models\Stage;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class StageController extends Controller
 {
@@ -40,9 +41,10 @@ class StageController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('stages', 'public');
-        }
+            $imagePath = $request->file('image')->store('pyra-public/stages', 's3');
 
+            $imagePath = Storage::disk('s3')->url($imagePath);
+        }
         Stage::create([
             'name' => $request->name,
             'image' => $imagePath,
@@ -82,10 +84,13 @@ class StageController extends Controller
 
         if ($request->hasFile('image')) {
             if ($stage->image) {
-                Storage::disk('public')->delete($stage->image);
+                $oldImagePath = str_replace(Storage::disk('s3')->url(''), '', $stage->image);
+                Storage::disk('s3')->delete($oldImagePath);
             }
-            $imagePath = $request->file('image')->store('stages', 'public');
-            $stage->image = $imagePath;
+
+            $imagePath = $request->file('image')->store('pyra-public/stages', 's3');
+
+            $stage->image = Storage::disk('s3')->url($imagePath);
         }
 
         $stage->update([
