@@ -98,6 +98,16 @@
 
 @section('page_js')
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector("form");
+            const submitButton = document.getElementById("submit-btn");
+
+            form.addEventListener("submit", function() {
+                submitButton.disabled = true;
+                submitButton.innerHTML = "Processing...";
+            });
+            console.log("test");
+        });
         $(document).ready(function() {
             $('#stage_id').select2({
                 placeholder: "Select Grades",
@@ -174,15 +184,5 @@
             this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
         });
     </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const form = document.querySelector("form");
-            const submitButton = document.getElementById("submit-btn");
-
-            form.addEventListener("submit", function() {
-                submitButton.disabled = true;
-                submitButton.innerHTML = "Processing...";
-            });
-        });
-    </script>
+    <script></script>
 @endsection
