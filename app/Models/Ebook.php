@@ -18,9 +18,17 @@ class Ebook extends Model
     {
         return $val ? Storage::disk('s3')->url("pyra-public/$val") : "";
     }
+
     public function getFilePathAttribute($val)
     {
-        return ($val !== null) ? asset('public/storage/ebooks/' . basename($val) . '/index.html') : "";
+        if ($val !== null) {
+            // Construct the correct S3 path for the eBook index.html
+            $filePath = rtrim($val, '/') . '/index.html';
 
+            // Return the full S3 URL
+            return Storage::disk('s3')->url($filePath);
+        }
+
+        return "";
     }
 }
