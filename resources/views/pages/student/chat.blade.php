@@ -121,11 +121,8 @@ $menuItems = [];
     const authType = chatArea.getAttribute('data-auth-type');
 
     // Initialize lastMessageId with the value passed from the server
-    let lastMessageId = {
-        {
-            $lastMessageId
-        }
-    };
+    let lastMessageId = {{ $lastMessageId }};
+
 
     chatForm.addEventListener('submit', function(e) {
         e.preventDefault();
