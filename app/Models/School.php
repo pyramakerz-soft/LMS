@@ -66,7 +66,7 @@ class School extends Model
 
     public function getImageAttribute($val)
 {
-    return ($val !== null) ? Storage::disk('s3')->url($val) : "";
+    return ($val !== null) ? Storage::disk('s3')->url("/pyra-public/$val") : "";
 }
 
 
