@@ -136,7 +136,7 @@ $menuItems = [];
         const sendButton = chatForm.querySelector('button[type="submit"]');
         sendButton.disabled = true;
 
-        fetch(`https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/chat/{{ $receiver->id }}/{{ $receiverType }}`, {
+        fetch(`http://steam-scouts.com/public/chat/{{ $receiver->id }}/{{ $receiverType }}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -173,7 +173,7 @@ $menuItems = [];
 
     setInterval(function() {
         fetch(
-                `https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/chat/{{ $receiver->id }}/{{ $receiverType }}/messages?last_message_id=${lastMessageId}`
+                `http://steam-scouts.com/public/chat/{{ $receiver->id }}/{{ $receiverType }}/messages?last_message_id=${lastMessageId}`
             )
             .then(response => {
                 if (!response.ok) {

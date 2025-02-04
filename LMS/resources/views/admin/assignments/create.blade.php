@@ -111,7 +111,7 @@
 <script>
     document.getElementById('school_id').addEventListener('change', function() {
         let schoolId = this.value;
-        fetch(`/LMS/lms_pyramakerz/public/admin/api/schools/${schoolId}/stages`)
+        fetch(`/public/admin/api/schools/${schoolId}/stages`)
             .then(response => response.json())
             .then(data => {
                 let stageSelect = document.getElementById('stage_id');
@@ -124,7 +124,7 @@
 
     document.getElementById('stage_id').addEventListener('change', function() {
         let stageId = this.value;
-        fetch(`/LMS/lms_pyramakerz/public/admin/api/stages/${stageId}/students`)
+        fetch(`/public/admin/api/stages/${stageId}/students`)
             .then(response => response.json())
             .then(data => {
                 let studentSelect = document.getElementById('student_ids');
