@@ -289,7 +289,7 @@
 
     function getSchoolClasses(schoolId, selectedClassId) {
         $.ajax({
-            url: '/LMS/lms_pyramakerz/public/admin/get-classes-school/' + schoolId,
+            url: '/public/admin/get-classes-school/' + schoolId,
             type: "GET",
             dataType: "json",
             success: function(data) {

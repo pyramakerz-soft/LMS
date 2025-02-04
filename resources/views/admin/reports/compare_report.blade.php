@@ -493,7 +493,7 @@
 
     function getSchoolTeachers(schoolId, selectedTeacherId) {
         $.ajax({
-            url: '/LMS/lms_pyramakerz/public/admin/get-teachers-school/' + schoolId,
+            url: '/public/admin/get-teachers-school/' + schoolId,
             type: "GET",
             dataType: "json",
             success: function(data) {
@@ -525,7 +525,7 @@
 
     function getSchoolTeachers2(schoolId, selectedTeacherId) {
         $.ajax({
-            url: '/LMS/lms_pyramakerz/public/admin/get-teachers-school/' + schoolId,
+            url: '/public/admin/get-teachers-school/' + schoolId,
             type: "GET",
             dataType: "json",
             success: function(data) {
@@ -558,7 +558,7 @@
 
     function getSchoolClasses(schoolId, selectedClassId) {
         $.ajax({
-            url: '/LMS/lms_pyramakerz/public/admin/get-classes-school/' + schoolId,
+            url: '/public/admin/get-classes-school/' + schoolId,
             type: "GET",
             dataType: "json",
             success: function(data) {
@@ -590,7 +590,7 @@
 
     function getSchoolClasses2(schoolId, selectedClassId) {
         $.ajax({
-            url: '/LMS/lms_pyramakerz/public/admin/get-classes-school/' + schoolId,
+            url: '/public/admin/get-classes-school/' + schoolId,
             type: "GET",
             dataType: "json",
             success: function(data) {
