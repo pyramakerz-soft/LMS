@@ -1,0 +1,1 @@
+﻿positionForPages[2]={page:2,positions:[{word:"represent ",left:0.633528,top:0.125487,width:0.054749,height:0.018444},{word:"data to ",left:0.633528,top:0.148063,width:0.040847,height:0.018444},{word:"propose ",left:0.633528,top:0.170639,width:0.046611,height:0.018444},{word:"solutions. ",left:0.633528,top:0.193215,width:0.054330,height:0.018444}]};
