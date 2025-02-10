@@ -255,7 +255,7 @@
 
     function getSchoolStudents(schoolId, selectedStudentId) {
         $.ajax({
-            url: '/dev-pyramakerz.cloud/LMS/lms_pyramakerz/public/admin/get-students-school/' + schoolId,
+            url: '/LMS/lms_pyramakerz/public/admin/get-students-school/' + schoolId,
             type: "GET",
             dataType: "json",
             success: function(data) {
@@ -287,7 +287,7 @@
 
     function getSchoolTeachers(schoolId, selectedTeacherId) {
         $.ajax({
-            url: '/dev-pyramakerz.cloud/LMS/lms_pyramakerz/public/admin/get-teachers-school/' + schoolId,
+            url: '/LMS/lms_pyramakerz/public/admin/get-teachers-school/' + schoolId,
             type: "GET",
             dataType: "json",
             success: function(data) {
