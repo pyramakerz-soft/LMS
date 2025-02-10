@@ -86,8 +86,34 @@
 
 
             </div>
+            <div class="container-fluid p-0 mb-5">
+                <h1>Edit Teacher Info</h1>
+                <form action="{{ route('teachers.update', $mainteacher->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Teacher Name</label>
+
+                        <input type="text" name="name" id="name" class="form-control" value="{{$mainteacher->name}}" required>
+                        <div class="invalid-feedback" style="display: none;">Name cannot contain numbers.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="gender" class="form-label">Gender</label>
+                        <select name="gender" id="gender" class="form-control">
+                            <option value="boy" {{ (old('gender', $mainteacher->gender ?? '') == 'boy') ? 'selected' : '' }}>Boy</option>
+                            <option value="girl" {{ (old('gender', $mainteacher->gender ?? '') == 'girl') ? 'selected' : '' }}>Girl</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Profile Image</label>
+                        <input type="file" name="image" class="form-control" id="image" accept="image/*">
+                    </div>
+                    <input type="hidden" name="mainteacher" value="{{$mainteacher->id}}">
+                    <button type="submit" class="btn btn-primary">Edit Teacher</button>
+                </form>
+            </div>
             <div class="container-fluid p-0">
-                <h1>Add School</h1>
+                <h1>Add Teacher School</h1>
                 <form action="{{ route('teachers.storeSchool') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">

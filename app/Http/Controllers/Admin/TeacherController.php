@@ -19,7 +19,7 @@ class TeacherController extends Controller
      */
     public function index(Request $request)
     {
-        $this->updateTeacherNames();
+        // $this->updateTeacherNames();
 
         $teacherQuery = Teacher::with('school')->whereNull('alias_id');
 
@@ -166,6 +166,7 @@ class TeacherController extends Controller
             $password = Str::random(8);
 
             Teacher::create([
+                'name' => 'Teacher' . ($currentCount + $i) . '_' . $school->name,
                 'username' => $username,
                 'password' => Hash::make($password),
                 'plain_password' => $password,
@@ -223,10 +224,10 @@ class TeacherController extends Controller
         $teacher = Teacher::findOrFail($id);
 
         $request->validate([
-            'school_id' => 'required|exists:schools,id',
-            'stage_ids' => 'required|array',
+            'school_id' => 'sometimes|exists:schools,id',
+            'stage_ids' => 'sometimes|array',
             'stage_ids.*' => 'exists:stages,id',
-            'class_id' => 'required|array',
+            'class_id' => 'sometimes|array',
             'class_id.*' => 'exists:groups,id',
             'password' => 'nullable|string|confirmed|min:6',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048',
@@ -238,16 +239,28 @@ class TeacherController extends Controller
             $imagePath = $request->file('image')->store('teachers', 'public');
             $teacher->image = $imagePath;
         }
+        if ($request->has('school_id')) {
+            $teacher->update([
+                'school_id' => $request->input('school_id'),
+                'password' => Hash::make($request->password),
+                'plain_password' => $request->password,
+                'is_active' => $request->input('is_active') ?? 1,
+            ]);
 
-        $teacher->update([
-            'school_id' => $request->input('school_id'),
-            'password' => Hash::make($request->password),
-            'plain_password' => $request->password,
-            'is_active' => $request->input('is_active') ?? 1,
-        ]);
+            $teacher->classes()->sync($request->input('class_id'));
+            $teacher->stages()->sync($request->input('stage_ids'));
+        } else {
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('teachers', 'public');
+            }
+            $teacher->update([
+                'gender' => $request->input('gender'),
+                'name' => $request->name,
+                'image' => $imagePath,
+            ]);
+        }
 
-        $teacher->classes()->sync($request->input('class_id'));
-        $teacher->stages()->sync($request->input('stage_ids'));
 
 
         if ($teacher->alias_id != null) {
@@ -256,7 +269,7 @@ class TeacherController extends Controller
             $returnId = $teacher->id;
         }
         return redirect()->route('teachers.addSchool', ['teacherId' => $returnId])
-            ->with('success', 'School Teacher Updated Successfully.');
+            ->with('success', 'Teacher Updated Successfully.');
 
         // return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully.');
     }
