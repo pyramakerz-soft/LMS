@@ -16,15 +16,18 @@ class LessonController extends Controller
     {
         // Fetch all themes (materials) and units for filters.
         $themes = \App\Models\Material::all();
-        $units = \App\Models\Unit::all();
+
 
         // Apply filters based on request.
         $query = Lesson::query()->with('chapter.unit.material');
 
         if ($request->filled('theme_id')) {
+            $units = \App\Models\Unit::where('material_id', $request->theme_id)->get();
             $query->whereHas('chapter.unit.material', function ($q) use ($request) {
                 $q->where('id', $request->theme_id);
             });
+        } else {
+            $units = \App\Models\Unit::all();
         }
 
         if ($request->filled('unit_id')) {
@@ -108,7 +111,6 @@ class LessonController extends Controller
         ]);
 
         return redirect()->route('lessons.index')->with('success', 'Lesson created successfully.');
-
     }
     /**
      * Display the specified resource.
