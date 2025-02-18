@@ -84,7 +84,11 @@ class AdminController extends Controller
             'classes.*.name' => 'required|string|max:255', // Validate each class name
             'classes.*.stage_id' => 'required|exists:stages,id', // Validate each class's stage_id
         ]);
-
+        if ($request->has('flag')) {
+            $flag = 1;
+        } else {
+            $flag = 0;
+        }
         // Create the school
         $school = School::create([
             'name' => $request->name,
@@ -92,6 +96,7 @@ class AdminController extends Controller
             'address' => $request->address,
             'city' => $request->city,
             'type_id' => $request->type_id,
+            'flag' => $flag,
         ]);
 
         // Create classes for this school

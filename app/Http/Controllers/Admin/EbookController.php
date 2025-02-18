@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Ebook;
 use App\Models\Lesson;
+use App\Models\Stage;
 use Illuminate\Http\Request;
 use ZipArchive;
 
@@ -24,8 +25,13 @@ class EbookController extends Controller
      */
     public function create()
     {
-        $lessons = Lesson::all();
-        return view('admin.ebooks.create', compact('lessons'));
+        // $lessons = Lesson::all();
+        $grades = [];
+        for ($i = 1; $i <= 10; $i++) {
+            $grades[] = 'Grade ' . $i;
+        }
+        // $grades = Stage::all();
+        return view('admin.ebooks.create', compact('grades'));
     }
 
     /**
@@ -35,10 +41,7 @@ class EbookController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'author' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
             'file_path' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240', // Accept zip or other file formats
-            'lesson_id' => 'required|exists:lessons,id',
         ]);
 
         // Handle the file upload and saving process
@@ -48,34 +51,47 @@ class EbookController extends Controller
         // If it's a zip file, extract it
         if ($isZip) {
             $filePath = $file->store('ebooks', 'public'); // Store the zip file temporarily
+            // dd($filePath);
 
-            // Create a path for the extracted files
-            $extractPath = storage_path('app/public/ebooks/' . pathinfo($filePath, PATHINFO_FILENAME));
+            // Create a path for the extracted files based on grade
+            $extractPath = storage_path('app\\public\\ebooks\\' . $request->grade . '\\');
+
+            // Ensure the directory exists or create it
+            if (!file_exists($extractPath)) {
+                mkdir($extractPath, 0777, true); // Create the directory if it doesn't exist
+            }
+
+            // Log the extraction path
+            \Log::info("Extracting zip to: " . $extractPath);
 
             // Extract the zip file
             $zip = new \ZipArchive;
-            if ($zip->open(storage_path('app/public/' . $filePath)) === TRUE) {
-                $zip->extractTo($extractPath);
+            $zipFilePath = storage_path('app\\public\\' . $filePath);
+            \Log::info("Opening zip file at: " . $zipFilePath);
+
+            if ($zip->open($zipFilePath) === TRUE) {
+                $zip->extractTo($extractPath); // Extract the contents of the zip to the grade-specific folder
                 $zip->close();
 
-                // Update the file path to the folder where files are extracted
-                $filePath = 'ebooks/' . pathinfo($filePath, PATHINFO_FILENAME);
+                // Set the filePath to the folder where files are extracted
+                $filePath = 'ebooks\\' . $request->grade . '\\' . pathinfo($filePath, PATHINFO_FILENAME);
 
                 // Check if there's an index.html file in the extracted folder
-                if (file_exists(public_path('storage/' . $filePath . '/index.html'))) {
+                if (file_exists(public_path('storage\\' . $filePath . '\\index.html'))) {
                     // Save the ebook record and redirect to view index.html
                     $ebook = Ebook::create([
                         'title' => $request->title,
-                        'author' => $request->author,
-                        'description' => $request->description,
+                        'author' => 'Pyramakerz',
+                        'description' => null,
                         'file_path' => $filePath,
-                        'lesson_id' => $request->lesson_id,
                     ]);
 
                     // Redirect to view the index.html file
                     return redirect()->back();
                 }
             } else {
+                // Log error details
+                \Log::error("Failed to open zip file: " . $zip->getStatusString());
                 return back()->withErrors(['file_path' => 'Failed to extract the zip file.']);
             }
         } else {
@@ -86,14 +102,14 @@ class EbookController extends Controller
         // Create the Ebook record in the database
         Ebook::create([
             'title' => $request->title,
-            'author' => $request->author,
-            'description' => $request->description,
+            'author' => 'Pyramakerz',
+            'description' => null,
             'file_path' => $filePath, // This could be a file or a folder
-            'lesson_id' => $request->lesson_id,
         ]);
 
         return redirect()->route('ebooks.index')->with('success', 'Ebook created successfully.');
     }
+
 
 
     /**

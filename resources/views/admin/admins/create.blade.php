@@ -73,7 +73,12 @@
                             @endforeach
                         </select>
                     </div>
-
+                    <div>
+                        <label for="flag">
+                            <input type="checkbox" id="flag" name="flag" value="1" {{ old('flag') ? 'checked' : '' }}>
+                            مدارس 30 يونيو
+                        </label>
+                    </div>
                     <div class="mt-3">
                         <h2>Classes</h2>
                         <div id="class-container">

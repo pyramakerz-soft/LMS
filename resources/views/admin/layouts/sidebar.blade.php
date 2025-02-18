@@ -31,6 +31,12 @@
                         Types</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ request()->is('admin/ebooks') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('ebooks.create') }}">
+                    <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
+                        Add E-Book</span>
+                </a>
+            </li>
             <li class="sidebar-item {{ request()->is('admin/admins') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('admins.index') }}">
                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">School</span>
