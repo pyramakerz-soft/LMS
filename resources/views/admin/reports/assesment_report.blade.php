@@ -46,12 +46,7 @@
                         <div class="mb-3 col-6" id="grade_select">
                             <label for="stage_id" class="form-label">Grade</label>
                             <select name="stage_id" id="stage_id" class="form-control">
-                                <option selected value="">All Grades</option>
-                                @foreach ($stages as $stage)
-                                <option value="{{ $stage->id }}" {{ request('stage_id') == $stage->id ? 'selected' : '' }}>
-                                    {{ $stage->name }}
-                                </option>
-                                @endforeach
+                                <option selected disabled value="">Please Select School</option>
                             </select>
                         </div>
 
@@ -279,9 +274,11 @@
             var selectedClassId = "{{$request['class_id'] ?? '' }}";
             var selectedStudentId = "{{$request['student_id'] ?? '' }}";
             var selectedTeacherId = "{{$request['teacher_id'] ?? '' }}";
+            var selectedStageId = "{{$request['stage_id'] ?? '' }}";
             getSchoolClasses(schoolId, selectedClassId);
             getSchoolTeachers(schoolId, selectedTeacherId);
             getSchoolStudents(schoolId, selectedStudentId);
+            getSchoolGrades(schoolId, selectedStageId);
 
         });
         $('#school_id').trigger('change');
