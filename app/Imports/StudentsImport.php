@@ -40,7 +40,7 @@ class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
         //     throw new \Exception("The username '{$username}' cannot start with a number.");
         // }
 
-        $existingStudent = Student::where('username', $username)->first();
+        // $existingStudent = Student::where('username', $username)->first();
 
         // if ($existingStudent) {
         //     if ($existingStudent->class_id) {
@@ -66,6 +66,9 @@ class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
         $birthDate = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['tarykh_almylad'])->format('Y-m-d') ?? null;
         $password = Str::random(8);
         // dd($username, $password, $gender, $arabicName, $phone, $birthDate, $this->class->school_id, $this->class->stage_id, $this->class->id);
+        if (Student::where('username', $username)->exists()) {
+            return null;
+        }
         $student = Student::create([
             'username' => $username,
             'password' => Hash::make($password),
