@@ -28,32 +28,45 @@ class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
 
     public function model(array $row)
     {
-        if (empty($row['username'])) {
+
+        if (empty($row['asm_altalb_ballgh_alanglyzy'])) {
             return null;
         }
 
-        $username = str_replace(' ', '_', $row['username']);
+        // Clean up username and ensure it doesn't start with a number
+        $username = str_replace(' ', '_', $row['asm_altalb_ballgh_alanglyzy']);
 
-        if (preg_match('/^\d/', $username)) {
-            throw new \Exception("The username '{$username}' cannot start with a number.");
-        }
+        // if (preg_match('/^\d/', $username)) {
+        //     throw new \Exception("The username '{$username}' cannot start with a number.");
+        // }
 
         $existingStudent = Student::where('username', $username)->first();
 
-        if ($existingStudent) {
-            if ($existingStudent->class_id) {
-                $this->duplicateUsernames[] = $username;
-                return null;
-            } else {
-                $existingStudent->update(['class_id' => $this->class->id]);
-                return null;
-            }
+        // if ($existingStudent) {
+        //     if ($existingStudent->class_id) {
+        //         $this->duplicateUsernames[] = $username;
+        //         return null;
+        //     } else {
+        //         $existingStudent->update(['class_id' => $this->class->id]);
+        //         return null;
+        //     }
+        // }
+
+        // Extract the new fields from the row
+        $genderArabic = $row['algns'] ?? null;
+        $gender = null;
+        if ($genderArabic == 'ذكر') {
+            $gender = 'Boy';
+        } elseif ($genderArabic == 'انثى') {
+            $gender = 'Girl';
         }
 
-        $gender = !empty($row['gender']) ? strtolower($row['gender']) : null;
+        $arabicName = $row['asm_altalb_ballgh_alaarby'] ?? null;
+        $phone = $row['rkm_almobayl'] ?? null;
+        $birthDate = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['tarykh_almylad'])->format('Y-m-d') ?? null;
         $password = Str::random(8);
-
-        return new Student([
+        // dd($username, $password, $gender, $arabicName, $phone, $birthDate, $this->class->school_id, $this->class->stage_id, $this->class->id);
+        $student = Student::create([
             'username' => $username,
             'password' => Hash::make($password),
             'plain_password' => $password,
@@ -63,7 +76,25 @@ class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
             'is_active' => 1,
             'image' => null,
             'class_id' => $this->class->id,
+            'arabic_name' => $arabicName,
+            'phone' => $phone,
+            'birth_date' => $birthDate,
         ]);
-    }
+        return $student;
 
+        // return new Student([
+        //     'username' => $username,
+        //     'password' => Hash::make($password),
+        //     'plain_password' => $password,
+        //     'gender' => $gender,
+        //     'school_id' => $this->class->school_id,
+        //     'stage_id' => $this->class->stage_id,
+        //     'is_active' => 1,
+        //     'image' => null,
+        //     'class_id' => $this->class->id,
+        //     'arabic_name' => $arabicName,
+        //     'phone' => $phone,
+        //     'birth_date' => $birthDate,
+        // ]);
+    }
 }
