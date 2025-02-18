@@ -16,7 +16,7 @@
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    {{-- <a href="{{ route('chapters.create') }}" class="btn btn-primary mb-3">Add Chapter</a> --}}
+                    <a href="{{ route('chapters.create') }}" class="btn btn-primary mb-3">Add Chapter</a> 
 
 
                     <div class="table-responsive" style="overflow-x: auto;">

@@ -1,5 +1,7 @@
+@php
+session(['schools_previous_url' => url()->full()]);
+@endphp
 @extends('admin.layouts.layout')
-
 @section('content')
     <div class="wrapper">
         @include('admin.layouts.sidebar')

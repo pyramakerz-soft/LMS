@@ -222,8 +222,9 @@ class AdminController extends Controller
     {
         $school = School::findOrFail($id);
         $school->delete();
-
-        return redirect()->route('admins.index')->with('success', 'School deleted successfully.');
+        $redirectUrl = session('schools_previous_url', route('admins.index'));
+        return redirect($redirectUrl)->with('success', 'School deleted successfully.');
+        // return redirect()->route('admins.index')->with('success', 'School deleted successfully.');
     }
 
     public function viewCurriculum($schoolId)

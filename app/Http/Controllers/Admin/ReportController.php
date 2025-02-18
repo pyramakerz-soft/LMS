@@ -56,7 +56,7 @@ class ReportController extends Controller
                 $query->where('school_id', $request->school_id);
                 if (!$query->exists()) {
                     $schoolName = School::where('id', $request->school_id)->value('name');
-                    return redirect()->back()->with('error', "No Assignments found in School: $schoolName");
+                    return redirect()->route('admin.assignmentAvgReport')->with('error', "No Assignments found in School: $schoolName");
                 }
             }
 
@@ -65,21 +65,21 @@ class ReportController extends Controller
                 $query->where('teacher_id', $request->teacher_id);
                 if (!$query->exists()) {
                     $teacherUsername = Teacher::where('id', $request->teacher_id)->value('username');
-                    return redirect()->back()->with('error', "No Assignments found for Teacher: $teacherUsername");
+                    return redirect()->route('admin.assignmentAvgReport')->with('error', "No Assignments found for Teacher: $teacherUsername");
                 }
             }
             if ($request->filled('from_date')) {
                 $query->whereDate('created_at', '>=', $request->from_date);
 
                 if (!$query->exists()) {
-                    return redirect()->back()->with('error', "No Assignments found after {$request->from_date}");
+                    return redirect()->route('admin.assignmentAvgReport')->with('error', "No Assignments found after {$request->from_date}");
                 }
             }
             if ($request->filled('to_date')) {
                 $query->whereDate('created_at', '<=', $request->to_date);
 
                 if (!$query->exists()) {
-                    return redirect()->back()->with('error', "No Assignments found before {$request->to_date}");
+                    return redirect()->route('admin.assignmentAvgReport')->with('error', "No Assignments found before {$request->to_date}");
                 }
             }
 
@@ -87,7 +87,7 @@ class ReportController extends Controller
             $filteredAssignments = $query->pluck('id');
 
             if ($filteredAssignments->isEmpty()) {
-                return redirect()->back()->with('error', 'No assignments found based on the applied filters.');
+                return redirect()->route('admin.assignmentAvgReport')->with('error', 'No assignments found based on the applied filters.');
             }
 
             $assignments = DB::table('assignment_stage')
@@ -176,7 +176,7 @@ class ReportController extends Controller
                 // dd($studentAssignments, $data, $chartData);
                 return view('admin.reports.assignment_avg_report', compact('chartData', 'request', 'data', 'schools', 'stages', 'classes', 'teachers', 'students'));
             } else {
-                return redirect()->back()->with('error', 'No Submitted Assignments Found');
+                return redirect()->route('admin.assignmentAvgReport')->with('error', 'No Submitted Assignments Found');
             }
         } else {
             return view('admin.reports.assignment_avg_report', compact('schools', 'stages', 'classes', 'teachers', 'students'));
@@ -204,12 +204,12 @@ class ReportController extends Controller
                 $msg1 = 'Teacher: ' . $teacher1;
                 $msg2 = 'Teacher: ' . $teacher2;
                 $labels = [$teacher1, $teacher2];
-                if (!$query1->exists()) {
-                    return redirect()->back()->with('error', "No Assignments found for {$msg1}");
-                }
-                if (!$query2->exists()) {
-                    return redirect()->back()->with('error', "No Assignments found for {$msg2}");
-                }
+                // if (!$query1->exists()) {
+                //     return redirect()->route('admin.compareReport')->with('error', "No Assignments found for {$msg1}");
+                // }
+                // if (!$query2->exists()) {
+                //     return redirect()->route('admin.compareReport')->with('error', "No Assignments found for {$msg2}");
+                // }
             }
             if ($request->compare_by == 'schools') {
 
@@ -223,12 +223,12 @@ class ReportController extends Controller
                 $labels = [$school1, $school2];
                 $msg1 = 'School: ' . $school1;
                 $msg2 = 'School: ' . $school2;
-                if (!$query1->exists()) {
-                    return redirect()->back()->with('error', "No Assignments found for {$msg1}");
-                }
-                if (!$query2->exists()) {
-                    return redirect()->back()->with('error', "No Assignments found for {$msg2}");
-                }
+                // if (!$query1->exists()) {
+                //     return redirect()->route('admin.compareReport')->with('error', "No Assignments found for {$msg1}");
+                // }
+                // if (!$query2->exists()) {
+                //     return redirect()->route('admin.compareReport')->with('error', "No Assignments found for {$msg2}");
+                // }
                 // dd($query1->get(), $query2->get());
             }
             if ($request->compare_by == 'classes') {
@@ -254,47 +254,47 @@ class ReportController extends Controller
 
                 $msg1 = 'Class: ' . $class1;
                 $msg2 = 'Class: ' . $class2;
-                if (!$query1->exists()) {
-                    return redirect()->back()->with('error', "No Assignments found for {$msg1}");
-                }
-                if (!$query2->exists()) {
-                    return redirect()->back()->with('error', "No Assignments found for {$msg2}");
-                }
+                // if (!$query1->exists()) {
+                //     return redirect()->route('admin.compareReport')->with('error', "No Assignments found for {$msg1}");
+                // }
+                // if (!$query2->exists()) {
+                //     return redirect()->route('admin.compareReport')->with('error', "No Assignments found for {$msg2}");
+                // }
             }
 
             if ($request->filled('from_date')) {
                 $query1->whereDate('created_at', '>=', $request->from_date);
                 $query2->whereDate('created_at', '>=', $request->from_date);
 
-                if (!$query1->exists()) {
-                    return redirect()->back()->with('error', "No Assignments found for {$msg1} after {$request->from_date}");
-                }
-                if (!$query2->exists()) {
-                    return redirect()->back()->with('error', "No Assignments found for {$msg2} after {$request->from_date}");
-                }
+                // if (!$query1->exists()) {
+                //     return redirect()->route('admin.compareReport')->with('error', "No Assignments found for {$msg1} after {$request->from_date}");
+                // }
+                // if (!$query2->exists()) {
+                //     return redirect()->route('admin.compareReport')->with('error', "No Assignments found for {$msg2} after {$request->from_date}");
+                // }
             }
             if ($request->filled('to_date')) {
                 $query1->whereDate('created_at', '<=', $request->to_date);
                 $query2->whereDate('created_at', '<=', $request->to_date);
 
-                if (!$query1->exists()) {
-                    return redirect()->back()->with('error', "No Assignments found for {$msg1} before {$request->to_date}");
-                }
-                if (!$query2->exists()) {
-                    return redirect()->back()->with('error', "No Assignments found for {$msg2} before {$request->to_date}");
-                }
+                // if (!$query1->exists()) {
+                //     return redirect()->route('admin.compareReport')->with('error', "No Assignments found for {$msg1} before {$request->to_date}");
+                // }
+                // if (!$query2->exists()) {
+                //     return redirect()->route('admin.compareReport')->with('error', "No Assignments found for {$msg2} before {$request->to_date}");
+                // }
             }
             $filteredAssignments1 = $query1->pluck('id');
             $filteredAssignments2 = $query2->pluck('id');
 
             // dd($filteredAssignments1, $filteredAssignments2);
 
-            if ($filteredAssignments1->isEmpty()) {
-                return redirect()->back()->with('error', 'No assignments found based on the applied filters.');
-            }
-            if ($filteredAssignments2->isEmpty()) {
-                return redirect()->back()->with('error', 'No assignments found based on the applied filters.');
-            }
+            // if ($filteredAssignments1->isEmpty()) {
+            //     return redirect()->route('admin.compareReport')->with('error', 'No assignments found based on the applied filters.');
+            // }
+            // if ($filteredAssignments2->isEmpty()) {
+            //     return redirect()->route('admin.compareReport')->with('error', 'No assignments found based on the applied filters.');
+            // }
 
             $assignments1 = DB::table('assignment_stage')
                 ->whereIn('assignment_id', $filteredAssignments1)
@@ -318,174 +318,165 @@ class ReportController extends Controller
                 ->whereNotNull('submitted_at')
                 ->get();
             // dd($studentAssignments1, $studentAssignments2);
-            if (!$studentAssignments1->isEmpty() && !$studentAssignments2->isEmpty()) {
-                $data1 = [];
-                foreach ($assignments1 as $assignment) {
-                    $stageId = $assignment->stage_id;
-                    $assignmentId = $assignment->assignment_id;
+            $data1 = [];
+            foreach ($assignments1 as $assignment) {
+                $stageId = $assignment->stage_id;
+                $assignmentId = $assignment->assignment_id;
 
-                    if (!isset($data1[$stageId])) {
-                        $data1[$stageId] = [
-                            'stage_id' => $stageId,
-                            'stage_name' => $stages1[$stageId]->name,
-                            'assignments' => [],
-                        ];
-                    }
-
-                    if (!isset($data1[$stageId]['assignments'][$assignmentId])) {
-                        $data1[$stageId]['assignments'][$assignmentId] = [
-                            'assignment_id' => $assignmentId,
-                            'assignment_name' => $allAssignments1[$assignmentId]->title,
-                            'students' => [],
-                            'students_average' => 0,
-                        ];
-                    }
-                }
-
-                foreach ($studentAssignments1 as $studentAssignment) {
-                    $stageId = DB::table('assignment_stage')
-                        ->where('assignment_id', $studentAssignment->assignment_id)
-                        ->value('stage_id');
-
-                    $assignmentId = $studentAssignment->assignment_id;
-                    $data1[$stageId]['assignments'][$assignmentId]['students'][] = $studentAssignment->student_id;
-                    if ($studentAssignment->marks !== null) {
-                        $data1[$stageId]['assignments'][$assignmentId]['students_average'] += $studentAssignment->marks;
-                    }
-                }
-
-                // Calculate averages
-                foreach ($data1 as $stageId => $stage) {
-                    foreach ($stage['assignments'] as $assignmentId => $assignment) {
-                        $studentCount = count($assignment['students']);
-                        if ($studentCount > 0) {
-                            $data1[$stageId]['assignments'][$assignmentId]['students_average'] = round($assignment['students_average'] / $studentCount, 2);
-                        }
-                    }
-                }
-
-                // dd($data1);
-                // Prepare Chart.js data
-                $chartData = [];
-
-                // Process each grade (stage)
-                foreach ($data1 as $stage) {
-                    $material = Material::where('stage_id', $stage['stage_id'])->first();
-                    if ($material) {
-                        $material = ' - ' . $material->title;
-                    } else {
-                        $material = ' ';
-                    }
-                    $grade = [
-                        'grade' => $stage['stage_name'] . $material, // Grade name
-                        'assignments' => [], // Initialize assignments array
-                        'color' => '#9e9fdc'
+                if (!isset($data1[$stageId])) {
+                    $data1[$stageId] = [
+                        'stage_id' => $stageId,
+                        'stage_name' => $stages1[$stageId]->name,
+                        'assignments' => [],
                     ];
-
-                    // Add assignments to the grade
-                    foreach ($stage['assignments'] as $assignment) {
-                        $grade['assignments'][] = [
-                            'name' => $assignment['assignment_name'], // Assignment name
-                            'degree' => $assignment['students_average'] // Assignment degree (students average)
-                        ];
-                    }
-
-                    // Add the grade with assignments to the chart data
-                    $chartData[] = $grade;
-                }
-                // dd($data1);
-
-
-                $data2 = [];
-                foreach ($assignments2 as $assignment) {
-                    $stageId = $assignment->stage_id;
-                    $assignmentId = $assignment->assignment_id;
-
-                    if (!isset($data2[$stageId])) {
-                        $data2[$stageId] = [
-                            'stage_id' => $stageId,
-                            'stage_name' => $stages2[$stageId]->name,
-                            'assignments' => [],
-                        ];
-                    }
-
-                    if (!isset($data2[$stageId]['assignments'][$assignmentId])) {
-                        $data2[$stageId]['assignments'][$assignmentId] = [
-                            'assignment_id' => $assignmentId,
-                            'assignment_name' => $allAssignments2[$assignmentId]->title,
-                            'students' => [],
-                            'students_average' => 0,
-                        ];
-                    }
                 }
 
-                foreach ($studentAssignments2 as $studentAssignment) {
-                    $stageId = DB::table('assignment_stage')
-                        ->where('assignment_id', $studentAssignment->assignment_id)
-                        ->value('stage_id');
-
-                    $assignmentId = $studentAssignment->assignment_id;
-                    $data2[$stageId]['assignments'][$assignmentId]['students'][] = $studentAssignment->student_id;
-                    if ($studentAssignment->marks !== null) {
-                        $data2[$stageId]['assignments'][$assignmentId]['students_average'] += $studentAssignment->marks;
-                    }
-                }
-
-                // Calculate averages
-                foreach ($data2 as $stageId => $stage) {
-                    foreach ($stage['assignments'] as $assignmentId => $assignment) {
-                        $studentCount = count($assignment['students']);
-                        if ($studentCount > 0) {
-                            $data2[$stageId]['assignments'][$assignmentId]['students_average'] = round($assignment['students_average'] / $studentCount, 2);
-                        }
-                    }
-                }
-
-
-                // Prepare Chart.js data
-                // $chartData = [];
-
-                // Process each grade (stage)
-                foreach ($data2 as $stage) {
-                    $material = Material::where('stage_id', $stage['stage_id'])->first();
-                    if ($material) {
-                        $material = ' - ' . $material->title;
-                    } else {
-                        $material = ' ';
-                    }
-
-                    $grade = [
-                        'grade' => $stage['stage_name'] . $material,
-                        'assignments' => [], // Initialize assignments array
-                        'color' => '#0d6efd'
+                if (!isset($data1[$stageId]['assignments'][$assignmentId])) {
+                    $data1[$stageId]['assignments'][$assignmentId] = [
+                        'assignment_id' => $assignmentId,
+                        'assignment_name' => $allAssignments1[$assignmentId]->title,
+                        'students' => [],
+                        'students_average' => 0,
                     ];
-
-                    // Add assignments to the grade
-                    foreach ($stage['assignments'] as $assignment) {
-                        $grade['assignments'][] = [
-                            'name' => $assignment['assignment_name'], // Assignment name
-                            'degree' => $assignment['students_average'] // Assignment degree (students average)
-                        ];
-                    }
-
-                    // Add the grade with assignments to the chart data
-                    $chartData[] = $grade;
-                }
-                // dd($chartData);
-                // dd($data1, $data2);
-                // dd($chartData);
-                // dd($msg1, $msg2);
-
-                $request = $request->all();
-                return view('admin.reports.compare_report', compact('msg1', 'msg2', 'chartData', 'request', 'data1', 'data2', 'labels', 'schools', 'stages', 'classes', 'teachers', 'students'));
-            } else {
-                if ($studentAssignments1->isEmpty()) {
-                    return redirect()->back()->with('error', "No assignments found for {$msg1} students");
-                }
-                if ($studentAssignments2->isEmpty()) {
-                    return redirect()->back()->with('error', "No assignments found for {$msg2} students");
                 }
             }
+
+            foreach ($studentAssignments1 as $studentAssignment) {
+                $stageId = DB::table('assignment_stage')
+                    ->where('assignment_id', $studentAssignment->assignment_id)
+                    ->value('stage_id');
+
+                $assignmentId = $studentAssignment->assignment_id;
+                $data1[$stageId]['assignments'][$assignmentId]['students'][] = $studentAssignment->student_id;
+                if ($studentAssignment->marks !== null) {
+                    $data1[$stageId]['assignments'][$assignmentId]['students_average'] += $studentAssignment->marks;
+                }
+            }
+
+            // Calculate averages
+            foreach ($data1 as $stageId => $stage) {
+                foreach ($stage['assignments'] as $assignmentId => $assignment) {
+                    $studentCount = count($assignment['students']);
+                    if ($studentCount > 0) {
+                        $data1[$stageId]['assignments'][$assignmentId]['students_average'] = round($assignment['students_average'] / $studentCount, 2);
+                    }
+                }
+            }
+
+            // dd($data1);
+            // Prepare Chart.js data
+            $chartData = [];
+
+            // Process each grade (stage)
+            foreach ($data1 as $stage) {
+                $material = Material::where('stage_id', $stage['stage_id'])->first();
+                if ($material) {
+                    $material = ' - ' . $material->title;
+                } else {
+                    $material = ' ';
+                }
+                $grade = [
+                    'grade' => $stage['stage_name'] . $material, // Grade name
+                    'assignments' => [], // Initialize assignments array
+                    'color' => '#9e9fdc'
+                ];
+
+                // Add assignments to the grade
+                foreach ($stage['assignments'] as $assignment) {
+                    $grade['assignments'][] = [
+                        'name' => $assignment['assignment_name'], // Assignment name
+                        'degree' => $assignment['students_average'] // Assignment degree (students average)
+                    ];
+                }
+
+                // Add the grade with assignments to the chart data
+                $chartData[] = $grade;
+            }
+            // dd($data1);
+
+
+            $data2 = [];
+            foreach ($assignments2 as $assignment) {
+                $stageId = $assignment->stage_id;
+                $assignmentId = $assignment->assignment_id;
+
+                if (!isset($data2[$stageId])) {
+                    $data2[$stageId] = [
+                        'stage_id' => $stageId,
+                        'stage_name' => $stages2[$stageId]->name,
+                        'assignments' => [],
+                    ];
+                }
+
+                if (!isset($data2[$stageId]['assignments'][$assignmentId])) {
+                    $data2[$stageId]['assignments'][$assignmentId] = [
+                        'assignment_id' => $assignmentId,
+                        'assignment_name' => $allAssignments2[$assignmentId]->title,
+                        'students' => [],
+                        'students_average' => 0,
+                    ];
+                }
+            }
+
+            foreach ($studentAssignments2 as $studentAssignment) {
+                $stageId = DB::table('assignment_stage')
+                    ->where('assignment_id', $studentAssignment->assignment_id)
+                    ->value('stage_id');
+
+                $assignmentId = $studentAssignment->assignment_id;
+                $data2[$stageId]['assignments'][$assignmentId]['students'][] = $studentAssignment->student_id;
+                if ($studentAssignment->marks !== null) {
+                    $data2[$stageId]['assignments'][$assignmentId]['students_average'] += $studentAssignment->marks;
+                }
+            }
+
+            // Calculate averages
+            foreach ($data2 as $stageId => $stage) {
+                foreach ($stage['assignments'] as $assignmentId => $assignment) {
+                    $studentCount = count($assignment['students']);
+                    if ($studentCount > 0) {
+                        $data2[$stageId]['assignments'][$assignmentId]['students_average'] = round($assignment['students_average'] / $studentCount, 2);
+                    }
+                }
+            }
+
+
+            // Prepare Chart.js data
+            // $chartData = [];
+
+            // Process each grade (stage)
+            foreach ($data2 as $stage) {
+                $material = Material::where('stage_id', $stage['stage_id'])->first();
+                if ($material) {
+                    $material = ' - ' . $material->title;
+                } else {
+                    $material = ' ';
+                }
+
+                $grade = [
+                    'grade' => $stage['stage_name'] . $material,
+                    'assignments' => [], // Initialize assignments array
+                    'color' => '#0d6efd'
+                ];
+
+                // Add assignments to the grade
+                foreach ($stage['assignments'] as $assignment) {
+                    $grade['assignments'][] = [
+                        'name' => $assignment['assignment_name'], // Assignment name
+                        'degree' => $assignment['students_average'] // Assignment degree (students average)
+                    ];
+                }
+
+                // Add the grade with assignments to the chart data
+                $chartData[] = $grade;
+            }
+            // dd($chartData);
+            // dd($data1, $data2);
+            // dd($chartData);
+            // dd($msg1, $msg2);
+
+            $request = $request->all();
+            return view('admin.reports.compare_report', compact('msg1', 'msg2', 'chartData', 'request', 'data1', 'data2', 'labels', 'schools', 'stages', 'classes', 'teachers', 'students'));
         }
 
         return view('admin.reports.compare_report', compact('schools', 'stages', 'classes', 'teachers', 'students'))->with('error', 'No marks found for all assignments');
@@ -506,7 +497,7 @@ class ReportController extends Controller
                     ->where('s1.school_id', $request->school_id);
                 if (!$query->exists()) {
                     $schoolName = School::where('id', $request->school_id)->value('name');
-                    return redirect()->back()->with('error', "No Assessments found for School: $schoolName");
+                    return redirect()->route('admin.assesmentReport')->with('error', "No Assessments found for School: $schoolName");
                 }
             }
 
@@ -515,7 +506,7 @@ class ReportController extends Controller
                     ->where('s2.class_id', $request->class_id);
                 if (!$query->exists()) {
                     $className = Group::where('id', $request->class_id)->value('name');
-                    return redirect()->back()->with('error', "No Assessments found for Class: $className");
+                    return redirect()->route('admin.assesmentReport')->with('error', "No Assessments found for Class: $className");
                 }
             }
 
@@ -523,7 +514,7 @@ class ReportController extends Controller
                 $query->where('teacher_id', $request->teacher_id);
                 if (!$query->exists()) {
                     $teacherUsername = Teacher::where('id', $request->teacher_id)->value('name');
-                    return redirect()->back()->with('error', "No Assessments found for Teacher: $teacherUsername");
+                    return redirect()->route('admin.assesmentReport')->with('error', "No Assessments found for Teacher: $teacherUsername");
                 }
             }
 
@@ -531,7 +522,7 @@ class ReportController extends Controller
                 $query->where('student_id', $request->student_id);
                 if (!$query->exists()) {
                     $studentUsername = Student::where('id', $request->student_id)->value('username');
-                    return redirect()->back()->with('error', "No Assessments found for Student: $studentUsername");
+                    return redirect()->route('admin.assesmentReport')->with('error', "No Assessments found for Student: $studentUsername");
                 }
             }
 
@@ -541,7 +532,7 @@ class ReportController extends Controller
                     ->where('groups.stage_id', $request->stage_id);
                 if (!$query->exists()) {
                     $stageName = Stage::where('id', $request->stage_id)->value('name');
-                    return redirect()->back()->with('error', "No Assessments found for Grade: $stageName");
+                    return redirect()->route('admin.assesmentReport')->with('error', "No Assessments found for Grade: $stageName");
                 }
             }
 
@@ -549,20 +540,20 @@ class ReportController extends Controller
                 $query->whereDate('student_assessments.created_at', '>=', $request->from_date);
 
                 if (!$query->exists()) {
-                    return redirect()->back()->with('error', "No Assessments found after {$request->from_date}");
+                    return redirect()->route('admin.assesmentReport')->with('error', "No Assessments found after {$request->from_date}");
                 }
             }
             if ($request->filled('to_date')) {
                 $query->whereDate('student_assessments.created_at', '<=', $request->to_date);
 
                 if (!$query->exists()) {
-                    return redirect()->back()->with('error', "No Assessments found before {$request->to_date}");
+                    return redirect()->route('admin.assesmentReport')->with('error', "No Assessments found before {$request->to_date}");
                 }
             }
             $assessments = $query->get();
 
             if ($assessments->isEmpty()) {
-                return redirect()->back()->with('error', 'No assessments found for the selected criteria.');
+                return redirect()->route('admin.assesmentReport')->with('error', 'No assessments found for the selected criteria.');
             }
             $homeworkAvg = 0;
             $participationAvg = 0;
@@ -622,7 +613,7 @@ class ReportController extends Controller
                     $query->where('school_id', $request->school_id);
                     if (!$query->exists()) {
                         $schoolName = School::where('id', $request->school_id)->value('name');
-                        return redirect()->back()->with('error', "No Teachers found in School: $schoolName");
+                        return redirect()->route('admin.loginReport')->with('error', "No Teachers found in School: $schoolName");
                     }
                 }
                 $teachers = $query->get();
@@ -641,14 +632,14 @@ class ReportController extends Controller
                     $query->where('school_id', $request->school_id);
                     if (!$query->exists()) {
                         $schoolName = School::where('id', $request->school_id)->value('name');
-                        return redirect()->back()->with('error', "No Students found in School: $schoolName");
+                        return redirect()->route('admin.loginReport')->with('error', "No Students found in School: $schoolName");
                     }
                 }
                 if ($request->filled('class_id')) {
                     $query->where('class_id', $request->class_id);
                     if (!$query->exists()) {
                         $className = Group::where('id', $request->class_id)->value('name');
-                        return redirect()->back()->with('error', "No Students found in Class: $className");
+                        return redirect()->route('admin.loginReport')->with('error', "No Students found in Class: $className");
                     }
                 }
                 $students = $query->get();
@@ -673,7 +664,7 @@ class ReportController extends Controller
                         ];
                     }
                 } else {
-                    return redirect()->back()->with('error', "No Observers found");
+                    return redirect()->route('admin.loginReport')->with('error', "No Observers found");
                 }
             }
             $request = $request->all();

@@ -90,7 +90,7 @@ class UnitController extends Controller
             'is_active' => $request->is_active ?? 0,
         ]);
 
-        return redirect()->back()->with('success', 'Unit created successfully.');
+        return redirect()->route('units.index')->with('success', 'Unit created successfully.');
     }
 
 

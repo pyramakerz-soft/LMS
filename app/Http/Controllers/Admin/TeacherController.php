@@ -111,7 +111,7 @@ class TeacherController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => ['required', 'string', 'regex:/^[A-Za-z\s]+$/'],
             'gender' => 'required',
             'school_id' => 'required|exists:schools,id',
             'stage_ids' => 'required|array',

@@ -162,15 +162,13 @@ class MaterialController extends Controller
 
     public function store(Request $request)
     {
+
         // Validate the request with named error bag for material form
         $validator = \Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'stage_id' => 'required|exists:stages,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'existing_image' => 'nullable|string',
-            'file_path' => 'required',
-            'how_to_use' => 'required',
-            'learning' => 'required',
             'is_active' => 'nullable|boolean',
         ]);
 
@@ -180,7 +178,6 @@ class MaterialController extends Controller
                 ->withErrors($validator, 'material')
                 ->withInput();
         }
-
         // Handle image upload or existing image
         $imagePath = $request->hasFile('image')
             ? $request->file('image')->store('materials', 'public')
@@ -197,7 +194,7 @@ class MaterialController extends Controller
             'learning' => $request->learning,
         ]);
 
-        return redirect()->back()->with('success', 'Theme created successfully.');
+        return redirect()->route('material.index')->with('success', 'Theme created successfully.');
     }
 
     private function handleFileUpload($file, $storageFolder)
