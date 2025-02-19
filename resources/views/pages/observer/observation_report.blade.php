@@ -17,7 +17,7 @@ $menuItems = [
 
 @section('content')
 <div id="content-to-export">
-    < class="p-3 text-[#667085] my-8" style="padding:20px">
+    <div class="p-3 text-[#667085] my-8" style="padding:20px">
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-bold">Observations Report</h1>
             <div class="flex">
@@ -101,7 +101,7 @@ $menuItems = [
         @else
         <p>No Observation Questions Found</p>
         @endif
-</div>
+    </div>
 </div>
 <div id="filter-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
     <div

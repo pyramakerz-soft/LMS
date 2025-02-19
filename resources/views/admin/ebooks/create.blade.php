@@ -11,7 +11,9 @@
             <div class="container-fluid p-0">
 
                 <h1>Add Ebook</h1>
-
+                @if (session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
                 @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -24,13 +26,6 @@
 
                 <form action="{{ route('ebooks.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Title</label>
-                        <input type="text" name="title" class="form-control" id="title"
-                            value="{{ old('title') }}" required>
-                    </div>
-
                     <div class="mb-3">
                         <label for="lesson_id" class="form-label">Grade</label>
                         <select name="grade" id="grade" class="form-control" required>

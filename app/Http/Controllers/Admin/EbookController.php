@@ -40,77 +40,37 @@ class EbookController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'file_path' => 'required|file|mimes:zip,pdf,ppt,pptx,doc,docx,html,txt|max:10240', // Accept zip or other file formats
+            'file_path' => 'required|file|mimes:zip|max:10240',
         ]);
 
-        // Handle the file upload and saving process
         $file = $request->file('file_path');
-        $isZip = $file->getClientOriginalExtension() === 'zip';
+        $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
 
-        // If it's a zip file, extract it
-        if ($isZip) {
-            $filePath = $file->store('ebooks', 'public'); // Store the zip file temporarily
-            // dd($filePath);
+        $extractPath = public_path('ebooks/' . $request->grade . '/');
+        // dd($extractPath);
 
-            // Create a path for the extracted files based on grade
-            $extractPath = storage_path('app\\public\\ebooks\\' . $request->grade . '\\');
+        if (!file_exists($extractPath)) {
+            mkdir($extractPath, 0777, true);
+        }
 
-            // Ensure the directory exists or create it
-            if (!file_exists($extractPath)) {
-                mkdir($extractPath, 0777, true); // Create the directory if it doesn't exist
-            }
-
-            // Log the extraction path
-            \Log::info("Extracting zip to: " . $extractPath);
-
-            // Extract the zip file
-            $zip = new \ZipArchive;
-            $zipFilePath = storage_path('app\\public\\' . $filePath);
-            \Log::info("Opening zip file at: " . $zipFilePath);
-
-            if ($zip->open($zipFilePath) === TRUE) {
-                $zip->extractTo($extractPath); // Extract the contents of the zip to the grade-specific folder
-                $zip->close();
-
-                // Set the filePath to the folder where files are extracted
-                $filePath = 'ebooks\\' . $request->grade . '\\' . pathinfo($filePath, PATHINFO_FILENAME);
-
-                // Check if there's an index.html file in the extracted folder
-                if (file_exists(public_path('storage\\' . $filePath . '\\index.html'))) {
-                    // Save the ebook record and redirect to view index.html
-                    $ebook = Ebook::create([
-                        'title' => $request->title,
-                        'author' => 'Pyramakerz',
-                        'description' => null,
-                        'file_path' => $filePath,
-                    ]);
-
-                    // Redirect to view the index.html file
-                    return redirect()->back();
-                }
-            } else {
-                // Log error details
-                \Log::error("Failed to open zip file: " . $zip->getStatusString());
-                return back()->withErrors(['file_path' => 'Failed to extract the zip file.']);
-            }
+        $zip = new ZipArchive;
+        if ($zip->open($request->file('file_path')->path()) === TRUE) {
+            $zip->extractTo($extractPath);
+            $zip->close();
         } else {
-            // Store non-zip files (pdf, ppt, etc.)
-            $filePath = $file->store('ebooks', 'public');
+            return back()->withErrors(['file_path' => 'Failed to open the ZIP file.']);
         }
 
         // Create the Ebook record in the database
-        Ebook::create([
-            'title' => $request->title,
+        $ebook = Ebook::create([
+            'title' => $fileName,
             'author' => 'Pyramakerz',
             'description' => null,
-            'file_path' => $filePath, // This could be a file or a folder
+            'file_path' => $request->grade . '/' . $fileName,
         ]);
 
-        return redirect()->route('ebooks.index')->with('success', 'Ebook created successfully.');
+        return redirect()->route('ebooks.create')->with('success', 'Ebook created successfully.');
     }
-
-
 
     /**
      * Display the specified resource.
