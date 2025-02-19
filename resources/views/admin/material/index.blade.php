@@ -15,7 +15,7 @@
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
-
+                    <a href="{{ route('material.create') }}" class="btn btn-primary mb-3">Add Theme</a>
                     <!-- Wrap table in a scrollable container -->
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">

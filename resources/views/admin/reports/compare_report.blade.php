@@ -431,24 +431,24 @@
     $(document).ready(function() {
         $('.js-select2').select2();
 
-        function updateOptions(selectedValue, selectToUpdate) {
-            // Enable all options first
-            $(`#${selectToUpdate} option`).prop("disabled", false);
+        // function updateOptions(selectedValue, selectToUpdate) {
+        //     // Enable all options first
+        //     $(`#${selectToUpdate} option`).prop("disabled", false);
 
-            // Disable the matching option in the other select
-            if (selectedValue) {
-                $(`#${selectToUpdate} option[value="${selectedValue}"]`)
-                    .prop("disabled", true)
-                    .addClass("dim-option");
-            }
-        }
+        //     // Disable the matching option in the other select
+        //     if (selectedValue) {
+        //         $(`#${selectToUpdate} option[value="${selectedValue}"]`)
+        //             .prop("disabled", true)
+        //             .addClass("dim-option");
+        //     }
+        // }
 
 
 
         $('#school_id').change(function() {
             var schoolId = $('#school_id').val();
             var compareBy = $('#compare_by').val();
-            updateOptions(schoolId, "school_id2");
+            // updateOptions(schoolId, "school_id2");
 
             switch (compareBy) {
                 case 'classes':
@@ -466,7 +466,7 @@
         $('#school_id2').change(function() {
             var schoolId2 = $('#school_id2').val();
             var compareBy = $('#compare_by').val();
-            updateOptions(schoolId2, "school_id");
+            // updateOptions(schoolId2, "school_id");
 
             switch (compareBy) {
                 case 'classes':

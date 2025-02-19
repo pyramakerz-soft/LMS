@@ -69,6 +69,15 @@ $menuItems = [];
         <!-- Chat Area -->
         <div class="w-2/3">
             <div class="flex flex-col h-full">
+                <div class="bg-gray-300 text-gray-800 p-4">
+                    <h2 class="text-xl">
+                        @if ($receiverType === 'student')
+                        {{ $receiver->username }}
+                        @else
+                        {{ $receiver->username }}
+                        @endif
+                    </h2>
+                </div>
                 <div id="chatArea" class="flex-1 overflow-y-auto p-4 bg-gray-100" style="max-height: 95vh;"
                     data-auth-id="{{ auth()->guard('student')->check() ? auth()->guard('student')->id() : auth()->guard('teacher')->id() }}"
                     data-auth-type="{{ auth()->guard('student')->check() ? 'student' : 'teacher' }}">
@@ -133,7 +142,7 @@ $menuItems = [];
         const sendButton = chatForm.querySelector('button[type="submit"]');
         sendButton.disabled = true;
 
-        fetch(`https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/chat/{{ $receiver->id }}/{{ $receiverType }}`, {
+        fetch(`/chat/{{ $receiver->id }}/{{ $receiverType }}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -170,7 +179,7 @@ $menuItems = [];
 
     setInterval(function() {
         fetch(
-                `https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/chat/{{ $receiver->id }}/{{ $receiverType }}/messages?last_message_id=${lastMessageId}`
+                `/chat/{{ $receiver->id }}/{{ $receiverType }}/messages?last_message_id=${lastMessageId}`
             )
             .then(response => {
                 if (!response.ok) {

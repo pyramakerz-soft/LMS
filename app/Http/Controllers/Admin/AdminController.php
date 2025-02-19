@@ -85,14 +85,11 @@ class AdminController extends Controller
             'classes.*.stage_id' => 'required|exists:stages,id', // Validate each class's stage_id
         ]);
 
-        $existingSchool = School::where('name', $request->name)
-            ->where('address', $request->address)
-            ->first();
-
-        if ($existingSchool) {
-            return redirect()->back();
+        if ($request->has('flag')) {
+            $flag = 1;
+        } else {
+            $flag = 0;
         }
-
         // Create the school
         $school = School::create([
             'name' => $request->name,
@@ -100,6 +97,7 @@ class AdminController extends Controller
             'address' => $request->address,
             'city' => $request->city,
             'type_id' => $request->type_id,
+            'flag' => $flag,
         ]);
 
         // Create classes for this school
@@ -230,8 +228,9 @@ class AdminController extends Controller
     {
         $school = School::findOrFail($id);
         $school->delete();
-
-        return redirect()->route('admins.index')->with('success', 'School deleted successfully.');
+        $redirectUrl = session('schools_previous_url', route('admins.index'));
+        return redirect($redirectUrl)->with('success', 'School deleted successfully.');
+        // return redirect()->route('admins.index')->with('success', 'School deleted successfully.');
     }
 
     public function viewCurriculum($schoolId)

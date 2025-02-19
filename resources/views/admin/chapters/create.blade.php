@@ -21,7 +21,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('chapters.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('chapters.store') }}" id="chapterform" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="mb-3">
@@ -69,3 +69,14 @@
         </div>
     </div>
 @endsection
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.getElementById("chapterform");
+
+        form.addEventListener("submit", function() {
+            const submitButton = form.querySelector("[type='submit']");
+            submitButton.disabled = true; // Disable the button
+            submitButton.innerHTML = "Submitting..."; // Optional: Change button text
+        });
+    });
+</script>

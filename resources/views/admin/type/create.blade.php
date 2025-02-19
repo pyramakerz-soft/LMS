@@ -22,7 +22,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('types.store') }}" method="POST">
+                    <form action="{{ route('types.store') }}" id="typeform" method="POST">
                         @csrf
 
                         <div class="mb-3">
@@ -39,3 +39,14 @@
         </div>
     </div>
 @endsection
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.getElementById("typeform");
+
+        form.addEventListener("submit", function() {
+            const submitButton = form.querySelector("[type='submit']");
+            submitButton.disabled = true; // Disable the button
+            submitButton.innerHTML = "Submitting..."; // Optional: Change button text
+        });
+    });
+</script>
