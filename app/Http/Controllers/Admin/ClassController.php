@@ -150,7 +150,8 @@ class ClassController extends Controller
         // Check if there are any duplicate usernames
         if (!empty($import->duplicateUsernames)) {
             $duplicates = implode(', ', $import->duplicateUsernames);
-            return back()->withErrors(['file' => "Duplicate usernames found: $duplicates"]);
+            // return back()->withErrors(['file' => "Students Imported except duplicate usernames found: $duplicates"]);
+            return redirect()->route('classes.index')->with('success', "Students imported successfully and the following exisitng students classes has been updated $duplicates.");
         }
         return redirect()->route('classes.index')->with('success', 'Students imported successfully.');
     }

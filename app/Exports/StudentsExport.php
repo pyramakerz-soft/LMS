@@ -27,22 +27,20 @@ class StudentsExport implements FromCollection, WithHeadings
             ->with(['school', 'stage'])
             ->get()
             ->map(function ($student) {
-                if ($student->gender == 'Boy' || $student->gender == 'boy') {
-                    $gender = 'ذكر';
-                } else {
-                    $gender = 'انثى';
-                }
+                // if ($student->gender == 'Boy' || $student->gender == 'boy') {
+                //     $gender = 'ذكر';
+                // } else {
+                //     $gender = 'انثى';
+                // }
                 return [
-                    'username' => str_replace('_', ' ', $student->username) ?? '',
-                    'arabic_name' => $student->arabic_name ?? '',
-                    'gender' => $gender ?? '',
-                    'phone' => (string)$student->phone ?? '',
-                    'birth_date' => $student->birth_date ?? '',
+                    'username' => $student->username ?? '',
+                    'password' => $student->plain_password ?? '',
                 ];
             });
     }
     public function headings(): array
     {
-        return ['اسم الطالب باللغة الانجليزية', 'اسم الطالب باللغة العربية', 'الجنس', 'رقم الموبايل', 'تاريخ الميلاد'];
+        // return ['اسم الطالب باللغة الانجليزية', 'اسم الطالب باللغة العربية', 'الجنس', 'رقم الموبايل', 'تاريخ الميلاد'];
+        return ['Username', 'Password'];
     }
 }
