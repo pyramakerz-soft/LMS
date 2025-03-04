@@ -23,7 +23,12 @@ class StudentController extends Controller
         $StudentQuery = Student::with('school', 'stage');
 
         $schools = School::all();
-        $classes = Group::all();
+
+        if ($request->filled('school')) {
+            $classes = Group::where('school_id', $request->school)->get();
+        } else {
+            $classes = Group::all();
+        }
 
         if ($request->has('school') && $request->school != null) {
             $StudentQuery->where('school_id', $request->school);

@@ -58,7 +58,7 @@ $menuItems = [
     </div>
 
     <div class="overflow-x-auto">
-        <form action="{{ route('observation.store') }}" method="GET" enctype="multipart/form-data" class="mb-4 flex" style="gap:10px; padding:10px" id="observation_form">
+        <form action="{{ route('observation.store') }}" id="obsform" method="GET" enctype="multipart/form-data" class="mb-4 flex" style="gap:10px; padding:10px" id="observation_form">
             @csrf
 
 
@@ -185,7 +185,17 @@ $menuItems = [
     }
 </style>
 @section('page_js')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.getElementById("obsform");
 
+        form.addEventListener("submit", function() {
+            const submitButton = form.querySelector("[type='submit']");
+            submitButton.disabled = true; // Disable the button
+            submitButton.innerHTML = "Submitting..."; // Optional: Change button text
+        });
+    });
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('lastSubmissionTime', new Date().getTime());

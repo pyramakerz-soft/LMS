@@ -144,25 +144,16 @@ class ClassController extends Controller
 
         $import = new StudentsImport($id);
 
-        try {
-            // Import the file
-            \Excel::import($import, $request->file('file'));
+        // Import the file
+        Excel::import($import, $request->file('file'));
 
-            // Check if there are any duplicate usernames
-            if (!empty($import->duplicateUsernames)) {
-                $duplicates = implode(', ', $import->duplicateUsernames);
-                return back()->withErrors(['file' => "Duplicate usernames found: $duplicates"]);
-            }
-
-            return redirect()->route('classes.index')->with('success', 'Students imported successfully.');
-        } catch (\Illuminate\Database\QueryException $e) {
-            if ($e->getCode() == 23000) {
-                return back()->withErrors(['file' => 'A student with the same username already exists.']);
-            }
-            return back()->withErrors(['file' => 'Database error: ' . $e->getMessage()]);
-        } catch (\Exception $e) {
-            return back()->withErrors(['file' => 'Import error: ' . $e->getMessage()]);
+        // Check if there are any duplicate usernames
+        if (!empty($import->duplicateUsernames)) {
+            $duplicates = implode(', ', $import->duplicateUsernames);
+            // return back()->withErrors(['file' => "Students Imported except duplicate usernames found: $duplicates"]);
+            return redirect()->route('classes.index')->with('success', "Students imported successfully and the following exisitng students classes has been updated $duplicates.");
         }
+        return redirect()->route('classes.index')->with('success', 'Students imported successfully.');
     }
 
     public function exportStudents($id)

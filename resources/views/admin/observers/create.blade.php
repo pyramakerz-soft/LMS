@@ -22,7 +22,7 @@
                 </div>
                 @endif
 
-                <form action="{{ route('observers.store') }}" method="POST" enctype="multipart/form-data" autocomplete="off">
+                <form action="{{ route('observers.store') }}" id="observerform" method="POST" enctype="multipart/form-data" autocomplete="off">
                     @csrf
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
@@ -69,6 +69,17 @@
 </div>
 @endsection
 @section('page_js')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.getElementById("observerform");
+
+        form.addEventListener("submit", function() {
+            const submitButton = form.querySelector("[type='submit']");
+            submitButton.disabled = true; // Disable the button
+            submitButton.innerHTML = "Submitting..."; // Optional: Change button text
+        });
+    });
+</script>
 <script>
     document.getElementById('school_id').addEventListener('change', function() {
         let schoolId = this.value;

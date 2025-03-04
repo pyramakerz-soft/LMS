@@ -5,6 +5,7 @@ namespace App\Exports;
 use App\Models\Student;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+
 class StudentsExport implements FromCollection, WithHeadings
 {
     protected $classId;
@@ -26,16 +27,20 @@ class StudentsExport implements FromCollection, WithHeadings
             ->with(['school', 'stage'])
             ->get()
             ->map(function ($student) {
+                // if ($student->gender == 'Boy' || $student->gender == 'boy') {
+                //     $gender = 'ذكر';
+                // } else {
+                //     $gender = 'انثى';
+                // }
                 return [
-                    'username' => $student->username,
-                    'password' => $student->plain_password,
-                    'school_name' => $student->school->name,
-                    'grade' => $student->stage->name,
+                    'username' => $student->username ?? '',
+                    'password' => $student->plain_password ?? '',
                 ];
             });
     }
     public function headings(): array
     {
-        return ['Username', 'Password', 'School Name', 'Grade'];
+        // return ['اسم الطالب باللغة الانجليزية', 'اسم الطالب باللغة العربية', 'الجنس', 'رقم الموبايل', 'تاريخ الميلاد'];
+        return ['Username', 'Password'];
     }
 }

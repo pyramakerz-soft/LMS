@@ -94,7 +94,7 @@ class ChapterController extends Controller
             'is_active' => $request->is_active ?? 0,
         ]);
 
-        return redirect()->back()->with('success', 'Chapter created successfully.');
+        return redirect()->route('chapters.index')->with('success', 'Chapter created successfully.');
     }
 
 

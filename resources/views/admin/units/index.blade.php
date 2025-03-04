@@ -15,7 +15,7 @@
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
-
+                    <a href="{{ route('units.create') }}" class="btn btn-primary mb-3">Add Unit</a>
                     <!-- Add scrollable wrapper for horizontal scroll -->
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">

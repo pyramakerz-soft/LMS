@@ -1,0 +1,1 @@
+﻿positionForPages[19]={page:19,positions:[{word:"machine. ",left:0.194080,top:0.125487,width:0.051693,height:0.018444}]};
