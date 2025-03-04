@@ -102,14 +102,12 @@ class StudentAssignmentController extends Controller
         $assignmentId = $request->assignment_id;
         $studentId = $userAuth->id;
 
-        // Check if student is already linked to assignment
         $studentAssignment = DB::table('assignment_student')
             ->where('assignment_id', $assignmentId)
             ->where('student_id', $studentId)
             ->first();
 
         if ($studentAssignment) {
-            // Update existing submission instead of creating a new entry
             DB::table('assignment_student')
                 ->where('assignment_id', $assignmentId)
                 ->where('student_id', $studentId)
@@ -119,7 +117,6 @@ class StudentAssignmentController extends Controller
                     'updated_at' => now(),
                 ]);
         } else {
-            // If for some reason student was not linked, create the entry (Fallback)
             DB::table('assignment_student')->insert([
                 'assignment_id' => $assignmentId,
                 'student_id' => $studentId,
