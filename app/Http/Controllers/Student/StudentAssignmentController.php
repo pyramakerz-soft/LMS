@@ -51,34 +51,85 @@ class StudentAssignmentController extends Controller
         }
     }
 
+    // public function store(Request $request)
+    // {
+    //     $userAuth = auth()->guard('student')->user();
+
+    //     if ($userAuth) {
+    //         $request->validate([
+    //             'file_upload' => 'required|file|mimes:xlsx,xls,pdf',
+    //             'assignment_id' => 'required|exists:assignments,id',
+    //         ]);
+
+    //         $currentTime = Carbon::now();
+    //         $filePath = $request->file('file_upload')->store('assignments', 'public');
+
+    //         $assignmentId = $request->assignment_id;
+    //         $studentId = $userAuth->id;
+    //         $studentAssignment = $userAuth->assignments()->where('assignment_id', $assignmentId)->first();
+
+
+
+    //         if ($studentAssignment) {
+    //             $studentAssignment->updateExistingPivot->submitted_at = $currentTime->toDateString();
+    //             $studentAssignment->updateExistingPivot->path_file = $filePath;
+    //             $studentAssignment->updateExistingPivot->save();
+
+    //         }
+
+    //         return redirect()->route('student.assignment.show', $assignmentId)->with('success', 'Assignment submitted successfully.');
+    //     } else {
+    //         return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
+    //     }
+    // }
+
     public function store(Request $request)
     {
         $userAuth = auth()->guard('student')->user();
 
-        if ($userAuth) {
-            $request->validate([
-                'file_upload' => 'required|file|mimes:xlsx,xls,pdf',
-                'assignment_id' => 'required|exists:assignments,id',
-            ]);
-
-            $currentTime = Carbon::now();
-            $filePath = $request->file('file_upload')->store('assignments', 'public');
-
-            $assignmentId = $request->assignment_id;
-            $studentId = $userAuth->id;
-            $studentAssignment = $userAuth->assignments()->where('assignment_id', $assignmentId)->first();
-
-
-
-            if ($studentAssignment) {
-                $studentAssignment->pivot->submitted_at = $currentTime->toDateString();
-                $studentAssignment->pivot->path_file = $filePath;
-                $studentAssignment->pivot->save();
-            }
-
-            return redirect()->route('student.assignment.show', $assignmentId)->with('success', 'Assignment submitted successfully.');
-        } else {
+        if (!$userAuth) {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
+
+        $request->validate([
+            'file_upload' => 'required|file|mimes:xlsx,xls,pdf',
+            'assignment_id' => 'required|exists:assignments,id',
+        ]);
+
+        $currentTime = Carbon::now();
+        $filePath = $request->file('file_upload')->store('assignments', 'public');
+
+        $assignmentId = $request->assignment_id;
+        $studentId = $userAuth->id;
+
+        // Check if student is already linked to assignment
+        $studentAssignment = DB::table('assignment_student')
+            ->where('assignment_id', $assignmentId)
+            ->where('student_id', $studentId)
+            ->first();
+
+        if ($studentAssignment) {
+            // Update existing submission instead of creating a new entry
+            DB::table('assignment_student')
+                ->where('assignment_id', $assignmentId)
+                ->where('student_id', $studentId)
+                ->update([
+                    'submitted_at' => $currentTime->toDateString(),
+                    'path_file' => $filePath,
+                    'updated_at' => now(),
+                ]);
+        } else {
+            // If for some reason student was not linked, create the entry (Fallback)
+            DB::table('assignment_student')->insert([
+                'assignment_id' => $assignmentId,
+                'student_id' => $studentId,
+                'submitted_at' => $currentTime->toDateString(),
+                'path_file' => $filePath,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        return redirect()->route('student.assignment.show', $assignmentId)->with('success', 'Assignment submitted successfully.');
     }
 }
