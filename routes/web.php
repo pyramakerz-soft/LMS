@@ -292,6 +292,13 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
 });
 Route::prefix('observer')->middleware('auth:observer')->group(function () {
     Route::get('/dashboard', [ObserverDashboardController::class, 'index'])->name('observer.dashboard');
+
+    // Route::get('/observations/export', [ObserverDashboardController::class, 'exportObservations'])->name('observer.observations.export');
+    
+    Route::get('/observer/observations/export', [ObserverDashboardController::class, 'exportObservations'])
+    ->name('observer.observations.export');
+
+
     Route::get('/report', [ObserverDashboardController::class, 'report'])->name('observer.report');
 
     Route::get('/observation/create', [ObserverDashboardController::class, 'createObservation'])->name('observer.observation.create');

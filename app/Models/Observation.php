@@ -30,4 +30,8 @@ class Observation extends Model
     {
         return $this->belongsTo(Observer::class);
     }
+    public function histories()
+    {
+        return $this->hasMany(ObservationHistory::class);
+    }
 }

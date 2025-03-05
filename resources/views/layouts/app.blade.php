@@ -43,11 +43,11 @@
             width: 125%;
         }
 
-        @media (max-width: 991px) {
+        /* @media (max-width: 991px) {
             body {
                 display: none;
             }
-        }
+        } */
     </style>
     @yield('page_css')
 </head>

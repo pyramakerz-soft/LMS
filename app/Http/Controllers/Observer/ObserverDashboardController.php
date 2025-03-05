@@ -30,7 +30,10 @@ class ObserverDashboardController extends Controller
         $cities = School::distinct()->whereNotNull('city')->pluck('city');
         $observers = Observer::all();
         $stages = Stage::all();
-        $query = Observation::where('observer_id', $observer->id);
+        // $query = Observation::where('observer_id', $observer->id);
+        $query = Observation::with(['school', 'subject', 'stage', 'teacher', 'observer', 'histories.observation_question'])
+            ->where('observer_id', $observer->id);
+
         if ($request->filled('teacher_id')) {
             $teacherIds = Teacher::where('id', $request->teacher_id)
                 ->orWhere('alias_id', $request->teacher_id)->pluck('id');
@@ -70,8 +73,41 @@ class ObserverDashboardController extends Controller
 
         $observations = $query->get();
 
+
         return view('pages.observer.observer', compact('teachers', 'stages', 'cities', 'observers', 'schools', 'observer', 'observations'));
     }
+    public function exportObservations()
+    {
+        $observer = Auth::guard('observer')->user();
+
+        $observations = Observation::with(['school', 'subject', 'stage', 'teacher', 'observer', 'histories.observation_question'])
+            ->where('observer_id', $observer->id)
+            ->get()
+            ->map(function ($observation) {
+                return [
+                    'id' => $observation->id,
+                    'name' => $observation->name,
+                    'teacher_name' => $observation->teacher->name ?? 'N/A',
+                    'coteacher_name' => $observation->coteacher->name ?? 'N/A',
+                    'school' => $observation->school->name ?? 'N/A',
+                    'city' => $observation->school->city ?? 'N/A',
+                    'subject' => $observation->subject->name ?? 'N/A',
+                    'stage' => $observation->stage->name ?? 'N/A',
+                    'activity' => $observation->activity,
+                    'note' => $observation->note,
+                    // 'questions' => $observation->histories->map(function ($history) {
+                    //     return [
+                    //         // 'name' => $history->observation_question->question,
+                    //         'avg_rating' => $history->rate,
+                    //         'max_rating' => $history->question->max_rate
+                    //     ];
+                    // })->toArray()
+                ];
+            });
+
+        return response()->json($observations);
+    }
+
     public function createObservation()
     {
         $observer = Auth::guard('observer')->user();
@@ -282,8 +318,13 @@ class ObserverDashboardController extends Controller
                     $data[$header['header_id']]['questions'][$question['question_id']]['avg_rating'] = round($data[$header['header_id']]['questions'][$question['question_id']]['avg_rating'] / $obsCount, 2);
                 }
             }
+            $overallComments = Observation::whereIn('id', $observations)
+                ->whereNotNull('note')
+                ->pluck('note')
+                ->toArray();
+
             $cities = School::distinct()->whereNotNull('city')->pluck('city');
-            return view('pages.observer.observation_report', compact('stages', 'cities', 'teachers', 'observer', 'observers', 'schools', 'headers', 'data'));
+            return view('pages.observer.observation_report', compact('stages', 'cities', 'teachers', 'observer', 'observers', 'schools', 'headers', 'data', 'overallComments'));
         } else {
             $cities = School::distinct()->whereNotNull('city')->pluck('city');
             return view('pages.observer.observation_report', compact('stages', 'cities', 'teachers', 'observer', 'observers', 'schools', 'headers'));

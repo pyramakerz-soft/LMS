@@ -25,4 +25,8 @@ class Observer extends Authenticatable
     {
         return $this->hasMany(Observation::class);
     }
+    public function schools()
+    {
+        return $this->belongsToMany(School::class, 'observer_school');
+    }
 }

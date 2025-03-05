@@ -32,7 +32,8 @@ class ObserverController extends Controller
 
     public function create()
     {
-        return view('admin.observers.create');
+        $schools = School::all();
+        return view('admin.observers.create', compact("schools"));
     }
 
     /**
@@ -46,24 +47,27 @@ class ObserverController extends Controller
         ]);
 
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|string',
             'username' => [
                 'required',
                 'regex:/^[a-zA-Z][a-zA-Z0-9_]*$/',
                 Rule::unique('observers'),
             ],
-            'gender' => 'required',
+            'gender' => 'required|string',
             'password' => 'required|string|confirmed|min:6',
+            'school_id' => 'required|array',
+            'school_id.*' => 'exists:schools,id',
         ]);
 
-
-        Observer::create([
+        $observer = Observer::create([
             'name' => $request->name,
             'username' => $request->input('username'),
             'password' => Hash::make($request->password),
             'gender' => $request->input('gender'),
             'is_active' => 1
         ]);
+
+        $observer->schools()->attach($request->input('school_id'));
 
         return redirect()->route('observers.index')->with('success', 'Observer created successfully.');
     }
@@ -175,7 +179,7 @@ class ObserverController extends Controller
         $request->validate([
             'name' => 'required|string',
         ]);
-        $obs =  ObservationHeader::create([
+        $obs = ObservationHeader::create([
             'header' => $request->name,
         ]);
         return redirect()->route('observers.addQuestions')->with('success', 'Header added successfully.');
@@ -185,7 +189,7 @@ class ObserverController extends Controller
         $request->validate([
             'header_name' => 'required|string',
         ]);
-        $obs  = ObservationHeader::findOrFail($request->header_id);
+        $obs = ObservationHeader::findOrFail($request->header_id);
 
         $obs->update([
             'header' => $request->header_name,
@@ -200,7 +204,7 @@ class ObserverController extends Controller
             'question_name' => 'required|string',
             'max_rating' => 'required|integer|min:1',
         ]);
-        $obs  = ObservationQuestion::findOrFail($request->question_id);
+        $obs = ObservationQuestion::findOrFail($request->question_id);
 
         $obs->update([
             'question' => $request->question_name,

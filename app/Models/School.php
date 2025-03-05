@@ -66,6 +66,9 @@ class School extends Model
     {
         return ($val !== null) ? asset($val) : "";
     }
-
+    public function observers()
+    {
+        return $this->belongsToMany(Observer::class, 'observer_school');
+    }
 
 }
