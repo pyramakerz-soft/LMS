@@ -25,6 +25,12 @@
             </a>
             </li> --}}
 
+            <li class="sidebar-item {{ request()->is('admin/roles') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('admin.roles.index') }}">
+                    <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
+                        Roles</span>
+                </a>
+            </li>
             <li class="sidebar-item {{ request()->is('admin/types') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('types.index') }}">
                     <i class="align-middle" data-feather="sliders"></i><span class="align-middle">

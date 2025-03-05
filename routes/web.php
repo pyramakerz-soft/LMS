@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\MaterialController;
 use App\Http\Controllers\Admin\ObserverController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\StageController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TeacherController;
@@ -149,7 +150,16 @@ Route::prefix('admin')->group(function () {
         //     ->name('admin.schools.stages');
         Route::get('/admin/schools/{school}/stages/{stage}/classes', [StudentController::class, 'getClasses'])->name('admin.schools.stages.classes');
 
-
+        Route::get('/roles', [RoleController::class, 'index'])->name('admin.roles.index');
+        Route::get('/roles/create', [RoleController::class, 'create'])->name('admin.roles.create');
+        Route::post('/roles', [RoleController::class, 'store'])->name('admin.roles.store');
+        Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->name('admin.roles.edit');
+        Route::put('/roles/{role}', [RoleController::class, 'update'])->name('admin.roles.update');
+        Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('admin.roles.destroy');
+    
+        Route::get('/roles/assign', [RoleController::class, 'assignRole'])->name('admin.roles.assign');
+        Route::post('/roles/assign', [RoleController::class, 'assignRoleToUser'])->name('admin.roles.assignUser');
+    
 
         Route::get('/api/schools/{school}/classes', function (School $school) {
             return response()->json($school->classes);
@@ -294,9 +304,9 @@ Route::prefix('observer')->middleware('auth:observer')->group(function () {
     Route::get('/dashboard', [ObserverDashboardController::class, 'index'])->name('observer.dashboard');
 
     // Route::get('/observations/export', [ObserverDashboardController::class, 'exportObservations'])->name('observer.observations.export');
-    
+
     Route::get('/observer/observations/export', [ObserverDashboardController::class, 'exportObservations'])
-    ->name('observer.observations.export');
+        ->name('observer.observations.export');
 
 
     Route::get('/report', [ObserverDashboardController::class, 'report'])->name('observer.report');
