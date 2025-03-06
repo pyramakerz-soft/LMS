@@ -150,16 +150,19 @@ Route::prefix('admin')->group(function () {
         //     ->name('admin.schools.stages');
         Route::get('/admin/schools/{school}/stages/{stage}/classes', [StudentController::class, 'getClasses'])->name('admin.schools.stages.classes');
 
+        Route::delete('/roles/{role}/permissions/{permission}', [RoleController::class, 'revokePermission'])->name('roles.permissions.revoke');
+        Route::post('/roles/{role}/permissions', [RoleController::class, 'givePermission'])->name('roles.permissions');
+
         Route::get('/roles', [RoleController::class, 'index'])->name('admin.roles.index');
         Route::get('/roles/create', [RoleController::class, 'create'])->name('admin.roles.create');
         Route::post('/roles', [RoleController::class, 'store'])->name('admin.roles.store');
         Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->name('admin.roles.edit');
         Route::put('/roles/{role}', [RoleController::class, 'update'])->name('admin.roles.update');
         Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('admin.roles.destroy');
-    
+
         Route::get('/roles/assign', [RoleController::class, 'assignRole'])->name('admin.roles.assign');
         Route::post('/roles/assign', [RoleController::class, 'assignRoleToUser'])->name('admin.roles.assignUser');
-    
+
 
         Route::get('/api/schools/{school}/classes', function (School $school) {
             return response()->json($school->classes);

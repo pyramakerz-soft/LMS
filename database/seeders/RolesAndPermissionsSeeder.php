@@ -19,21 +19,51 @@ class RolesAndPermissionsSeeder extends Seeder
         $supervisor = Role::firstOrCreate(['name' => 'Supervisor']);
         $observer = Role::firstOrCreate(['name' => 'Observer']);
 
-        // Define permissions
-        $permissions = [
-            'manage users',
-            'create roles',
-            'assign roles',
-            'delete roles',
-            'view reports'
+
+        $models = [
+            'user',
+            'role',
+            'permission',
+            'admin',
+            'assessment',
+            'assignment',
+            'chapter',
+            'ebook',
+            'group',
+            'image',
+            'lesson',
+            'material',
+            'message',
+            'observation',
+            'observation',
+            'observationHistory',
+            'observationQuestion',
+            'observer',
+            'school',
+            'stage',
+            'student_assessment',
+
+            'student',
+            'teacher',
+            'teacherClass',
+            'teacherResource',
+            'type',
+            'unit',
         ];
-
-        foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
+        $crudActions = ['create', 'read', 'update', 'delete'];
+        foreach ($models as $model) {
+            foreach ($crudActions as $action) {
+                Permission::firstOrCreate(['name' => "{$action} {$model}"]);
+            }
         }
+       
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $adminRole->syncPermissions(Permission::all());
+        
+        $supervisorRole = Role::firstOrCreate(['name' => 'supervisor']);
+        $readPermissions = Permission::where('name', 'like', 'read %')->get();
+        $supervisorRole->syncPermissions($readPermissions);
 
-        // Assign permissions to roles
-        $admin->givePermissionTo(Permission::all());
-        $supervisor->givePermissionTo(['view reports']);
+        $this->command->info('Permissions and roles seeded successfully!');
     }
 }

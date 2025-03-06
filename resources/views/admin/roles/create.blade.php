@@ -8,35 +8,42 @@
             @include('admin.layouts.navbar')
 
             <main class="content">
-                <div class="container-fluid p-0">
+                <div class="container py-4">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="card shadow-sm">
+                                <div
+                                    class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                                    <h5>Create New Role</h5>
+                                    <a href="{{ route('admin.roles.index') }}" class="btn btn-light btn-sm">
+                                        <i class="bi bi-arrow-left"></i> Back to Roles
+                                    </a>
+                                </div>
 
-                    <h1>Create Role</h1>
-                    <form action="{{ route('admin.roles.store') }}" method="POST">
-                        @csrf
-                        <input type="text" name="name" placeholder="Role Name" required>
-                        <h4>Permissions:</h4>
-                        @foreach ($permissions as $permission)
-                            <input type="checkbox" name="permissions[]" value="{{ $permission->name }}">
-                            {{ $permission->name }}<br>
-                        @endforeach
-                        <button type="submit" class="btn btn-success">Create Role</button>
-                    </form>
+                                <div class="card-body">
+                                    <form method="POST" action="{{ route('admin.roles.store') }}">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Role Name</label>
+                                            <input type="text" id="name" name="name"
+                                                class="form-control @error('name') is-invalid @enderror">
+                                            @error('name')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
+                                        <div class="d-flex justify-content-end">
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="bi bi-plus-circle"></i> Create Role
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </main>
-
-
         </div>
     </div>
 @endsection
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const form = document.getElementById("typeform");
-
-        form.addEventListener("submit", function() {
-            const submitButton = form.querySelector("[type='submit']");
-            submitButton.disabled = true; // Disable the button
-            submitButton.innerHTML = "Submitting..."; // Optional: Change button text
-        });
-    });
-</script>

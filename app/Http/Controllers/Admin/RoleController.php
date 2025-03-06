@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
@@ -23,15 +24,10 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|unique:roles',
-            'permissions' => 'array|required',
-        ]);
+        $validated = $request->validate(['name' => ['required', 'min:3']]);
+        Role::create($validated);
 
-        $role = Role::create(['name' => $request->name]);
-        $role->givePermissionTo($request->permissions);
-
-        return redirect()->route('admin.roles.index')->with('success', 'Role created successfully.');
+        return to_route('admin.roles.index')->with('message', 'Role Created successfully.');
     }
 
     public function edit(Role $role)
@@ -65,16 +61,34 @@ class RoleController extends Controller
         return view('admin.roles.assign', compact('users', 'roles'));
     }
 
-    public function assignRoleToUser(Request $request)
+    // public function assignRoleToUser(Request $request)
+    // {
+    //     $request->validate([
+    //         'user_id' => 'required|exists:users,id',
+    //         'role' => 'required|exists:roles,name',
+    //     ]);
+
+    //     $user = User::findOrFail($request->user_id);
+    //     $user->syncRoles([$request->role]);
+
+    //     return redirect()->route('admin.roles.assign')->with('success', 'Role assigned successfully.');
+    // }
+
+    public function givePermission(Request $request, Role $role)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'role' => 'required|exists:roles,name',
-        ]);
+        if ($role->hasPermissionTo($request->permission)) {
+            return back()->with('message', 'Permission exists.');
+        }
+        $role->givePermissionTo($request->permission);
+        return back()->with('message', 'Permission added.');
+    }
 
-        $user = User::findOrFail($request->user_id);
-        $user->syncRoles([$request->role]);
-
-        return redirect()->route('admin.roles.assign')->with('success', 'Role assigned successfully.');
+    public function revokePermission(Role $role, Permission $permission)
+    {
+        if ($role->hasPermissionTo($permission)) {
+            $role->revokePermissionTo($permission);
+            return back()->with('message', 'Permission revoked.');
+        }
+        return back()->with('message', 'Permission not exists.');
     }
 }
