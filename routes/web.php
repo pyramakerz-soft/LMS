@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\TeacherResourceController;
 use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ChapterController as ControllersChapterController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DashboardController;
@@ -162,6 +163,16 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/roles/assign', [RoleController::class, 'assignRole'])->name('admin.roles.assign');
         Route::post('/roles/assign', [RoleController::class, 'assignRoleToUser'])->name('admin.roles.assignUser');
+
+
+
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+        Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+        Route::post('/users/{user}/roles', [UserController::class, 'assignRole'])->name('users.roles');
+        Route::delete('/users/{user}/roles/{role}', [UserController::class, 'removeRole'])->name('users.roles.remove');
+        Route::post('/users/{user}/permissions', [UserController::class, 'givePermission'])->name('users.permissions');
+        Route::delete('/users/{user}/permissions/{permission}', [UserController::class, 'revokePermission'])->name('users.permissions.revoke');
 
 
         Route::get('/api/schools/{school}/classes', function (School $school) {

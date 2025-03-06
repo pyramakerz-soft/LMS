@@ -18,6 +18,11 @@
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Images</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ request()->is('admin/users') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('users.index') }}">
+                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Users</span>
+                </a>
+            </li>
             {{-- <li class="sidebar-item {{ request()->is('admin/teacher_resources') ? 'active' : '' }}">
             <a class="sidebar-link" href="{{ route('teacher_resources.index') }}">
                 <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Teacher
@@ -107,27 +112,32 @@
             </li>
             <li class="sidebar-item {{ request()->is('admin/observers/observation_questions') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('observers.addQuestions') }}">
-                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Observation Questions</span>
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Observation
+                        Questions</span>
                 </a>
             </li>
             <li class="sidebar-item {{ request()->is('admin/observers/observation_report_admin') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('observers.obsReport') }}">
-                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Observation Report</span>
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Observation
+                        Report</span>
                 </a>
             </li>
             <li class="sidebar-item {{ request()->is('admin/reports/assesment_report') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('admin.assesmentReport') }}">
-                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Assessment Report</span>
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Assessment
+                        Report</span>
                 </a>
             </li>
             <li class="sidebar-item {{ request()->is('admin/reports/assignment_avg_report') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('admin.assignmentAvgReport') }}">
-                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Assignment Report</span>
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Assignment
+                        Report</span>
                 </a>
             </li>
             <li class="sidebar-item {{ request()->is('admin/reports/compare_report') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('admin.compareReport') }}">
-                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Comparison Report</span>
+                    <i class="align-middle" data-feather="square"></i> <span class="align-middle">Comparison
+                        Report</span>
                 </a>
             </li>
             <li class="sidebar-item {{ request()->is('admin/reports/login_report') ? 'active' : '' }}">
