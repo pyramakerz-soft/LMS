@@ -17,7 +17,7 @@
     }
 
     .alert-banner {
-        background-color: #4f46e5;
+        background-color: #222e3c;
         /* Matches the blue background */
         color: white;
         font-weight: 500;

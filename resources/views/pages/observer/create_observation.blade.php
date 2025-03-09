@@ -312,7 +312,7 @@
 
         function getSchool(teacherId) {
             $.ajax({
-                url: '/observer/observation/get_school/' + teacherId,
+                url: '/LMS/lms_pyramakerz/observer/observation/get_school/' + teacherId,
                 // url: "/observer/observation/get_school/" + teacherId,
                 type: "GET",
                 dataType: "json",
@@ -350,7 +350,7 @@
 
         function getStages(teacherId) {
             $.ajax({
-                url: '/observer/observation/get_stages/' + teacherId,
+                url: '/LMS/lms_pyramakerz/observer/observation/get_stages/' + teacherId,
                 // url: '/observer/observation/get_stages/' + teacherId,
                 type: "GET",
                 dataType: "json",

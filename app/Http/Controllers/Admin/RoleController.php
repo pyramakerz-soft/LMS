@@ -24,7 +24,9 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate(['name' => ['required', 'min:3']]);
+        $validated = $request->validate([
+            'name' => ['required', 'min:3', 'unique:roles,name']
+        ]);
         Role::create($validated);
 
         return to_route('admin.roles.index')->with('message', 'Role Created successfully.');
@@ -40,10 +42,11 @@ class RoleController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:roles,name,' . $role->id,
-            'permissions' => 'array|required',
+            // 'permissions' => 'array|required',
         ]);
+        $role->update(['name' => $request->name]);
 
-        $role->syncPermissions($request->permissions);
+        // $role->syncPermissions($request->permissions);
 
         return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully.');
     }

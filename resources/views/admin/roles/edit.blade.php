@@ -12,11 +12,11 @@
             <main class="content">
                 <div class="container py-4">
                     <div class="row justify-content-center">
-                        <div class="col-md-8">
+                        <div class="col-md-10">
                             <div class="card shadow-sm">
                                 <div
                                     class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                                    <h5>Edit Role</h5>
+                                    <h5 class="text-light">Edit Role</h5>
                                     <a href="{{ route('admin.roles.index') }}" class="btn btn-light btn-sm">
                                         <i class="bi bi-arrow-left"></i> Back to Roles
                                     </a>
@@ -27,7 +27,6 @@
                                     <form method="POST" action="{{ route('admin.roles.update', $role->id) }}">
                                         @csrf
                                         @method('PUT')
-
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Role Name</label>
                                             <input type="text" id="name" name="name" value="{{ $role->name }}"

@@ -10,11 +10,11 @@
             <main class="content">
                 <div class="container py-4">
                     <div class="row justify-content-center">
-                        <div class="col-md-6">
+                        <div class="col-md-10">
                             <div class="card shadow-sm">
                                 <div
-                                    class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                                    <h5>Create New Role</h5>
+                                    class="card-header bg-dark  d-flex justify-content-between align-items-center">
+                                    <h5 class="text-light">Create New Role</h5>
                                     <a href="{{ route('admin.roles.index') }}" class="btn btn-light btn-sm">
                                         <i class="bi bi-arrow-left"></i> Back to Roles
                                     </a>
