@@ -220,6 +220,10 @@
             fetch('{{ route('observer.observations.export') }}')
                 .then(response => response.json())
                 .then(data => {
+                    if (data.length === 0) {
+                        alert("No observations available to export.");
+                        return;
+                    }
                     const pdfContainer = document.createElement('div');
                     pdfContainer.innerHTML = `<h2 class="text-xl font-bold mb-4">Observation Reports</h2>`;
 

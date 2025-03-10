@@ -27,7 +27,10 @@ class RoleController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'min:3', 'unique:roles,name']
         ]);
-        Role::create($validated);
+        Role::create([
+            'name' => $validated['name'],
+            'guard_name' => 'web'
+        ]);
 
         return to_route('admin.roles.index')->with('message', 'Role Created successfully.');
     }
@@ -85,6 +88,7 @@ class RoleController extends Controller
         $role->givePermissionTo($request->permission);
         return back()->with('message', 'Permission added.');
     }
+
 
     public function revokePermission(Role $role, Permission $permission)
     {
