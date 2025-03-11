@@ -19,7 +19,7 @@
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    {{-- <a href="{{ route('admins.create') }}" class="btn btn-primary mb-3">Add School</a> --}}
+                    <a href="{{ route('users.create') }}" class="btn btn-primary mb-3">Create user</a>
 
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">
