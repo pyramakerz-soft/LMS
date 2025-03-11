@@ -104,7 +104,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
-                                        class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded shadow focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50"
+                                        class="btn btn-danger bg-danger bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded shadow focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50"
                                         onclick="return confirm('Are you sure you want to delete this Observation?');">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
