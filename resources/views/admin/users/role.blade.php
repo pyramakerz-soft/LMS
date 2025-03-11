@@ -1,149 +1,115 @@
 @extends('admin.layouts.layout')
 
 @section('content')
-    <div class="wrapper">
-        @include('admin.layouts.sidebar')
+<div class="wrapper">
+    @include('admin.layouts.sidebar')
 
-        <div class="main">
-            @include('admin.layouts.navbar')
+    <div class="main">
+        @include('admin.layouts.navbar')
 
-            <main class="content">
-                <div class="container mt-4">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                            <h4 class="mb-0"><i class="bi bi-person-circle"></i> User Details</h4>
+        <main class="content py-4">
+            <div class="container">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">User Details</h5>
+                        <a href="{{ route('users.index') }}" class="btn btn-light btn-sm">
+                            <i class="bi bi-arrow-left"></i> Back to Users
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <h6 class="fw-bold">User Name:</h6>
+                            <p class="text-muted">{{ $user->name }}</p>
                         </div>
-                        <div class="card-body">
-                            <p><strong>Name:</strong> {{ $user->name }}</p>
-                            <p><strong>Email:</strong> {{ $user->email }}</p>
+                        <div class="mb-3">
+                            <h6 class="fw-bold">User Email:</h6>
+                            <p class="text-muted">{{ $user->email }}</p>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Roles Section -->
-                    <div class="card shadow-sm border-0 mt-3">
-                        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0"><i class="bi bi-person-badge"></i> Assigned Roles</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-flex flex-wrap gap-2">
+                {{-- Roles Section --}}
+                <div class="card shadow-sm border-0 mt-4">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0 text-light">User Roles</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3 d-flex flex-wrap gap-2">
+                            @if ($user->roles)
                                 @foreach ($user->roles as $user_role)
-                                    <button class="btn btn-danger btn-sm remove-role" data-user="{{ $user->id }}"
-                                        data-role="{{ $user_role->id }}">
-                                        <i class="bi bi-trash"></i> {{ $user_role->name }}
-                                    </button>
-                                @endforeach
-                            </div>
-
-                            <!-- Assign Role Form -->
-                            <form method="POST" action="{{ route('users.roles', $user->id) }}" class="mt-3">
-                                @csrf
-                                <div class="row g-2">
-                                    <div class="col-md-8">
-                                        <select name="role" class="form-select">
-                                            @foreach ($roles as $role)
-                                                <option value="{{ $role->name }}">{{ $role->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <button type="submit" class="btn btn-success w-100">
-                                            <i class="bi bi-plus-circle"></i> Assign Role
+                                    <form method="POST" action="{{ route('users.roles.remove', [$user->id, $user_role->id]) }}"
+                                          onsubmit="return confirm('Are you sure?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-x-circle"></i> {{ $user_role->name }}
                                         </button>
-                                    </div>
-                                </div>
-                            </form>
+                                    </form>
+                                @endforeach
+                            @endif
                         </div>
+                        <form method="POST" action="{{ route('users.roles', $user->id) }}">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="role" class="form-label">Assign New Role</label>
+                                <select id="role" name="role" class="form-select">
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('role')
+                                <span class="text-danger small">{{ $message }}</span>
+                            @enderror
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-plus-circle"></i> Assign Role
+                            </button>
+                        </form>
                     </div>
+                </div>
 
-                    <!-- Permissions Section -->
-                    {{-- <div class="card shadow-sm border-0 mt-3">
-                        <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0"><i class="bi bi-key"></i> Assigned Permissions</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-flex flex-wrap gap-2">
+                {{-- Permissions Section --}}
+                {{-- <div class="card shadow-sm border-0 mt-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">User Permissions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3 d-flex flex-wrap gap-2">
+                            @if ($user->permissions)
                                 @foreach ($user->permissions as $user_permission)
-                                    <button class="btn btn-danger btn-sm remove-permission" data-user="{{ $user->id }}"
-                                        data-permission="{{ $user_permission->id }}">
-                                        <i class="bi bi-trash"></i> {{ $user_permission->name }}
-                                    </button>
-                                @endforeach
-                            </div>
-
-                            <!-- Assign Permission Form -->
-                            <form method="POST" action="{{ route('users.permissions', $user->id) }}" class="mt-3">
-                                @csrf
-                                <div class="row g-2">
-                                    <div class="col-md-8">
-                                        <select name="permission" class="form-select">
-                                            @foreach ($permissions as $permission)
-                                                <option value="{{ $permission->name }}">{{ $permission->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <button type="submit" class="btn btn-success w-100">
-                                            <i class="bi bi-plus-circle"></i> Assign Permission
+                                    <form method="POST" action="{{ route('users.permissions.revoke', [$user->id, $user_permission->id]) }}"
+                                          onsubmit="return confirm('Are you sure?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-x-circle"></i> {{ $user_permission->name }}
                                         </button>
-                                    </div>
-                                </div>
-                            </form>
+                                    </form>
+                                @endforeach
+                            @endif
                         </div>
-                    </div> --}}
-                </div>
-            </main>
-        </div>
-    </div>
+                        <form method="POST" action="{{ route('users.permissions', $user->id) }}">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="permission" class="form-label">Assign New Permission</label>
+                                <select id="permission" name="permission" class="form-select">
+                                    @foreach ($permissions as $permission)
+                                        <option value="{{ $permission->name }}">{{ $permission->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('permission')
+                                <span class="text-danger small">{{ $message }}</span>
+                            @enderror
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-plus-circle"></i> Assign Permission
+                            </button>
+                        </form>
+                    </div>
+                </div> --}}
 
-    <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Action</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to remove this role/permission?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <form id="deleteForm" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Confirm</button>
-                    </form>
-                </div>
             </div>
-        </div>
+        </main>
     </div>
-@endsection
-
-@section('page_js')
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let deleteForm = document.getElementById('deleteForm');
-            let confirmModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-
-            document.querySelectorAll('.remove-role').forEach(button => {
-                button.addEventListener('click', function() {
-                    let userId = this.getAttribute('data-user');
-                    let roleId = this.getAttribute('data-role');
-                    deleteForm.setAttribute('action', `/users/${userId}/roles/${roleId}/remove`);
-                    confirmModal.show();
-                });
-            });
-
-            document.querySelectorAll('.remove-permission').forEach(button => {
-                button.addEventListener('click', function() {
-                    let userId = this.getAttribute('data-user');
-                    let permissionId = this.getAttribute('data-permission');
-                    deleteForm.setAttribute('action',
-                        `/users/${userId}/permissions/${permissionId}/revoke`);
-                    confirmModal.show();
-                });
-            });
-        });
-    </script>
+</div>
 @endsection

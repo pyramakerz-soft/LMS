@@ -45,13 +45,15 @@ class RoleController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:roles,name,' . $role->id,
-            // 'permissions' => 'array|required',
+            'permissions' => 'array',
+            'permissions.*' => 'exists:permissions,id'
         ]);
         $role->update(['name' => $request->name]);
 
+        $role->permissions()->sync($request->permissions);
         // $role->syncPermissions($request->permissions);
 
-        return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully.');
+        return redirect()->back()->with('success', 'Role updated successfully.');
     }
 
     public function destroy(Role $role)

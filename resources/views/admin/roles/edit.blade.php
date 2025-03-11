@@ -36,61 +36,22 @@
                                             @enderror
                                         </div>
 
-                                        <div class="d-flex justify-content-end">
-                                            <button type="submit" class="btn btn-success">
-                                                <i class="bi bi-save"></i> Update Role
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-
-                            {{-- Assigned Permissions --}}
-                            <div class="card mt-4 shadow-sm">
-                                <div class="card-header bg-secondary text-white">
-                                    <h5 class="mb-0">Assigned Permissions</h5>
-                                </div>
-                                <div class="card-body">
-                                    @if ($role->permissions->isNotEmpty())
-                                        <div class="d-flex flex-wrap gap-2">
-                                            @foreach ($role->permissions as $role_permission)
-                                                <form method="POST"
-                                                    action="{{ route('roles.permissions.revoke', [$role->id, $role_permission->id]) }}"
-                                                    onsubmit="return confirm('Are you sure you want to remove this permission?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm">
-                                                        <i class="bi bi-x-circle"></i> {{ $role_permission->name }}
-                                                    </button>
-                                                </form>
-                                            @endforeach
-                                        </div>
-                                    @else
-                                        <p class="text-muted">No permissions assigned to this role.</p>
-                                    @endif
-                                </div>
-                            </div>
-
-                            {{-- Assign New Permission --}}
-                            <div class="card mt-4 shadow-sm">
-                                <div class="card-header bg-info text-white">
-                                    <h5 class="mb-0">Assign New Permission</h5>
-                                </div>
-                                <div class="card-body">
-                                    <form method="POST" action="{{ route('roles.permissions', $role->id) }}">
-                                        @csrf
                                         <div class="mb-3">
-                                            <label for="permission" class="form-label">Select Permission</label>
-                                            <select id="permission" name="permission" class="form-select">
+                                            <label for="permission" class="form-label">Select Permissions</label>
+                                            <select id="permission" name="permissions[]" class="form-select select2"
+                                                multiple>
                                                 @foreach ($permissions as $permission)
-                                                    <option value="{{ $permission->name }}">{{ $permission->name }}</option>
+                                                    <option value="{{ $permission->id }}"
+                                                        @if ($role->permissions->contains($permission->id)) selected @endif>
+                                                        {{ $permission->name }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
 
                                         <div class="d-flex justify-content-end">
-                                            <button type="submit" class="btn btn-primary">
-                                                <i class="bi bi-plus-circle"></i> Assign Permission
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="bi bi-save"></i> Update Role
                                             </button>
                                         </div>
                                     </form>
@@ -102,4 +63,17 @@
             </main>
         </div>
     </div>
+
+    {{-- Include Select2 JS --}}
+@section('page_js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Select Permissions",
+                allowClear: true
+            });
+        });
+    </script>
+@endsection
 @endsection
