@@ -47,7 +47,7 @@
 
 
 
-                        <button type="submit" class="btn btn-primary">Create Student</button>
+                        <button type="submit" class="btn btn-primary">Create User</button>
                     </form>
 
                 </div>
