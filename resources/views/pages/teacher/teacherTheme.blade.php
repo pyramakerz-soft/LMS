@@ -128,15 +128,15 @@
             </div>
         </div>
     </div>
-
+    {{-- <img src="{{ asset('assets/img/watermark 2.png') }}" 
+    class="absolute inset-0 w-full h-full opacity-50 z-10"
+    style="pointer-events: none;"> --}}
     @section('page_js')
         <script>
             function openModal(id, filePath) {
                 let modalContent = `
             <embed src="${filePath}" width="100%" height="90%" />
-            <img src="{{ asset('assets/img/watermark 2.png') }}" 
-                class="absolute inset-0 w-full h-full opacity-50 z-10"
-                style="pointer-events: none;">
+           
         `;
                 document.getElementById(id + '-content').innerHTML = modalContent;
                 document.getElementById(id).classList.remove("hidden");

@@ -74,7 +74,8 @@
                                             <form action="{{ route('material.destroy', $material->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"  onclick="return confirm('Are you sure you want to delete this theme?');">Delete</button>
+                                                <button type="submit" class="btn btn-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this theme?');">Delete</button>
                                             </form>
                                         </td>
 
@@ -103,8 +104,8 @@
                 </div>
                 <div class="position-relative modal-body" style="height: calc(100% - 60px);">
                     <embed src="" id="ebookEmbed" width="100%" height="100%" style="border: none;"></embed>
-                    <img src="{{ asset('assets/img/watermark 2.png') }}"
-                        class="position-absolute top-0 start-0 w-100 h-100" style="pointer-events: none; opacity: 0.5;">
+                    {{-- <img src="{{ asset('assets/img/watermark 2.png') }}"
+                        class="position-absolute top-0 start-0 w-100 h-100" style="pointer-events: none; opacity: 0.5;"> --}}
                 </div>
             </div>
         </div>

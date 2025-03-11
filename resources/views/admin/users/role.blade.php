@@ -56,7 +56,7 @@
                     </div>
 
                     <!-- Permissions Section -->
-                    <div class="card shadow-sm border-0 mt-3">
+                    {{-- <div class="card shadow-sm border-0 mt-3">
                         <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
                             <h5 class="mb-0"><i class="bi bi-key"></i> Assigned Permissions</h5>
                         </div>
@@ -89,7 +89,7 @@
                                 </div>
                             </form>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </main>
         </div>
