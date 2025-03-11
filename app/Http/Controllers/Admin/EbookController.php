@@ -30,7 +30,7 @@ class EbookController extends Controller
         for ($i = 1; $i <= 10; $i++) {
             $grades[] = 'Grade ' . $i;
         }
-        $grades[] = 'Grade Test';
+        $grades[] = 'demo grade';
         // $grades = Stage::all();
         return view('admin.ebooks.create', compact('grades'));
     }
