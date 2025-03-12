@@ -147,6 +147,8 @@
                         @endforeach
                     </select>
                 </div>
+               
+
                 <div class="mb-4">
                     <label for="school_id" class="block text-sm font-medium text-gray-700">School</label>
                     <select name="school_id[]" id="school_id" class="w-full p-2 border border-gray-300 rounded" multiple>
