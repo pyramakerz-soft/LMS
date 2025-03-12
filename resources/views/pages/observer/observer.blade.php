@@ -94,11 +94,18 @@
                             <td class="border px-4 py-2">{{ $school->city }}</td>
                             <td class="border px-4 py-2">{{ $observation->activity }}</td>
                             <td class="border px-4 py-2" style="text-align:center; ">
+                                <button
+                                    class="text-white font-medium py-2 px-4 rounded shadow focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50"
+                                    style="background-color:#323d53; margin-right:5px;" data-id="{{ $observation->id }}"
+                                    title="Download PDF">
+                                    <i class="fa-solid fa-download text-white"></i>
+                                </button>
                                 <a href="{{ route('observation.view', $observation->id) }}"
                                     class="text-white font-medium py-2 px-4 rounded shadow focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50"
                                     style="background-color:#667085; margin-right:5px;">
                                     <i class="fa-solid fa-eye"></i>
                                 </a>
+
                                 <form action="{{ route('observation.destroy', $observation->id) }}" method="POST"
                                     style="display:inline-block;">
                                     @csrf
@@ -279,6 +286,69 @@
 
         document.getElementById('close-modal-btn').addEventListener('click', function() {
             document.getElementById('filter-modal').classList.add('hidden');
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.download-pdf').forEach(button => {
+                button.addEventListener('click', function() {
+                    let observationId = this.getAttribute('data-id');
+
+                    fetch(`{{ route('observer.observation.export', ':id') }}`.replace(':id',
+                            observationId))
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(
+                                    `Error ${response.status}: Observation not found.`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.error) {
+                                alert(data.error);
+                                return;
+                            }
+
+                            const pdfContainer = document.createElement('div');
+                            pdfContainer.innerHTML = `
+                        <h2 class="text-xl font-bold mb-4">Observation Report</h2>
+                        <h3 class="text-lg font-semibold">${data.name}</h3>
+                        <p><strong>Teacher:</strong> ${data.teacher_name}</p>
+                        <p><strong>Co-Teacher:</strong> ${data.coteacher_name}</p>
+                        <p><strong>School:</strong> ${data.school}</p>
+                        <p><strong>City:</strong> ${data.city}</p>
+                        <p><strong>Stage:</strong> ${data.stage}</p>
+                        <p><strong>Subject:</strong> ${data.subject}</p>
+                        <p><strong>Date:</strong> ${data.activity}</p>
+                        <p><strong>Comments:</strong> ${data.note || 'No comments provided'}</p>
+                        <h4 class="text-md font-semibold mt-3">Ratings</h4>
+                        <ul>
+                            ${data.questions.map(q => `<li>${q.name}: ${q.avg_rating} / ${q.max_rating}</li>`).join('')}
+                        </ul>
+                    `;
+
+                            const options = {
+                                margin: [0.5, 0.5, 0.5, 0.5],
+                                filename: `Observation_${data.id}.pdf`,
+                                pagebreak: {
+                                    mode: ['avoid-all', 'css', 'legacy']
+                                },
+                                html2canvas: {
+                                    scale: 2,
+                                    useCORS: true
+                                },
+                                jsPDF: {
+                                    unit: 'in',
+                                    format: 'letter',
+                                    orientation: 'portrait'
+                                }
+                            };
+
+                            html2pdf().set(options).from(pdfContainer).toPdf().save();
+                        })
+                        .catch(err => console.error('Error fetching observation details:', err));
+                });
+            });
         });
     </script>
 @endsection

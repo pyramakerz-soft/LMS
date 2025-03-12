@@ -325,6 +325,9 @@ Route::prefix('observer')->middleware('auth:observer')->group(function () {
 
     Route::get('/observer/observations/export', [ObserverDashboardController::class, 'exportObservations'])
         ->name('observer.observations.export');
+        
+    Route::get('/observer/observation/{id}/export', [ObserverDashboardController::class, 'exportSingleObservation'])
+        ->name('observer.observation.export');
 
 
     Route::get('/report', [ObserverDashboardController::class, 'report'])->name('observer.report');

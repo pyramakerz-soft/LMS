@@ -108,6 +108,41 @@ class ObserverDashboardController extends Controller
 
         return response()->json($observations);
     }
+    public function exportSingleObservation($id)
+    {
+        $observation = Observation::with([
+            'school',
+            'subject',
+            'stage',
+            'teacher',
+            'observer',
+            'histories.observation_question'
+        ])->find($id);
+
+        if (!$observation) {
+            return response()->json(['error' => 'Observation not found'], 404);
+        }
+
+        return response()->json([
+            'id' => $observation->id,
+            'name' => $observation->name,
+            'teacher_name' => optional($observation->teacher)->username ?? 'N/A',
+            'coteacher_name' => $observation->coteacher_name ?? 'N/A',
+            'school' => optional($observation->school)->name ?? 'N/A',
+            'city' => optional($observation->school)->city ?? 'N/A',
+            'subject' => optional($observation->subject)->title ?? optional($observation->subject)->name ?? 'N/A',
+            'stage' => optional($observation->stage)->name ?? 'N/A',
+            'activity' => $observation->activity,
+            'note' => $observation->note,
+            'questions' => $observation->histories->map(function ($history) {
+                return [
+                    'name' => optional($history->observation_question)->question ?? 'N/A',
+                    'avg_rating' => $history->rate ?? 0,
+                    'max_rating' => optional($history->observation_question)->max_rate ?? 'N/A'
+                ];
+            })->toArray()
+        ]);
+    }
 
     public function createObservation()
     {
