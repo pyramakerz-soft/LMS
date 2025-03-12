@@ -34,11 +34,11 @@ class Teacher extends Authenticatable
     //     return $this->belongsToMany(Group::class, 'teacher_classes');
     // }
     public function classes()
-{
-    return $this->belongsToMany(Group::class, 'teacher_classes', 'teacher_id', 'class_id');
-}
- public function getImageAttribute($val)
     {
-        return ($val !== null) ? asset( $val) : "";
+        return $this->belongsToMany(Group::class, 'teacher_classes', 'teacher_id', 'class_id');
+    }
+    public function getImageAttribute($val)
+    {
+        return ($val !== null) ? asset($val) : "";
     }
 }

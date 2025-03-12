@@ -87,21 +87,22 @@ class ObserverDashboardController extends Controller
                 return [
                     'id' => $observation->id,
                     'name' => $observation->name,
-                    'teacher_name' => $observation->teacher->name ?? 'N/A',
-                    'coteacher_name' => $observation->coteacher->name ?? 'N/A',
+                    'teacher_name' => $observation->teacher->username ?? 'N/A',
+                    'coteacher_name' => $observation->coteacher_name ?? 'N/A',
                     'school' => $observation->school->name ?? 'N/A',
                     'city' => $observation->school->city ?? 'N/A',
-                    'subject' => $observation->subject->name ?? 'N/A',
+                    'subject' => $observation->subject->title ?? $observation->subject->name ?? 'N/A',
                     'stage' => $observation->stage->name ?? 'N/A',
                     'activity' => $observation->activity,
                     'note' => $observation->note,
-                    // 'questions' => $observation->histories->map(function ($history) {
-                    //     return [
-                    //         // 'name' => $history->observation_question->question,
-                    //         'avg_rating' => $history->rate,
-                    //         'max_rating' => $history->question->max_rate
-                    //     ];
-                    // })->toArray()
+                    'questions' => $observation->histories->map(function ($history) {
+                        $question = optional($history->observation_question);
+                        return [
+                            'name' => $question->question ?? 'N/A',
+                            'avg_rating' => $history->rate ?? 0,
+                            'max_rating' => $question->max_rate ?? 'N/A'
+                        ];
+                    })->toArray()
                 ];
             });
 

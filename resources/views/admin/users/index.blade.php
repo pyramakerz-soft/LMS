@@ -39,10 +39,16 @@
                                             <a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-info">
                                                 <i class="bi bi-person-badge"></i> Roles
                                             </a>
-                                            <button class="btn btn-sm btn-danger delete-user" data-id="{{ $user->id }}">
-                                                <i class="bi bi-trash"></i> Delete
-                                            </button>
+                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger delete-user"
+                                                    onclick="return confirm('Are you sure you want to delete this user?');">
+                                                    <i class="bi bi-trash"></i> Delete</button>
+                                            </form>
+                                           
                                         </td>
+
                                     </tr>
                                 @endforeach
                             </tbody>

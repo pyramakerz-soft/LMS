@@ -241,7 +241,9 @@
                         <p><strong>Date:</strong> ${observation.activity}</p>
                         <p><strong>Comments:</strong> ${observation.note || 'No comments provided'}</p>
                         <h4 class="text-md font-semibold mt-3">Ratings</h4>
-                       
+                        <ul>
+                            ${observation.questions.map(q => `<li>${q.name}: ${q.avg_rating} / ${q.max_rating}</li>`).join('')}
+                        </ul>
                     </div>
                 `;
                     });

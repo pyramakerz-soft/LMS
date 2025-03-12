@@ -18,6 +18,6 @@ class ObservationHistory extends Model
     }
     public function observation_question()
     {
-        return $this->belongsTo(ObservationQuestion::class);
+        return $this->belongsTo(ObservationQuestion::class, 'question_id');
     }
 }

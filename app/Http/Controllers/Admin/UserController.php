@@ -77,9 +77,9 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        if ($user->hasRole('admin')) {
-            return back()->with('message', 'you are admin.');
-        }
+        // if ($user->hasRole('admin')) {
+        //     return back()->with('message', 'you are admin.');
+        // }
         $user->delete();
 
         return back()->with('message', 'User deleted.');
