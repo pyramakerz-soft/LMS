@@ -220,7 +220,8 @@
                 <div class="flex justify-end">
                     <button type="button" id="close-modal-btn"
                         class="px-4 py-2 bg-gray-500 text-white rounded mr-2">Close</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Apply Filters</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded"
+                        style="background-color: rgb(63, 134, 249)">Apply Filters</button>
                 </div>
             </form>
         </div>

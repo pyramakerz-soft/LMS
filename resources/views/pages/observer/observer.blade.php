@@ -264,12 +264,12 @@
                         </thead>
                         <tbody>
                             ${observation.questions.map(q => `
-                                    <tr>
-                                        <td style="border:1px solid #ddd; padding:6px;">${q.name}</td>
-                                        <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.avg_rating}</td>
-                                        <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.max_rating}</td>
-                                    </tr>
-                                `).join('')}
+                                        <tr>
+                                            <td style="border:1px solid #ddd; padding:6px;">${q.name}</td>
+                                            <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.avg_rating}</td>
+                                            <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.max_rating}</td>
+                                        </tr>
+                                    `).join('')}
                         </tbody>
                     </table>
                 </div>
@@ -297,8 +297,6 @@
                 })
                 .catch(err => console.error('Error fetching observation details:', err));
         });
-
-
 
         // Modal toggle
         document.getElementById('filter-modal-btn').addEventListener('click', function() {
