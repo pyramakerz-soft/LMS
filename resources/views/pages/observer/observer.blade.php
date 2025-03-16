@@ -147,7 +147,7 @@
                         @endforeach
                     </select>
                 </div>
-               
+
 
                 <div class="mb-4">
                     <label for="school_id" class="block text-sm font-medium text-gray-700">School</label>
@@ -234,31 +234,50 @@
                         alert("No observations available to export.");
                         return;
                     }
+
                     const pdfContainer = document.createElement('div');
-                    pdfContainer.innerHTML = `<h2 class="text-xl font-bold mb-4">Observation Reports</h2>`;
+                    pdfContainer.innerHTML = `
+                <h1 style="text-align:center; font-size:18px; font-weight:bold; margin-bottom:10px;">Observation Reports</h1>
+            `;
 
                     data.forEach(observation => {
                         pdfContainer.innerHTML += `
-                    <div class="observation-report border p-4 rounded-lg shadow-md mb-4">
-                        <h3 class="text-lg font-semibold">${observation.name}</h3>
-                        <p><strong>Teacher:</strong> ${observation.teacher_name}</p>
-                        <p><strong>Co-Teacher:</strong> ${observation.coteacher_name}</p>
-                        <p><strong>School:</strong> ${observation.school}</p>
-                        <p><strong>City:</strong> ${observation.city}</p>
-                        <p><strong>Stage:</strong> ${observation.stage}</p>
-                        <p><strong>Subject:</strong> ${observation.subject}</p>
-                        <p><strong>Date:</strong> ${observation.activity}</p>
-                        <p><strong>Comments:</strong> ${observation.note || 'No comments provided'}</p>
-                        <h4 class="text-md font-semibold mt-3">Ratings</h4>
-                        <ul>
-                            ${observation.questions.map(q => `<li>${q.name}: ${q.avg_rating} / ${q.max_rating}</li>`).join('')}
-                        </ul>
-                    </div>
+                <div style="border:1px solid #ddd; padding:15px; margin-bottom:10px; border-radius:5px;">
+                    <h3 style="color:#333; font-size:16px; font-weight:bold;">${observation.name}</h3>
+                    <p><strong>Teacher:</strong> ${observation.teacher_name}</p>
+                    <p><strong>Co-Teacher:</strong> ${observation.coteacher_name}</p>
+                    <p><strong>School:</strong> ${observation.school}</p>
+                    <p><strong>City:</strong> ${observation.city}</p>
+                    <p><strong>Stage:</strong> ${observation.stage}</p>
+                    <p><strong>Subject:</strong> ${observation.subject}</p>
+                    <p><strong>Date:</strong> ${observation.activity}</p>
+                    <p><strong>Comments:</strong> ${observation.note || 'No comments provided'}</p>
+
+                    <h4 style="font-size:14px; margin-top:10px; font-weight:bold;">Ratings</h4>
+                    <table style="width:100%; border-collapse:collapse; margin-top:10px;">
+                        <thead>
+                            <tr style="background:#f4f4f4;">
+                                <th style="border:1px solid #ddd; padding:6px; text-align:left;">Question</th>
+                                <th style="border:1px solid #ddd; padding:6px; text-align:center;">Average Rating</th>
+                                <th style="border:1px solid #ddd; padding:6px; text-align:center;">Max Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${observation.questions.map(q => `
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:6px;">${q.name}</td>
+                                        <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.avg_rating}</td>
+                                        <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.max_rating}</td>
+                                    </tr>
+                                `).join('')}
+                        </tbody>
+                    </table>
+                </div>
                 `;
                     });
 
                     const options = {
-                        margin: [0.5, 0.5, 0.5, 0.5],
+                        margin: 10,
                         filename: 'Observations_Report.pdf',
                         pagebreak: {
                             mode: ['avoid-all', 'css', 'legacy']
@@ -268,8 +287,8 @@
                             useCORS: true
                         },
                         jsPDF: {
-                            unit: 'in',
-                            format: 'letter',
+                            unit: 'mm',
+                            format: 'a4',
                             orientation: 'portrait'
                         }
                     };
