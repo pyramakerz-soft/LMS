@@ -95,7 +95,7 @@
                             <td class="border px-4 py-2">{{ $observation->activity }}</td>
                             <td class="border px-4 py-2" style="text-align:center; ">
                                 <button
-                                    class="text-white font-medium py-2 px-4 rounded shadow focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50"
+                                    class="text-white font-medium py-2 px-4 download-pdf rounded shadow focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50"
                                     style="background-color:#323d53; margin-right:5px;" data-id="{{ $observation->id }}"
                                     title="Download PDF">
                                     <i class="fa-solid fa-download text-white"></i>
