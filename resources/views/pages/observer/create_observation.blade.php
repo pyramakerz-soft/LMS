@@ -120,6 +120,7 @@
                                 <option value="{{ $observer->id }}">{{ $observer->username }}</option>
                             </select>
                         </div>
+
                         <div class="mb-3">
                             <label for="teacher" class="block text-sm font-medium text-gray-700">Teacher Username</label>
                             <select name="teacher_id" id="teacher_id" class="w-full p-2 border border-gray-300 rounded"
@@ -130,6 +131,14 @@
                                 @endforeach
                             </select>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="school" class="block text-sm font-medium text-gray-700">School</label>
+                            <select name="school_id" id="school_id" class="w-full p-2 border border-gray-300 rounded"
+                                required>
+                                <option value="" selected disabled>No Available School</option>
+                            </select>
+                        </div>
                         <div class="mb-3">
                             <label for="coteacher" class="block text-sm font-medium text-gray-700">Co-Teacher
                                 Username</label>
@@ -138,13 +147,6 @@
                                 @foreach ($teachers as $teacher)
                                     <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
                                 @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="school" class="block text-sm font-medium text-gray-700">School</label>
-                            <select name="school_id" id="school_id" class="w-full p-2 border border-gray-300 rounded"
-                                required>
-                                <option value="" selected disabled>No Available School</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -376,5 +378,45 @@
                 }
             });
         }
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("select[name='school_id']").change(function() {
+                var schoolId = $(this).val();
+                var coteacherSelect = $("select[name='coteacher_id']");
+
+                if (schoolId) {
+                    $.ajax({
+                        url: "/observer/observation/get_coteachers/" + schoolId,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(data) {
+                            coteacherSelect.empty();
+                            coteacherSelect.append(
+                                '<option value="">Select Co-Teacher</option>');
+
+                            if (data.length > 0) {
+                                $.each(data, function(key, value) {
+                                    coteacherSelect.append(
+                                        '<option value="' + value.id + '">' + value
+                                        .name + '</option>'
+                                    );
+                                });
+                            } else {
+                                coteacherSelect.append(
+                                    '<option value="" disabled>No Co-Teachers Available</option>'
+                                    );
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("AJAX Error:", error);
+                        }
+                    });
+                } else {
+                    coteacherSelect.empty();
+                    coteacherSelect.append('<option value="">Select Co-Teacher</option>');
+                }
+            });
+        });
     </script>
 @endsection

@@ -178,7 +178,14 @@ class ObserverDashboardController extends Controller
         return response()->json($schools);
         // return response()->json($school);
     }
+    public function getCoteachers($school_id)
+    {
+        $coteachers = Teacher::where('school_id', $school_id)
 
+            ->get();
+
+        return response()->json($coteachers);
+    }
     public function getStages($teacherId)
     {
         $teacher = Teacher::find($teacherId);
@@ -356,8 +363,8 @@ class ObserverDashboardController extends Controller
             }
             $overallComments = Observation::whereIn('id', $observations)
                 ->whereNotNull('note')
-                ->pluck('note')
-                ->toArray();
+                ->with('teacher')
+                ->get(['note', 'teacher_id']);
 
             $cities = School::distinct()->whereNotNull('city')->pluck('city');
             return view('pages.observer.observation_report', compact('stages', 'cities', 'teachers', 'observer', 'observers', 'schools', 'headers', 'data', 'overallComments'));

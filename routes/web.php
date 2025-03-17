@@ -325,7 +325,7 @@ Route::prefix('observer')->middleware('auth:observer')->group(function () {
 
     Route::get('/observer/observations/export', [ObserverDashboardController::class, 'exportObservations'])
         ->name('observer.observations.export');
-        
+
     Route::get('/observer/observation/{id}/export', [ObserverDashboardController::class, 'exportSingleObservation'])
         ->name('observer.observation.export');
 
@@ -334,6 +334,8 @@ Route::prefix('observer')->middleware('auth:observer')->group(function () {
 
     Route::get('/observation/create', [ObserverDashboardController::class, 'createObservation'])->name('observer.observation.create');
     Route::get('/observation/get_school/{teacher_id}', [ObserverDashboardController::class, 'getSchool'])->name('observer.observation.getSchool');
+    Route::get('/observation/get_coteachers/{school_id}', [ObserverDashboardController::class, 'getCoteachers'])->name('observer.observation.getCoteachers');
+
     Route::get('/observation/get_stages/{teacher_id}', [ObserverDashboardController::class, 'getStages'])->name('observer.observation.getStages');
     Route::get('/observation/store/', [ObserverDashboardController::class, 'store'])->name('observation.store');
     Route::delete('/observation/delete/{id}', [ObserverDashboardController::class, 'destroy'])->name('observation.destroy');

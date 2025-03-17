@@ -215,7 +215,9 @@
                 <div class="flex justify-end">
                     <button type="button" id="close-modal-btn"
                         class="px-4 py-2 bg-gray-500 text-white rounded mr-2">Close</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Apply Filters</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded"
+                        style="background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+">Apply Filters</button>
                 </div>
             </form>
         </div>
@@ -264,12 +266,12 @@
                         </thead>
                         <tbody>
                             ${observation.questions.map(q => `
-                                        <tr>
-                                            <td style="border:1px solid #ddd; padding:6px;">${q.name}</td>
-                                            <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.avg_rating}</td>
-                                            <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.max_rating}</td>
-                                        </tr>
-                                    `).join('')}
+                                                    <tr>
+                                                        <td style="border:1px solid #ddd; padding:6px;">${q.name}</td>
+                                                        <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.avg_rating}</td>
+                                                        <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.max_rating}</td>
+                                                    </tr>
+                                                `).join('')}
                         </tbody>
                     </table>
                 </div>

@@ -84,12 +84,29 @@
                                 @endforeach
                                 <br>
                             @endforeach
+                            {{-- @if (isset($overallComments) && count($overallComments) > 0)
+                                <div class="comments-section bg-gray-100 p-4 rounded-lg shadow-md mt-6">
+                                    <h2 class="text-xl font-semibold text-gray-800">Overall Comments</h2>
+                                    <ul class="list-disc pl-4 mt-2">
+                                        @foreach ($overallComments as $comment)
+                                            <li class="text-gray-700">{{ $comment }} -- </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif --}}
                             @if (isset($overallComments) && count($overallComments) > 0)
                                 <div class="comments-section bg-gray-100 p-4 rounded-lg shadow-md mt-6">
                                     <h2 class="text-xl font-semibold text-gray-800">Overall Comments</h2>
                                     <ul class="list-disc pl-4 mt-2">
                                         @foreach ($overallComments as $comment)
-                                            <li class="text-gray-700">{{ $comment }}</li>
+                                            @php
+                                                $teacherName =
+                                                    App\Models\Teacher::find($comment->teacher_id)?->name ??
+                                                    'Unknown Teacher';
+                                            @endphp
+                                            <li class="text-gray-700">
+                                                <strong>{{ $teacherName }}:</strong> {{ $comment->note }}
+                                            </li>
                                         @endforeach
                                     </ul>
                                 </div>
