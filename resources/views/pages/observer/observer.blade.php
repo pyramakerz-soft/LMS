@@ -266,12 +266,12 @@
                         </thead>
                         <tbody>
                             ${observation.questions.map(q => `
-                                                    <tr>
-                                                        <td style="border:1px solid #ddd; padding:6px;">${q.name}</td>
-                                                        <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.avg_rating}</td>
-                                                        <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.max_rating}</td>
-                                                    </tr>
-                                                `).join('')}
+                                                        <tr>
+                                                            <td style="border:1px solid #ddd; padding:6px;">${q.name}</td>
+                                                            <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.avg_rating}</td>
+                                                            <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.max_rating}</td>
+                                                        </tr>
+                                                    `).join('')}
                         </tbody>
                     </table>
                 </div>
@@ -332,8 +332,12 @@
 
                             const pdfContainer = document.createElement('div');
                             pdfContainer.innerHTML = `
-                        <h2 class="text-xl font-bold mb-4">Observation Report</h2>
-                        <h3 class="text-lg font-semibold">${data.name}</h3>
+                    <h1 style="text-align:center; font-size:18px; font-weight:bold; margin-bottom:10px;">
+                        Observation Report
+                    </h1>
+
+                    <div style="border:1px solid #ddd; padding:15px; margin-bottom:10px; border-radius:5px;">
+                        <h3 style="color:#333; font-size:16px; font-weight:bold;">${data.name}</h3>
                         <p><strong>Teacher:</strong> ${data.teacher_name}</p>
                         <p><strong>Co-Teacher:</strong> ${data.coteacher_name}</p>
                         <p><strong>School:</strong> ${data.school}</p>
@@ -342,14 +346,31 @@
                         <p><strong>Subject:</strong> ${data.subject}</p>
                         <p><strong>Date:</strong> ${data.activity}</p>
                         <p><strong>Comments:</strong> ${data.note || 'No comments provided'}</p>
-                        <h4 class="text-md font-semibold mt-3">Ratings</h4>
-                        <ul>
-                            ${data.questions.map(q => `<li>${q.name}: ${q.avg_rating} / ${q.max_rating}</li>`).join('')}
-                        </ul>
+
+                        <h4 style="font-size:14px; margin-top:10px; font-weight:bold;">Ratings</h4>
+                        <table style="width:100%; border-collapse:collapse; margin-top:10px;">
+                            <thead>
+                                <tr style="background:#f4f4f4;">
+                                    <th style="border:1px solid #ddd; padding:6px; text-align:left;">Question</th>
+                                    <th style="border:1px solid #ddd; padding:6px; text-align:center;">Average Rating</th>
+                                    <th style="border:1px solid #ddd; padding:6px; text-align:center;">Max Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.questions.map(q => `
+                                        <tr>
+                                            <td style="border:1px solid #ddd; padding:6px;">${q.name}</td>
+                                            <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.avg_rating}</td>
+                                            <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.max_rating}</td>
+                                        </tr>
+                                    `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
                     `;
 
                             const options = {
-                                margin: [0.5, 0.5, 0.5, 0.5],
+                                margin: 10,
                                 filename: `Observation_${data.id}.pdf`,
                                 pagebreak: {
                                     mode: ['avoid-all', 'css', 'legacy']
@@ -359,8 +380,8 @@
                                     useCORS: true
                                 },
                                 jsPDF: {
-                                    unit: 'in',
-                                    format: 'letter',
+                                    unit: 'mm',
+                                    format: 'a4',
                                     orientation: 'portrait'
                                 }
                             };

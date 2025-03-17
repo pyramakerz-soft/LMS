@@ -169,6 +169,13 @@ class ChatController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
+        Message::where('receiver_id', $userId)
+            ->where('receiver_type', $userType)
+            ->where('sender_id', $receiverId)
+            ->where('sender_type', $receiverType)
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
+
         return response()->json(['messages' => $messages]);
     }
 
