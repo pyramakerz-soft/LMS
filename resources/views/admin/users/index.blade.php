@@ -18,9 +18,9 @@
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
-
-                    <a href="{{ route('users.create') }}" class="btn btn-primary mb-3">Create user</a>
-
+                    @can('create_user')
+                        <a href="{{ route('users.create') }}" class="btn btn-primary mb-3">Create user</a>
+                    @endcan
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">
                             <thead>
@@ -39,14 +39,15 @@
                                             <a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-info">
                                                 <i class="bi bi-person-badge"></i> Roles
                                             </a>
-                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST"
+                                                class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger delete-user"
                                                     onclick="return confirm('Are you sure you want to delete this user?');">
                                                     <i class="bi bi-trash"></i> Delete</button>
                                             </form>
-                                           
+
                                         </td>
 
                                     </tr>
