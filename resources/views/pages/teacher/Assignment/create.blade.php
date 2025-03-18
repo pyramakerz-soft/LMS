@@ -67,7 +67,10 @@
                     Date</label>
                 <input type="date" name="due_date" id="due_date"
                     class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
-                    value="{{ old('due_date') }}" min="{{ date('Y-m-d', strtotime('+1 year')) }}" required>
+                    value="{{ old('due_date') }}" required>
+                {{-- <input type="date" name="due_date" id="due_date"
+                    class="form-control border border-[#E5E5EA] rounded-lg w-full p-2 md:p-4 text-xs md:text-base"
+                    value="{{ old('due_date') }}" min="{{ date('Y-m-d', strtotime('+1 year')) }}" required> --}}
 
                 <label for="week"
                     class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select Week</label>
@@ -204,7 +207,8 @@
             classDropdown.disabled = true;
 
             if (stageId) {
-                fetch(`https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/teacher/teacher/api/stages/${stageId}/classes`)
+                fetch(
+                        `/teacher/teacher/api/stages/${stageId}/classes`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Error fetching classes');
