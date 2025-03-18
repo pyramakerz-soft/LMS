@@ -18,9 +18,9 @@
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
-                    @can('create_user')
-                        <a href="{{ route('users.create') }}" class="btn btn-primary mb-3">Create user</a>
-                    @endcan
+                    {{-- @can('create_user') --}}
+                    <a href="{{ route('users.create') }}" class="btn btn-primary mb-3">Create user</a>
+                    {{-- @endcan --}}
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">
                             <thead>

@@ -73,7 +73,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/get-students-school/{school}', [ReportController::class, 'getSchoolStudents'])->name('getSchoolStudents');
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/loginP', [AuthController::class, 'login'])->name('admin.login.post');
-    Route::middleware('auth:admin')->group(function () {
+    Route::middleware('auth:admin,web')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
 
         // Admin Controller 
@@ -91,6 +91,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/lessons/{lesson}/view', [LessonController::class, 'viewEbook'])->name('lesson.view');
 
         Route::resource('students', StudentController::class);
+        Route::delete('/admin/students/delete-multiple', [StudentController::class, 'deleteMultiple'])->name('students.deleteMultiple');
         Route::resource('teachers', TeacherController::class);
 
         Route::get('observers/observation_questions', [ObserverController::class, 'addQuestions'])->name('observers.addQuestions');

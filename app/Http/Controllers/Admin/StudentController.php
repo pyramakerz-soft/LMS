@@ -196,4 +196,16 @@ class StudentController extends Controller
             ->get(['id', 'name']);
         return response()->json($classes);
     }
+    public function deleteMultiple(Request $request)
+    {
+        $studentIds = $request->input('student_ids');
+
+        if (!$studentIds) {
+            return redirect()->route('students.index')->with('error', 'No students selected for deletion.');
+        }
+
+        Student::whereIn('id', $studentIds)->delete();
+
+        return redirect()->route('students.index')->with('success', 'Selected students deleted successfully.');
+    }
 }

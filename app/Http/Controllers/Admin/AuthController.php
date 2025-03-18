@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -23,17 +24,18 @@ class AuthController extends Controller
         ]);
 
         $admin = Admin::where('email', $request->input('email'))->first();
-        if ($admin) {
-            if (Hash::check($request->input('password'), $admin->password)) {
-                // Log the admin in
-                Auth::guard('admin')->login($admin);
-                return redirect()->route('admin.dashboard')->with('success', 'Logged in successfully.');
-            } else {
-                return redirect()->back()->withErrors(['password' => 'The provided Password is incorrect.']);
-            }
+        if ($admin && Hash::check($request->input('password'), $admin->password)) {
+            Auth::guard('admin')->login($admin);
+            return redirect()->route('admin.dashboard')->with('success', 'Logged in successfully as Admin.');
         }
 
-        return redirect()->back()->withErrors(['email' => 'The provided Email is incorrect.']);
+        $user = User::where('email', $request->input('email'))->first();
+        if ($user && Hash::check($request->input('password'), $user->password)) {
+            Auth::guard('web')->login($user);
+            return redirect()->route('admin.dashboard')->with('success', 'Logged in successfully as User.');
+        }
+
+        return redirect()->back()->withErrors(['email' => 'The provided credentials are incorrect.']);
     }
 
     public function logout()
