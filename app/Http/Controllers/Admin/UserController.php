@@ -39,12 +39,24 @@ class UserController extends Controller
 
     public function assignRole(Request $request, User $user)
     {
-        if ($user->hasRole($request->role)) {
-            return back()->with('message', 'Role exists.');
+        // if ($user->hasRole($request->role)) {
+        //     return back()->with('message', 'Role exists.');
+        // }
+
+        // $user->assignRole($request->role);
+        // return back()->with('message', 'Role assigned.');
+        $role = Role::where('name', $request->role)->where('guard_name', 'web')->first();
+
+        if (!$role) {
+            return back()->with('error', 'Role does not exist.');
         }
 
-        $user->assignRole($request->role);
-        return back()->with('message', 'Role assigned.');
+        if ($user->hasRole($role->name)) {
+            return back()->with('message', 'Role already assigned.');
+        }
+
+        $user->assignRole($role->name);
+        return back()->with('message', 'Role assigned successfully.');
     }
 
     public function removeRole(User $user, Role $role)

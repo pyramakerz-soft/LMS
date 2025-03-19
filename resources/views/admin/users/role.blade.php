@@ -19,7 +19,7 @@
                         <div class="card-body">
                             <div class="mb-3">
                                 <h6 class="fw-bold">User Name:</h6>
-                                <p class="text-muted">{{ $user->username }}</p>
+                                <p class="text-muted">{{ $user->name }}</p>
                             </div>
                             <div class="mb-3">
                                 <h6 class="fw-bold">User Email:</h6>

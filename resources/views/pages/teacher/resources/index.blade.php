@@ -30,7 +30,9 @@
                 <span class="mx-2 cursor-pointer">Resources</span>
             </div>
             <a href="{{ route('teacher.resources.create') }}"
-                class="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
+                class="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg"
+                style="    background-color: rgb(37 99 235 / var(--tw-bg-opacity));
+">
                 Add New Resource
             </a>
         </div>
