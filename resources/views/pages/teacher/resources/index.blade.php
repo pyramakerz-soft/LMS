@@ -31,8 +31,7 @@
             </div>
             <a href="{{ route('teacher.resources.create') }}"
                 class="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg"
-                style="    background-color: rgb(37 99 235 / var(--tw-bg-opacity));
-">
+                style="background-color:rgb(37 99 235) ";>
                 Add New Resource
             </a>
         </div>
