@@ -174,7 +174,7 @@ class StudentController extends Controller
     {
         $student = Student::findOrFail($id);
         $student->delete();
-        return redirect()->route('students.index')->with('success', 'Student deleted successfully.');
+        return redirect()->back()->with('success', 'Student deleted successfully.');
     }
 
     public function getStages($schoolId)
@@ -206,6 +206,6 @@ class StudentController extends Controller
 
         Student::whereIn('id', $studentIds)->delete();
 
-        return redirect()->route('students.index')->with('success', 'Selected students deleted successfully.');
+        return redirect()->back()->with('success', 'Selected students deleted successfully.');
     }
 }
