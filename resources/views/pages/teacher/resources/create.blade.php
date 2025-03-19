@@ -88,7 +88,8 @@
                             </select>
                         </div> --}}
 
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Add Resource</button>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded"
+                            style="background-color: rgb(59 130 246)">Add Resource</button>
                     </form>
                 </div>
             </div>
