@@ -37,6 +37,9 @@ class StudentController extends Controller
         if ($request->has('class') && $request->class != null) {
             $StudentQuery->where('class_id', $request->class);
         }
+        if ($request->filled('search')) {
+            $StudentQuery->where('username', 'LIKE', '%' . $request->search . '%');
+        }
 
         $students = $StudentQuery->paginate(30)->appends($request->query());
 

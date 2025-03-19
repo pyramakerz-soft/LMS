@@ -19,6 +19,9 @@
 
                     <form id="filterForm" action="{{ route('students.index') }}" method="GET"
                         class="d-flex justify-content-evenly mb-3">
+
+                        <input type="text" name="search" class="form-control w-25" placeholder="Search by username"
+                            value="{{ request('search') }}">
                         <select name="school" id="school" class="form-select w-25">
                             <option disabled selected hidden>Filter By School</option>
                             @foreach ($schools as $school)
@@ -34,6 +37,8 @@
                                 </option>
                             @endforeach
                         </select>
+                        <button type="submit" class="btn btn-primary">Search</button>
+
                         <a class="btn btn-secondary" href="{{ route('students.index') }}">Clear</a>
                     </form>
 
@@ -82,6 +87,16 @@
                                             <td class="d-flex align-items-center gap-2">
                                                 <a href="{{ route('students.edit', $student->id) }}"
                                                     class="btn btn-info">Edit</a>
+
+                                                <form action="{{ route('students.destroy', $student->id) }}" method="POST"
+                                                    style="display:inline-block;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this student?');">
+                                                        Delete
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach
