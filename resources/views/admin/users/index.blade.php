@@ -36,11 +36,11 @@
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td class="text-end">
-                                            {{-- @can('update user') --}}
+                                            @can('update user')
                                                 <a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-info">
                                                     <i class="bi bi-person-badge"></i> Roles
                                                 </a>
-                                            {{-- @endcan --}}
+                                            @endcan
                                             @can('delete user')
                                                 <form action="{{ route('users.destroy', $user->id) }}" method="POST"
                                                     class="d-inline">
@@ -55,6 +55,8 @@
 
                                     </tr>
                                 @endforeach
+                               
+
                             </tbody>
                         </table>
                     </div>
