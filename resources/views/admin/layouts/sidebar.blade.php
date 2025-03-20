@@ -20,27 +20,27 @@
                     </a>
                 </li>
             @endcan
-            @can('read user')
-                <li class="sidebar-item {{ request()->is('admin/users') ? 'active' : '' }}">
-                    <a class="sidebar-link" href="{{ route('users.index') }}">
-                        <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Users</span>
-                    </a>
-                </li>
-            @endcan
+            {{-- @can('read user') --}}
+            <li class="sidebar-item {{ request()->is('admin/users') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('users.index') }}">
+                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Users</span>
+                </a>
+            </li>
+            {{-- @endcan --}}
             {{-- <li class="sidebar-item {{ request()->is('admin/teacher_resources') ? 'active' : '' }}">
             <a class="sidebar-link" href="{{ route('teacher_resources.index') }}">
                 <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Teacher
                     resources</span>
             </a>
             </li> --}}
-            @can('read role')
-                <li class="sidebar-item {{ request()->is('admin/roles') ? 'active' : '' }}">
-                    <a class="sidebar-link" href="{{ route('admin.roles.index') }}">
-                        <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
-                            Roles</span>
-                    </a>
-                </li>
-            @endcan
+            {{-- @can('read role') --}}
+            <li class="sidebar-item {{ request()->is('admin/roles') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('admin.roles.index') }}">
+                    <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
+                        Roles</span>
+                </a>
+            </li>
+            {{-- @endcan --}}
             @can('read type')
                 <li class="sidebar-item {{ request()->is('admin/types') ? 'active' : '' }}">
                     <a class="sidebar-link" href="{{ route('types.index') }}">
