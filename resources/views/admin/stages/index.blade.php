@@ -15,9 +15,9 @@
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
-
-                    <a href="{{ route('stages.create') }}" class="btn btn-primary mb-3">Add Grade</a>
-
+                    @can('create stage')
+                        <a href="{{ route('stages.create') }}" class="btn btn-primary mb-3">Add Grade</a>
+                    @endcan
                     <!-- Add scrollable wrapper for horizontal scroll -->
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">
@@ -41,15 +41,21 @@
                                             @endif
                                         </td>
                                         <td class="d-flex align-items-center gap-2">
-                                            <a href="{{ route('material.unit.chapter.create', $stage->id) }}"
-                                                class="btn btn-primary">Add Material</a>
-                                            <a href="{{ route('stages.edit', $stage->id) }}" class="btn btn-info">Edit</a>
-                                            <form action="{{ route('stages.destroy', $stage->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this stage?');">Delete</button>
-                                            </form>
+                                            @can('create material')
+                                                <a href="{{ route('material.unit.chapter.create', $stage->id) }}"
+                                                    class="btn btn-primary">Add Material</a>
+                                            @endcan
+                                            @can('update stage')
+                                                <a href="{{ route('stages.edit', $stage->id) }}" class="btn btn-info">Edit</a>
+                                            @endcan
+                                            @can('delete stage')
+                                                <form action="{{ route('stages.destroy', $stage->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this stage?');">Delete</button>
+                                                </form>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @endforeach

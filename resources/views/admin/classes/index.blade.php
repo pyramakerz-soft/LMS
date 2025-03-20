@@ -30,7 +30,9 @@
                     </form>
 
                     <!-- Button to create a new student -->
-                    <a href="{{ route('classes.create') }}" class="btn btn-primary mb-3">Add class</a>
+                    @can('create group')
+                        <a href="{{ route('classes.create') }}" class="btn btn-primary mb-3">Add class</a>
+                    @endcan
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">
                             <thead>
@@ -48,18 +50,21 @@
                                         <td>{{ $class->school->name }}</td>
                                         <td>{{ $class->stage->name }}</td>
                                         <td class="d-flex align-items-center gap-2">
-                                            <a href="{{ route('classes.edit', $class->id) }}" class="btn btn-info">Edit</a>
-
+                                            @can('update group')
+                                                <a href="{{ route('classes.edit', $class->id) }}" class="btn btn-info">Edit</a>
+                                            @endcan
                                             <!-- Delete button -->
-                                            <form action="{{ route('classes.destroy', $class->id) }}" method="POST"
-                                                style="display:inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this class?');">
-                                                    Delete
-                                                </button>
-                                            </form>
+                                            @can('delete group')
+                                                <form action="{{ route('classes.destroy', $class->id) }}" method="POST"
+                                                    style="display:inline-block;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this class?');">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            @endcan
 
                                             <a href="{{ route('classes.import', $class->id) }}"
                                                 class="btn btn-secondary">Import Students</a>

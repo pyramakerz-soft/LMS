@@ -42,7 +42,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'school',
             'stage',
             'student_assessment',
-
             'student',
             'teacher',
             'teacherClass',

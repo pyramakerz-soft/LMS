@@ -11,8 +11,9 @@
                 <div class="container-fluid p-0">
 
                     <h1>Lessons</h1>
-                    <a href="{{ route('lessons.create') }}" class="btn btn-primary mb-3">Add Lesson</a>
-
+                    @can('create lesson')
+                        <a href="{{ route('lessons.create') }}" class="btn btn-primary mb-3">Add Lesson</a>
+                    @endcan
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
@@ -84,14 +85,18 @@
                                         </td>
                                         <td>{{ $lesson->is_active ? 'Active' : 'Inactive' }}</td>
                                         <td class="d-flex align-items-center gap-2">
-                                            <a href="{{ route('lessons.edit', $lesson->id) }}"
-                                                class="btn btn-info">Edit</a>
-                                            <form action="{{ route('lessons.destroy', $lesson->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this lesson?');">Delete</button>
-                                            </form>
+                                            @can('update lesson')
+                                                <a href="{{ route('lessons.edit', $lesson->id) }}"
+                                                    class="btn btn-info">Edit</a>
+                                            @endcan
+                                            @can('delete lesson')
+                                                <form action="{{ route('lessons.destroy', $lesson->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this lesson?');">Delete</button>
+                                                </form>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @endforeach

@@ -1,5 +1,5 @@
 @php
-session(['schools_previous_url' => url()->full()]);
+    session(['schools_previous_url' => url()->full()]);
 @endphp
 @extends('admin.layouts.layout')
 @section('content')
@@ -21,9 +21,9 @@ session(['schools_previous_url' => url()->full()]);
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
-
-                    <a href="{{ route('admins.create') }}" class="btn btn-primary mb-3">Add School</a>
-
+                    @can('create school')
+                        <a href="{{ route('admins.create') }}" class="btn btn-primary mb-3">Add School</a>
+                    @endcan
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">
                             <thead>
@@ -45,20 +45,26 @@ session(['schools_previous_url' => url()->full()]);
                                         <td>{{ $school->type->name ?? '-' }}</td>
                                         <td>{{ $school->students->count() ?? '-' }}</td>
                                         <td class="d-flex align-items-center gap-2">
-                                            <a href="{{ route('admins.edit', $school->id) }}" class="btn btn-info">Edit</a>
-                                            <form action="{{ route('admins.destroy', $school->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"  onclick="return confirm('Are you sure you want to delete this school?');">Delete</button>
-                                            </form>
-
+                                            @can('update school')
+                                                <a href="{{ route('admins.edit', $school->id) }}" class="btn btn-info">Edit</a>
+                                            @endcan
+                                            @can('delete school')
+                                                <form action="{{ route('admins.destroy', $school->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this school?');">Delete</button>
+                                                </form>
+                                            @endcan
                                             <!-- Button to assign curriculum -->
-                                            <a href="{{ route('school.curriculum.assign', $school->id) }}"
-                                                class="btn btn-success">Add Curriculum</a>
+                                            @can('create school')
+                                                <a href="{{ route('school.curriculum.assign', $school->id) }}"
+                                                    class="btn btn-success">Add Curriculum</a>
 
-                                            <!-- New Button to view curriculum -->
-                                            <a href="{{ route('school.curriculum.view', $school->id) }}"
-                                                class="btn btn-primary">View Curriculum</a>
+                                                <!-- New Button to view curriculum -->
+                                                <a href="{{ route('school.curriculum.view', $school->id) }}"
+                                                    class="btn btn-primary">View Curriculum</a>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @endforeach

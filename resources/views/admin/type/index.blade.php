@@ -14,9 +14,9 @@
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
-
-                    <a href="{{ route('types.create') }}" class="btn btn-primary mb-3">Add New Type</a>
-
+                    @can('create type')
+                        <a href="{{ route('types.create') }}" class="btn btn-primary mb-3">Add New Type</a>
+                    @endcan
                     <!-- Add scrollable wrapper for horizontal scroll -->
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">
@@ -30,18 +30,22 @@
                                 @foreach ($types as $type)
                                     <tr>
                                         <td>{{ $type->name }}</td>
-                                        <td class="d-flex align-items-center gap-2">
-                                            <a href="{{ route('types.edit', $type->id) }}" class="btn btn-info">Edit</a>
 
+                                        <td class="d-flex align-items-center gap-2">
+                                            @can('update type')
+                                                <a href="{{ route('types.edit', $type->id) }}" class="btn btn-info">Edit</a>
+                                            @endcan
                                             <!-- Delete button -->
-                                            <form action="{{ route('types.destroy', $type->id) }}" method="POST" >
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this type?');">
-                                                    Delete
-                                                </button>
-                                            </form>
+                                            @can('delete type')
+                                                <form action="{{ route('types.destroy', $type->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this type?');">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @endforeach

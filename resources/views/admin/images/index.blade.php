@@ -15,16 +15,15 @@
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
-
-                    <a href="{{ route('images.create') }}" class="btn btn-primary mb-3">Upload New Images</a>
-
+                    @can('create image')
+                        <a href="{{ route('images.create') }}" class="btn btn-primary mb-3">Upload New Images</a>
+                    @endcan
                     <div class="row">
                         @foreach ($images as $key => $image)
                             <div class="col-md-4 col-lg-3">
                                 <div class="card mb-4 " style="height: 350px;">
                                     <div style="height: 250px; overflow: hidden;">
-                                        <img src="{{ asset($image->path) }}" alt="Image"
-                                            class="card-img-top"
+                                        <img src="{{ asset($image->path) }}" alt="Image" class="card-img-top"
                                             style="height: 100%; width: 100%; object-fit: cover; cursor: pointer;"
                                             data-bs-toggle="modal" data-bs-target="#imageModal"
                                             data-bs-slide-to="{{ $key }}">
@@ -32,12 +31,15 @@
                                     <div class="card-body d-flex flex-column justify-content-between">
                                         <h5 class="card-title text-truncate">{{ $image->title ?? 'Image ' . $image->id }}
                                         </h5>
-                                        <form action="{{ route('images.destroy', $image->id) }}" method="POST"
-                                            class="mt-2">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger w-100"  onclick="return confirm('Are you sure you want to delete this image?');">Delete</button>
-                                        </form>
+                                        @can('delete image')
+                                            <form action="{{ route('images.destroy', $image->id) }}" method="POST"
+                                                class="mt-2">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger w-100"
+                                                    onclick="return confirm('Are you sure you want to delete this image?');">Delete</button>
+                                            </form>
+                                        @endcan
                                     </div>
                                 </div>
                             </div>
@@ -84,7 +86,7 @@
                 </div>
             </main>
 
-             
+
         </div>
     </div>
 @endsection
