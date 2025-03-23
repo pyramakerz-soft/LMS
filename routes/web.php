@@ -33,6 +33,7 @@ use App\Http\Controllers\Teacher\TeacherResources;
 use App\Http\Controllers\Teacher\TeacherUnitController;
 use App\Http\Controllers\Student\StudentAssignmentController;
 use App\Http\Controllers\Observer\ObserverDashboardController;
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UnitController as ControllersUnitController;
 use App\Models\Group;
@@ -133,6 +134,9 @@ Route::prefix('admin')->group(function () {
         Route::get('classes/{id}/import', [ClassController::class, 'showImportForm'])->name('classes.import');
         Route::post('classes/{id}/import', [ClassController::class, 'importStudents'])->name('classes.importStudents');
         Route::get('classes/{id}/export', [ClassController::class, 'exportStudents'])->name('classes.export');
+
+        Route::get('tickets', [TicketController::class, 'index'])->name('tickets.index');
+        Route::put('/admin/tickets/{ticket}/status', [TicketController::class, 'updateStatus'])->name('admin.tickets.updateStatus');
 
 
         Route::post('teachers/generate', [TeacherController::class, 'generate'])->name('teachers.generate');
@@ -265,6 +269,9 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
 
     Route::get('students_classess/{class_id}', [TeacherClasses::class, 'students'])->name('students_classess');
     Route::post('store-assessment', [TeacherClasses::class, 'storeAssessment'])->name('teacher.storeAssessment');
+    Route::get('/tickets', [App\Http\Controllers\Teacher\TicketController::class, 'index'])->name('tickets.index');
+    Route::get('/tickets/create', [App\Http\Controllers\Teacher\TicketController::class, 'create'])->name('tickets.create');
+    Route::post('/tickets', [App\Http\Controllers\Teacher\TicketController::class, 'store'])->name('tickets.store');
 
 
 

@@ -49,6 +49,14 @@
                     </a>
                 </li>
             @endcan
+            {{-- @can('read type') --}}
+            <li class="sidebar-item {{ request()->is('admin/tickets') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('tickets.index') }}">
+                    <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
+                        Tickets</span>
+                </a>
+            </li>
+            {{-- @endcan --}}
             @can('read ebook')
                 <li class="sidebar-item {{ request()->is('admin/ebooks') ? 'active' : '' }}">
                     <a class="sidebar-link" href="{{ route('ebooks.create') }}">

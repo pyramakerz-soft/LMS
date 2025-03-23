@@ -5,8 +5,10 @@
 @endsection
 
 @php
-    $menuItems = [['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
-    ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')]];
+    $menuItems = [
+        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
+        ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
+    ];
 @endphp
 
 @section('sidebar')
@@ -39,7 +41,7 @@
                     <tr class="border-t border-gray-300 text-lg md:text-xl">
                         <td class="py-5 px-6 font-bold">Name</td>
                         @foreach ($students as $student)
-                        @dd($student)
+                            @dd($student)
                             {{-- <td class="py-5 px-6 text-blue-600">{{ $student->username }}</td> --}}
                         @endforeach
                     </tr>
@@ -75,7 +77,7 @@
                     const field = this.dataset.field;
                     const value = this.value;
 
-                    
+
                     // Send AJAX request to save the assessment
                     fetch("{{ route('teacher.storeAssessment') }}", {
                             method: 'POST',

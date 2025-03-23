@@ -37,7 +37,14 @@
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="permission" class="form-label">Select Permissions</label>
+                                            <label for="permission"
+                                                class="form-label d-flex justify-content-between align-items-center">
+                                                <span>Select Permissions</span>
+                                                <button type="button" id="select-all-permissions"
+                                                    class="btn btn-sm btn-outline-primary">
+                                                    Select All
+                                                </button>
+                                            </label>
                                             <select id="permission" name="permissions[]" class="form-select select2"
                                                 multiple>
                                                 @foreach ($permissions as $permission)
@@ -69,9 +76,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('.select2').select2({
+            const $select = $('.select2');
+            $select.select2({
                 placeholder: "Select Permissions",
                 allowClear: true
+            });
+
+            $('#select-all-permissions').click(function() {
+                $select.find('option').prop('selected', true);
+                $select.trigger('change');
             });
         });
     </script>
