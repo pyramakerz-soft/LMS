@@ -1,1 +1,0 @@
-﻿positionForPages[1]={page:1,positions:[{word:"FROM THE CREA T ORS OF P YRAMAKERZ",left:0.275696,top:0.917257,width:0.448611,height:0.012677}]};
