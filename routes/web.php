@@ -273,10 +273,8 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::get('/tickets/create', [App\Http\Controllers\Teacher\TicketController::class, 'create'])->name('tickets.create');
     Route::post('/tickets', [App\Http\Controllers\Teacher\TicketController::class, 'store'])->name('tickets.store');
 
-
-
     Route::get('show-assignments/{id}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'showAssignments'])->name('assignments.showAssignments');
-
+    Route::get('assignments/create/{stageId?}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'create'])->name('assignments.create');
     Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
 
     Route::get('teacher/api/stages/{stageId}/classes', [\App\Http\Controllers\Teacher\AssignmentController::class, 'getClassesByStage'])

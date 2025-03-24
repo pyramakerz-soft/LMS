@@ -31,8 +31,8 @@ class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
         if (empty($row['asm_altalb_ballgh_alanglyzy'])) {
             return null;
         }
-
-        $username = str_replace(' ', '_', $row['asm_altalb_ballgh_alanglyzy']);
+        $rawName = $row['asm_altalb_ballgh_alanglyzy'];
+        $username = str_replace(' ', '_', preg_replace('/^=IFERROR\(.*?,\"(.*?)\"\)$/', '$1', $rawName));
         $existingStudent = Student::where('username', $username)->first();
 
         // if ($existingStudent) {

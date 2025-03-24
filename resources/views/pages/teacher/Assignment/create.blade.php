@@ -44,6 +44,11 @@
                 </ul>
             </div>
         @endif
+        @if (session('success'))
+            <div class="alert alert-success mb-4 p-4 rounded-md bg-green-100 text-green-800">
+                {{ session('success') }}
+            </div>
+        @endif
         <form action="{{ route('assignments.store') }}" method="POST" enctype="multipart/form-data" class="mt-5"
             id="form">
             @csrf
@@ -113,15 +118,7 @@
                     @endforeach
                 </select> --}}
 
-                <label for="stage_id"
-                    class="form-label block mb-3 font-semibold text-xs md:text-sm text-[#3A3A3C] mt-5">Select Stage</label>
-                <select name="stage_id" id="stage_id"
-                    class="form-control w-full p-2 md:p-4 border border-[#E5E5EA] rounded-xl" required>
-                    <option value="">--Select Stage--</option>
-                    @foreach ($stages as $stage)
-                        <option value="{{ $stage->id }}">{{ $stage->name }}</option>
-                    @endforeach
-                </select>
+                <input type="hidden" name="stage_id" value="{{ $selectedStage }}">
 
                 <!-- Class Dropdown -->
                 <label for="class_ids"
@@ -198,20 +195,15 @@
             placeholder: "Select Classes",
             allowClear: true
         });
-    </script>
-    <script>
-        document.getElementById('stage_id').addEventListener('change', function() {
-            const stageId = this.value;
+
+        function fetchClasses(stageId) {
             const classDropdown = document.getElementById('class_ids');
 
-            // Clear and disable the class dropdown initially
             classDropdown.innerHTML = '<option value="">--Select Classes--</option>';
             classDropdown.disabled = true;
 
             if (stageId) {
-                fetch(
-                        `https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/teacher/teacher/api/stages/${stageId}/classes`
-                        )
+                fetch(`/teacher/teacher/api/stages/${stageId}/classes`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Error fetching classes');
@@ -219,21 +211,25 @@
                         return response.json();
                     })
                     .then(data => {
-                        // Populate the class dropdown
                         data.forEach(classItem => {
                             const option = document.createElement('option');
                             option.value = classItem.id;
                             option.textContent = classItem.name;
                             classDropdown.appendChild(option);
                         });
-
-                        // Enable the class dropdown
                         classDropdown.disabled = false;
                     })
                     .catch(error => {
                         console.error('Error fetching classes:', error);
                         alert('Unable to fetch classes. Please try again later.');
                     });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const stageId = "{{ $selectedStage }}"; // This is passed from the controller
+            if (stageId) {
+                fetchClasses(stageId); // Auto-fetch classes on load
             }
         });
     </script>
@@ -249,6 +245,7 @@
                 input.value = previousValue;
             }
         }
+
         document.getElementById('start_date').addEventListener('change', function() {
             const startDate = this.value;
             document.getElementById('due_date').min = startDate;
@@ -265,11 +262,9 @@
 
         form.addEventListener('submit', function(event) {
             const file = fileInput.files[0];
-
             if (file) {
                 const fileName = file.name;
                 const fileExtension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
-
                 if (!allowedExtensions.includes(fileExtension)) {
                     document.getElementById("fileErr")?.classList.remove("hidden");
                     document.getElementById("fileErr")?.classList.add("flex");
