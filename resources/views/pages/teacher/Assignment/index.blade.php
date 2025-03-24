@@ -31,9 +31,9 @@
                 <span class="mx-2 text-[#D0D5DD]">/</span>
                 <a href="#" class="mx-2 cursor-pointer">Assignment</a>
             </div>
-            <a href="{{ route('assignments.create') }}">
+            <a href="{{ route('assignments.create', ['stageId' => $stage->id]) }}">
                 <button class="rounded-md px-6 py-3 bg-[#17253E] text-white border-none">
-                    Create
+                    Create 
                 </button>
             </a>
         </div>
