@@ -7,6 +7,7 @@ use App\Models\School;
 use App\Models\Stage;
 use App\Models\TeacherResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TeacherResourceController extends Controller
 {
@@ -33,11 +34,22 @@ class TeacherResourceController extends Controller
             'stage_id' => 'required|exists:stages,id',
             'school_id' => 'required|exists:schools,id',
             'type' => 'required|in:pdf,ebook',
-            
+
         ]);
 
-        $imagePath = $request->file('image') ? $request->file('image')->store('teacher_resources', 'public') : null;
-        $filePath = $request->file('file_path')->store('teacher_resources', 'public');
+        if ($request->hasFile('image')) {
+            // Store image in S3 inside 'pyra-public/teacher_resources/' folder
+            $imagePath = $request->file('image')->store('pyra-public/teacher_resources', 's3');
+
+            // Convert the path to a full S3 URL
+            $imagePath = Storage::disk('s3')->url($imagePath);
+        }
+
+        // Store file in S3 inside 'pyra-public/teacher_resources/' folder
+        $filePath = $request->file('file_path')->store('pyra-public/teacher_resources', 's3');
+
+        // Convert the path to a full S3 URL
+        $filePath = Storage::disk('s3')->url($filePath);
 
         TeacherResource::create([
             'name' => $request->name,

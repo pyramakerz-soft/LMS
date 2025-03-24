@@ -39,12 +39,16 @@ class ImageController extends Controller
         ]);
 
         if ($request->hasFile('images')) {
+            // foreach ($request->file('images') as $image) {
+            //     $path = $image->store('images', 'public');
+            //     Image::create(['path' => $path]);
+            // }
             foreach ($request->file('images') as $image) {
-                $path = $image->store('images', 'public');
-                Image::create(['path' => $path]);
+                $path = $image->store('pyra-public/images', 's3');
+                Image::create(['path' => Storage::disk('s3')->url($path)]);
             }
             return redirect()->route('images.index')->with('success', 'Images uploaded successfully.');
-        } else{
+        } else {
             return redirect()->route('images.index')->withErrors(['images' => 'No images were uploaded.']);
         }
     }
@@ -78,7 +82,7 @@ class ImageController extends Controller
      */
     public function destroy(Image $image)
     {
-        Storage::disk('public')->delete($image->path);
+        Storage::disk('s3')->delete($image->path);
         $image->delete();
 
         return redirect()->route('images.index')->with('success', 'Image deleted successfully.');

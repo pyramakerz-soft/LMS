@@ -7,6 +7,7 @@ use App\Models\Image;
 use App\Models\Material;
 use App\Models\Stage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MaterialController extends Controller
 {
@@ -179,9 +180,14 @@ class MaterialController extends Controller
                 ->withInput();
         }
         // Handle image upload or existing image
-        $imagePath = $request->hasFile('image')
-            ? $request->file('image')->store('materials', 'public')
-            : $request->existing_image;
+
+        $imagePath = $request->existing_image ?? null;
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('pyra-public/materials', 's3');
+
+            $imagePath = Storage::disk('s3')->url($imagePath);
+        }
 
         // Create new material
         $material = Material::create([
@@ -204,36 +210,54 @@ class MaterialController extends Controller
             return false; // Return false if ZipArchive is not installed
         }
 
+
         if ($file->getClientOriginalExtension() === 'zip') {
-            $storedPath = $file->store($storageFolder, 'public');
-            $extractPath = storage_path('app/public/' . $storageFolder . '/' . pathinfo($storedPath, PATHINFO_FILENAME));
+            // Store ZIP file in S3
+            $storedPath = $file->store("pyra-public/{$storageFolder}", 's3');
+            $fileNameWithoutExt = pathinfo($storedPath, PATHINFO_FILENAME);
 
-            // Ensure that the directory has write permissions
-            if (!is_writable(dirname($extractPath))) {
-                return false; // Return false if the directory is not writable
-            }
+            // Download ZIP from S3 for extraction
+            $localZipPath = storage_path("app/temp/{$fileNameWithoutExt}.zip");
+            Storage::disk('s3')->download($storedPath, $localZipPath);
 
+            // Extract ZIP file locally
+            $extractPath = storage_path("app/temp/{$fileNameWithoutExt}");
             $zip = new \ZipArchive;
-            if ($zip->open(storage_path('app/public/' . $storedPath)) === TRUE) {
+
+            if ($zip->open($localZipPath) === TRUE) {
                 if (!$zip->extractTo($extractPath)) {
                     $zip->close();
                     return false; // Return false if extraction fails
                 }
                 $zip->close();
 
-                // Construct the path to the extracted folder
-                $extractedPath = $storageFolder . '/' . pathinfo($storedPath, PATHINFO_FILENAME);
-                if (!file_exists(public_path('storage/' . $extractedPath . '/index.html'))) {
-                    return false; // Return false if index.html is missing
+                // Upload extracted files to S3
+                foreach (scandir($extractPath) as $fileName) {
+                    if ($fileName !== '.' && $fileName !== '..') {
+                        $fileContent = file_get_contents("$extractPath/$fileName");
+                        Storage::disk('s3')->put("pyra-public/{$storageFolder}/{$fileNameWithoutExt}/$fileName", $fileContent);
+                    }
                 }
 
-                return $extractedPath;
+                // Check if `index.html` exists in extracted folder on S3
+                $indexHtmlPath = "pyra-public/{$storageFolder}/{$fileNameWithoutExt}/index.html";
+                if (!Storage::disk('s3')->exists($indexHtmlPath)) {
+                    return false; // Return false if `index.html` is missing
+                }
+
+                // Clean up local ZIP file
+                unlink($localZipPath);
+
+                // Return extracted folder path in S3
+                return "pyra-public/{$storageFolder}/{$fileNameWithoutExt}";
             } else {
                 return false; // Return false if unable to open ZIP file
             }
         } else {
-            return $file->store($storageFolder, 'public'); // Return the stored path if not a zip file
+            // Store normal files directly in S3
+            return Storage::disk(name: 's3')->url($file->store("pyra-public/{$storageFolder}", 's3'));
         }
+
     }
 
 
@@ -298,10 +322,11 @@ class MaterialController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('materials', 'public');
+            $imagePath = $request->file('image')->store('pyra-public/materials', 's3');
 
-            $material->image = $imagePath;
+            $material->image = Storage::disk('s3')->url($imagePath);
         }
+
 
         // Update the material
         $material->update([

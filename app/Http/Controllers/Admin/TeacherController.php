@@ -10,6 +10,7 @@ use App\Models\Teacher;
 use App\Models\TeacherClass;
 use Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Str;
 
 class TeacherController extends Controller
@@ -87,7 +88,7 @@ class TeacherController extends Controller
 
         // dd($username);
         // $username = $existingTeacher->username . '_' . $school->name;
-        $existingTeacherSchool  = Teacher::where('username', $username)->get();
+        $existingTeacherSchool = Teacher::where('username', $username)->get();
         if ($existingTeacherSchool->count() > 0) {
             return redirect()->back()->with('error', 'Teacher already added to this school.');
         }
@@ -125,8 +126,11 @@ class TeacherController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('teachers', 'public');
+            $imagePath = $request->file('image')->store('pyra-public/teachers', 's3');
+
+            $imagePath = Storage::disk('s3')->url($imagePath);
         }
+
         $teacher = Teacher::create([
             'name' => $request->name,
             'school_id' => $request->input('school_id'),
@@ -236,8 +240,14 @@ class TeacherController extends Controller
         $username = str_replace(' ', '_', $request->input('username'));
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('teachers', 'public');
-            $teacher->image = $imagePath;
+            if ($teacher->image) {
+                $oldImagePath = str_replace(Storage::disk('s3')->url(''), '', $teacher->image);
+                Storage::disk('s3')->delete($oldImagePath);
+            }
+
+            $imagePath = $request->file('image')->store('pyra-public/teachers', 's3');
+
+            $teacher->image = Storage::disk('s3')->url($imagePath);
         }
         if ($request->has('school_id')) {
             $teacher->update([

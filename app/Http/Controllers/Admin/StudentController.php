@@ -9,6 +9,7 @@ use App\Models\Student;
 use App\Models\Group;
 use App\Models\StudentClass;
 use Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Str;
@@ -84,9 +85,11 @@ class StudentController extends Controller
 
         $password = Str::random(8);
 
-        $imagePath = $request->hasFile('image')
-            ? $request->file('image')->store('students', 'public')
-            : null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('pyra-public/students', 's3');
+
+            $imagePath = Storage::disk('s3')->url($imagePath);
+        }
 
         Student::create([
             'username' => $request->input('username'),
@@ -154,9 +157,15 @@ class StudentController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $student->image = $request->file('image')->store('students', 'public');
-        }
+            if ($student->image) {
+                $oldImagePath = str_replace(Storage::disk('s3')->url(''), '', $student->image);
+                Storage::disk('s3')->delete($oldImagePath);
+            }
 
+            $imagePath = $request->file('image')->store('pyra-public/students', 's3');
+
+            $student->image = Storage::disk('s3')->url($imagePath);
+        }
         $student->update([
             'username' => $request->input('username'),
             'gender' => $request->input('gender'),

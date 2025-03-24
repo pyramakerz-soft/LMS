@@ -10,8 +10,8 @@ use App\Models\School;
 use App\Models\Stage;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
-use Storage;
 
 class ClassController extends Controller
 {
@@ -54,8 +54,12 @@ class ClassController extends Controller
         ]);
 
         $imagePath = null;
+        // if ($request->hasFile('image')) {
+        //     $imagePath = $request->file('image')->store('classes', 'public');
+        // }
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('classes', 'public');
+            $imagePath = $request->file('image')->store('pyra-public/classes', 's3');
+            $imagePath = Storage::disk('s3')->url($imagePath);
         }
         $class = Group::create([
             'name' => $request->input('name'),
@@ -104,11 +108,13 @@ class ClassController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('classes', 'public');
+            $imagePath = $request->file('image')->store('pyra-public/classes', 's3');
+
             if ($class->image) {
-                Storage::disk('public')->delete($class->image);
+                Storage::disk('s3')->delete(str_replace(Storage::disk('s3')->url(''), '', $class->image));
             }
-            $class->image = $imagePath;
+
+            $class->image = Storage::disk('s3')->url($imagePath);
         }
 
         $class->update([

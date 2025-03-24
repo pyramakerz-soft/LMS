@@ -303,10 +303,35 @@
                 var schoolCity = selectedSchool.data("city"); // Retrieve the city from the data attribute
                 var citySelect = $("select[name='city_id']");
 
+<<<<<<< HEAD
                 citySelect.empty(); // Clear existing city options
                 if (schoolCity) {
                     citySelect.append(
                         '<option value="' + schoolCity + '" selected>' + schoolCity + '</option>'
+=======
+            citySelect.empty(); // Clear existing city options
+            if (schoolCity) {
+                citySelect.append(
+                    '<option value="' + schoolCity + '" selected>' + schoolCity + '</option>'
+                );
+            }
+        });
+    });
+
+    function getSchool(teacherId) {
+        $.ajax({
+            url: '/public/observer/observation/get_school/' + teacherId,
+            // url: "/observer/observation/get_school/" + teacherId,
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+                // Clear the existing options
+                $("select[name='school_id']").empty();
+
+                if (data.error) {
+                    $("select[name='school_id']").append(
+                        '<option value="" selected disabled>' + data.error + "</option>"
+>>>>>>> origin/AWS
                     );
                 }
             });
@@ -350,6 +375,7 @@
             });
         }
 
+<<<<<<< HEAD
         function getStages(teacherId) {
             $.ajax({
                 url: '/LMS/lms_pyramakerz/public/observer/observation/get_stages/' + teacherId,
@@ -361,6 +387,24 @@
                     // Clear the existing options
                     $('select[name="grade_id"]').empty();
                     if (!data || data.length === 0) {
+=======
+    function getStages(teacherId) {
+        $.ajax({
+            url: '/public/observer/observation/get_stages/' + teacherId,
+            // url: '/observer/observation/get_stages/' + teacherId,
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+                console.log(data);
+                // Clear the existing options
+                $('select[name="grade_id"]').empty();
+                if (!data || data.length === 0) {
+                    $('select[name="grade_id"]').append(
+                        '<option value="" selected disabled>No Available School</option>'
+                    );
+                } else {
+                    $.each(data, function(key, value) {
+>>>>>>> origin/AWS
                         $('select[name="grade_id"]').append(
                             '<option value="" selected disabled>No Available School</option>'
                         );

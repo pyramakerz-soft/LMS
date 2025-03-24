@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Chapter;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class LessonController extends Controller
 {
@@ -69,8 +70,11 @@ class LessonController extends Controller
         // $isZip = $file->getClientOriginalExtension() === 'zip';
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('lessons', 'public');
+            $imagePath = $request->file('image')->store('pyra-public/lessons', 's3');
+
+            $imageUrl = Storage::disk('s3')->url($imagePath);
         }
+
 
         // if ($isZip) {
         //     $filePath = $file->store('ebooks', 'public');
@@ -119,20 +123,22 @@ class LessonController extends Controller
     {
         //
     }
+
     public function viewEbook(Lesson $lesson)
     {
-        $relativePath = 'storage/' . $lesson->file_path . '/index.html';
+        $indexHtmlPath = $lesson->file_path . '/index.html';
 
-        $fileUrl = asset($relativePath);
+        $fileUrl = Storage::disk('s3')->url($indexHtmlPath);
 
         \Log::info('Looking for index.html at: ' . $fileUrl);
 
-        if (file_exists(public_path($relativePath))) {
+        if (Storage::disk('s3')->exists($indexHtmlPath)) {
             return redirect($fileUrl);
         } else {
             return abort(404, 'Index file not found.');
         }
     }
+
 
 
     /**
@@ -196,15 +202,19 @@ class LessonController extends Controller
             'is_active' => 'nullable|boolean',
         ]);
 
+
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('lessons', 'public');
-            $lesson->image = $imagePath;
+            $imagePath = $request->file('image')->store('pyra-public/lessons', 's3');
+
+            $lesson->image = Storage::disk('s3')->url($imagePath);
         }
 
         if ($request->hasFile('file_path')) {
-            $filePath = $request->file('file_path')->store('ebooks', 'public');
-            $lesson->file_path = $filePath;
+            $filePath = $request->file('file_path')->store('pyra-public/ebooks', 's3');
+
+            $lesson->file_path = Storage::disk('s3')->url($filePath);
         }
+
 
         $lesson->update([
             'title' => $request->title,

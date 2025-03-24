@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class School extends Model
 {
@@ -62,7 +63,9 @@ class School extends Model
     {
         return $this->belongsTo(Type::class, 'type_id');
     }
+
     public function getImageAttribute($val)
+<<<<<<< HEAD
     {
         return ($val !== null) ? asset($val) : "";
     }
@@ -70,5 +73,11 @@ class School extends Model
     {
         return $this->belongsToMany(Observer::class, 'observer_school');
     }
+=======
+{
+    return ($val !== null) ? Storage::disk('s3')->url("/pyra-public/$val") : "";
+}
+
+>>>>>>> origin/AWS
 
 }
