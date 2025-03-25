@@ -6,7 +6,7 @@
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
         ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
-        ['label' => 'Ticket', 'icon' => 'fa-solid fa-ticket', 'route' => route('teacher.teacher.tickets.index')],
+        ['label' => 'Ticket', 'icon' => 'fa-solid fa-ticket', 'route' => route('teacher.tickets.index')],
 
         ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
     ];
@@ -204,7 +204,8 @@
 
             if (stageId) {
                 fetch(
-                        `https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/teacher/teacher/api/stages/${stageId}/classes`)
+                        `https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/teacher/teacher/api/stages/${stageId}/classes`
+                        )
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Error fetching classes');
