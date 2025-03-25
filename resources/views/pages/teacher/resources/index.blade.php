@@ -63,7 +63,7 @@ $menuItems = [
                         <option value="{{ $lesson->id }}">{{ $lesson->chapter->material->title ?? ''}}-{{ $lesson->chapter->unit->title ?? ''}}-{{$lesson->chapter->title ?? ''}}-{{ $lesson->title ?? ''}}</option>
                         @endforeach
                     </select>
-                    <button type="submit" class="mt-2 text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">Download as ZIP</button>
+                    <button type="submit" style="background-color:#2563EB;" class="mt-2 text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">Download as ZIP</button>
                 </form>
             </div>
 
@@ -78,7 +78,7 @@ $menuItems = [
                         <option value="{{ $theme->id }}">{{ $theme->title ?? ''}}</option>
                         @endforeach
                     </select>
-                    <button type="submit" class="mt-2 text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">Download as ZIP</button>
+                    <button type="submit" style="background-color:#2563EB;" class="mt-2 text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">Download as ZIP</button>
                 </form>
             </div>
 
@@ -94,7 +94,7 @@ $menuItems = [
                         </option>
                         @endforeach
                     </select>
-                    <button type="submit"
+                    <button type="submit" style="background-color:#2563EB;"
                         class="mt-2 text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">Filter</button>
                 </form>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -111,13 +111,13 @@ $menuItems = [
                         </a>
                         <div class="flex justify-between mt-4">
                             <a href="{{ route('teacher.resources.edit', $resource->id) }}"
-                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit</a>
+                                style="background-color:#2C6F4B;" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit</a>
                             <form action="{{ route('teacher.resources.destroy', $resource->id) }}" method="POST"
                                 onsubmit="return confirm('Are you sure you want to delete this resource?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
-                                    class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
+                                    style="background-color:#E34E2E;" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
                             </form>
                         </div>
                     </div>
