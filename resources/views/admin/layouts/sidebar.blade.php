@@ -48,6 +48,18 @@
                         Add E-Book</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ request()->is('admin/lesson_resource') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('lesson_resource.create') }}">
+                    <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
+                        Add Lesson Resource</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ request()->is('admin/theme_resource') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('theme_resource.create') }}">
+                    <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
+                        Add Theme Resource</span>
+                </a>
+            </li>
             <li class="sidebar-item {{ request()->is('admin/admins') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('admins.index') }}">
                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">School</span>
