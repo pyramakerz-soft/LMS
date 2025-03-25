@@ -14,7 +14,7 @@ class TicketController extends Controller
         return view('admin.tickets.index', compact('tickets'));
     }
 
-   
+
     public function updateStatus(Request $request, Ticket $ticket)
     {
         $request->validate([
