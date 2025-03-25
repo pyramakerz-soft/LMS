@@ -15,7 +15,9 @@
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
-                    <a href="{{ route('material.create') }}" class="btn btn-primary mb-3">Add Theme</a>
+                    @can('create material')
+                        <a href="{{ route('material.create') }}" class="btn btn-primary mb-3">Add Theme</a>
+                    @endcan
                     <!-- Wrap table in a scrollable container -->
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">
@@ -69,14 +71,18 @@
 
                                         <td>{{ $material->is_active ? 'Active' : 'Inactive' }}</td>
                                         <td class="d-flex align-items-center gap-2">
-                                            <a href="{{ route('material.edit', $material->id) }}"
-                                                class="btn btn-info">Edit</a>
-                                            <form action="{{ route('material.destroy', $material->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this theme?');">Delete</button>
-                                            </form>
+                                            @can('update material')
+                                                <a href="{{ route('material.edit', $material->id) }}"
+                                                    class="btn btn-info">Edit</a>
+                                            @endcan
+                                            @can('delete material')
+                                                <form action="{{ route('material.destroy', $material->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this theme?');">Delete</button>
+                                                </form>
+                                            @endcan
                                         </td>
 
                                     </tr>

@@ -15,10 +15,9 @@
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
-
-                    <a href="{{ route('chapters.create') }}" class="btn btn-primary mb-3">Add Chapter</a> 
-
-
+                    @can('create chapter')
+                        <a href="{{ route('chapters.create') }}" class="btn btn-primary mb-3">Add Chapter</a>
+                    @endcan
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">
                             <thead>
@@ -49,14 +48,19 @@
                                         </td>
                                         <td>{{ $chapter->is_active ? 'Active' : 'Inactive' }}</td>
                                         <td class="d-flex align-items-center gap-2">
-                                            <a href="{{ route('chapters.edit', $chapter->id) }}"
-                                                class="btn btn-info">Edit</a>
-                                            <form action="{{ route('chapters.destroy', $chapter->id) }}" method="POST"
-                                                style="display:inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"  onclick="return confirm('Are you sure you want to delete this chapter?');">Delete</button>
-                                            </form>
+                                            @can('update chapter')
+                                                <a href="{{ route('chapters.edit', $chapter->id) }}"
+                                                    class="btn btn-info">Edit</a>
+                                            @endcan
+                                            @can('delete chapter')
+                                                <form action="{{ route('chapters.destroy', $chapter->id) }}" method="POST"
+                                                    style="display:inline-block;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this chapter?');">Delete</button>
+                                                </form>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @endforeach

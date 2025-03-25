@@ -15,7 +15,9 @@
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
-                    <a href="{{ route('units.create') }}" class="btn btn-primary mb-3">Add Unit</a>
+                    @can('create unit')
+                        <a href="{{ route('units.create') }}" class="btn btn-primary mb-3">Add Unit</a>
+                    @endcan
                     <!-- Add scrollable wrapper for horizontal scroll -->
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">
@@ -32,10 +34,10 @@
                                 @foreach ($units as $unit)
                                     <tr>
                                         <td>{{ $unit->title }}</td>
-                                        <td>{{ $unit->material->title ?? ' '}}</td>
+                                        <td>{{ $unit->material->title ?? ' ' }}</td>
                                         <td>
                                             @if ($unit->image)
-                                                <img src="{{ asset( $unit->image) }}" alt="{{ $unit->title }}"
+                                                <img src="{{ asset($unit->image) }}" alt="{{ $unit->title }}"
                                                     width="100">
                                             @else
                                                 No Image
@@ -43,12 +45,17 @@
                                         </td>
                                         <td>{{ $unit->is_active ? 'Active' : 'Inactive' }}</td>
                                         <td class="d-flex align-items-center gap-2">
-                                            <a href="{{ route('units.edit', $unit->id) }}" class="btn btn-info">Edit</a>
-                                            <form action="{{ route('units.destroy', $unit->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"  onclick="return confirm('Are you sure you want to delete this unit?');">Delete</button>
-                                            </form>
+                                            @can('update unit')
+                                                <a href="{{ route('units.edit', $unit->id) }}" class="btn btn-info">Edit</a>
+                                            @endcan
+                                            @can('delete unit')
+                                                <form action="{{ route('units.destroy', $unit->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this unit?');">Delete</button>
+                                                </form>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @endforeach

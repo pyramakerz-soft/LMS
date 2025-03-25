@@ -9,11 +9,21 @@ Resources
 @endsection
 
 @php
+<<<<<<< HEAD
 $menuItems = [
 ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
 ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
 ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
 ];
+=======
+    $menuItems = [
+        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
+        ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
+        ['label' => 'Ticket', 'icon' => 'fa-solid fa-ticket', 'route' => route('teacher.tickets.index')],
+
+        ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
+    ];
+>>>>>>> 12932ab561d425697bb1d45aa23b3911f9d81e44
 @endphp
 @section('sidebar')
 @include('components.sidebar', ['menuItems' => $menuItems])

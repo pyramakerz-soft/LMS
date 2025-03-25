@@ -1,1 +1,0 @@
-﻿positionForPages[1]={page:1,positions:[{word:"grade ",left:0.631909,top:0.266424,width:0.126062,height:0.024290},{word:"04",left:0.757971,top:0.266424,width:0.047182,height:0.024290},{word:"BUILDING ROBOT ARM (SDGS)",left:0.300654,top:0.911396,width:0.398415,height:0.018638},{word:"Arm Power",left:0.235729,top:0.190892,width:0.545395,height:0.063188}]};

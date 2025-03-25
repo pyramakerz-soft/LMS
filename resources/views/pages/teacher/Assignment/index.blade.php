@@ -12,6 +12,8 @@
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
         ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
+
+        ['label' => 'Ticket', 'icon' => 'fa-solid fa-ticket', 'route' => route('teacher.tickets.index')],
         ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
     ];
 @endphp
@@ -29,9 +31,9 @@
                 <span class="mx-2 text-[#D0D5DD]">/</span>
                 <a href="#" class="mx-2 cursor-pointer">Assignment</a>
             </div>
-            <a href="{{ route('assignments.create') }}">
+            <a href="{{ route('assignments.create', ['stageId' => $stage->id]) }}">
                 <button class="rounded-md px-6 py-3 bg-[#17253E] text-white border-none">
-                    Create
+                    Create 
                 </button>
             </a>
         </div>

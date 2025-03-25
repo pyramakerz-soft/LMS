@@ -1,1 +1,0 @@
-﻿positionForPages[1]={page:1,positions:[{word:"grade ",left:0.637427,top:0.266424,width:0.126061,height:0.024290},{word:"01",left:0.763488,top:0.266424,width:0.036146,height:0.024290},{word:"STEAM POWERING CONSERVATION (SDGS)",left:0.216878,top:0.911400,width:0.565964,height:0.018639},{word:"Zoo Detectives",left:0.161093,top:0.195741,width:0.677814,height:0.057804}]};

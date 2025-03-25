@@ -14,9 +14,9 @@
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
-
-                    <a href="{{ route('students.create') }}" class="btn btn-primary mb-3">Add Student</a>
-
+                    @can('create student')
+                        <a href="{{ route('students.create') }}" class="btn btn-primary mb-3">Add Student</a>
+                    @endcan
                     <form id="filterForm" action="{{ route('students.index') }}" method="GET"
                         class="d-flex justify-content-evenly mb-3">
 
@@ -85,18 +85,21 @@
                                             <td>{{ $student->classes->name ?? '' }}</td>
                                             <td>{{ $student->num_logins }}</td>
                                             <td class="d-flex align-items-center gap-2">
-                                                <a href="{{ route('students.edit', $student->id) }}"
-                                                    class="btn btn-info">Edit</a>
-
-                                                <form action="{{ route('students.destroy', $student->id) }}" method="POST"
-                                                    style="display:inline-block;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this student?');">
-                                                        Delete
-                                                    </button>
-                                                </form>
+                                                @can('update student')
+                                                    <a href="{{ route('students.edit', $student->id) }}"
+                                                        class="btn btn-info">Edit</a>
+                                                @endcan
+                                                @can('delete student')
+                                                    <form action="{{ route('students.destroy', $student->id) }}" method="POST"
+                                                        style="display:inline-block;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger"
+                                                            onclick="return confirm('Are you sure you want to delete this student?');">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                @endcan
                                             </td>
                                         </tr>
                                     @endforeach
@@ -105,9 +108,11 @@
                         </div>
 
                         <!-- Delete Selected Button -->
-                        <button type="submit" id="delete-selected" class="btn btn-danger mt-3" disabled>
-                            Delete Selected
-                        </button>
+                        @can('delete student')
+                            <button type="submit" id="delete-selected" class="btn btn-danger mt-3" disabled>
+                                Delete Selected
+                            </button>
+                        @endcan
                     </form>
 
 

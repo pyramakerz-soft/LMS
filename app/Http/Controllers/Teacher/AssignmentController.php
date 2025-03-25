@@ -7,6 +7,7 @@ use App\Models\Assignment;
 use App\Models\Group;
 use App\Models\Lesson;
 use App\Models\School;
+use App\Models\Stage;
 use App\Models\Student_assessment;
 use App\Models\TeacherClass;
 use DB;
@@ -33,7 +34,7 @@ class AssignmentController extends Controller
     public function showAssignments($id)
     {
         $userAuth = auth()->guard('teacher')->user();
-
+        $stage = Stage::findOrFail($id);
         if ($userAuth) {
             // Fetch assignments filtered by stage ID
             $assignments = Assignment::where('teacher_id', $userAuth->id)
@@ -44,7 +45,7 @@ class AssignmentController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->get();
 
-            return view('pages.teacher.Assignment.index', compact('assignments', 'userAuth'));
+            return view('pages.teacher.Assignment.index', compact('assignments', 'stage', 'userAuth'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
@@ -83,20 +84,17 @@ class AssignmentController extends Controller
     //         return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
     //     }
     // }
-    public function create()
+    public function create(Request $request)
     {
         $userAuth = auth()->guard('teacher')->user();
 
         if ($userAuth) {
             $lessons = Lesson::with('chapter.unit.material')->get();
-
             $stages = $userAuth->stages;
-
-            $classes = TeacherClass::where('teacher_id', $userAuth->id)
-                ->with('class')
-                ->get();
-
-            return view('pages.teacher.Assignment.create', compact('lessons', 'stages', 'classes', 'userAuth'));
+            $classes = TeacherClass::where('teacher_id', $userAuth->id)->with('class')->get();
+            $selectedStage = $request->query('stageId');
+            // dd($selectedStage);
+            return view('pages.teacher.Assignment.create', compact('lessons', 'stages', 'classes', 'userAuth', 'selectedStage'));
         } else {
             return redirect()->route('login')->withErrors(['error' => 'Unauthorized access']);
         }
@@ -209,7 +207,7 @@ class AssignmentController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('pages.teacher.Assignment.index', compact('assignments'))->with('success', 'Assignment created successfully.');
+        return redirect()->back()->with('success', 'Assignment created successfully.');
     }
 
 

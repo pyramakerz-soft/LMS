@@ -6,8 +6,14 @@
 
 @php
     $menuItems = [
-        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard'),
-        ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')]],
+        [
+            'label' => 'Dashboard',
+            'icon' => 'fi fi-rr-table-rows',
+            'route' => route('teacher.dashboard'),
+            ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
+        ],
+        ['label' => 'Ticket', 'icon' => 'fa-solid fa-ticket', 'route' => route('teacher.tickets.index')],
+
         ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
     ];
 
@@ -25,11 +31,12 @@
         <div class="text-[#667085] my-8">
             <i class="fa-solid fa-house mx-2"></i>
             <span class="mx-2 text-[#D0D5DD]">/</span>
-            <a href="{{ route("teacher_classes") }}" class="mx-2 cursor-pointer">Classes</a>
+            <a href="{{ route('teacher_classes') }}" class="mx-2 cursor-pointer">Classes</a>
             <span class="mx-2 text-[#D0D5DD]">/</span>
             <a href="#" class="mx-2 cursor-pointer">Assessments</a>
         </div>
-        <a class="bg-white border-2 border-[#FF7519] p-2 text-gray-600 font-semibold rounded-md" href="{{ route("assessments.create") }}">Add Student Assessment</a>
+        <a class="bg-white border-2 border-[#FF7519] p-2 text-gray-600 font-semibold rounded-md"
+            href="{{ route('assessments.create') }}">Add Student Assessment</a>
     </div>
 
     <div class="p-3">
@@ -40,8 +47,8 @@
         @endif
 
         <div class="overflow-x-auto rounded-2xl border border-[#EAECF0]">
-            <table class="w-full table-auto bg-[#FFFFFF] text-left text-[#475467] text-lg md:text-xl">  
-                <thead class="bg-[#F9FAFB]">  
+            <table class="w-full table-auto bg-[#FFFFFF] text-left text-[#475467] text-lg md:text-xl">
+                <thead class="bg-[#F9FAFB]">
                     <tr>
                         <th class="py-4 px-6 min-w-[220px] whitespace-nowrap">Student</th>
                         <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Attendance (Max 10)</th>
@@ -53,13 +60,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if(count($students) === 0)
+                    @if (count($students) === 0)
                         <tr>
-                            <td colspan="7" class="px-4 py-4 h-[72px] text-center border-t border-gray-300 text-lg md:text-xl">No Data Found</td>
+                            <td colspan="7"
+                                class="px-4 py-4 h-[72px] text-center border-t border-gray-300 text-lg md:text-xl">No Data
+                                Found</td>
                         </tr>
                     @endif
                     @foreach ($students as $i => $student)
-                        <tr class="border-t border-gray-300 text-lg md:text-xl {{ $i % 2 === 0 ? 'bg-[#F4F4F4]' : 'bg-white' }}">
+                        <tr
+                            class="border-t border-gray-300 text-lg md:text-xl {{ $i % 2 === 0 ? 'bg-[#F4F4F4]' : 'bg-white' }}">
                             <td class="py-5 px-6 text-[#FF7519]">
                                 <!-- Make the student's name a clickable link -->
                                 <a href="{{ route('teacher.assessments.student', $student->id) }}">
@@ -71,33 +81,38 @@
                                 $assessment = $student->studentAssessment->first(); // Get the first assessment (latest) for this student
                             @endphp
                             <td class="py-5 px-6">
-                                <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
+                                <div
+                                    class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
                                     {{ $assessment->attendance_score ?? '--' }} / 10
                                 </div>
                             </td>
                             <td class="py-5 px-6">
-                                <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
+                                <div
+                                    class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
                                     {{ $assessment->classroom_participation_score ?? '--' }} / 15
                                 </div>
                             </td>
                             <td class="py-5 px-6">
-                                <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
+                                <div
+                                    class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
                                     {{ $assessment->classroom_behavior_score ?? '--' }} / 15
                                 </div>
                             </td>
                             <td class="py-5 px-6">
-                                <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
+                                <div
+                                    class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
                                     {{ $assessment->homework_score ?? '--' }} / 10
                                 </div>
                             </td>
                             <td class="py-5 px-6">
-                                <div class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
+                                <div
+                                    class="bg-white w-[90px] mx-auto p-2 rounded-md border-2 border-gray-300 flex items-center justify-center">
                                     {{ $assessment->final_project_score ?? '--' }} / 50
                                 </div>
                             </td>
                             <td class="py-5 px-6 text-center">
-                                <a href="{{ route('teacher.assessments.student', $student->id) }}"
-                                    class="btn btn-info"><i class="text-[#FF7519] fa-solid fa-eye"></i></a>
+                                <a href="{{ route('teacher.assessments.student', $student->id) }}" class="btn btn-info"><i
+                                        class="text-[#FF7519] fa-solid fa-eye"></i></a>
                                 {{-- <a href="{{ route('teacher.assessments.edit', $student->id) }}"
                                     class="btn btn-info"><i class="ml-2 fa-solid fa-pen-to-square"></i></a> --}}
                             </td>

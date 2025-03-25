@@ -1,1 +1,0 @@
-﻿positionForPages[38]={page:38,positions:[{word:"10",left:0.477394,top:0.955485,width:0.030198,height:0.018047},{word:"Seasons Game Scenario!",left:0.142432,top:0.091234,width:0.716450,height:0.037952}]};

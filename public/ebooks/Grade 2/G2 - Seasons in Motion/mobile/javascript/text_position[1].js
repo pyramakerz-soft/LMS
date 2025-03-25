@@ -1,1 +1,0 @@
-﻿positionForPages[1]={page:1,positions:[{word:"grade ",left:0.632443,top:0.266424,width:0.126061,height:0.024290},{word:"02",left:0.758504,top:0.266424,width:0.046114,height:0.024290},{word:"SCHOOL CARNIVAL OF THE YEAR (SDGS)",left:0.231575,top:0.911400,width:0.536572,height:0.018639},{word:"Seasons in Motion",left:0.161722,top:0.200356,width:0.676557,height:0.047902}]};

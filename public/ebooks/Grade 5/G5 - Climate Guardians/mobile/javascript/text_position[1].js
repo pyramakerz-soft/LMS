@@ -1,1 +1,0 @@
-﻿positionForPages[1]={page:1,positions:[{word:"grade ",left:0.632668,top:0.266424,width:0.126061,height:0.024290},{word:"05",left:0.758729,top:0.266424,width:0.045665,height:0.024290},{word:"THE MONITORING SYSTEM MISSION!(SDGS)",left:0.216856,top:0.911552,width:0.566011,height:0.018345},{word:"Climate Guardians",left:0.166888,top:0.198695,width:0.666225,height:0.046448}]};
