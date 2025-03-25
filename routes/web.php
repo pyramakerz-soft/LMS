@@ -324,7 +324,7 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
         return view('pages.teacher.teacherTheme');
     })->name('teacher.TTheme');
 });
-Route::prefix('observer')->middleware('auth:observer')->group(function () {
+Route::prefix('observer')->middleware(['auth:observer', 'role:observer'])->group(function () {
     Route::get('/dashboard', [ObserverDashboardController::class, 'index'])->name('observer.dashboard');
 
     // Route::get('/observations/export', [ObserverDashboardController::class, 'exportObservations'])->name('observer.observations.export');
