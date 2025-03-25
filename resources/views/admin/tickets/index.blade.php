@@ -113,7 +113,7 @@
                                                         <p id="modal-description"></p>
                                                         <div id="modal-attachment-container" class="mt-3">
                                                             <strong>Attachment:</strong><br>
-                                                            <img id="modal-attachment" src="{{ asset('/' . $ticket->attachment) }}"
+                                                            <img id="modal-attachment" src="{{ asset($ticket->attachment) }}"
                                                                 alt="Attachment" class="img-fluid rounded d-none" />
                                                             <a id="modal-attachment-link" href="" target="_blank"
                                                                 class="btn btn-outline-primary mt-2 d-none">View File</a>
@@ -159,7 +159,7 @@
 
                     if (attachment) {
                         if (attachment.match(/\.(jpeg|jpg|gif|png|webp)$/i)) {
-                            img.src = attachment;
+                            // img.src = attachment;
                             img.classList.remove('d-none');
                             link.classList.add('d-none');
                         } else {
