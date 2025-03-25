@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\Models\Lesson;
+use App\Models\Material;
 use App\Models\Stage;
 use App\Models\TeacherResource;
 use Auth;
@@ -30,7 +32,22 @@ class TeacherResources extends Controller
 
         $resources = $resources->get();
 
-        return view('pages.teacher.resources.index', compact('resources', 'stages', 'selectedGrade'));
+        $lessons = Lesson::query()
+            ->whereHas('chapter.unit.material', function ($query) use ($stages) {
+                $query->whereIn('stage_id', $stages->pluck('id'));
+            })
+            ->with('chapter.unit.material')
+            ->get()
+            ->sortBy([
+                fn($lesson) => $lesson->chapter?->unit?->material?->title ?? 0,
+                fn($lesson) => $lesson->chapter?->unit?->title ?? 0,
+                fn($lesson) => $lesson->chapter?->title ?? 0,
+                fn($lesson) => strtolower($lesson->title),
+            ]);
+
+        $themes = Material::whereIn('stage_id', $stages->pluck('id'))->get();
+
+        return view('pages.teacher.resources.index', compact('resources', 'stages', 'selectedGrade', 'lessons', 'themes'));
     }
     public function create()
     {

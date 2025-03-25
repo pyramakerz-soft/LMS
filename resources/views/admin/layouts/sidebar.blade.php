@@ -56,65 +56,70 @@
                         Tickets</span>
                 </a>
             </li>
-            {{-- @endcan --}}
-            @can('read ebook')
-                <li class="sidebar-item {{ request()->is('admin/ebooks') ? 'active' : '' }}">
-                    <a class="sidebar-link" href="{{ route('ebooks.create') }}">
-                        <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
-                            Add E-Book</span>
-                    </a>
-                </li>
-            @endcan
-            @can('read school')
-                <li class="sidebar-item {{ request()->is('admin/admins') ? 'active' : '' }}">
-                    <a class="sidebar-link" href="{{ route('admins.index') }}">
-                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">School</span>
-                    </a>
-                </li>
-            @endcan
-            @can('read stage')
-                <li class="sidebar-item {{ request()->is('admin/stages') ? 'active' : '' }}">
-                    <a class="sidebar-link" href="{{ route('stages.index') }}">
-                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">Grade</span>
-                    </a>
-                </li>
-            @endcan
-            @can('read group')
-                <li class="sidebar-item {{ request()->is('admin/classes') ? 'active' : '' }}">
-                    <a class="sidebar-link" href="{{ route('classes.index') }}">
-                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">Class</span>
-                    </a>
-                </li>
-            @endcan
-            @can('read material')
-                <li class="sidebar-item {{ request()->is('admin/material') ? 'active' : '' }}">
-                    <a class="sidebar-link" href="{{ route('material.index') }}">
-                        <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Theme</span>
-                    </a>
-                </li>
-            @endcan
-            @can('read unit')
-                <li class="sidebar-item {{ request()->is('admin/units') ? 'active' : '' }}">
-                    <a class="sidebar-link" href="{{ route('units.index') }}">
-                        <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Unit
-                        </span>
-                    </a>
-                </li>
-            @endcan
-            @can('read chapter')
-                <li class="sidebar-item {{ request()->is('admin/chapters') ? 'active' : '' }}">
-                    <a class="sidebar-link" href="{{ route('chapters.index') }}">
-                        <i class="align-middle" data-feather="book"></i> <span class="align-middle">Chapter</span>
-                    </a>
-                </li>
-            @endcan
-            @can('read lesson')
-                <li class="sidebar-item {{ request()->is('admin/lessons') ? 'active' : '' }}">
-                    <a class="sidebar-link" href="{{ route('lessons.index') }}">
-                        <i class="align-middle" data-feather="book"></i> <span class="align-middle">Lesson</span>
-                    </a>
-                </li>
-            @endcan
+            <li class="sidebar-item {{ request()->is('admin/types') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('types.index') }}">
+                    <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
+                        Types</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ request()->is('admin/ebooks') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('ebooks.create') }}">
+                    <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
+                        Add E-Book</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ request()->is('admin/lesson_resource') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('lesson_resource.create') }}">
+                    <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
+                        Add Lesson Resource</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ request()->is('admin/theme_resource') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('theme_resource.create') }}">
+                    <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
+                        Add Theme Resource</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ request()->is('admin/admins') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('admins.index') }}">
+                    <i class="align-middle" data-feather="user"></i> <span class="align-middle">School</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ request()->is('admin/stages') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('stages.index') }}">
+                    <i class="align-middle" data-feather="user"></i> <span class="align-middle">Grade</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ request()->is('admin/classes') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('classes.index') }}">
+                    <i class="align-middle" data-feather="user"></i> <span class="align-middle">Class</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item {{ request()->is('admin/material') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('material.index') }}">
+                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Theme</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item {{ request()->is('admin/units') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('units.index') }}">
+                    <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Unit
+                    </span>
+                </a>
+            </li>
+
+            <li class="sidebar-item {{ request()->is('admin/chapters') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('chapters.index') }}">
+                    <i class="align-middle" data-feather="book"></i> <span class="align-middle">Chapter</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ request()->is('admin/lessons') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('lessons.index') }}">
+                    <i class="align-middle" data-feather="book"></i> <span class="align-middle">Lesson</span>
+                </a>
+            </li>
+
 
 
             {{-- <li class="sidebar-item">
