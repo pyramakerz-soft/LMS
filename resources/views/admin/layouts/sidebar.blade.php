@@ -56,7 +56,6 @@
                         Tickets</span>
                 </a>
             </li>
-<<<<<<< HEAD
             <li class="sidebar-item {{ request()->is('admin/types') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('types.index') }}">
                     <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
@@ -120,8 +119,6 @@
                     <i class="align-middle" data-feather="book"></i> <span class="align-middle">Lesson</span>
                 </a>
             </li>
-
-=======
             {{-- @endcan --}}
             @can('read ebook')
                 <li class="sidebar-item {{ request()->is('admin/ebooks') ? 'active' : '' }}">
@@ -181,9 +178,6 @@
                     </a>
                 </li>
             @endcan
->>>>>>> 12932ab561d425697bb1d45aa23b3911f9d81e44
-
-
             {{-- <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('ebooks.index') }}">
             <i class="align-middle" data-feather="square"></i> <span class="align-middle">Ebook</span>
