@@ -274,7 +274,7 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
 
     Route::get('students_classess/{class_id}', [TeacherClasses::class, 'students'])->name('students_classess');
     Route::post('store-assessment', [TeacherClasses::class, 'storeAssessment'])->name('teacher.storeAssessment');
-    Route::get('/tickets', [App\Http\Controllers\Teacher\TicketController::class, 'index'])->name('tickets.index');
+    Route::get('/tickets', [App\Http\Controllers\Teacher\TicketController::class, 'index'])->name('teacher.tickets.index');
     Route::get('/tickets/create', [App\Http\Controllers\Teacher\TicketController::class, 'create'])->name('tickets.create');
     Route::post('/tickets', [App\Http\Controllers\Teacher\TicketController::class, 'store'])->name('tickets.store');
 
