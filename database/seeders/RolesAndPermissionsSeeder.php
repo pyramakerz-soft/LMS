@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use File;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -14,55 +15,27 @@ class RolesAndPermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        // Define roles
-        $admin = Role::firstOrCreate(['name' => 'Admin']);
-        $supervisor = Role::firstOrCreate(['name' => 'Supervisor']);
-        $observer = Role::firstOrCreate(['name' => 'Observer']);
+        // $permissions = [
+        //     'role-list',
+        //     'role-create',
+        //     'role-edit',
+        //     'role-delete'
+        // ];
 
+        // Get all model files from the app/Models directory
+        $modelFiles = File::allFiles(app_path('Models'));
 
-        $models = [
-            'user',
-            'role',
-            'permission',
-            'admin',
-            'assessment',
-            'assignment',
-            'chapter',
-            'ebook',
-            'group',
-            'image',
-            'lesson',
-            'material',
-            'message',
-            'observation',
-            'observation',
-            'observationHistory',
-            'observationQuestion',
-            'observer',
-            'school',
-            'stage',
-            'student_assessment',
-            'student',
-            'teacher',
-            'teacherClass',
-            'teacherResource',
-            'type',
-            'unit',
-        ];
-        $crudActions = ['create', 'read', 'update', 'delete'];
-        foreach ($models as $model) {
-            foreach ($crudActions as $action) {
-                Permission::firstOrCreate(['name' => "{$action} {$model}"]);
-            }
+        foreach ($modelFiles as $file) {
+            $modelName = strtolower(pathinfo($file->getFilename(), PATHINFO_FILENAME));
+            $permissions[] = "{$modelName}-list";
+            $permissions[] = "{$modelName}-create";
+            $permissions[] = "{$modelName}-edit";
+            $permissions[] = "{$modelName}-delete";
         }
-       
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
-        $adminRole->syncPermissions(Permission::all());
-        
-        $supervisorRole = Role::firstOrCreate(['name' => 'supervisor']);
-        $readPermissions = Permission::where('name', 'like', 'read %')->get();
-        $supervisorRole->syncPermissions($readPermissions);
 
-        $this->command->info('Permissions and roles seeded successfully!');
+        foreach ($permissions as $permission) {
+            if (!Permission::where('name', $permission)->exists())
+                Permission::create(['name' => $permission]);
+        }
     }
 }
