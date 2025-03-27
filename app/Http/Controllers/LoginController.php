@@ -140,7 +140,7 @@ class LoginController extends Controller
 
         // 4. Try from students table
         if ($role === 'student') {
-            $student = Student::where('username', $username)->orWhere('name', $username)->first();
+            $student = Student::where('username', $username)->orWhere('username', $username)->first();
             if ($student && Hash::check($password, $student->password)) {
                 $student->increment('num_logins');
                 Auth::guard('student')->login($student);
