@@ -106,8 +106,11 @@ class LoginController extends Controller
         $username = $request->input('username');
         $password = $request->input('password');
 
-        // Check from users table first
-        $user = User::where('username', $username)->first();
+        // 1. Try from users table (based on name or email)
+        $user = User::where('name', $username)
+            ->orWhere('email', $username)
+            ->first();
+
         if ($user && Hash::check($password, $user->password)) {
             if ($user->hasRole($role)) {
                 Auth::guard($role)->login($user);
@@ -117,26 +120,29 @@ class LoginController extends Controller
             }
         }
 
-        // If login failed through `users` table, check other guards (teacher/observer/student)
+        // 2. Try from teachers table
         if ($role === 'teacher') {
-            $teacher = Teacher::where('username', $username)->first();
+            $teacher = Teacher::where('username', $username)->orWhere('name', $username)->first();
             if ($teacher && Hash::check($password, $teacher->password)) {
                 Auth::guard('teacher')->login($teacher);
                 return redirect()->route('teacher.dashboard');
             }
         }
 
+        // 3. Try from observers table
         if ($role === 'observer') {
-            $observer = Observer::where('username', $username)->first();
+            $observer = Observer::where('username', $username)->orWhere('name', $username)->first();
             if ($observer && Hash::check($password, $observer->password)) {
                 Auth::guard('observer')->login($observer);
                 return redirect()->route('observer.dashboard');
             }
         }
 
+        // 4. Try from students table
         if ($role === 'student') {
-            $student = Student::where('username', $username)->first();
+            $student = Student::where('username', $username)->orWhere('name', $username)->first();
             if ($student && Hash::check($password, $student->password)) {
+                $student->increment('num_logins');
                 Auth::guard('student')->login($student);
                 return redirect()->route('student.dashboard');
             }
@@ -144,6 +150,7 @@ class LoginController extends Controller
 
         return back()->withErrors(['username' => 'Invalid Username or Password']);
     }
+
 
 
     public function logout(Request $request)
