@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\LessonResource;
 use App\Models\Lesson;
+use App\Models\Material;
+use App\Models\Stage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -12,7 +14,39 @@ use ZipArchive;
 
 class LessonResourceController extends Controller
 {
-    public function index(Request $request) {}
+    public function index(Request $request)
+    {
+
+        $query = LessonResource::query();
+        if ($request->filled('lesson_id')) {
+            $query->where('lesson_id', $request->lesson_id);
+        }
+        if ($request->filled('stage_id')) {
+            $query->whereHas('lesson.chapter.unit.material.stage', function ($q) use ($request) {
+                $q->where('id', $request->stage_id);
+            });
+        }
+        if ($request->filled('theme_id')) {
+            $query->whereHas('lesson.chapter.unit.material', function ($q) use ($request) {
+                $q->where('id', $request->theme_id);
+            });
+        }
+        $resources = $query->get();
+        $themes = Material::all();
+        $stages = Stage::all();
+
+        $lessons = Lesson::query()
+            ->with('chapter.unit.material')
+            ->get()
+            ->sortBy([
+                fn($lesson) => $lesson->chapter?->unit?->material?->title ?? 0,
+                fn($lesson) => $lesson->chapter?->unit?->title ?? 0,
+                fn($lesson) => $lesson->chapter?->title ?? 0,
+                fn($lesson) => strtolower($lesson->title),
+            ]);
+
+        return view('admin.lesson_resources.index', compact('stages', 'themes', 'resources', 'lessons'));
+    }
 
 
     /**
@@ -118,5 +152,17 @@ class LessonResourceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id) {}
+    public function destroy($id)
+    {
+        $resource = LessonResource::findOrFail($id);
+
+        $filePath = public_path($resource->path);
+        if (File::exists($filePath)) {
+            File::delete($filePath);
+        }
+
+        $resource->delete();
+
+        return redirect()->route('lesson_resource.index')->with('success', 'Resource deleted successfully.');
+    }
 }

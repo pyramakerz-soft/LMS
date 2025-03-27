@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Material;
 use App\Models\MaterialResource;
+use App\Models\Stage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -13,7 +14,23 @@ use ZipArchive;
 
 class MaterialResourceController extends Controller
 {
-    public function index(Request $request) {}
+    public function index(Request $request)
+    {
+        $query = MaterialResource::query();
+        if ($request->filled('theme_id')) {
+            $query->where('material_id', $request->theme_id);
+        }
+        if ($request->filled('stage_id')) {
+            $query->whereHas('material.stage', function ($q) use ($request) {
+                $q->where('id', $request->stage_id);
+            });
+        }
+        $resources = $query->get();
+        $themes = Material::all();
+        $stages = Stage::all();
+
+        return view('admin.theme_resources.index', compact('stages', 'themes', 'resources'));
+    }
 
 
     /**
@@ -109,5 +126,17 @@ class MaterialResourceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id) {}
+    public function destroy($id)
+    {
+        $resource = MaterialResource::findOrFail($id);
+
+        $filePath = public_path($resource->path);
+        if (File::exists($filePath)) {
+            File::delete($filePath);
+        }
+
+        $resource->delete();
+
+        return redirect()->route('lesson_resource.index')->with('success', 'Resource deleted successfully.');
+    }
 }
