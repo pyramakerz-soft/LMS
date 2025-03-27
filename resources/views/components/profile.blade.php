@@ -15,11 +15,11 @@
             </div>
             <div class="ml-3 font-semibold text-white flex flex-col space-y-2">
                 <div class="text-xl">
-                    {{ Auth::guard('teacher')->user()->name }}
+                    {{ Auth::guard('teacher')->user()->name ?? Auth::guard('teacher')->user()->username }}
                 </div>
                 <div class="text-sm">
                     <!-- Optionally show the teacher's school -->
-                    {{ Auth::guard('teacher')->user()->school->name }}
+                    {{ Auth::guard('teacher')->user()->school->name ?? '' }}
                 </div>
             </div>
         </div>

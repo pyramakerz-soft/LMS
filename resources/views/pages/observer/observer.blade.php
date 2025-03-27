@@ -93,7 +93,11 @@
                             <td class="border px-4 py-2">{{ $school->name }}</td>
                             <td class="border px-4 py-2">{{ $school->city }}</td>
                             <td class="border px-4 py-2">{{ $observation->activity }}</td>
-                            <td class="border px-4 py-2" style="text-align:center; ">
+                            <td class="border px-4 py-2"
+                                style="    display: flex
+;
+    flex-direction: row;
+    justify-content: space-between; ">
                                 <button
                                     class="text-white font-medium py-2 px-4 download-pdf rounded shadow focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50"
                                     style="background-color:#323d53; margin-right:5px;" data-id="{{ $observation->id }}"
@@ -266,12 +270,12 @@
                         </thead>
                         <tbody>
                             ${observation.questions.map(q => `
-                                                        <tr>
-                                                            <td style="border:1px solid #ddd; padding:6px;">${q.name}</td>
-                                                            <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.avg_rating}</td>
-                                                            <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.max_rating}</td>
-                                                        </tr>
-                                                    `).join('')}
+                                                                <tr>
+                                                                    <td style="border:1px solid #ddd; padding:6px;">${q.name}</td>
+                                                                    <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.avg_rating}</td>
+                                                                    <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.max_rating}</td>
+                                                                </tr>
+                                                            `).join('')}
                         </tbody>
                     </table>
                 </div>
@@ -358,12 +362,12 @@
                             </thead>
                             <tbody>
                                 ${data.questions.map(q => `
-                                        <tr>
-                                            <td style="border:1px solid #ddd; padding:6px;">${q.name}</td>
-                                            <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.avg_rating}</td>
-                                            <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.max_rating}</td>
-                                        </tr>
-                                    `).join('')}
+                                                <tr>
+                                                    <td style="border:1px solid #ddd; padding:6px;">${q.name}</td>
+                                                    <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.avg_rating}</td>
+                                                    <td style="border:1px solid #ddd; padding:6px; text-align:center;">${q.max_rating}</td>
+                                                </tr>
+                                            `).join('')}
                             </tbody>
                         </table>
                     </div>
