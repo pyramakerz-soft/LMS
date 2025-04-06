@@ -66,7 +66,7 @@ class TeacherResources extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'file_path' => 'required|file|mimes:pdf',
+            'file_path' => 'required|file',
             'stage_id' => 'required|exists:stages,id',
         ]);
 

@@ -69,15 +69,16 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="image" class="block font-medium"> Image (optional)</label>
+                            <label for="image" class="block font-medium"> Image</label>
                             <input type="file" name="image" id="image"
                                 class="w-full p-2 border border-gray-300 rounded">
                         </div>
 
                         <div class="form-group">
-                            <label for="file_path" class="block font-medium">Resource File (PDF only)</label>
-                            <input type="file" name="file_path" id="file_path" accept=".pdf"
+                            <label for="file_path" class="block font-medium">Resource File </label>
+                            <input type="file" name="file_path" id="file_path"
                                 class="w-full p-2 border border-gray-300 rounded" required>
+
                         </div>
 
                         {{-- <div class="form-group">
