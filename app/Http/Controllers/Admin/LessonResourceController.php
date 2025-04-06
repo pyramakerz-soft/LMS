@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use ZipArchive;
+use Illuminate\Support\Str;
 
 class LessonResourceController extends Controller
 {
@@ -86,20 +87,56 @@ class LessonResourceController extends Controller
         ]);
 
         $file = $request->file('file_path');
-        $fileName = time() . '_' . $file->getClientOriginalName();
-        $filePath = 'lesson_resources/' . $fileName;
-        $fileType = $file->getClientOriginalExtension();
+        $extension = $file->getClientOriginalExtension();
+        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
 
-        $file->move(public_path('lesson_resources'), $fileName);
+        $basePath = public_path('lesson_resources');
 
-        LessonResource::create([
-            'lesson_id' => $request->lesson_id,
-            'title' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
-            'path' => $filePath,
-            'type' => $fileType,
-        ]);
+        if (!File::exists($basePath)) {
+            File::makeDirectory($basePath, 0777, true, true);
+        }
 
-        return redirect()->back()->with('success', 'Lesson resource uploaded successfully.');
+        if (strtolower($extension) === 'zip') {
+            $zip = new ZipArchive;
+            $zipPath = $file->getRealPath();
+
+            $uniqueFolderName = Str::slug($originalName . '_' . time());
+            $extractPath = $basePath . '/' . $uniqueFolderName;
+
+            if (!File::exists($extractPath)) {
+                File::makeDirectory($extractPath, 0777, true, true);
+            }
+
+            if ($zip->open($zipPath) === TRUE) {
+                $zip->extractTo($extractPath);
+                $zip->close();
+
+                LessonResource::create([
+                    'lesson_id' => $request->lesson_id,
+                    'title' => $originalName,
+                    'path' => 'lesson_resources/' . $uniqueFolderName,
+                    'type' => 'zip',
+                ]);
+
+                return redirect()->back()->with('success', 'ZIP file extracted and lesson resource saved successfully.');
+            } else {
+                return back()->withErrors(['file_path' => 'Failed to open the ZIP file.']);
+            }
+        } else {
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = 'lesson_resources/' . $fileName;
+
+            $file->move($basePath, $fileName);
+
+            LessonResource::create([
+                'lesson_id' => $request->lesson_id,
+                'title' => $originalName,
+                'path' => $filePath,
+                'type' => $extension,
+            ]);
+
+            return redirect()->back()->with('success', 'Lesson resource uploaded successfully.');
+        }
     }
     public function download(Request $request)
     {
@@ -112,7 +149,7 @@ class LessonResourceController extends Controller
             ->with('chapter.unit.material')
             ->first();
 
-        $zipFileName =  $lesson->chapter->material->title . '_' . $lesson->chapter->unit->title . '_' . $lesson->chapter->title . '_' .  $lesson->title . '_resources.zip';
+        $zipFileName = $lesson->chapter->material->title . '_' . $lesson->chapter->unit->title . '_' . $lesson->chapter->title . '_' . $lesson->title . '_resources.zip';
         $zipPath = public_path('lesson_resources/' . $zipFileName);
 
         $zip = new ZipArchive;
@@ -142,12 +179,16 @@ class LessonResourceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id) {}
+    public function edit(string $id)
+    {
+    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $student_id) {}
+    public function update(Request $request, string $student_id)
+    {
+    }
 
     /**
      * Remove the specified resource from storage.
