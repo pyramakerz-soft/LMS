@@ -107,8 +107,8 @@ class LoginController extends Controller
         $password = $request->input('password');
 
         // 1. Try from users table (based on name or email)
-        $user = User::where('name', $username)
-            ->orWhere('email', $username)
+        $user = User::where('username', $username)
+            ->orWhere('email', operator: $username)
             ->first();
 
         if ($user && Hash::check($password, $user->password)) {
@@ -122,7 +122,7 @@ class LoginController extends Controller
 
         // 2. Try from teachers table
         if ($role === 'teacher') {
-            $teacher = Teacher::where('username', $username)->orWhere('name', $username)->first();
+            $teacher = Teacher::where('username', $username)->orWhere('username', $username)->first();
             if ($teacher && Hash::check($password, $teacher->password)) {
                 Auth::guard('teacher')->login($teacher);
                 return redirect()->route('teacher.dashboard');
