@@ -7,6 +7,7 @@ use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
+use Str;
 
 class RoleController extends Controller
 {
@@ -35,9 +36,15 @@ class RoleController extends Controller
         return to_route('admin.roles.index')->with('message', 'Role Created successfully.');
     }
 
-    public function edit(Role $role)
+    public function edit($id)
     {
-        $permissions = Permission::all();
+        $role = Role::findById($id);
+
+        // Group permissions by model name (e.g., user, role, etc.)
+        $permissions = Permission::all()->groupBy(function ($permission) {
+            return Str::afterLast($permission->name, ' '); // e.g., 'create user' -> 'user'
+        });
+
         return view('admin.roles.edit', compact('role', 'permissions'));
     }
 
