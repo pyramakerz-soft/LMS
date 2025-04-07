@@ -47,6 +47,9 @@
                             <label for="name" class="block font-medium">Resource Name</label>
                             <input type="text" name="name" id="name" value="{{ old('name') }}"
                                 class="w-full p-2 border border-gray-300 rounded" required>
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="form-group">
@@ -72,6 +75,9 @@
                             <label for="image" class="block font-medium"> Image</label>
                             <input type="file" name="image" id="image"
                                 class="w-full p-2 border border-gray-300 rounded">
+                            @error('image')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="form-group">
@@ -79,6 +85,9 @@
                             <input type="file" name="file_path" id="file_path"
                                 accept=".pdf,.ppt,.pptx,.zip,.mp4,.mov,.avi"
                                 class="w-full p-2 border border-gray-300 rounded">
+                            @error('file_path')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="form-group">
