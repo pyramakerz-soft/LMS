@@ -12,7 +12,7 @@ class Material extends Model
 
     public function schools()
     {
-        return $this->belongsToMany(School::class, 'material_school');
+        return $this->belongsToMany(School::class);
     }
     public function materialSchool()
     {

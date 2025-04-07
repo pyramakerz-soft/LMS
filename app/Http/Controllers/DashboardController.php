@@ -13,7 +13,7 @@ class DashboardController extends Controller
         $userAuth = auth()->guard('student')->user();
 
         if ($userAuth) {
-            $materials = Material::whereHas('materialSchool.school', function ($query) use ($userAuth) {
+            $materials = Material::whereHas('materialSchool', function ($query) use ($userAuth) {
                 $query->where('id', $userAuth->school_id);
             })->where('stage_id', $userAuth->stage_id)->get();
             return view('pages.student.theme.index', compact('materials', 'userAuth'));
