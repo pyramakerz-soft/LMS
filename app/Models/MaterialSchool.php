@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class MaterialSchool extends Model
 {
+    use HasFactory;
+
     protected $table = 'material_school';
     protected $guarded = [];
     public function material()
@@ -17,5 +19,4 @@ class MaterialSchool extends Model
     {
         return $this->belongsTo(School::class);
     }
-    use HasFactory;
 }
