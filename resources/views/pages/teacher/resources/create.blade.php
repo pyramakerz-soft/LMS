@@ -75,10 +75,16 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="file_path" class="block font-medium">Resource File </label>
+                            <label for="file_path" class="block font-medium">Upload File </label>
                             <input type="file" name="file_path" id="file_path"
-                                class="w-full p-2 border border-gray-300 rounded" required>
+                                accept=".pdf,.ppt,.pptx,.zip,.mp4,.mov,.avi"
+                                class="w-full p-2 border border-gray-300 rounded">
+                        </div>
 
+                        <div class="form-group">
+                            <label for="video_url" class="block font-medium">Video URL </label>
+                            <input type="url" name="video_url" id="video_url" placeholder="https://example.com/video"
+                                class="w-full p-2 border border-gray-300 rounded">
                         </div>
 
                         {{-- <div class="form-group">

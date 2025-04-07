@@ -50,8 +50,8 @@
                                                 <input type="checkbox" id="select-all-global"> Select All
                                             </label>
 
-                                            @foreach ($permissions as $model => $groupedPermissions)
-                                                <div class="mb-3 border rounded p-3">
+                                            @foreach ($groupedPermissions as $model => $permissions)
+                                                <div class="mb-4 border rounded p-3">
                                                     <div class="form-check mb-2">
                                                         <input type="checkbox" class="form-check-input model-master"
                                                             data-model="{{ $model }}">
@@ -60,7 +60,7 @@
                                                     </div>
 
                                                     <div class="row">
-                                                        @foreach ($groupedPermissions as $permission)
+                                                        @foreach ($permissions as $permission)
                                                             <div class="col-md-3">
                                                                 <div class="form-check">
                                                                     <input
@@ -71,7 +71,7 @@
                                                                         {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}>
                                                                     <label class="form-check-label"
                                                                         for="perm-{{ $permission->id }}">
-                                                                        {{ ucfirst($permission->name) }}
+                                                                        {{ ucfirst(Str::afterLast($permission->name, '-')) }}
                                                                     </label>
                                                                 </div>
                                                             </div>
@@ -79,6 +79,9 @@
                                                     </div>
                                                 </div>
                                             @endforeach
+
+
+
 
 
                                         </div>

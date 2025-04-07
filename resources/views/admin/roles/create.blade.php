@@ -25,7 +25,7 @@
 
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Role Name</label>
-                                            <input type="text" id="name" name="name" 
+                                            <input type="text" id="name" name="name"
                                                 class="form-control @error('name') is-invalid @enderror" required>
                                             @error('name')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -37,7 +37,7 @@
                                                 <i class="bi bi-plus-circle"></i> Create Role
                                             </button>
                                         </div>
-                                        
+
                                     </form>
                                 </div>
                             </div>

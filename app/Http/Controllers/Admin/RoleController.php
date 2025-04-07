@@ -36,16 +36,25 @@ class RoleController extends Controller
         return to_route('admin.roles.index')->with('message', 'Role Created successfully.');
     }
 
-    public function edit($id)
+    public function edit(Role $role)
     {
-        $role = Role::findById($id);
-
-        // Group permissions by model name (e.g., user, role, etc.)
-        $permissions = Permission::all()->groupBy(function ($permission) {
-            return Str::afterLast($permission->name, ' '); // e.g., 'create user' -> 'user'
+        $permissions = Permission::all()->reject(function ($permission) {
+            return Str::contains($permission->name, 'observationHistory');
         });
 
-        return view('admin.roles.edit', compact('role', 'permissions'));
+        $groupedPermissions = $permissions->groupBy(function ($permission) {
+            $name = $permission->name;
+
+            if (Str::contains($name, '-')) {
+                return Str::before($name, '-');
+            } elseif (Str::contains($name, ' ')) {
+                return Str::afterLast($name, ' ');
+            }
+
+            return 'others';
+        });
+
+        return view('admin.roles.edit', compact('role', 'groupedPermissions'));
     }
 
     public function update(Request $request, Role $role)
@@ -58,7 +67,6 @@ class RoleController extends Controller
         $role->update(['name' => $request->name]);
 
         $role->permissions()->sync($request->permissions);
-        // $role->syncPermissions($request->permissions);
 
         return redirect()->back()->with('success', 'Role updated successfully.');
     }

@@ -10,6 +10,7 @@ use App\Models\TeacherResource;
 use Auth;
 use Illuminate\Http\Request;
 use Str;
+use ZipArchive;
 
 class TeacherResources extends Controller
 {
@@ -66,13 +67,46 @@ class TeacherResources extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'file_path' => 'required|file',
+            'file_path' => 'nullable|file|mimes:pdf,ppt,pptx,zip,mp4,mov,avi|max:51200',
+            'video_url' => 'nullable|url',
             'stage_id' => 'required|exists:stages,id',
         ]);
 
         $user = Auth::guard('teacher')->user();
-        $filePath = $request->file('file_path')->store('resources', 'public');
-        $imagePath = $request->hasFile('image') ? $request->file('image')->store('resources/images', 'public') : null;
+        $filePath = null;
+        $fileType = null;
+
+        if ($request->hasFile('file_path')) {
+            $file = $request->file('file_path');
+            $extension = strtolower($file->getClientOriginalExtension());
+
+            if ($extension === 'zip') {
+                $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $extractPath = public_path('resources/ebooks/' . $fileName);
+
+                if (!file_exists($extractPath)) {
+                    mkdir($extractPath, 0777, true);
+                }
+
+                $zip = new ZipArchive;
+                if ($zip->open($file->getRealPath()) === true) {
+                    $zip->extractTo($extractPath);
+                    $zip->close();
+                    $filePath = 'resources/ebooks/' . $fileName;
+                    $fileType = 'ebook';
+                } else {
+                    return back()->withErrors(['file_path' => 'Failed to extract the ZIP file.']);
+                }
+            } else {
+                $stored = $file->store('resources', 'public');
+                $filePath = $stored;
+                $fileType = $extension;
+            }
+        }
+
+        $imagePath = $request->hasFile('image')
+            ? $request->file('image')->store('resources/images', 'public')
+            : null;
 
         TeacherResource::create([
             'teacher_id' => $user->id,
@@ -82,10 +116,11 @@ class TeacherResources extends Controller
             'description' => $request->description,
             'image' => $imagePath,
             'file_path' => $filePath,
-            'type' => 'pdf',
+            'video_url' => $request->video_url,
+            'type' => $fileType ?? 'url',
         ]);
 
-        return redirect()->route('teacher.resources.index')->with('success', 'Resource created successfully!');
+        return redirect()->route('teacher.resources.index')->with('success', 'Resource uploaded successfully!');
     }
     public function edit($id)
     {
