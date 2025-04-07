@@ -14,6 +14,10 @@ class Material extends Model
     {
         return $this->belongsToMany(School::class, 'material_school');
     }
+    public function materialSchool()
+    {
+        return $this->belongsToMany(MaterialSchool::class, 'material_school');
+    }
     public function stage()
     {
         return $this->belongsTo(Stage::class);
