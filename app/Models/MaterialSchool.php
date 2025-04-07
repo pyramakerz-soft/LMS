@@ -9,7 +9,7 @@ class MaterialSchool extends Model
 {
     use HasFactory;
 
-    protected $table = 'material_school';
+    // protected $table = 'material_school';
     protected $guarded = [];
     public function material()
     {
