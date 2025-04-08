@@ -159,7 +159,8 @@ class ClassController extends Controller
     public function exportStudents($id)
     {
         $class = Group::findOrFail($id);
-        $fileName = 'students_' . $class->name . '.xlsx';
+        $safeClassName = preg_replace('/[\/\\\\:*?"<>|]/', '-', $class->name);
+        $fileName = 'students_' . $safeClassName . '.xlsx';
 
         return Excel::download(new StudentsExport($id), $fileName);
     }
