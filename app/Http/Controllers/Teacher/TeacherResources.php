@@ -96,7 +96,9 @@ class TeacherResources extends Controller
         if ($request->hasFile('file_path')) {
             $file = $request->file('file_path');
             $extension = strtolower($file->getClientOriginalExtension());
-
+            if ($extension === 'apk') {
+                return back()->withErrors(['file_path' => 'APK files are not allowed.']);
+            }
             if ($extension === 'zip') {
                 $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                 $extractPath = public_path('resources/ebooks/' . $fileName);
@@ -165,8 +167,10 @@ class TeacherResources extends Controller
 
         $filePath = $resource->file_path;
         if ($request->hasFile('file_path')) {
+
             $filePath = $request->file('file_path')->store('resources', 'public');
         }
+
 
         $imagePath = $resource->image;
         if ($request->hasFile('image')) {
