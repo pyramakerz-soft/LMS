@@ -262,6 +262,8 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
 
 
     Route::get('/teacher/resources', [TeacherResources::class, 'index'])->name('teacher.resources.index');
+    Route::get('/teacher/resources/admin', [TeacherResources::class, 'adminResources'])->name('teacher.resources.admin');
+
     Route::get('/teacher/resources/create', [TeacherResources::class, 'create'])->name('teacher.resources.create');
     Route::get('/teacher/resources/{id}/edit', [TeacherResources::class, 'edit'])->name('teacher.resources.edit');
     Route::post('/teacher/resources', [TeacherResources::class, 'store'])->name('teacher.resources.store');

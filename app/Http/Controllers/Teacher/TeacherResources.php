@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
 use App\Models\Lesson;
+use App\Models\LessonResource;
 use App\Models\Material;
+use App\Models\MaterialResource;
 use App\Models\Stage;
 use App\Models\TeacherResource;
 use Auth;
@@ -49,6 +51,13 @@ class TeacherResources extends Controller
         $themes = Material::whereIn('stage_id', $stages->pluck('id'))->get();
 
         return view('pages.teacher.resources.index', compact('resources', 'stages', 'selectedGrade', 'lessons', 'themes'));
+    }
+    public function adminResources()
+    {
+        $lessonResources = LessonResource::with('lesson')->get();
+        $themeResources = MaterialResource::with('material')->get();
+
+        return view('pages.teacher.resources.admin_resources', compact('lessonResources', 'themeResources'));
     }
     public function create()
     {

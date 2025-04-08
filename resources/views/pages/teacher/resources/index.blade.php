@@ -73,10 +73,16 @@
     <div class="container my-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>My Resources</h2>
-            <div>
-                <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#downloadModal">Download
-                    Resources</button>
-                <a href="{{ route('teacher.resources.create') }}" class="btn btn-primary">Add Resource</a>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#downloadModal">
+                    Download Resources
+                </button>
+                <a href="{{ route('teacher.resources.admin') }}" class="btn btn-outline-info">
+                    View Admin Resources
+                </a>
+                <a href="{{ route('teacher.resources.create') }}" class="btn btn-primary">
+                    Add Resource
+                </a>
             </div>
         </div>
 
