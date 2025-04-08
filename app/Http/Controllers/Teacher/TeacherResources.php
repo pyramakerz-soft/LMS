@@ -79,6 +79,14 @@ class TeacherResources extends Controller
             'file_path' => 'nullable|file|mimes:pdf,ppt,pptx,zip,mp4|max:51200',
             'video_url' => 'nullable|url',
             'stage_id' => 'required|exists:stages,id',
+        ], [
+            'file_path.required_without' => 'Please upload a file or provide a video URL.',
+            'video_url.required_without' => 'Please upload a file or provide a video URL.',
+        ]);
+
+        $request->validate([
+            'file_path' => 'required_without:video_url',
+            'video_url' => 'required_without:file_path',
         ]);
 
         $user = Auth::guard('teacher')->user();

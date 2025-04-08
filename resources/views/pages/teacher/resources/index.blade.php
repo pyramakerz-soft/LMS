@@ -108,7 +108,13 @@
             @forelse ($resources as $resource)
                 <div class="col-md-3">
                     <div class="resource-card">
-                        <a href="{{ asset($resource->file_path) }}" target="_blank">
+                        @if ($resource->video_url)
+                            <span class="badge bg-info mb-2">Video Link</span>
+                        @elseif(Str::endsWith($resource->file_path, ['.pdf', '.ppt', '.mp4', '.pptx']))
+                            <span class="badge bg-secondary mb-2">{{ strtoupper($resource->type) }}</span>
+                        @endif
+                        <a href="{{ $resource->video_url ? $resource->video_url : ($resource->file_path ? asset($resource->file_path) : '#') }}"
+                            target="_blank">
                             <img src="{{ $resource->image ? asset($resource->image) : asset('assets/img/default.png') }}"
                                 alt="{{ $resource->name }}">
                         </a>
