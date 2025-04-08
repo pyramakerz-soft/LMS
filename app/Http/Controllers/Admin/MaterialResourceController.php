@@ -12,6 +12,7 @@ use App\Models\Stage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Str;
 use ZipArchive;
 
 class MaterialResourceController extends Controller
@@ -158,8 +159,12 @@ class MaterialResourceController extends Controller
         }
 
         $lesson = Lesson::find($lessonId);
-        $zipFileName = $lesson->title . '_lesson_resources.zip';
+        $zipFileName = Str::slug($lesson->title) . '_lesson_resources.zip';
         $zipPath = public_path('lesson_resources/' . $zipFileName);
+
+        if (\File::exists($zipPath)) {
+            \File::delete($zipPath);
+        }
 
         $zip = new \ZipArchive;
         if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
@@ -173,8 +178,17 @@ class MaterialResourceController extends Controller
             $zip->close();
         }
 
-        return response()->download($zipPath)->deleteFileAfterSend(true);
+        if (!\File::exists($zipPath)) {
+            return redirect()->back()->with('error', 'Failed to generate the ZIP file. Please try again.');
+        }
+
+        try {
+            return response()->download($zipPath)->deleteFileAfterSend(true);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error downloading file: ' . $e->getMessage());
+        }
     }
+
 
     public function downloadThemeResources($themeId)
     {
@@ -185,14 +199,23 @@ class MaterialResourceController extends Controller
         }
 
         $material = Material::find($themeId);
-        $zipFileName = $material->title . '_theme_resources.zip';
+        if (!$material) {
+            return redirect()->back()->with('error', 'Material not found.');
+        }
+
+        $safeTitle = Str::slug($material->title, '_');
+        $zipFileName = $safeTitle . '_theme_resources.zip';
         $zipPath = public_path('material_resources/' . $zipFileName);
+
+        if (File::exists($zipPath)) {
+            File::delete($zipPath);
+        }
 
         $zip = new \ZipArchive;
         if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
             foreach ($resources as $resource) {
                 $filePath = public_path($resource->path);
-                if (\File::exists($filePath)) {
+                if (File::exists($filePath)) {
                     $fileNameInZip = $resource->title . '.' . $resource->type;
                     $zip->addFile($filePath, $fileNameInZip);
                 }
@@ -200,9 +223,16 @@ class MaterialResourceController extends Controller
             $zip->close();
         }
 
-        return response()->download($zipPath)->deleteFileAfterSend(true);
-    }
+        if (!File::exists($zipPath)) {
+            return redirect()->back()->with('error', 'Failed to create ZIP file. Please try again.');
+        }
 
+        try {
+            return response()->download($zipPath)->deleteFileAfterSend(true);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error during download: ' . $e->getMessage());
+        }
+    }
 
     /**
      * Display the specified resource.
