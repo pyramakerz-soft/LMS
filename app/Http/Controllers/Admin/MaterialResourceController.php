@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\Lesson;
+use App\Models\LessonResource;
 use App\Models\Material;
 use App\Models\MaterialResource;
 use App\Models\Stage;
@@ -86,7 +88,7 @@ class MaterialResourceController extends Controller
         }
         $material = Material::query()->where('id', $request->download_theme_id)->first();
 
-        $zipFileName =  $material->title . '_resources.zip';
+        $zipFileName = $material->title . '_resources.zip';
         $zipPath = public_path('material_resources/' . $zipFileName);
 
         $zip = new ZipArchive;
@@ -103,7 +105,103 @@ class MaterialResourceController extends Controller
 
         return response()->download($zipPath)->deleteFileAfterSend(true);
     }
+    // public function downloadThemeResources(Request $request)
+    // {
+    //     $themeId = $request->download_theme_id;
 
+    //     $resources = MaterialResource::where('material_id', $themeId)->get();
+
+    //     if ($resources->isEmpty()) {
+    //         return redirect()->back()->with('error', 'No resources available for this theme.');
+    //     }
+
+    //     $material = Material::find($themeId);
+    //     $zipFileName = $material->title . '_resources.zip';
+    //     $zipPath = public_path('material_resources/' . $zipFileName);
+
+    //     $zip = new \ZipArchive;
+    //     if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+    //         foreach ($resources as $resource) {
+    //             $filePath = public_path($resource->path);
+    //             if (\File::exists($filePath)) {
+    //                 $fileNameInZip = $resource->title . '.' . $resource->type;
+    //                 $zip->addFile($filePath, $fileNameInZip);
+    //             }
+    //         }
+    //         $zip->close();
+    //     }
+
+    //     return response()->download($zipPath)->deleteFileAfterSend(true);
+    // }
+
+
+    public function downloadResources(Request $request)
+    {
+        if ($request->resource_type === 'lesson') {
+            return $this->downloadLessonResources($request->download_lesson_id);
+        }
+
+        if ($request->resource_type === 'theme') {
+            return $this->downloadThemeResources($request->download_theme_id);
+        }
+
+        return back()->with('error', 'Invalid resource selection.');
+    }
+
+
+    public function downloadLessonResources($lessonId)
+    {
+        $resources = LessonResource::where('lesson_id', $lessonId)->get();
+
+        if ($resources->isEmpty()) {
+            return redirect()->back()->with('error', 'No resources available for this lesson.');
+        }
+
+        $lesson = Lesson::find($lessonId);
+        $zipFileName = $lesson->title . '_lesson_resources.zip';
+        $zipPath = public_path('lesson_resources/' . $zipFileName);
+
+        $zip = new \ZipArchive;
+        if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+            foreach ($resources as $resource) {
+                $filePath = public_path($resource->path);
+                if (\File::exists($filePath)) {
+                    $fileNameInZip = $resource->title . '.' . $resource->type;
+                    $zip->addFile($filePath, $fileNameInZip);
+                }
+            }
+            $zip->close();
+        }
+
+        return response()->download($zipPath)->deleteFileAfterSend(true);
+    }
+
+    public function downloadThemeResources($themeId)
+    {
+        $resources = MaterialResource::where('material_id', $themeId)->get();
+
+        if ($resources->isEmpty()) {
+            return redirect()->back()->with('error', 'No resources available for this theme.');
+        }
+
+        $material = Material::find($themeId);
+        $zipFileName = $material->title . '_theme_resources.zip';
+        $zipPath = public_path('material_resources/' . $zipFileName);
+
+        $zip = new \ZipArchive;
+        if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+            foreach ($resources as $resource) {
+                $filePath = public_path($resource->path);
+                if (\File::exists($filePath)) {
+                    $fileNameInZip = $resource->title . '.' . $resource->type;
+                    $zip->addFile($filePath, $fileNameInZip);
+                }
+            }
+            $zip->close();
+        }
+
+        return response()->download($zipPath)->deleteFileAfterSend(true);
+    }
 
 
     /**
@@ -116,12 +214,16 @@ class MaterialResourceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id) {}
+    public function edit(string $id)
+    {
+    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $student_id) {}
+    public function update(Request $request, string $student_id)
+    {
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -139,4 +241,7 @@ class MaterialResourceController extends Controller
 
         return redirect()->route('lesson_resource.index')->with('success', 'Resource deleted successfully.');
     }
+
+
+
 }

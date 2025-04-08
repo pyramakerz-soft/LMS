@@ -267,8 +267,15 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::post('/teacher/resources', [TeacherResources::class, 'store'])->name('teacher.resources.store');
     Route::put('/teacher/resources/{id}', [TeacherResources::class, 'update'])->name('teacher.resources.update');
     Route::delete('/teacher/resources/{id}', [TeacherResources::class, 'destroy'])->name('teacher.resources.destroy');
-    Route::post('/lesson-resource/download/', [LessonResourceController::class, 'download'])->name('lesson_resource.download');
-    Route::post('/material-resource/download/', [MaterialResourceController::class, 'download'])->name('theme_resource.download');
+    // Route::post('/lesson-resource/download/', [LessonResourceController::class, 'download'])->name('lesson_resource.download');
+    // Route::post('/material-resource/download/', [MaterialResourceController::class, 'download'])->name('theme_resource.download');
+    // Route::post('/teacher/download-resources', [MaterialResourceController::class, 'downloadResources'])->name('download.resources');
+
+    // Route::post('/material-resource/download/', [MaterialResourceController::class, 'downloadThemeResources'])->name('theme_resource.download');
+
+    Route::post('/teacher/download-resources', [MaterialResourceController::class, 'downloadResources'])->name('download.resources');
+
+
 
     Route::get('/teacher/classes/{stage_id}', [TeacherClasses::class, 'index'])->name('teacher_classes');
 
