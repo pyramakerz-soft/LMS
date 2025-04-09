@@ -28,7 +28,10 @@
             {{-- <span class="mx-2 text-[#D0D5DD]">/</span> --}}
             {{-- <a href="{{ route('assignments.index') }}" class="mx-2 cursor-pointer">Assignment</a> --}}
             <span class="mx-2 text-[#D0D5DD]">/</span>
-            <a href="#" class="mx-2 cursor-pointer">Students Assigned to {{ $assignment->title }}</a>
+            <a href="#" class="mx-2 cursor-pointer">Students Assigned to {{ $assignment->title }} / <br> description:
+                {{ $assignment->description }}</a>
+            {{-- <p>description: {{ $assignment->description }}</p> --}}
+            {{-- <p>Total marks : {{ $assignment->marks }}</p> --}}
         </div>
     </div>
     <div class="p-3">

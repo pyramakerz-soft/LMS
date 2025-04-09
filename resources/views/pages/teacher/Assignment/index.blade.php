@@ -33,7 +33,7 @@
             </div>
             <a href="{{ route('assignments.create', ['stageId' => $stage->id]) }}">
                 <button class="rounded-md px-6 py-3 bg-[#17253E] text-white border-none">
-                    Create 
+                    Create
                 </button>
             </a>
         </div>
@@ -44,10 +44,10 @@
                     <thead class="bg-[#F9FAFB] text-lg md:text-xl">
                         <tr>
                             <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Title</th>
-                            <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Description</th>
+                            {{-- <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Description</th> --}}
                             <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Start Date</th>
                             <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Due Date</th>
-                            <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Marks</th>
+                            {{-- <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Marks</th> --}}
                             <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Lesson</th>
                             <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">School</th>
                             <th class="py-4 px-6 min-w-[120px] whitespace-nowrap">Actions</th>
@@ -64,11 +64,21 @@
                                 <tr
                                     class="border-t border-gray-300 {{ $loop->index % 2 === 0 ? 'bg-[#F4F4F4]' : 'bg-white' }}">
                                     <td class="py-5 px-6">{{ $row['title'] }}</td>
-                                    <td class="py-5 px-6">{{ $row['description'] }}</td>
+                                    {{-- <td class="py-5 px-6">{{ $row['description'] }}</td> --}}
                                     <td class="py-5 px-6">{{ $row['start_date'] }}</td>
                                     <td class="py-5 px-6">{{ $row['due_date'] }}</td>
-                                    <td class="py-5 px-6">{{ $row['marks'] }}</td>
-                                    <td class="py-5 px-6">{{ $row['lesson']['title'] ?? 'N/A' }}</td>
+                                    {{-- <td class="py-5 px-6">{{ $row['marks'] }}</td> --}}
+                                    <td class="py-5 px-6">
+                                        @php
+                                            $theme = $row->lesson->chapter->unit->material->title ?? 'N/A';
+                                            $unit = $row->lesson->chapter->unit->title ?? 'N/A';
+                                            $chapter = $row->lesson->chapter->title ?? 'N/A';
+                                            $lesson = $row->lesson->title ?? 'N/A';
+                                        @endphp
+                                        {{ $theme }} - {{ $unit }} - {{ $chapter }} -
+                                        {{ $lesson }}
+                                    </td>
+
                                     <td class="py-5 px-6">{{ $row['school']['name'] ?? 'N/A' }}</td>
                                     <td class="py-5 px-6">
                                         <a href="{{ route('assignments.edit', $row->id) }}">
