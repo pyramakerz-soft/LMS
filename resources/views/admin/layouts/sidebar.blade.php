@@ -49,13 +49,30 @@
                     </a>
                 </li>
             @endcan
-            {{-- @can('read type') --}}
-            <li class="sidebar-item {{ request()->is('admin/tickets') ? 'active' : '' }}">
-                <a class="sidebar-link" href="{{ route('tickets.index') }}">
+            @can('ticket-list')
+                <li class="sidebar-item {{ request()->is('admin/tickets') ? 'active' : '' }}">
+                    <a class="sidebar-link" href="{{ route('tickets.index') }}">
+                        <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
+                            Tickets</span>
+                    </a>
+                </li>
+            @endcan
+
+            {{-- @can('read lesson_resource') --}}
+            <li class="sidebar-item {{ request()->is('admin/lesson_resource') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('lesson_resource.index') }}">
                     <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
-                        Tickets</span>
+                        Lesson Resources</span>
                 </a>
             </li>
+            {{-- @endcan --}}
+            <li class="sidebar-item {{ request()->is('admin/theme_resource') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('theme_resource.index') }}">
+                    <i class="align-middle" data-feather="sliders"></i><span class="align-middle">
+                        Theme Resources</span>
+                </a>
+            </li>
+
             {{-- @endcan --}}
             @can('read ebook')
                 <li class="sidebar-item {{ request()->is('admin/ebooks') ? 'active' : '' }}">
@@ -115,8 +132,6 @@
                     </a>
                 </li>
             @endcan
-
-
             {{-- <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('ebooks.index') }}">
             <i class="align-middle" data-feather="square"></i> <span class="align-middle">Ebook</span>

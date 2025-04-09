@@ -9,6 +9,19 @@
 
             <main class="content py-4">
                 <div class="container">
+                    @if (Session::has('message'))
+                        <div class="alert-banner alert alert-primary d-flex align-items-center justify-content-between rounded px-4 py-3 shadow-sm"
+                            role="alert">
+                            <div class="d-flex align-items-center">
+                                <span class="icon-container me-3">
+                                    <i class="bi bi-megaphone-fill"></i>
+                                </span>
+                                <span class="message-text">{{ Session::get('message') }}</span>
+                            </div>
+                            <button type="button" class="btn-close text-white" data-bs-dismiss="alert"
+                                aria-label="Close"></button>
+                        </div>
+                    @endif
                     <div class="card shadow-sm border-0">
                         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">User Details</h5>

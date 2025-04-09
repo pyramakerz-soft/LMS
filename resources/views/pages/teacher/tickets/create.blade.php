@@ -5,6 +5,15 @@
 @endsection
 @section('page_css')
     <style>
+        .custom-alert.success {
+            background-color: #e9fbe9;
+            color: #2d7a2d;
+            border: 1px solid #b2e2b2;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
         .ticket-form-wrapper {
             max-width: 1000px;
             margin: 30px auto;
@@ -94,7 +103,7 @@
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
         ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
-        ['label' => 'Ticket', 'icon' => 'fa-solid fa-ticket', 'route' => route('tickets.index')],
+        ['label' => 'Ticket', 'icon' => 'fa-solid fa-ticket', 'route' => route('teacher.tickets.index')],
         ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
     ];
 @endphp
@@ -117,6 +126,11 @@
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
+            </div>
+        @endif
+        @if (session('success'))
+            <div class="custom-alert success">
+                {{ session('success') }}
             </div>
         @endif
 

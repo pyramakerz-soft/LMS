@@ -44,11 +44,7 @@ class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
         //         return null;
         //     }
         // }
-        if ($existingStudent) {
-            $this->duplicateUsernames[] = $username;
-            $existingStudent->update(['class_id' => $this->class->id]);
-            return null;
-        }
+
 
         $genderArabic = $row['algns'] ?? null;
         $gender = null;
@@ -68,7 +64,19 @@ class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
             $birthDate = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['tarykh_almylad'])->format('Y-m-d');
         }
 
-
+        if ($existingStudent) {
+            $this->duplicateUsernames[] = $username;
+            $existingStudent->update([
+                'class_id' => $this->class->id,
+                'school_id' => $this->class->school_id,
+                'stage_id' => $this->class->stage_id,
+                'arabic_name' => $arabicName,
+                'phone' => $phone,
+                'birth_date' => $birthDate,
+                'gender' => $gender,
+            ]);
+            return null;
+        }
         $password = Str::random(8);
         if (Student::where('username', $username)->exists()) {
             return null;

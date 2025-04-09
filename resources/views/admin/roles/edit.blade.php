@@ -37,23 +37,53 @@
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="permission"
+                                            {{-- <label for="permission"
                                                 class="form-label d-flex justify-content-between align-items-center">
                                                 <span>Select Permissions</span>
                                                 <button type="button" id="select-all-permissions"
                                                     class="btn btn-sm btn-outline-primary">
                                                     Select All
                                                 </button>
+                                            </label> --}}
+                                            <label class="form-label d-flex justify-content-between align-items-center">
+                                                <span>Select Permissions</span>
+                                                <input type="checkbox" id="select-all-global"> Select All
                                             </label>
-                                            <select id="permission" name="permissions[]" class="form-select select2"
-                                                multiple>
-                                                @foreach ($permissions as $permission)
-                                                    <option value="{{ $permission->id }}"
-                                                        @if ($role->permissions->contains($permission->id)) selected @endif>
-                                                        {{ $permission->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+
+                                            @foreach ($groupedPermissions as $model => $permissions)
+                                                <div class="mb-4 border rounded p-3">
+                                                    <div class="form-check mb-2">
+                                                        <input type="checkbox" class="form-check-input model-master"
+                                                            data-model="{{ $model }}">
+                                                        <label class="form-check-label fw-bold">{{ ucfirst($model) }}
+                                                            Permissions</label>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        @foreach ($permissions as $permission)
+                                                            <div class="col-md-3">
+                                                                <div class="form-check">
+                                                                    <input
+                                                                        class="form-check-input model-checkbox model-{{ $model }}"
+                                                                        type="checkbox" name="permissions[]"
+                                                                        value="{{ $permission->id }}"
+                                                                        id="perm-{{ $permission->id }}"
+                                                                        {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}>
+                                                                    <label class="form-check-label"
+                                                                        for="perm-{{ $permission->id }}">
+                                                                        {{ ucfirst(Str::afterLast($permission->name, '-')) }}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            @endforeach
+
+
+
+
+
                                         </div>
 
                                         <div class="d-flex justify-content-end">
@@ -75,16 +105,33 @@
 @section('page_js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>
-        $(document).ready(function() {
-            const $select = $('.select2');
-            $select.select2({
-                placeholder: "Select Permissions",
-                allowClear: true
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.group-checkbox').forEach(groupCheck => {
+                groupCheck.addEventListener('change', function() {
+                    const groupClass = 'group-' + this.id.replace('group-', '');
+                    document.querySelectorAll('.' + groupClass).forEach(cb => {
+                        cb.checked = this.checked;
+                    });
+                });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Global Select All
+            document.getElementById('select-all-global').addEventListener('change', function() {
+                const all = document.querySelectorAll('.model-checkbox, .model-master');
+                all.forEach(cb => cb.checked = this.checked);
             });
 
-            $('#select-all-permissions').click(function() {
-                $select.find('option').prop('selected', true);
-                $select.trigger('change');
+            // Model Group Select All
+            document.querySelectorAll('.model-master').forEach(masterCheckbox => {
+                masterCheckbox.addEventListener('change', function() {
+                    const model = this.dataset.model;
+                    document.querySelectorAll('.model-' + model).forEach(cb => {
+                        cb.checked = this.checked;
+                    });
+                });
             });
         });
     </script>

@@ -4,95 +4,229 @@
 
 @extends('layouts.app')
 
-@section('title')
-    Resources
+@section('title', 'Resources')
+
+@section('page_css')
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .resource-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .resource-card:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .resource-card img {
+            max-height: 180px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .resource-card h3 {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0 5px;
+        }
+
+        .resource-card p {
+            color: #555;
+            font-size: 14px;
+        }
+
+        .resource-card .actions {
+            margin-top: 10px;
+        }
+
+        .filter-form select,
+        .filter-form button {
+            max-width: 250px;
+        }
+
+        .modal-header h5 {
+            font-weight: bold;
+        }
+    </style>
 @endsection
 
-@php
-    $menuItems = [
-        ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
-        ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
-        ['label' => 'Ticket', 'icon' => 'fa-solid fa-ticket', 'route' => route('tickets.index')],
-
-        ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
-    ];
-@endphp
 @section('sidebar')
-    @include('components.sidebar', ['menuItems' => $menuItems])
+    @include('components.sidebar', [
+        'menuItems' => [
+            ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
+            ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
+            ['label' => 'Ticket', 'icon' => 'fa-solid fa-ticket', 'route' => route('teacher.tickets.index')],
+            ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
+        ],
+    ])
 @endsection
 
 @section('content')
     @include('components.profile')
 
-    <div class="p-3">
-        <div class="flex justify-between items-center px-5 my-8">
-            <div class="text-[#667085]">
-                <i class="fa-solid fa-house mx-2"></i>
-                <span class="mx-2 text-[#D0D5DD]">/</span>
-                <span class="mx-2 cursor-pointer">Resources</span>
+    <div class="container my-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>My Resources</h2>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#downloadModal">
+                    Download Resources
+                </button>
+                <a href="{{ route('teacher.resources.admin') }}" class="btn btn-outline-info">
+                    View Admin Resources
+                </a>
+                <a href="{{ route('teacher.resources.create') }}" class="btn btn-primary">
+                    Add Resource
+                </a>
             </div>
-            <a href="{{ route('teacher.resources.create') }}"
-                class="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg"
-                style="background-color:rgb(37 99 235) ";>
-                Add New Resource
-            </a>
         </div>
+
         @if (session('success'))
-            <div class="bg-green-500 text-white p-3 rounded-lg mb-4">
-                {{ session('success') }}
-            </div>
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
 
-        <div class="p-3">
-            <form method="GET" action="{{ route('teacher.resources.index') }}" class="mb-4">
-                <label for="grade" class="block text-sm font-medium text-gray-700">Filter by Grade</label>
-                <select id="grade" name="grade" class="w-full p-2 border border-gray-300 rounded">
-                    <option value="">All Grades</option>
-                    @foreach ($stages as $stage)
-                        <option value="{{ $stage->id }}" {{ request('grade') == $stage->id ? 'selected' : '' }}>
-                            {{ $stage->name }}
-                        </option>
-                    @endforeach
-                </select>
-                <button type="submit"
-                    class="mt-2 text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">Filter</button>
-            </form>
-            <div class="overflow-x-auto rounded-2xl border border-[#EAECF0]">
-                <div class="container mx-auto px-4 py-8">
-                    <h1 class="text-2xl font-bold mb-4">My Resources</h1>
+        <form method="GET" action="{{ route('teacher.resources.index') }}" class="filter-form mb-4 d-flex gap-2">
+            <select id="grade" name="grade" class="form-select">
+                <option value="">All Grades</option>
+                @foreach ($stages as $stage)
+                    <option value="{{ $stage->id }}" {{ request('grade') == $stage->id ? 'selected' : '' }}>
+                        {{ $stage->name }}</option>
+                @endforeach
+            </select>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        @foreach ($resources as $resource)
-                            <div class="border rounded-lg p-4">
-                                <a href="{{ asset($resource->file_path) }}" target="_blank" class="block">
-                                    <img src="{{ $resource->image ? asset($resource->image) : asset('assets/img/default.png') }}"
-                                        alt="{{ $resource->name }}" class="object-cover w-full h-48 rounded-md mb-4">
-                                    <h3 class="text-lg font-bold">{{ $resource->name }}</h3>
-                                    <p class="text-gray-500 mb-3">{{ $resource->description }}</p>
-                                    <b class="mt-3">
-                                        {{ $resource->stage->name }}
-                                    </b>
-                                </a>
-                                <div class="flex justify-between mt-4">
-                                    <a href="{{ route('teacher.resources.edit', $resource->id) }}"
-                                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit</a>
-                                    <form action="{{ route('teacher.resources.destroy', $resource->id) }}" method="POST"
-                                        onsubmit="return confirm('Are you sure you want to delete this resource?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
-                                    </form>
-                                </div>
-                            </div>
-                        @endforeach
+        <div class="row">
+            @forelse ($resources as $resource)
+                <div class="col-md-3">
+                    <div class="resource-card">
+                        @if ($resource->video_url)
+                            <span class="badge bg-info mb-2">Video Link</span>
+                        @elseif(Str::endsWith($resource->file_path, ['.pdf', '.ppt', '.mp4', '.pptx']))
+                            <span class="badge bg-secondary mb-2">{{ strtoupper($resource->type) }}</span>
+                        @endif
+                        <a href="{{ $resource->video_url ? $resource->video_url : ($resource->file_path ? asset($resource->file_path) : '#') }}"
+                            target="_blank">
+                            <img src="{{ $resource->image ? asset($resource->image) : asset('assets/img/default.png') }}"
+                                alt="{{ $resource->name }}">
+                        </a>
+                        <h3>{{ $resource->name }}</h3>
+                        <p>{{ Str::limit($resource->description, 100) }}</p>
+                        <p><strong>Grade:</strong> {{ $resource->stage->name }}</p>
+
+                        <div class="actions d-flex justify-content-between">
+                            <a href="{{ route('teacher.resources.edit', $resource->id) }}"
+                                class="btn btn-sm btn-success">Edit</a>
+                            <form action="{{ route('teacher.resources.destroy', $resource->id) }}" method="POST"
+                                onsubmit="return confirm('Are you sure?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <p class="text-center mt-4">No resources available.</p>
+            @endforelse
+        </div>
+    </div>
+
+    <!-- Modal for Download -->
+    <div class="modal fade" id="downloadModal" tabindex="-1" aria-labelledby="downloadModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="downloadForm" action="{{ route('download.resources') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="resource_type" id="resource_type" value="">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="downloadModalLabel">Download Resources</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
-                    @if ($resources->isEmpty())
-                        <p class="text-gray-500 text-center mt-6">No resources available.</p>
-                    @endif
-                </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="download_lesson_id" class="form-label">Download by Lesson</label>
+                            <select name="download_lesson_id" id="download_lesson_id" class="form-select">
+                                <option value="">-- Select Lesson --</option>
+                                @foreach ($lessons as $lesson)
+                                    <option value="{{ $lesson->id }}">
+                                        {{ $lesson->chapter->material->title ?? '' }} -
+                                        {{ $lesson->chapter->unit->title ?? '' }} -
+                                        {{ $lesson->chapter->title ?? '' }} -
+                                        {{ $lesson->title }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <hr>
+                        <div class="mb-3">
+                            <label for="download_theme_id" class="form-label">Download by Theme</label>
+                            <select name="download_theme_id" id="download_theme_id" class="form-select">
+                                <option value="">-- Select Theme --</option>
+                                @foreach ($themes as $theme)
+                                    <option value="{{ $theme->id }}">{{ $theme->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Download as ZIP</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
+    @section('page_js')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const lessonSelect = document.getElementById('download_lesson_id');
+                const themeSelect = document.getElementById('download_theme_id');
+                const resourceTypeInput = document.getElementById('resource_type');
+                const form = document.getElementById('downloadForm');
+
+                lessonSelect.addEventListener('change', function() {
+                    if (this.value) themeSelect.value = '';
+                });
+
+                themeSelect.addEventListener('change', function() {
+                    if (this.value) lessonSelect.value = '';
+                });
+
+                form.addEventListener('submit', function(e) {
+                    const lessonId = lessonSelect.value;
+                    const themeId = themeSelect.value;
+
+                    if (!lessonId && !themeId) {
+                        e.preventDefault();
+                        alert('Please select a lesson or a theme to download.');
+                        return;
+                    }
+
+                    if (lessonId && themeId) {
+                        e.preventDefault();
+                        alert('Please select only one option (Lesson or Theme).');
+                        return;
+                    }
+
+                    resourceTypeInput.value = lessonId ? 'lesson' : 'theme';
+                });
+            });
+        </script>
+    @endsection
+
+
 @endsection

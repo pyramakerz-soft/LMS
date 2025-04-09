@@ -73,62 +73,68 @@
                                                 data-teacher="{{ $ticket->teacher->name }}">
                                                 <i class="fas fa-eye"></i> View
                                             </button>
-
-                                            <form action="{{ route('admin.tickets.updateStatus', $ticket->id) }}"
-                                                method="POST" class="d-inline">
-                                                @csrf
-                                                @method('PUT')
-                                                <select name="status" class="form-select form-select-sm d-inline w-auto"
-                                                    onchange="this.form.submit()">
-                                                    @foreach (['open', 'in_progress', 'resolved', 'closed'] as $status)
-                                                        <option value="{{ $status }}"
-                                                            {{ $ticket->status === $status ? 'selected' : '' }}>
-                                                            {{ ucfirst(str_replace('_', ' ', $status)) }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </form>
+                                            @can('ticket-edit')
+                                                <form action="{{ route('admin.tickets.updateStatus', $ticket->id) }}"
+                                                    method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <select name="status" class="form-select form-select-sm d-inline w-auto"
+                                                        onchange="this.form.submit()">
+                                                        @foreach (['open', 'in_progress', 'resolved', 'closed'] as $status)
+                                                            <option value="{{ $status }}"
+                                                                {{ $ticket->status === $status ? 'selected' : '' }}>
+                                                                {{ ucfirst(str_replace('_', ' ', $status)) }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </form>
+                                            @endcan
                                         </td>
                                     </tr>
+                                    <div class="modal fade" id="ticketModal" tabindex="-1"
+                                        aria-labelledby="ticketModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Ticket Details</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title"><strong>Title:</strong> <span
+                                                                    id="modal-title"></span>
+                                                            </h5>
+                                                            <p><strong>Teacher:</strong> <span id="modal-teacher"></span>
+                                                            </p>
+                                                            <p><strong>Status:</strong> <span class="badge bg-info"
+                                                                    id="modal-status"></span></p>
+                                                            <p><strong>Priority:</strong> <span class="badge bg-danger"
+                                                                    id="modal-priority"></span></p>
+                                                            <p><strong>Description:</strong></p>
+                                                            <p id="modal-description"></p>
+                                                            <div id="modal-attachment-container" class="mt-3">
+                                                                <strong>Attachment:</strong><br>
+                                                                <img id="modal-attachment"
+                                                                    src="{{ asset($ticket->attachment) }}" alt="Attachment"
+                                                                    class="img-fluid rounded d-none" />
+                                                                <a id="modal-attachment-link" href="" target="_blank"
+                                                                    class="btn btn-outline-primary mt-2 d-none">View
+                                                                    File</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
                     <!-- End of scrollable wrapper -->
-                    <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-lg modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Ticket Details</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title"><strong>Title:</strong> <span id="modal-title"></span>
-                                            </h5>
-                                            <p><strong>Teacher:</strong> <span id="modal-teacher"></span></p>
-                                            <p><strong>Status:</strong> <span class="badge bg-info"
-                                                    id="modal-status"></span></p>
-                                            <p><strong>Priority:</strong> <span class="badge bg-danger"
-                                                    id="modal-priority"></span></p>
-                                            <p><strong>Description:</strong></p>
-                                            <p id="modal-description"></p>
-                                            <div id="modal-attachment-container" class="mt-3">
-                                                <strong>Attachment:</strong><br>
-                                                <img id="modal-attachment" src="{{ asset('/' . $ticket->attachment) }}"
-                                                    alt="Attachment" class="img-fluid rounded d-none" />
-                                                <a id="modal-attachment-link" href="" target="_blank"
-                                                    class="btn btn-outline-primary mt-2 d-none">View File</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </main>
         </div>
@@ -150,7 +156,7 @@
                     document.getElementById('modal-description').textContent = ticket.description;
 
                     const attachment = ticket.attachment ?
-                        `/${ticket.attachment}` :
+                        `{{ route('landing') }}/${ticket.attachment}` :
                         null;
 
                     const img = document.getElementById('modal-attachment');
@@ -158,7 +164,7 @@
 
                     if (attachment) {
                         if (attachment.match(/\.(jpeg|jpg|gif|png|webp)$/i)) {
-                            img.src = attachment;
+                            // img.src = attachment;
                             img.classList.remove('d-none');
                             link.classList.add('d-none');
                         } else {

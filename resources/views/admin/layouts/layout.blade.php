@@ -17,7 +17,7 @@
     }
 
     .alert-banner {
-        background-color: #222e3c;
+        background-color: #48975b;
         /* Matches the blue background */
         color: white;
         font-weight: 500;
@@ -38,18 +38,7 @@
 </style>
 
 <body>
-    @if (Session::has('message'))
-        <div class="alert-banner alert alert-primary d-flex align-items-center justify-content-between rounded px-4 py-3 shadow-sm"
-            role="alert">
-            <div class="d-flex align-items-center">
-                <span class="icon-container me-3">
-                    <i class="bi bi-megaphone-fill"></i>
-                </span>
-                <span class="message-text">{{ Session::get('message') }}</span>
-            </div>
-            <button type="button" class="btn-close text-white" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+
     @yield('content')
 
 

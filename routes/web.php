@@ -8,7 +8,9 @@ use App\Http\Controllers\Admin\ClassController;
 use App\Http\Controllers\Admin\EbookController;
 use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\LessonController;
+use App\Http\Controllers\Admin\LessonResourceController;
 use App\Http\Controllers\Admin\MaterialController;
+use App\Http\Controllers\Admin\MaterialResourceController;
 use App\Http\Controllers\Admin\ObserverController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\RoleController;
@@ -86,6 +88,8 @@ Route::prefix('admin')->group(function () {
         Route::resource('chapters', ChapterController::class);
         Route::resource('lessons', LessonController::class);
         Route::resource('stages', StageController::class);
+        Route::resource('lesson_resource', LessonResourceController::class);
+        Route::resource('theme_resource', MaterialResourceController::class);
         // Route::resource('assignments', AssignmentController::class);
         Route::resource('ebooks', EbookController::class);
         Route::resource('classes', ClassController::class);
@@ -258,18 +262,28 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
 
 
     Route::get('/teacher/resources', [TeacherResources::class, 'index'])->name('teacher.resources.index');
+    Route::get('/teacher/resources/admin', [TeacherResources::class, 'adminResources'])->name('teacher.resources.admin');
+
     Route::get('/teacher/resources/create', [TeacherResources::class, 'create'])->name('teacher.resources.create');
     Route::get('/teacher/resources/{id}/edit', [TeacherResources::class, 'edit'])->name('teacher.resources.edit');
     Route::post('/teacher/resources', [TeacherResources::class, 'store'])->name('teacher.resources.store');
     Route::put('/teacher/resources/{id}', [TeacherResources::class, 'update'])->name('teacher.resources.update');
     Route::delete('/teacher/resources/{id}', [TeacherResources::class, 'destroy'])->name('teacher.resources.destroy');
+    // Route::post('/lesson-resource/download/', [LessonResourceController::class, 'download'])->name('lesson_resource.download');
+    // Route::post('/material-resource/download/', [MaterialResourceController::class, 'download'])->name('theme_resource.download');
+    // Route::post('/teacher/download-resources', [MaterialResourceController::class, 'downloadResources'])->name('download.resources');
+
+    // Route::post('/material-resource/download/', [MaterialResourceController::class, 'downloadThemeResources'])->name('theme_resource.download');
+
+    Route::post('/teacher/download-resources', [MaterialResourceController::class, 'downloadResources'])->name('download.resources');
+
 
 
     Route::get('/teacher/classes/{stage_id}', [TeacherClasses::class, 'index'])->name('teacher_classes');
 
     Route::get('students_classess/{class_id}', [TeacherClasses::class, 'students'])->name('students_classess');
     Route::post('store-assessment', [TeacherClasses::class, 'storeAssessment'])->name('teacher.storeAssessment');
-    Route::get('/tickets', [App\Http\Controllers\Teacher\TicketController::class, 'index'])->name('tickets.index');
+    Route::get('/tickets', [App\Http\Controllers\Teacher\TicketController::class, 'index'])->name('teacher.tickets.index');
     Route::get('/tickets/create', [App\Http\Controllers\Teacher\TicketController::class, 'create'])->name('tickets.create');
     Route::post('/tickets', [App\Http\Controllers\Teacher\TicketController::class, 'store'])->name('tickets.store');
 

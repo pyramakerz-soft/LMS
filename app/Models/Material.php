@@ -12,7 +12,11 @@ class Material extends Model
 
     public function schools()
     {
-        return $this->belongsToMany(School::class, 'material_school');
+        return $this->belongsToMany(School::class);
+    }
+    public function materialSchools()
+    {
+        return $this->hasMany(MaterialSchool::class);
     }
     public function stage()
     {

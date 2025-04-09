@@ -6,13 +6,28 @@
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
         ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
-        ['label' => 'Ticket', 'icon' => 'fa-solid fa-ticket', 'route' => route('tickets.index')],
+        ['label' => 'Ticket', 'icon' => 'fa-solid fa-ticket', 'route' => route('teacher.tickets.index')],
 
         ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
     ];
 
     $fileExErr = false;
 @endphp
+@section('page_css')
+    <style>
+        .custom-success-message {
+            background-color: #e6f7e6;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+            padding: 15px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 2px 4px rgba(0, 128, 0, 0.1);
+        }
+    </style>
+@endsection
 
 @section('sidebar')
     @include('components.sidebar', ['menuItems' => $menuItems])
@@ -45,7 +60,7 @@
             </div>
         @endif
         @if (session('success'))
-            <div class="alert alert-success mb-4 p-4 rounded-md bg-green-100 text-green-800">
+            <div class="custom-success-message">
                 {{ session('success') }}
             </div>
         @endif
@@ -203,7 +218,9 @@
             classDropdown.disabled = true;
 
             if (stageId) {
-                fetch(`/teacher/teacher/api/stages/${stageId}/classes`)
+                fetch(
+                        `https://pyramakerz-artifacts.com/LMS/lms_pyramakerz/public/teacher/teacher/api/stages/${stageId}/classes`
+                    )
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Error fetching classes');

@@ -12,7 +12,7 @@
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
         ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
-        ['label' => 'Ticket', 'icon' => 'fa-solid fa-ticket', 'route' => route('tickets.index')],
+        ['label' => 'Ticket', 'icon' => 'fa-solid fa-ticket', 'route' => route('teacher.tickets.index')],
 
         ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
     ];
@@ -47,6 +47,9 @@
                             <label for="name" class="block font-medium">Resource Name</label>
                             <input type="text" name="name" id="name" value="{{ old('name') }}"
                                 class="w-full p-2 border border-gray-300 rounded" required>
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="form-group">
@@ -69,15 +72,28 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="image" class="block font-medium"> Image (optional)</label>
+                            <label for="image" class="block font-medium"> Image</label>
                             <input type="file" name="image" id="image"
                                 class="w-full p-2 border border-gray-300 rounded">
+                            @error('image')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="form-group">
-                            <label for="file_path" class="block font-medium">Resource File (PDF only)</label>
-                            <input type="file" name="file_path" id="file_path" accept=".pdf"
-                                class="w-full p-2 border border-gray-300 rounded" required>
+                            <label for="file_path" class="block font-medium">Upload File </label>
+                            <input type="file" name="file_path" id="file_path"
+                                accept=".pdf,.ppt,.pptx,.zip,.mp4,.mov,.avi"
+                                class="w-full p-2 border border-gray-300 rounded">
+                            @error('file_path')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="video_url" class="block font-medium">Video URL </label>
+                            <input type="url" name="video_url" id="video_url" placeholder="https://example.com/video"
+                                class="w-full p-2 border border-gray-300 rounded">
                         </div>
 
                         {{-- <div class="form-group">

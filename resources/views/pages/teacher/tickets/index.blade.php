@@ -107,7 +107,7 @@
     $menuItems = [
         ['label' => 'Dashboard', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.dashboard')],
         ['label' => 'Resources', 'icon' => 'fi fi-rr-table-rows', 'route' => route('teacher.resources.index')],
-        ['label' => 'Tickets', 'icon' => 'fa-solid fa-ticket', 'route' => route('tickets.index')],
+        ['label' => 'Tickets', 'icon' => 'fa-solid fa-ticket', 'route' => route('teacher.tickets.index')],
         ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
     ];
 @endphp
