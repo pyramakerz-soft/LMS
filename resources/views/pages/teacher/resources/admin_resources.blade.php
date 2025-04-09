@@ -60,18 +60,24 @@
 
         <h4>Lesson Resources</h4>
         <div class="row">
-            @forelse ($lessonResources as $res)
-                <div class="col-md-3">
+            @forelse ($lessonGroups as $lessonId => $resources)
+                <div class="col-md-4">
                     <div class="resource-card">
-                        <h5>{{ $res->title }}</h5>
-                        <span class="resource-type">{{ strtoupper($res->type) }}</span>
-                        <p><strong>Lesson:</strong> {{ $res->lesson->title ?? 'N/A' }}</p>
-                        <a href="{{ asset($res->path) }}" target="_blank"
-                            class="btn btn-sm btn-outline-primary mt-2">View</a>
+                        <h5>{{ $resources->first()->lesson->title ?? 'Unknown Lesson' }}</h5>
+                        <p><strong>Total Resources:</strong> {{ $resources->count() }}</p>
+                        <ul class="list-unstyled">
+                            @foreach ($resources as $res)
+                                <li>
+                                    {{ $res->title }} ({{ strtoupper($res->type) }})
+                                    <a href="{{ asset($res->path) }}" target="_blank"
+                                        class="btn btn-sm btn-outline-primary mt-1">View</a>
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             @empty
-                <p class="text-muted">No lesson resources found.</p>
+                <p class="text-muted">No grouped lesson resources found.</p>
             @endforelse
         </div>
 
@@ -79,18 +85,24 @@
 
         <h4>Theme Resources</h4>
         <div class="row">
-            @forelse ($themeResources as $res)
-                <div class="col-md-3">
+            @forelse ($themeGroups as $themeId => $resources)
+                <div class="col-md-4">
                     <div class="resource-card">
-                        <h5>{{ $res->title }}</h5>
-                        <span class="resource-type">{{ strtoupper($res->type) }}</span>
-                        <p><strong>Theme:</strong> {{ $res->material->title ?? 'N/A' }}</p>
-                        <a href="{{ asset($res->path) }}" target="_blank"
-                            class="btn btn-sm btn-outline-primary mt-2">View</a>
+                        <h5>{{ $resources->first()->material->title ?? 'Unknown Theme' }}</h5>
+                        <p><strong>Total Resources:</strong> {{ $resources->count() }}</p>
+                        <ul class="list-unstyled">
+                            @foreach ($resources as $res)
+                                <li>
+                                    {{ $res->title }} ({{ strtoupper($res->type) }})
+                                    <a href="{{ asset($res->path) }}" target="_blank"
+                                        class="btn btn-sm btn-outline-primary mt-1">View</a>
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             @empty
-                <p class="text-muted">No theme resources found.</p>
+                <p class="text-muted">No grouped theme resources found.</p>
             @endforelse
         </div>
     </div>
