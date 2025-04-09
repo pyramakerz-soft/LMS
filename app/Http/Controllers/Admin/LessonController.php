@@ -69,7 +69,7 @@ class LessonController extends Controller
         // $isZip = $file->getClientOriginalExtension() === 'zip';
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('lessons', 'public');
+            $imagePath = $request->file('image')->store('pyra-public/lessons', 's3');
         }
 
         // if ($isZip) {
@@ -197,12 +197,12 @@ class LessonController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('lessons', 'public');
+            $imagePath = $request->file('image')->store('pyra-public/lessons', 's3');
             $lesson->image = $imagePath;
         }
 
         if ($request->hasFile('file_path')) {
-            $filePath = $request->file('file_path')->store('ebooks', 'public');
+            $filePath = $request->file('file_path')->store('pyra-public/ebooks', 's3');
             $lesson->file_path = $filePath;
         }
 

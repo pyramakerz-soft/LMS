@@ -66,10 +66,10 @@ class MaterialResourceController extends Controller
 
         $file = $request->file('file_path');
         $fileName = time() . '_' . $file->getClientOriginalName();
-        $filePath = 'material_resources/' . $fileName;
+        $filePath = 'pyra-public/material_resources/' . $fileName;
         $fileType = $file->getClientOriginalExtension();
 
-        $file->move(public_path('material_resources'), $fileName);
+        $file->move(public_path('pyra-public/material_resources'), $fileName);
 
         MaterialResource::create([
             'material_id' => $request->theme_id,
@@ -90,7 +90,7 @@ class MaterialResourceController extends Controller
         $material = Material::query()->where('id', $request->download_theme_id)->first();
 
         $zipFileName = $material->title . '_resources.zip';
-        $zipPath = public_path('material_resources/' . $zipFileName);
+        $zipPath = public_path('pyra-public/material_resources/' . $zipFileName);
 
         $zip = new ZipArchive;
         if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
@@ -160,7 +160,7 @@ class MaterialResourceController extends Controller
 
         $lesson = Lesson::find($lessonId);
         $zipFileName = Str::slug($lesson->title) . '_lesson_resources.zip';
-        $zipPath = public_path('lesson_resources/' . $zipFileName);
+        $zipPath = public_path('pyra-public/lesson_resources/' . $zipFileName);
 
         if (\File::exists($zipPath)) {
             \File::delete($zipPath);

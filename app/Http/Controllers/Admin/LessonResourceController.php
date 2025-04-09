@@ -114,7 +114,7 @@ class LessonResourceController extends Controller
                 LessonResource::create([
                     'lesson_id' => $request->lesson_id,
                     'title' => $originalName,
-                    'path' => 'lesson_resources/' . $uniqueFolderName,
+                    'path' => 'pyra-public/lesson_resources/' . $uniqueFolderName,
                     'type' => 'zip',
                 ]);
 
@@ -124,7 +124,7 @@ class LessonResourceController extends Controller
             }
         } else {
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = 'lesson_resources/' . $fileName;
+            $filePath = 'pyra-public/lesson_resources/' . $fileName;
 
             $file->move($basePath, $fileName);
 
@@ -150,7 +150,7 @@ class LessonResourceController extends Controller
             ->first();
 
         $zipFileName = $lesson->chapter->material->title . '_' . $lesson->chapter->unit->title . '_' . $lesson->chapter->title . '_' . $lesson->title . '_resources.zip';
-        $zipPath = public_path('lesson_resources/' . $zipFileName);
+        $zipPath = public_path('pyra-public/lesson_resources/' . $zipFileName);
 
         $zip = new ZipArchive;
         if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {

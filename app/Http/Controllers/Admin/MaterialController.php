@@ -180,7 +180,7 @@ class MaterialController extends Controller
         }
         // Handle image upload or existing image
         $imagePath = $request->hasFile('image')
-            ? $request->file('image')->store('materials', 'public')
+            ? $request->file('image')->store('materials', 's3')
             : $request->existing_image;
 
         // Create new material
@@ -205,8 +205,8 @@ class MaterialController extends Controller
         }
 
         if ($file->getClientOriginalExtension() === 'zip') {
-            $storedPath = $file->store($storageFolder, 'public');
-            $extractPath = storage_path('app/public/' . $storageFolder . '/' . pathinfo($storedPath, PATHINFO_FILENAME));
+            $storedPath = $file->store($storageFolder, 's3');
+            $extractPath = storage_path('app/temp/' . $storageFolder . '/' . pathinfo($storedPath, PATHINFO_FILENAME));
 
             // Ensure that the directory has write permissions
             if (!is_writable(dirname($extractPath))) {
@@ -214,7 +214,7 @@ class MaterialController extends Controller
             }
 
             $zip = new \ZipArchive;
-            if ($zip->open(storage_path('app/public/' . $storedPath)) === TRUE) {
+            if ($zip->open(storage_path('app/temp/' . $storedPath)) === TRUE) {
                 if (!$zip->extractTo($extractPath)) {
                     $zip->close();
                     return false; // Return false if extraction fails
@@ -232,7 +232,7 @@ class MaterialController extends Controller
                 return false; // Return false if unable to open ZIP file
             }
         } else {
-            return $file->store($storageFolder, 'public'); // Return the stored path if not a zip file
+            return $file->store($storageFolder, 's3'); // Return the stored path if not a zip file
         }
     }
 

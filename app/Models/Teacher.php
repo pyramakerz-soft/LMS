@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 
 
@@ -37,8 +38,12 @@ class Teacher extends Authenticatable
     {
         return $this->belongsToMany(Group::class, 'teacher_classes', 'teacher_id', 'class_id');
     }
+    // public function getImageAttribute($val)
+    // {
+    //     return ($val !== null) ? asset($val) : "";
+    // }
     public function getImageAttribute($val)
-    {
-        return ($val !== null) ? asset($val) : "";
+     {
+             return $val ? Storage::disk('s3')->url("pyra-public/$val") : "";
     }
 }
