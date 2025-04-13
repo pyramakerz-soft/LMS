@@ -11,6 +11,7 @@
         ['label' => 'Ticket', 'icon' => 'fa-solid fa-ticket', 'route' => route('teacher.tickets.index')],
 
         ['label' => 'Chat', 'icon' => 'fa-solid fa-message', 'route' => route('chat.all')],
+        
     ];
 
 @endphp
