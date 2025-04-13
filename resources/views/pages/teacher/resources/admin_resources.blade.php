@@ -66,8 +66,14 @@
                         <h5>{{ $res->title }}</h5>
                         <span class="resource-type">{{ strtoupper($res->type) }}</span>
                         <p><strong>Lesson:</strong> {{ $res->lesson->title ?? 'N/A' }}</p>
-                        <a href="{{ asset($res->path) }}" target="_blank"
-                            class="btn btn-sm btn-outline-primary mt-2">View</a>
+
+                        @if (strtoupper($res->type) == 'ZIP')
+                            <a href="{{ asset($res->path) }}" target="_blank"
+                                class="btn btn-sm btn-outline-primary mt-2">Download</a>
+                        @else
+                            <a href="{{ asset($res->path) }}" target="_blank"
+                                class="btn btn-sm btn-outline-primary mt-2">View</a>
+                        @endif
                     </div>
                 </div>
             @empty
@@ -83,10 +89,16 @@
                 <div class="col-md-3">
                     <div class="resource-card">
                         <h5>{{ $res->title }}</h5>
+
                         <span class="resource-type">{{ strtoupper($res->type) }}</span>
                         <p><strong>Theme:</strong> {{ $res->material->title ?? 'N/A' }}</p>
-                        <a href="{{ asset($res->path) }}" target="_blank"
-                            class="btn btn-sm btn-outline-primary mt-2">View</a>
+                        @if (strtoupper($res->type) == 'ZIP')
+                            <a href="{{ asset($res->path) }}" target="_blank"
+                                class="btn btn-sm btn-outline-primary mt-2">Download</a>
+                        @else
+                            <a href="{{ asset($res->path) }}" target="_blank"
+                                class="btn btn-sm btn-outline-primary mt-2">View</a>
+                        @endif
                     </div>
                 </div>
             @empty
