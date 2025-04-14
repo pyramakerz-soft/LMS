@@ -35,8 +35,6 @@ phases:
       - cp /tmp/.env.backup .env
       - echo "Running frontend build with Vite..."
       - npm run build
-      - echo "Optimizing Laravel..."
-      - php artisan optimize
 
 artifacts:
   files:
