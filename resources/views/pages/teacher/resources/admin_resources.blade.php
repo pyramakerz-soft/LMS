@@ -17,6 +17,8 @@
             margin-bottom: 20px;
             background-color: #fff;
             transition: 0.3s;
+            cursor: pointer;
+
         }
 
         .resource-card:hover {
@@ -31,12 +33,17 @@
         }
 
         .resource-type {
-            padding: 2px 6px;
+            margin-top: 4px;
+            display: inline-block;
+            background-color: #f1f1f1;
+            color: #333;
+            padding: 3px 8px;
             font-size: 12px;
             border-radius: 4px;
-            background-color: #eee;
-            display: inline-block;
-            margin-top: 5px;
+        }
+
+        span.title {
+            color: #f97233;
         }
     </style>
 @endsection
@@ -56,24 +63,30 @@
     @include('components.profile')
 
     <div class="container mt-4">
-        {{-- <h2 class="mb-4"> Resources</h2> --}}
-
         <h4>Lesson Resources</h4>
         <div class="row">
-            @forelse ($lessonResources as $res)
-                <div class="col-md-3">
-                    <div class="resource-card">
-                        <h5>{{ $res->title }}</h5>
-                        <span class="resource-type">{{ strtoupper($res->type) }}</span>
-                        <p><strong>Lesson:</strong> {{ $res->lesson->title ?? 'N/A' }}</p>
-
-                        @if (strtoupper($res->type) == 'ZIP')
-                            <a href="{{ asset($res->path) }}" target="_blank"
-                                class="btn btn-sm btn-outline-primary mt-2">Download</a>
-                        @else
-                            <a href="{{ asset($res->path) }}" target="_blank"
-                                class="btn btn-sm btn-outline-primary mt-2">View</a>
-                        @endif
+            @forelse ($groupedLessons as $lessonId => $resources)
+                <div class="col-md-4 mb-4">
+                    <div class="resource-card" onclick="toggleDetails('lesson-{{ $lessonId }}')">
+                        <h5><strong>Lesson:</strong>
+                            <span class="title">
+                                {{ $resources->first()->lesson->title ?? 'N/A' }}
+                            </span>
+                        </h5>
+                        <ul class="mt-2 p-0" id="lesson-{{ $lessonId }}" style="display: none;">
+                            @foreach ($resources as $res)
+                                <li class="d-flex justify-content-between align-items-center mb-2">
+                                    <div>
+                                        <div class="fw-bold">{{ $res->title }}</div>
+                                        <div class="resource-type">{{ strtoupper($res->type) }}</div>
+                                    </div>
+                                    <a href="{{ asset($res->path) }}" target="_blank"
+                                        class="btn btn-sm btn-outline-primary ms-3">
+                                        {{ strtoupper($res->type) === 'ZIP' ? 'Download' : 'View' }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             @empty
@@ -85,20 +98,29 @@
 
         <h4>Theme Resources</h4>
         <div class="row">
-            @forelse ($themeResources as $res)
-                <div class="col-md-3">
-                    <div class="resource-card">
-                        <h5>{{ $res->title }}</h5>
+            @forelse ($groupedThemes as $themeId => $resources)
+                <div class="col-md-4 mb-4">
+                    <div class="resource-card" onclick="toggleDetails('theme-{{ $themeId }}')">
+                        <h5><strong>Theme:</strong>
+                            <span class="title">
+                                {{ $resources->first()->material->title ?? 'N/A' }}
 
-                        <span class="resource-type">{{ strtoupper($res->type) }}</span>
-                        <p><strong>Theme:</strong> {{ $res->material->title ?? 'N/A' }}</p>
-                        @if (strtoupper($res->type) == 'ZIP')
-                            <a href="{{ asset($res->path) }}" target="_blank"
-                                class="btn btn-sm btn-outline-primary mt-2">Download</a>
-                        @else
-                            <a href="{{ asset($res->path) }}" target="_blank"
-                                class="btn btn-sm btn-outline-primary mt-2">View</a>
-                        @endif
+                            </span>
+                        </h5>
+                        <ul class="mt-2 p-0" id="theme-{{ $themeId }}" style="display: none;">
+                            @foreach ($resources as $res)
+                                <li class="d-flex justify-content-between align-items-center mb-2">
+                                    <div>
+                                        <div class="fw-bold">{{ $res->title }}</div>
+                                        <div class="resource-type">{{ strtoupper($res->type) }}</div>
+                                    </div>
+                                    <a href="{{ asset($res->path) }}" target="_blank"
+                                        class="btn btn-sm btn-outline-primary ms-3">
+                                        {{ strtoupper($res->type) === 'ZIP' ? 'Download' : 'View' }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             @empty
@@ -106,4 +128,16 @@
             @endforelse
         </div>
     </div>
+@endsection
+@section('page_js')
+    <script>
+        function toggleDetails(id) {
+            const el = document.getElementById(id);
+            if (el.style.display === 'none') {
+                el.style.display = 'block';
+            } else {
+                el.style.display = 'none';
+            }
+        }
+    </script>
 @endsection
