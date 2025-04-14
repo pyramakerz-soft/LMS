@@ -2,25 +2,31 @@
 
 echo "[POSTDEPLOY] Ensuring .env is available..."
 
-# Create .env from .env.prod inside /var/app/current
-if [ ! -f /var/app/current/.env ]; then
-    echo "[POSTDEPLOY] Copying .env.prod to .env in current directory..."
-    cp /var/app/current/.env.prod /var/app/current/.env
+cd /var/app/current
+
+# Copy .env.prod to .env if it doesn't exist
+if [ ! -f .env ]; then
+    echo "[POSTDEPLOY] Copying .env.prod to .env..."
+    cp .env.prod .env
 else
     echo "[POSTDEPLOY] .env already exists."
 fi
 
-echo "[POSTDEPLOY] Running Laravel tasks..."
-
-cd /var/app/current
-
-# Permissions just in case
+# Fix permissions for Laravel
 chmod -R 775 storage bootstrap/cache
 
+# Generate APP_KEY only if not already set
+if grep -q "APP_KEY=" .env && grep -q "^APP_KEY=$" .env; then
+    echo "[POSTDEPLOY] Generating new APP_KEY..."
+    php artisan key:generate --force
+else
+    echo "[POSTDEPLOY] APP_KEY already exists, skipping key:generate."
+fi
+
+# Laravel maintenance tasks
 php artisan config:clear
 php artisan migrate --force
 php artisan db:seed --force
 php artisan optimize
-php artisan key:generate
 
-echo "[POSTDEPLOY] Done."
+echo "[POSTDEPLOY] Deployment tasks completed."
