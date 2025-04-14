@@ -29,6 +29,10 @@ artifacts:
   files:
     - '**/*'
     - .ebextensions/**
+    - .platform/**
+    - .env.prod
+    - vendor/**
+    - bootstrap/cache/**
   name: build-$(date +%Y-%m-%dT%H-%M-%S).zip
 
 proxy:
