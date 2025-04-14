@@ -1,0 +1,52 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      php: 8.2
+      nodejs: 18.x
+    commands:
+      - echo "Installing system dependencies..."
+      - dnf install -y mariadb105 unzip
+      - echo "Installing Composer..."
+      - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+      - export HOME=/root
+
+  pre_build:
+    commands:
+      - echo "Preparing environment..."
+      - pwd
+      - ls -la
+      - echo "Copying .env.prod to .env"
+      - cp .env.prod .env
+      - cp .env.prod /tmp/.env.backup # Backup .env for reuse in build phase
+      - echo "Validating DB env variables:"
+      - cat .env | grep DB_ || echo "DB env vars not found!"
+      - echo "Running Composer install..."
+      - composer install --no-interaction --prefer-dist --optimize-autoloader
+      - echo "Installing npm packages..."
+      - npm install
+      - php artisan config:clear
+      - php artisan cache:clear
+
+  build:
+    commands:
+      - echo "Restoring .env from backup..."
+      - cp /tmp/.env.backup .env
+      - echo "Running frontend build with Vite..."
+      - npm run build
+      - echo "Running Laravel migrations..."
+      - php artisan migrate --force
+      - echo "Running Laravel seeders..."
+      - php artisan db:seed --force
+      - echo "Optimizing Laravel..."
+      - php artisan optimize
+
+artifacts:
+  files:
+    - '**/*'
+  name: build-$(date +%Y-%m-%dT%H-%M-%S).zip
+
+proxy:
+  upload-artifacts: yes
+  logs: yes
