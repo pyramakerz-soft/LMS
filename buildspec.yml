@@ -9,8 +9,8 @@ phases:
       - echo "Installing system dependencies..."
       - dnf install -y mariadb105 unzip
       - echo "Installing Composer..."
-      - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
       - export HOME=/root
+      - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
   pre_build:
     commands:
