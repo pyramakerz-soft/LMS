@@ -19,7 +19,6 @@ phases:
       - npm install
       - php artisan config:clear
       - php artisan cache:clear
-      - php artisan key:generate
       - composer update
 
   build:
