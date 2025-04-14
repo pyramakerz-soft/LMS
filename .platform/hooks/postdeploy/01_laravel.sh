@@ -21,5 +21,6 @@ php artisan config:clear
 php artisan migrate --force
 php artisan db:seed --force
 php artisan optimize
+php artisan key:generate
 
 echo "[POSTDEPLOY] Done."
