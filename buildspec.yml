@@ -6,34 +6,22 @@ phases:
       php: 8.2
       nodejs: 18.x
     commands:
-      - echo "Installing system dependencies..."
+      - echo "Installing dependencies..."
       - dnf install -y mariadb105 unzip
-      - echo "Installing Composer..."
-      - export HOME=/root
       - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
   pre_build:
     commands:
-      - echo "Preparing environment..."
-      - pwd
-      - ls -la
-      - echo "Copying .env.prod to .env"
-      - cp .env.prod .env
-      - cp .env.prod /tmp/.env.backup # Backup .env for reuse in build phase
-      - echo "Validating DB env variables:"
-      - cat .env | grep DB_ || echo "DB env vars not found!"
-      - echo "Running Composer install..."
+      - echo "Installing Composer packages..."
       - composer install --no-interaction --prefer-dist --optimize-autoloader
-      - echo "Installing npm packages..."
+      - echo "Installing NPM packages..."
       - npm install
       - php artisan config:clear
       - php artisan cache:clear
 
   build:
     commands:
-      - echo "Restoring .env from backup..."
-      - cp /tmp/.env.backup .env
-      - echo "Running frontend build with Vite..."
+      - echo "Building front-end with Vite..."
       - npm run build
 
 artifacts:
