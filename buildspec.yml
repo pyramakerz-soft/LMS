@@ -28,6 +28,7 @@ phases:
 artifacts:
   files:
     - '**/*'
+    - .ebextensions/**
   name: build-$(date +%Y-%m-%dT%H-%M-%S).zip
 
 proxy:
