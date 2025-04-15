@@ -11,8 +11,15 @@ if [ ! -f .env ]; then
 else
     echo "[POSTDEPLOY] .env already exists."
 fi
+# Set correct ownership
+sudo chown -R webapp:webapp storage bootstrap/cache
+
+# Ensure log file and required directories exist
+mkdir -p storage/logs
+touch storage/logs/laravel.log
 
 # Fix permissions for Laravel
+chmod -R 775 storage
 chmod -R 775 storage bootstrap/cache
 
 # Generate APP_KEY only if not already set
