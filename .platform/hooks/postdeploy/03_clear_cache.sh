@@ -2,7 +2,7 @@
 
 echo "[POSTDEPLOY] Starting Laravel cache clear script..."
 
-cd /var/app/current || {
+cd /var/www/html || {
   echo "[POSTDEPLOY] Failed to cd into /var/app/current"
   exit 1
 }
