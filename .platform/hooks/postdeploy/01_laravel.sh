@@ -23,10 +23,15 @@ else
     echo "[POSTDEPLOY] APP_KEY already exists, skipping key:generate."
 fi
 
-# Laravel maintenance tasks
+
+# Run Laravel optimization commands
 php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan optimize
+
+# Run migrations and seed database
 php artisan migrate --force
 php artisan db:seed --force
-php artisan optimize
 
 echo "[POSTDEPLOY] Deployment tasks completed."
