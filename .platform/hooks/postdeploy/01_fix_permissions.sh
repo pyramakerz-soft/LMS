@@ -1,20 +1,20 @@
 #!/bin/bash
 
-echo "[EB] Fixing Laravel file permissions..."
+echo "[POSTDEPLOY] Fixing Laravel permissions..."
 
-cd /var/app/current
+cd /var/app/current || exit 1
 
-# Set correct ownership
+# Set correct ownership for all files (important)
 sudo chown -R webapp:webapp .
 
-# Set directory permissions
-sudo find . -type d -exec chmod 755 {} \;
+# Make sure directories are executable
+find . -type d -exec chmod 755 {} \;
 
-# Set file permissions
-sudo find . -type f -exec chmod 644 {} \;
+# Make sure files are readable
+find . -type f -exec chmod 644 {} \;
 
-# Laravel storage and cache should be writable
-sudo chmod -R 775 storage
-sudo chmod -R 775 bootstrap/cache
+# Laravel storage & cache must be writable
+chmod -R 775 storage
+chmod -R 775 bootstrap/cache
 
-echo "[EB] Permissions fixed."
+echo "[POSTDEPLOY] Permissions fixed."
