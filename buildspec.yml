@@ -29,8 +29,8 @@ phases:
 artifacts:
   files:
     - '**/*'
-    - .ebextensions/**
-    - .platform/**
+    - .ebextensions/**/*
+    - .platform/**/*
     - .env.prod
     - vendor/**
     - bootstrap/cache/**
