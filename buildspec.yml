@@ -16,6 +16,7 @@ phases:
       - echo "Installing Composer packages..."
       - composer install --no-interaction --prefer-dist --optimize-autoloader
       - echo "Installing NPM packages..."
+      - rm -rf public/build
       - npm install
       - php artisan config:clear
       - php artisan cache:clear
@@ -29,6 +30,7 @@ phases:
 artifacts:
   files:
     - '**/*'
+    - public/build/**/*
     - .ebextensions/**/*
     - .platform/**/*
     - .env.prod
