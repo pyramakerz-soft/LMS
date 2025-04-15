@@ -19,9 +19,11 @@ mkdir -p storage/logs
 touch storage/logs/laravel.log
 
 # Fix permissions for Laravel
-chmod -R 775 storage
+chmod -R 777 storage
 chmod -R 775 storage bootstrap/cache
-
+sudo yum install npm -y
+npm install
+npm run build
 # Generate APP_KEY only if not already set
 if grep -q "APP_KEY=" .env && grep -q "^APP_KEY=$" .env; then
     echo "[POSTDEPLOY] Generating new APP_KEY..."
