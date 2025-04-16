@@ -14,7 +14,7 @@ phases:
   pre_build:
     commands:
       - echo "Installing Composer packages..."
-      - composer install --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-req=ext-zip
+      - composer install --no-interaction --prefer-dist --optimize-autoloader
       - echo "Installing NPM packages..."
       - rm -rf public/build
       - npm install
