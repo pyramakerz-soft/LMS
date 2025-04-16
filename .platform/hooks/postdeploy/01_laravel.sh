@@ -20,8 +20,8 @@ touch storage/logs/laravel.log
 
 # Fix permissions for Laravel
 chmod -R 777 storage
-chmod -R 775 storage bootstrap/cache
-chmod 777 /var/app/current/storage/logs/laravel.log
+chmod -R 777 bootstrap/cache
+chmod 777 storage/logs/laravel.log
 sudo yum install npm -y
 npm install
 npm run build
