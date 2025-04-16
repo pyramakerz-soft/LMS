@@ -383,10 +383,6 @@ Route::get('/view_student_grade', function () {
 })->name('teacher.student.grade');
 
 
-Route::get('/view_student_gradessss', function () {
-    return view('components.GradeTableForOneStudent');
-})->name('teacher.student.grade');
-
 
 Route::get('/Show_Assignment', function () {
     return view('pages.teacher.Assignment.details');
