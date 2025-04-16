@@ -14,7 +14,7 @@ class UnitController extends Controller
      */
     public function index()
     {
-        $units = Unit::with('material')->get(); // Get all units with their associated materials
+        $units = Unit::with('material')->paginate(20);
         return view('admin.units.index', compact('units'));
     }
 

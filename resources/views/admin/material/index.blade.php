@@ -92,6 +92,7 @@
 
                         </table>
                     </div>
+                    {{ $materials->appends(request()->input())->links('pagination::bootstrap-5') }}
                     <!-- End of scrollable table container -->
 
                 </div>
