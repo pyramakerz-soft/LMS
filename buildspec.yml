@@ -4,23 +4,19 @@ phases:
   install:
     runtime-versions:
       php: 8.2
-      nodejs: 18.x
+      nodejs: 18
     commands:
-      - echo "Installing dependencies..."
+      - echo "Installing OS & PHP dependencies..."
       - dnf install -y mariadb105 unzip php-zip php-cli php-common php-mbstring php-xml
-      - export HOME=/root
       - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
   pre_build:
     commands:
-      - echo "Installing Composer packages..."
+      - echo "Installing Composer dependencies..."
       - composer install --no-interaction --prefer-dist --optimize-autoloader
       - echo "Installing NPM packages..."
       - rm -rf public/build
       - npm install
-      - php artisan config:clear
-      - php artisan cache:clear
-      - composer update
 
   build:
     commands:
@@ -36,7 +32,6 @@ artifacts:
     - .env.prod
     - vendor/**
     - bootstrap/cache/**
-  name: build-$(date +%Y-%m-%dT%H-%M-%S).zip
 
 proxy:
   upload-artifacts: yes
