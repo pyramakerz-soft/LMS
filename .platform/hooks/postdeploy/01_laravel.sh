@@ -26,7 +26,7 @@ chmod 777 storage/logs/laravel.log
 
 # Install required packages including PHP Zip extension
 sudo yum install -y php-zip npm unzip
-
+php composer.phar require league/flysystem-aws-s3-v3 "^3.0" --with-all-dependencies
 # Install Node and Composer dependencies
 npm install
 npm run build
