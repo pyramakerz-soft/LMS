@@ -7,7 +7,7 @@ phases:
       nodejs: 18.x
     commands:
       - echo "Installing dependencies..."
-      - dnf install -y mariadb105 unzip
+      - dnf install -y mariadb105 unzip php-zip php-cli php-common php-mbstring php-xml
       - export HOME=/root
       - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
