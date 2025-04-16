@@ -288,7 +288,7 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::post('/tickets', [App\Http\Controllers\Teacher\TicketController::class, 'store'])->name('tickets.store');
 
     Route::get('show-assignments/{id}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'showAssignments'])->name('assignments.showAssignments');
-    Route::get('assignments/create/{stageId?}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'create'])->name('assignments.create');
+    Route::get('assignments/create/{stageId?}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'create'])->name('assignments.create_using_stage');
     Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
 
     Route::get('teacher/api/stages/{stageId}/classes', [\App\Http\Controllers\Teacher\AssignmentController::class, 'getClassesByStage'])
