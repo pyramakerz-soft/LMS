@@ -23,16 +23,6 @@ class AdminSeeder extends Seeder
             'role' => 'super_admin',
             'school_id' => null, // Update as needed
         ]);
-    }
-
-         if (!Admin::where('email', 'school@admin.com')->exists()) {
-        Admin::create([
-            'name' => 'School Admin',
-            'email' => 'school@admin.com',
-            'password' => Hash::make('123456789'),
-            'role' => 'school_admin',
-            'school_id' => 1, // Update as needed
-        ]);
-    }
+ }
     }
 }
