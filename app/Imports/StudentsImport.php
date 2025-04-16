@@ -33,10 +33,7 @@ class StudentsImport implements ToModel, WithHeadingRow, SkipsOnFailure
         }
         $rawName = $row['asm_altalb_ballgh_alanglyzy'];
         $username = str_replace(' ', '_', preg_replace('/^=IFERROR\(.*?,\"(.*?)\"\)$/', '$1', $rawName));
-        // $existingStudent = Student::where('username', $username)->first();
-        $existingStudent = Student::where('username', $username)
-            ->where('class_id', $this->class->id)
-            ->first();
+        $existingStudent = Student::where('username', $username)->first();
 
         // if ($existingStudent) {
         //     if ($existingStudent->class_id) {
