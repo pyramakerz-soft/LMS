@@ -28,7 +28,6 @@ class TeacherDashboardController extends Controller
     {
         $teacher = Auth::guard('teacher')->user();
 
-
         $stage = Stage::where('id', $stageId)
             ->whereHas('teachers', function ($query) use ($teacher) {
                 $query->where('teacher_id', $teacher->id);
@@ -36,7 +35,13 @@ class TeacherDashboardController extends Controller
             ->whereHas('schools', function ($query) use ($teacher) {
                 $query->where('school_id', $teacher->school_id);
             })
-            ->with('materials')
+            ->with([
+                'materials' => function ($query) use ($teacher) {
+                    $query->whereHas('schools', function ($q) use ($teacher) {
+                        $q->where('schools.id', $teacher->school_id);
+                    });
+                }
+            ])
             ->firstOrFail();
 
         return view('pages.teacher.teacherTheme', compact('stage'));
