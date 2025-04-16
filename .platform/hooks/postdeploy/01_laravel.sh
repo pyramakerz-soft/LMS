@@ -11,6 +11,7 @@ if [ ! -f .env ]; then
 else
     echo "[POSTDEPLOY] .env already exists."
 fi
+
 # Set correct ownership
 sudo chown -R webapp:webapp storage bootstrap/cache
 
@@ -22,9 +23,14 @@ touch storage/logs/laravel.log
 chmod -R 777 storage
 chmod -R 777 bootstrap/cache
 chmod 777 storage/logs/laravel.log
-sudo yum install npm -y
+
+# Install required packages including PHP Zip extension
+sudo yum install -y php-zip npm unzip
+
+# Install Node and Composer dependencies
 npm install
 npm run build
+
 # Generate APP_KEY only if not already set
 if grep -q "APP_KEY=" .env && grep -q "^APP_KEY=$" .env; then
     echo "[POSTDEPLOY] Generating new APP_KEY..."
@@ -33,14 +39,13 @@ else
     echo "[POSTDEPLOY] APP_KEY already exists, skipping key:generate."
 fi
 
-
-# Run Laravel optimization commands
+# Laravel optimize and clear commands
 php artisan config:clear
 php artisan route:clear
 php artisan view:clear
 php artisan optimize
 
-# Run migrations and seed database
+# Migrate and seed
 php artisan migrate --force
 php artisan db:seed --force
 
