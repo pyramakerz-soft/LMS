@@ -14,7 +14,7 @@ class Ticket extends Model
     {
         return $this->belongsTo(Teacher::class);
     }
-    public function getImageAttribute($val)
+    public function getAttachmentAttribute($val)
     {
         return $val ? Storage::disk('s3')->url("pyra-public/$val") : "";
     }
