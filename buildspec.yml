@@ -15,13 +15,12 @@ phases:
     commands:
       - |
         echo "[Slack] Sending pre_build notification..."
-        SLACK_WEBHOOK="https://hooks.slack.com/services/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"
+        SLACK_WEBHOOK="https://hooks.slack.com/services/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"
         BUILD_ID=$CODEBUILD_BUILD_ID
         PROJECT_NAME=$CODEBUILD_PROJECT_NAME
         BRANCH=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | awk -F/ '{print $NF}')
         COMMIT_ID=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)
         AUTHOR=$(git log -1 --pretty=format:'%an <%ae>' || echo "N/A")
-
         SLACK_MESSAGE="{
           \"text\": \":hourglass_flowing_sand: *Build Started* for *$PROJECT_NAME*\",
           \"blocks\": [
@@ -53,7 +52,7 @@ phases:
       - echo "[Slack] Preparing build notification..."
       - |
         START_TIME=$(date +%s)
-        SLACK_WEBHOOK="https://hooks.slack.com/services/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"
+        SLACK_WEBHOOK="https://hooks.slack.com/services/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"
         BUILD_ID=$CODEBUILD_BUILD_ID
         PROJECT_NAME=$CODEBUILD_PROJECT_NAME
         BRANCH=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | awk -F/ '{print $NF}')
