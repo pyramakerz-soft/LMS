@@ -27,9 +27,15 @@ phases:
         COMMIT_ID=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)
         LOG_URL="https://$AWS_REGION.console.aws.amazon.com/codesuite/codebuild/projects/$PROJECT_NAME/build/$BUILD_ID/"
 
-        curl -X POST -H 'Content-type: application/json' \
-        --data "{\"text\":\"🟡 Build started for *$PROJECT_NAME* on branch *$BRANCH* (commit: $COMMIT_ID)\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"🟡 *Build Started!*\n*Branch:* $BRANCH\n*Commit:* $COMMIT_ID\n<${LOG_URL}|View Logs>\"}}]}" \
-        $SLACK_WEBHOOK
+        PAYLOAD=$(echo -e "{
+          \"text\": \"🟡 Build started for *$PROJECT_NAME*\",
+          \"blocks\": [
+            {\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \"🟡 *Build Started!*\n*Branch:* $BRANCH\n*Commit:* $COMMIT_ID\n<${LOG_URL}|View Logs>\"}}
+          ]
+        }")
+
+        echo "[Slack Debug] Payload: $PAYLOAD"
+        curl -X POST -H "Content-type: application/json" --data "$PAYLOAD" "$SLACK_WEBHOOK"
 
       - echo "Installing Composer dependencies..."
       - composer require league/flysystem-aws-s3-v3 "^3.0" --with-all-dependencies || echo "Composer require failed" >> /tmp/error.log
@@ -68,14 +74,18 @@ phases:
           --query "Status" \
           --output text 2>/dev/null || echo "Unknown")
 
-        curl -X POST -H 'Content-type: application/json' \
-        --data "{\"text\":\"🚀 Build $STATUS for *$PROJECT_NAME*\",\"blocks\":[
-          {\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"🚀 *Build $STATUS!*\"}},
-          {\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*Branch:* $BRANCH\n*Commit:* $COMMIT_ID\n*Environment Health:* $EB_HEALTH\"}},
-          {\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*Logs:* <${LOG_URL}|View Build Logs>\"}},
-          {\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*Errors:*\\n\`\`\`${ERROR_LOG}\`\`\`\"}}
-        ]}" \
-        $SLACK_WEBHOOK
+        PAYLOAD=$(echo -e "{
+          \"text\": \"🚀 Build $STATUS for *$PROJECT_NAME*\",
+          \"blocks\": [
+            {\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \"🚀 *Build $STATUS!*\"}},
+            {\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \"*Branch:* $BRANCH\n*Commit:* $COMMIT_ID\n*Environment Health:* $EB_HEALTH\"}},
+            {\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \"*Logs:* <${LOG_URL}|View Build Logs>\"}},
+            {\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \"*Errors:*\\n\`\`\`${ERROR_LOG}\`\`\`\"}}
+          ]
+        }")
+
+        echo "[Slack Debug] Payload: $PAYLOAD"
+        curl -X POST -H "Content-type: application/json" --data "$PAYLOAD" "$SLACK_WEBHOOK"
 
 artifacts:
   files:
