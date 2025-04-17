@@ -13,7 +13,26 @@ phases:
 
   pre_build:
     commands:
-      - echo "[Slack] Starting pre_build..." || echo "Error during pre_build" >> /tmp/error.log
+      - |
+        echo "[Slack] Sending pre_build notification..."
+        SLACK_WEBHOOK="https://hooks.slack.com/services/..."
+        BUILD_ID=$CODEBUILD_BUILD_ID
+        PROJECT_NAME=$CODEBUILD_PROJECT_NAME
+        BRANCH=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | awk -F/ '{print $NF}')
+        COMMIT_ID=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)
+        AUTHOR=$(git log -1 --pretty=format:'%an <%ae>' || echo "N/A")
+
+        SLACK_MESSAGE="{
+          \"text\": \":hourglass_flowing_sand: *Build Started* for *$PROJECT_NAME*\",
+          \"blocks\": [
+            {\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \":hourglass_flowing_sand: *Build Started!*\"}},
+            {\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \"*Branch:* $BRANCH\\n*Commit:* $COMMIT_ID\\n*Author:* $AUTHOR\"}},
+            {\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \"*Logs:* <https://$AWS_REGION.console.aws.amazon.com/codesuite/codebuild/projects/$PROJECT_NAME/build/$BUILD_ID/|View Logs>\"}}
+          ]
+        }"
+
+        echo "$SLACK_MESSAGE" | curl -X POST -H 'Content-type: application/json' --data-binary @- "$SLACK_WEBHOOK"
+
       - echo "Installing Composer dependencies..."
       - composer require league/flysystem-aws-s3-v3 "^3.0" --with-all-dependencies || echo "Composer require failed" >> /tmp/error.log
       - composer install --no-interaction --prefer-dist --optimize-autoloader || echo "Composer install failed" >> /tmp/error.log
@@ -32,21 +51,18 @@ phases:
   post_build:
     commands:
       - echo "[Slack] Preparing build notification..."
-      - START_TIME=$(date +%s)
-      - SLACK_WEBHOOK="https://hooks.slack.com/services/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"
-
-      # Metadata
-      - BUILD_ID=$CODEBUILD_BUILD_ID
-      - PROJECT_NAME=$CODEBUILD_PROJECT_NAME
-      - BRANCH=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | awk -F/ '{print $NF}')
-      - COMMIT_ID=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)
-      - END_TIME=$(date +%s)
-      - CODEBUILD_START_TIME=${CODEBUILD_START_TIME:-$START_TIME}
-      - DURATION=$((END_TIME - CODEBUILD_START_TIME))
-      - STATUS="SUCCESS"
-
-      # Detect errors
       - |
+        START_TIME=$(date +%s)
+        SLACK_WEBHOOK="https://hooks.slack.com/services/..."
+        BUILD_ID=$CODEBUILD_BUILD_ID
+        PROJECT_NAME=$CODEBUILD_PROJECT_NAME
+        BRANCH=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | awk -F/ '{print $NF}')
+        COMMIT_ID=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)
+        END_TIME=$(date +%s)
+        CODEBUILD_START_TIME=${CODEBUILD_START_TIME:-$START_TIME}
+        DURATION=$((END_TIME - CODEBUILD_START_TIME))
+        STATUS="SUCCESS"
+
         if [ -f /tmp/error.log ]; then
           STATUS="FAILED"
           ERROR_LOG=$(cat /tmp/error.log | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
@@ -54,12 +70,9 @@ phases:
           ERROR_LOG="No errors detected."
         fi
 
-      # Elastic Beanstalk Health (optional)
-      - EB_ENV_NAME="your-env-name-here"
-      - EB_HEALTH=$(aws elasticbeanstalk describe-environment-health --environment-name "$EB_ENV_NAME" --attribute-names "Status" "Color" --query "Status" --output text 2>/dev/null || echo "Unknown")
+        EB_ENV_NAME="your-env-name-here"
+        EB_HEALTH=$(aws elasticbeanstalk describe-environment-health --environment-name "$EB_ENV_NAME" --attribute-names "Status" "Color" --query "Status" --output text 2>/dev/null || echo "Unknown")
 
-      # Compose Slack Message
-      - |
         SLACK_MESSAGE="{
           \"text\": \":rocket: *$PROJECT_NAME* Build Notification\",
           \"blocks\": [
@@ -71,4 +84,18 @@ phases:
           ]
         }"
 
-      - echo "$SLACK_MESSAGE" | curl -X POST -H 'Content-type: application/json' --data-binary @- "$SLACK_WEBHOOK"
+        echo "$SLACK_MESSAGE" | curl -X POST -H 'Content-type: application/json' --data-binary @- "$SLACK_WEBHOOK"
+
+artifacts:
+  files:
+    - '**/*'
+    - public/build/**/*
+    - .ebextensions/**/*
+    - .platform/**/*
+    - .env.prod
+    - vendor/**
+    - bootstrap/cache/**
+
+proxy:
+  upload-artifacts: yes
+  logs: yes
