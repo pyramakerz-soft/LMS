@@ -31,8 +31,8 @@ class Unit extends Model
     //     return ($val !== null) ? asset( $val) : "";
     // }
     public function getImageAttribute($val)
-     {
-             return $val ? Storage::disk('s3')->url("pyra-public/$val") : "";
+    {
+        return $val ? Storage::disk('s3')->url("pyra-public/$val") : "";
     }
 
 }

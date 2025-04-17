@@ -288,7 +288,7 @@ Route::prefix('teacher')->middleware('auth:teacher')->group(function () {
     Route::post('/tickets', [App\Http\Controllers\Teacher\TicketController::class, 'store'])->name('tickets.store');
 
     Route::get('show-assignments/{id}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'showAssignments'])->name('assignments.showAssignments');
-    Route::get('assignments/create/{stageId?}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'create'])->name('assignments.create');
+    Route::get('assignments/create/{stageId?}', [\App\Http\Controllers\Teacher\AssignmentController::class, 'create'])->name('assignments.create-by-stage');
     Route::resource('assignments', \App\Http\Controllers\Teacher\AssignmentController::class);
 
     Route::get('teacher/api/stages/{stageId}/classes', [\App\Http\Controllers\Teacher\AssignmentController::class, 'getClassesByStage'])
@@ -383,9 +383,9 @@ Route::get('/view_student_grade', function () {
 })->name('teacher.student.grade');
 
 
-Route::get('/view_student_gradessss', function () {
-    return view('components.GradeTableForOneStudent');
-})->name('teacher.student.grade');
+// Route::get('/view_student_gradessss', function () {
+//     return view('components.GradeTableForOneStudent');
+// })->name('teacher.student.grade');
 
 
 Route::get('/Show_Assignment', function () {

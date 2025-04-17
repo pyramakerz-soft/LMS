@@ -47,7 +47,7 @@ class Stage extends Model
     // }
     public function getImageAttribute($val)
     {
-            return $val ? Storage::disk('s3')->url("pyra-public/$val") : "";
-   }
+        return $val ? Storage::disk('s3')->url("pyra-public/$val") : "";
+    }
 
 }
