@@ -23,20 +23,13 @@ phases:
       - |
         BUILD_ID="$CODEBUILD_BUILD_ID"
         PROJECT_NAME="$CODEBUILD_PROJECT_NAME"
-        BRANCH="$(echo $CODEBUILD_WEBHOOK_HEAD_REF | awk -F/ '{print $NF}')"
-        COMMIT_ID="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)"
-        SLACK_MESSAGE=$(cat <<EOM
-{
-  "text": ":hourglass_flowing_sand: Build started for *$PROJECT_NAME*",
-  "blocks": [
-    {"type": "section", "text": {"type": "mrkdwn", "text": ":hourglass_flowing_sand: *Build Started!*"}},
-    {"type": "section", "text": {"type": "mrkdwn", "text": "*Branch:* $BRANCH\\n*Commit:* $COMMIT_ID"}},
-    {"type": "section", "text": {"type": "mrkdwn", "text": "*Logs:* <https://$AWS_REGION.console.aws.amazon.com/codesuite/codebuild/projects/$PROJECT_NAME/build/$BUILD_ID/|View Logs>"}}
-  ]
-}
-EOM
-)
-        echo "$SLACK_MESSAGE" | curl -X POST -H 'Content-type: application/json' --data-binary @- "$SLACK_WEBHOOK"
+        BRANCH=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | awk -F/ '{print $NF}')
+        COMMIT_ID=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)
+        LOG_URL="https://$AWS_REGION.console.aws.amazon.com/codesuite/codebuild/projects/$PROJECT_NAME/build/$BUILD_ID/"
+
+        curl -X POST -H 'Content-type: application/json' \
+        --data "{\"text\":\"🟡 Build started for *$PROJECT_NAME* on branch *$BRANCH* (commit: $COMMIT_ID)\",\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"🟡 *Build Started!*\n*Branch:* $BRANCH\n*Commit:* $COMMIT_ID\n<${LOG_URL}|View Logs>\"}}]}" \
+        $SLACK_WEBHOOK
 
       - echo "Installing Composer dependencies..."
       - composer require league/flysystem-aws-s3-v3 "^3.0" --with-all-dependencies || echo "Composer require failed" >> /tmp/error.log
@@ -55,12 +48,13 @@ EOM
 
   post_build:
     commands:
-      - echo "[Slack] Sending build result..."
+      - echo "[Slack] Sending post_build result..."
       - |
         BUILD_ID="$CODEBUILD_BUILD_ID"
         PROJECT_NAME="$CODEBUILD_PROJECT_NAME"
-        BRANCH="$(echo $CODEBUILD_WEBHOOK_HEAD_REF | awk -F/ '{print $NF}')"
-        COMMIT_ID="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)"
+        BRANCH=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | awk -F/ '{print $NF}')
+        COMMIT_ID=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)
+        LOG_URL="https://$AWS_REGION.console.aws.amazon.com/codesuite/codebuild/projects/$PROJECT_NAME/build/$BUILD_ID/"
         STATUS="SUCCESS"
         if [ -f /tmp/error.log ]; then
           STATUS="FAILED"
@@ -68,20 +62,20 @@ EOM
         else
           ERROR_LOG="No errors detected."
         fi
-        EB_HEALTH=$(aws elasticbeanstalk describe-environment-health --environment-name "$EB_ENV_NAME" --attribute-names "Status" "Color" --query "Status" --output text 2>/dev/null || echo "Unknown")
-        SLACK_MESSAGE=$(cat <<EOM
-{
-  "text": ":rocket: *$PROJECT_NAME* Build Notification",
-  "blocks": [
-    {"type": "section", "text": {"type": "mrkdwn", "text": "*Build Status:* *$STATUS*"}},
-    {"type": "section", "text": {"type": "mrkdwn", "text": "*Branch:* $BRANCH\\n*Commit:* $COMMIT_ID\\n*Environment Health:* $EB_HEALTH"}},
-    {"type": "section", "text": {"type": "mrkdwn", "text": "*Logs:* <https://$AWS_REGION.console.aws.amazon.com/codesuite/codebuild/projects/$PROJECT_NAME/build/$BUILD_ID/|View Build Logs>"}},
-    {"type": "section", "text": {"type": "mrkdwn", "text": "*Errors:*\\n\`\`\`$ERROR_LOG\`\`\`"}}
-  ]
-}
-EOM
-)
-        echo "$SLACK_MESSAGE" | curl -X POST -H 'Content-type: application/json' --data-binary @- "$SLACK_WEBHOOK"
+        EB_HEALTH=$(aws elasticbeanstalk describe-environment-health \
+          --environment-name "$EB_ENV_NAME" \
+          --attribute-names "Status" "Color" \
+          --query "Status" \
+          --output text 2>/dev/null || echo "Unknown")
+
+        curl -X POST -H 'Content-type: application/json' \
+        --data "{\"text\":\"🚀 Build $STATUS for *$PROJECT_NAME*\",\"blocks\":[
+          {\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"🚀 *Build $STATUS!*\"}},
+          {\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*Branch:* $BRANCH\n*Commit:* $COMMIT_ID\n*Environment Health:* $EB_HEALTH\"}},
+          {\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*Logs:* <${LOG_URL}|View Build Logs>\"}},
+          {\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*Errors:*\\n\`\`\`${ERROR_LOG}\`\`\`\"}}
+        ]}" \
+        $SLACK_WEBHOOK
 
 artifacts:
   files:
