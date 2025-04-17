@@ -15,7 +15,7 @@ phases:
     commands:
       - |
         echo "[Slack] Sending pre_build notification..."
-        SLACK_WEBHOOK="https://hooks.slack.com/services/..."
+        SLACK_WEBHOOK="https://hooks.slack.com/services/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"
         BUILD_ID=$CODEBUILD_BUILD_ID
         PROJECT_NAME=$CODEBUILD_PROJECT_NAME
         BRANCH=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | awk -F/ '{print $NF}')
@@ -53,7 +53,7 @@ phases:
       - echo "[Slack] Preparing build notification..."
       - |
         START_TIME=$(date +%s)
-        SLACK_WEBHOOK="https://hooks.slack.com/services/..."
+        SLACK_WEBHOOK="https://hooks.slack.com/services/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"
         BUILD_ID=$CODEBUILD_BUILD_ID
         PROJECT_NAME=$CODEBUILD_PROJECT_NAME
         BRANCH=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | awk -F/ '{print $NF}')
