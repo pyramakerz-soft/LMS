@@ -16,7 +16,7 @@ class StageController extends Controller
      */
     public function index()
     {
-        $stages = Stage::all();
+        $stages = Stage::paginate(10);
         return view('admin.stages.index', compact('stages'));
     }
 

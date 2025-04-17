@@ -103,7 +103,7 @@
                             </tbody>
                         </table>
                     </div>
-
+                    {{ $lessons->appends(request()->input())->links('pagination::bootstrap-5') }}
                 </div>
             </main>
         </div>

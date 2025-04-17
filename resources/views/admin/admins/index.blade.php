@@ -24,6 +24,18 @@
                     @can('create school')
                         <a href="{{ route('admins.create') }}" class="btn btn-primary mb-3">Add School</a>
                     @endcan
+                    <form action="{{ route('admins.index') }}" method="get">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <input type="text" name="name" class="form-control" placeholder="Search by name"
+                                    value="{{ request('name') }}">
+                            </div>
+                            <div class="col-md-auto">
+                                <button type="submit" class="btn btn-primary">Filter</button>
+                                <a href="{{ route('admins.index') }}" class="btn btn-secondary">Reset</a>
+                            </div>
+                        </div>
+                    </form>
                     <div class="table-responsive" style="overflow-x: auto;">
                         <table class="table table-bordered">
                             <thead>

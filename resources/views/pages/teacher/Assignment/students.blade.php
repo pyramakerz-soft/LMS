@@ -28,8 +28,13 @@
             {{-- <span class="mx-2 text-[#D0D5DD]">/</span> --}}
             {{-- <a href="{{ route('assignments.index') }}" class="mx-2 cursor-pointer">Assignment</a> --}}
             <span class="mx-2 text-[#D0D5DD]">/</span>
-            <a href="#" class="mx-2 cursor-pointer">Students Assigned to {{ $assignment->title }}</a>
+            <a href="#" class="mx-2 cursor-pointer">Students Assigned to {{ $assignment->title }} </a>
+
+            {{-- <p>description: {{ $assignment->description }}</p> --}}
+            {{-- <p>Total marks : {{ $assignment->marks }}</p> --}}
         </div>
+        <p class="mt-5 text-[#667085]"><b class="text-[#000]"> Description:</b>
+            {{ $assignment->description }}</p>
     </div>
     <div class="p-3">
 
@@ -42,7 +47,7 @@
                 <table class="w-full table-auto bg-[#FFFFFF] text-center text-[#475467] text-lg md:text-xl">
                     <thead class="bg-[#F9FAFB] text-lg md:text-xl">
                         <tr>
-                            <th class="py-4 px-6">Student Name</th>
+                            <th>Student Name</th>
                             <th class="py-4 px-6">Submission Status</th>
                             <th class="py-4 px-6">Submission Date</th>
                             <th class="py-4 px-6">File</th>

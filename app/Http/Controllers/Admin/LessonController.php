@@ -36,7 +36,7 @@ class LessonController extends Controller
             });
         }
 
-        $lessons = $query->get();
+        $lessons = $query->paginate(30);
 
         return view('admin.lessons.index', compact('lessons', 'themes', 'units'));
         // $lessons = Lesson::with('chapter.material')->get();

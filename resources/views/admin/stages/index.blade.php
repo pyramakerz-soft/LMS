@@ -62,6 +62,7 @@
                             </tbody>
                         </table>
                     </div>
+                    {{ $stages->appends(request()->input())->links('pagination::bootstrap-5') }}
                 </div>
             </main>
 

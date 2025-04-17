@@ -54,10 +54,15 @@ class TeacherResources extends Controller
     }
     public function adminResources()
     {
-        $lessonResources = LessonResource::with('lesson')->get();
-        $themeResources = MaterialResource::with('material')->get();
+        $groupedLessons = LessonResource::with('lesson')
+            ->get()
+            ->groupBy('lesson_id');
 
-        return view('pages.teacher.resources.admin_resources', compact('lessonResources', 'themeResources'));
+        $groupedThemes = MaterialResource::with('material')
+            ->get()
+            ->groupBy('material_id');
+
+        return view('pages.teacher.resources.admin_resources', compact('groupedLessons', 'groupedThemes'));
     }
     public function create()
     {

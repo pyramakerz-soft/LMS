@@ -38,7 +38,7 @@ class AssignmentController extends Controller
         if ($userAuth) {
             // Fetch assignments filtered by stage ID
             $assignments = Assignment::where('teacher_id', $userAuth->id)
-                ->with(['school', 'lesson'])
+                ->with(['school', 'lesson.chapter.unit.material'])
                 ->whereHas('stages', function ($q) use ($id) {
                     $q->where('stage_id', $id);
                 })

@@ -32,9 +32,12 @@ class AdminController extends Controller
 
         return view('admin.dashboard', compact('totalSchools', 'totalTeachers', 'totalStudents'));
     }
-    public function index()
+    public function index(Request $request)
     {
-        $schools = School::paginate(10);
+        $schools = School::where('name', 'like', '%' . $request->input('name') . '%')->paginate(10);
+
+        // $schools = School::paginate(10);
+
         return view('admin.admins.index', compact('schools'));
     }
 

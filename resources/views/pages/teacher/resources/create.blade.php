@@ -113,4 +113,41 @@
             </div>
         </div>
     </div>
+@section('page_js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const fileInput = document.getElementById('file_path');
+            const urlInput = document.getElementById('video_url');
+
+            form.addEventListener('submit', function(e) {
+                const hasFile = fileInput.files.length > 0;
+                const hasURL = urlInput.value.trim() !== '';
+
+                if (!hasFile && !hasURL) {
+                    e.preventDefault();
+                    alert("Please upload a file or enter a video URL.");
+                }
+
+                if (hasFile && hasURL) {
+                    e.preventDefault();
+                    alert("Please fill only one: upload a file OR enter a video URL.");
+                }
+            });
+        });
+    </script>
+    <script>
+        const fileInput = document.getElementById('file_path');
+        const urlInput = document.getElementById('video_url');
+
+        fileInput.addEventListener('change', function() {
+            urlInput.disabled = fileInput.files.length > 0;
+        });
+
+        urlInput.addEventListener('input', function() {
+            fileInput.disabled = urlInput.value.trim() !== '';
+        });
+    </script>
+@endsection
+
 @endsection
