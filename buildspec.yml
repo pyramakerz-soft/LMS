@@ -1,5 +1,11 @@
 version: 0.2
 
+env:
+  variables:
+    SLACK_WEBHOOK: "https://hooks.slack.com/services/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"
+    AWS_REGION: "us-east-1"
+    EB_ENV_NAME: "SteamScoutsBeanstalkApplication-prod-env"
+
 phases:
   install:
     runtime-versions:
@@ -14,23 +20,23 @@ phases:
   pre_build:
     commands:
       - echo "[Slack] Sending pre_build notification..."
-      - export SLACK_WEBHOOK="https://hooks.slack.com/services/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"
-      - export BUILD_ID=$CODEBUILD_BUILD_ID
-      - export PROJECT_NAME=$CODEBUILD_PROJECT_NAME
-      - export BRANCH=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | awk -F/ '{print $NF}')
-      - export COMMIT_ID=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)
-      - export AWS_REGION=${AWS_REGION:-us-east-1}
       - |
-        cat <<EOF | curl -X POST -H 'Content-type: application/json' --data-binary @- "$SLACK_WEBHOOK"
-        {
-          "text": ":hourglass_flowing_sand: Build started for *$PROJECT_NAME*",
-          "blocks": [
-            {"type": "section", "text": {"type": "mrkdwn", "text": ":hourglass_flowing_sand: *Build Started!*"}},
-            {"type": "section", "text": {"type": "mrkdwn", "text": "*Branch:* $BRANCH\\n*Commit:* $COMMIT_ID"}},
-            {"type": "section", "text": {"type": "mrkdwn", "text": "*Logs:* <https://$AWS_REGION.console.aws.amazon.com/codesuite/codebuild/projects/$PROJECT_NAME/build/$BUILD_ID/|View Logs>"}}
-          ]
-        }
-        EOF
+        BUILD_ID="$CODEBUILD_BUILD_ID"
+        PROJECT_NAME="$CODEBUILD_PROJECT_NAME"
+        BRANCH="$(echo $CODEBUILD_WEBHOOK_HEAD_REF | awk -F/ '{print $NF}')"
+        COMMIT_ID="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)"
+        SLACK_MESSAGE=$(cat <<EOF
+{
+  "text": ":hourglass_flowing_sand: Build started for *$PROJECT_NAME*",
+  "blocks": [
+    {"type": "section", "text": {"type": "mrkdwn", "text": ":hourglass_flowing_sand: *Build Started!*"}},
+    {"type": "section", "text": {"type": "mrkdwn", "text": "*Branch:* $BRANCH\\n*Commit:* $COMMIT_ID"}},
+    {"type": "section", "text": {"type": "mrkdwn", "text": "*Logs:* <https://$AWS_REGION.console.aws.amazon.com/codesuite/codebuild/projects/$PROJECT_NAME/build/$BUILD_ID/|View Logs>"}}
+  ]
+}
+EOF
+)
+        echo "$SLACK_MESSAGE" | curl -X POST -H 'Content-type: application/json' --data-binary @- "$SLACK_WEBHOOK"
 
       - echo "Installing Composer dependencies..."
       - composer require league/flysystem-aws-s3-v3 "^3.0" --with-all-dependencies || echo "Composer require failed" >> /tmp/error.log
@@ -50,34 +56,32 @@ phases:
   post_build:
     commands:
       - echo "[Slack] Sending build result..."
-      - export SLACK_WEBHOOK="https://hooks.slack.com/services/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"
-      - export BUILD_ID=$CODEBUILD_BUILD_ID
-      - export PROJECT_NAME=$CODEBUILD_PROJECT_NAME
-      - export BRANCH=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | awk -F/ '{print $NF}')
-      - export COMMIT_ID=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)
-      - export AWS_REGION=${AWS_REGION:-us-east-1}
-      - export STATUS="SUCCESS"
-      - export EB_ENV_NAME="SteamScoutsBeanstalkApplication-prod-env"
-      - export EB_HEALTH=$(aws elasticbeanstalk describe-environment-health --environment-name "$EB_ENV_NAME" --attribute-names "Status" "Color" --query "Status" --output text 2>/dev/null || echo "Unknown")
       - |
+        BUILD_ID="$CODEBUILD_BUILD_ID"
+        PROJECT_NAME="$CODEBUILD_PROJECT_NAME"
+        BRANCH="$(echo $CODEBUILD_WEBHOOK_HEAD_REF | awk -F/ '{print $NF}')"
+        COMMIT_ID="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)"
+        STATUS="SUCCESS"
         if [ -f /tmp/error.log ]; then
           STATUS="FAILED"
           ERROR_LOG=$(cat /tmp/error.log | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
         else
           ERROR_LOG="No errors detected."
         fi
-
-        cat <<EOF | curl -X POST -H 'Content-type: application/json' --data-binary @- "$SLACK_WEBHOOK"
-        {
-          "text": ":rocket: *$PROJECT_NAME* Build Notification",
-          "blocks": [
-            {"type": "section", "text": {"type": "mrkdwn", "text": "*Build Status:* *$STATUS*"}},
-            {"type": "section", "text": {"type": "mrkdwn", "text": "*Branch:* $BRANCH\\n*Commit:* $COMMIT_ID\\n*Environment Health:* $EB_HEALTH"}},
-            {"type": "section", "text": {"type": "mrkdwn", "text": "*Logs:* <https://$AWS_REGION.console.aws.amazon.com/codesuite/codebuild/projects/$PROJECT_NAME/build/$BUILD_ID/|View Build Logs>"}},
-            {"type": "section", "text": {"type": "mrkdwn", "text": "*Errors:*\\n\`\`\`$ERROR_LOG\`\`\`"}}
-          ]
-        }
-        EOF
+        EB_HEALTH=$(aws elasticbeanstalk describe-environment-health --environment-name "$EB_ENV_NAME" --attribute-names "Status" "Color" --query "Status" --output text 2>/dev/null || echo "Unknown")
+        SLACK_MESSAGE=$(cat <<EOF
+{
+  "text": ":rocket: *$PROJECT_NAME* Build Notification",
+  "blocks": [
+    {"type": "section", "text": {"type": "mrkdwn", "text": "*Build Status:* *$STATUS*"}},
+    {"type": "section", "text": {"type": "mrkdwn", "text": "*Branch:* $BRANCH\\n*Commit:* $COMMIT_ID\\n*Environment Health:* $EB_HEALTH"}},
+    {"type": "section", "text": {"type": "mrkdwn", "text": "*Logs:* <https://$AWS_REGION.console.aws.amazon.com/codesuite/codebuild/projects/$PROJECT_NAME/build/$BUILD_ID/|View Build Logs>"}},
+    {"type": "section", "text": {"type": "mrkdwn", "text": "*Errors:*\\n\`\`\`$ERROR_LOG\`\`\`"}}
+  ]
+}
+EOF
+)
+        echo "$SLACK_MESSAGE" | curl -X POST -H 'Content-type: application/json' --data-binary @- "$SLACK_WEBHOOK"
 
 artifacts:
   files:
