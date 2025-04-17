@@ -156,7 +156,7 @@
                     document.getElementById('modal-description').textContent = ticket.description;
 
                     const attachment = ticket.attachment ?
-                        `{{ route('landing') }}/${ticket.attachment}` :
+                        `${ticket.attachment}` :
                         null;
 
                     const img = document.getElementById('modal-attachment');
