@@ -61,7 +61,7 @@
                                         </td>
                                         <td>
                                             @if ($ticket->attachment)
-                                                <a href="{{ asset('/' . $ticket->attachment) }}" target="_blank">View</a>
+                                                <a href="{{ asset($ticket->attachment) }}" target="_blank">View</a>
                                             @else
                                                 No file
                                             @endif
