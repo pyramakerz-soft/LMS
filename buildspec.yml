@@ -25,7 +25,7 @@ phases:
         PROJECT_NAME="$CODEBUILD_PROJECT_NAME"
         BRANCH="$(echo $CODEBUILD_WEBHOOK_HEAD_REF | awk -F/ '{print $NF}')"
         COMMIT_ID="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)"
-        SLACK_MESSAGE=$(cat <<EOF
+        SLACK_MESSAGE=$(cat <<EOM
 {
   "text": ":hourglass_flowing_sand: Build started for *$PROJECT_NAME*",
   "blocks": [
@@ -34,7 +34,7 @@ phases:
     {"type": "section", "text": {"type": "mrkdwn", "text": "*Logs:* <https://$AWS_REGION.console.aws.amazon.com/codesuite/codebuild/projects/$PROJECT_NAME/build/$BUILD_ID/|View Logs>"}}
   ]
 }
-EOF
+EOM
 )
         echo "$SLACK_MESSAGE" | curl -X POST -H 'Content-type: application/json' --data-binary @- "$SLACK_WEBHOOK"
 
@@ -69,7 +69,7 @@ EOF
           ERROR_LOG="No errors detected."
         fi
         EB_HEALTH=$(aws elasticbeanstalk describe-environment-health --environment-name "$EB_ENV_NAME" --attribute-names "Status" "Color" --query "Status" --output text 2>/dev/null || echo "Unknown")
-        SLACK_MESSAGE=$(cat <<EOF
+        SLACK_MESSAGE=$(cat <<EOM
 {
   "text": ":rocket: *$PROJECT_NAME* Build Notification",
   "blocks": [
@@ -79,7 +79,7 @@ EOF
     {"type": "section", "text": {"type": "mrkdwn", "text": "*Errors:*\\n\`\`\`$ERROR_LOG\`\`\`"}}
   ]
 }
-EOF
+EOM
 )
         echo "$SLACK_MESSAGE" | curl -X POST -H 'Content-type: application/json' --data-binary @- "$SLACK_WEBHOOK"
 
